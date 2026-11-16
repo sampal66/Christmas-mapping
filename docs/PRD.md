@@ -60,8 +60,8 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 | M5 | **Show timeline** synced to one master audio track; play / pause / seek / restart | Must | ✅ WP-01 |
 | M6 | **Audio-delay slider** to compensate Bluetooth soundbar lag (+ beep/flash sync test) | Must | ✅ WP-01 |
 | M7 | **Hold points**: the show waits (looping) until the operator taps (live star moment) | Must | ✅ WP-01 |
-| M8 | **Media pack**: load personal photos and narration from the iPad's Files app, stored locally | Must | ⏳ |
-| M9 | Works offline once loaded (no Wi-Fi needed on show night) | Should | ⏳ |
+| M8 | **Media pack**: load personal photos and narration from the iPad's Files app, stored locally | Must | ✅ WP-02 |
+| M9 | Works offline once loaded (no Wi-Fi needed on show night) | Should | ✅ WP-02 |
 | M10 | 1080p **MP4 export** of the calibrated show as a backup | Must | ⏳ |
 | M11 | Pre-show idle loop | Should | ✅ WP-01 (starfield) |
 
@@ -133,5 +133,6 @@ The detailed outline and timings are in [PLAN.md §6](PLAN.md). The full script 
 | Tree too bright or green | Tree lights off until the finale; the flocked tips take colour well. |
 
 ## Changelog
+- **2026-11-16** — M8, M9 done (WP-02).
 - **2026-11-16** — M5, M6, M7, M11 done (WP-01).
 - **2026-11-16** — v1 created from the agreed plan (pets cast, HAPPRUN, measured room, live star finale).

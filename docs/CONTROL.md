@@ -14,7 +14,7 @@
 |---|---|---|---|---|---|
 | WP-00 | Project structure, docs, Mapper v0 | — | ✅ done (PR #1) | this setup session | M1–M4 |
 | WP-01 | [Show timeline, audio sync, hold points](work-packages/WP-01-timeline.md) | WP-00 | ✅ done (PR #1) | setup session | M5, M6, M7, M11 |
-| WP-02 | [Media pack + offline mode](work-packages/WP-02-media-offline.md) | WP-00 | 🟢 ready | — | M8, M9 |
+| WP-02 | [Media pack + offline mode](work-packages/WP-02-media-offline.md) | WP-00 | 🟡 in review (PR #2) | `claude/wp-02-media-offline` | M8, M9 |
 | WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01 | 🟢 ready (after PR #1 merge) | — | C1 (s00, s01, s02, s04, s06, s10 visuals) |
 | WP-04 | Character pipeline (model sheets → puppets) | WP-03, ElevenLabs connector | ⚪ waiting | — | C2, C3 |
 | WP-05 | Music and sfx sourcing (public domain + ElevenLabs) | — | ⚪ waiting (owner OK on credits) | — | C5 |
@@ -40,6 +40,12 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-16 · WP-02** — `media.js` (IndexedDB `christmas-mapping-media`/`files`: put/get/list/remove/objectUrl), panel
+  "Media pack" (multi-file add, list + delete, storage used), `sw.js` cache-first shell + manifest/icons, `.gitignore`
+  privacy guard. `master-mix` now drives the show clock (temporary music loader removed). Smoke test covers import,
+  reload, delete and an offline reload. Gotcha: **bump `VERSION` in `sw.js`** on any app change, and add new files to
+  `SHELL` (the smoke test fails otherwise). Not yet tested on the real iPad (Add to Home Screen + airplane mode).
 
 - **2026-11-16 · WP-01** (built in the setup session at the owner's request). `audio.js` MasterClock (audio or silent clock,
   latency = `layout.audioOffsetMs`), `timeline.js` (scenes + holds), Show mode panel, sync test, 2 placeholder scenes
