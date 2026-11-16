@@ -64,7 +64,8 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 ## Open decisions / waiting on owner
 
-- **Projector purchase (Nov 27):** depends on the spot. On the counter (2.9 m) it needs a throw ratio ≤ ≈1.05–1.2. **Spot confirmed:** tripod 3.5 m from the wall, head at 1.45 m. The HAPPRUN H1 (≈1.35) fits (needs ≤ ≈1.44). Check the listing's throw ratio and whether it has a 1/4″ tripod thread (else buy a tripod tray). See [STAGE_SURVEY §03d](STAGE_SURVEY.md).
+- **Projector purchase (Nov 27):** depends on the spot. On the counter (2.9 m) it needs a throw ratio ≤ ≈1.05–1.2. **Spot confirmed:** tripod ≈3.6 m from the wall, head at 1.45 m. The HAPPRUN H1 has a throw ratio of 1.4 (manual): it fits at 3.6 m (at 3.5 m it crops ≈1–2 cm at two unimportant corners). It has a 1/4″ tripod hole. **Check the voltage**: the manual says 220 V. See [STAGE_SURVEY §03e](STAGE_SURVEY.md).
+- WP-10 design note: LCD black glows faintly; plan scenes that never sit on pure black (survey §03e).
 - Tape-measure the remaining items in [STAGE_SURVEY §05](STAGE_SURVEY.md) (star size, counter height).
 - Merge PR #1 and enable GitHub Pages.
 - Reconnect the ElevenLabs connector with full permissions (from a PC). This blocks WP-04 and WP-05.

@@ -21,7 +21,7 @@ export const STAGE_MODEL = {
   fixtures: { sconce: { y: 1.25, z: 1.85 }, securityCamera: { z: 2.15 } },
   // Tripod in the kitchen behind the bar (owner measured 3.5 m, head 1.45 m). x and the tree position come from
   // fitting this model to the tripod-top photo (edges agree within ≈5–10 cm).
-  projector: { pos: [0.0, 3.5, 1.45], throwRatio: 1.35, res: [1920, 1080] },
+  projector: { pos: [0.0, 3.5, 1.45], throwRatio: 1.4, res: [1920, 1080] },
   counter: { y: 2.9, z: 1.06 },
 };
 
@@ -71,15 +71,47 @@ function treeRadiusAt(tree, z) {
   return Math.max(0, tree.radius * (tree.tipZ - z) / (tree.tipZ - tree.baseZ));
 }
 
-/** Projector camera aimed at the middle of the stage's angular extent (yaw/pitch can be overridden). */
-export function projectorCamera(m, override = {}) {
+// How far (px) the worst key point falls outside the image; ≤ 0 means everything fits.
+function overflow(m, cam) {
+  const [w, h] = cam.res;
+  let worst = -Infinity;
+  for (const k of keyPoints(m)) {
+    const q = project(cam, k.p);
+    if (!q) return Infinity;
+    worst = Math.max(worst, -q[0], q[0] - w, -q[1], q[1] - h);
+  }
+  return worst;
+}
+
+// Aim that keeps every key point as far inside the image as possible (coarse-to-fine search).
+function bestAim(m, throwRatio) {
   const pj = m.projector;
   const ang = keyPoints(m).map((k) => anglesTo(pj.pos, k.p));
   const mid = (vals) => (Math.min(...vals) + Math.max(...vals)) / 2;
+  let best = { yaw: mid(ang.map((a) => a.yaw)), pitch: mid(ang.map((a) => a.pitch)) };
+  const camFor = (a) => makeCamera({ pos: pj.pos, ...a, focalPx: throwRatio * pj.res[0], res: pj.res });
+  let bestO = overflow(m, camFor(best));
+  for (const step of [2, 0.5, 0.1].map((d) => d * Math.PI / 180)) {
+    for (let improved = true; improved;) {
+      improved = false;
+      for (const [dy, dp] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+        const a = { yaw: best.yaw + dy * step, pitch: best.pitch + dp * step };
+        const o = overflow(m, camFor(a));
+        if (o < bestO) { best = a; bestO = o; improved = true; }
+      }
+    }
+  }
+  return best;
+}
+
+/** Projector camera with the best-fit aim (yaw/pitch can be overridden). */
+export function projectorCamera(m, override = {}) {
+  const pj = m.projector;
+  const aim = bestAim(m, pj.throwRatio);
   return makeCamera({
     pos: pj.pos,
-    yaw: override.yaw ?? mid(ang.map((a) => a.yaw)),
-    pitch: override.pitch ?? mid(ang.map((a) => a.pitch)),
+    yaw: override.yaw ?? aim.yaw,
+    pitch: override.pitch ?? aim.pitch,
     focalPx: pj.throwRatio * pj.res[0],
     res: pj.res,
   });
@@ -195,14 +227,16 @@ export function coverage(m, cam = projectorCamera(m)) {
   });
 }
 
-/** Field of view (degrees) the stage needs from the projector spot, and the widest throw ratio that covers it. */
+/** Angular size of the stage from the projector spot, and the largest throw ratio that still covers every
+ *  key point with the best aim (exact projection, found by bisection). */
 export function requiredThrowRatio(m) {
   const ang = keyPoints(m).map((k) => anglesTo(m.projector.pos, k.p));
   const span = (vals) => Math.max(...vals) - Math.min(...vals);
-  const h = span(ang.map((a) => a.yaw)), v = span(ang.map((a) => a.pitch));
-  const [rw, rh] = m.projector.res;
-  // Small-angle-safe: the image must contain both spans around its centre.
-  const trH = 1 / (2 * Math.tan(h / 2));
-  const trV = (rh / rw) / (2 * Math.tan(v / 2));
-  return { hDeg: h * 180 / Math.PI, vDeg: v * 180 / Math.PI, maxThrowRatio: Math.min(trH, trV) };
+  const fits = (tr) => {
+    const aim = bestAim(m, tr);
+    return overflow(m, makeCamera({ pos: m.projector.pos, ...aim, focalPx: tr * m.projector.res[0], res: m.projector.res })) <= 0;
+  };
+  let lo = 0.3, hi = 3;
+  for (let i = 0; i < 25; i++) { const c = (lo + hi) / 2; if (fits(c)) lo = c; else hi = c; }
+  return { hDeg: span(ang.map((a) => a.yaw)) * 180 / Math.PI, vDeg: span(ang.map((a) => a.pitch)) * 180 / Math.PI, maxThrowRatio: lo };
 }
