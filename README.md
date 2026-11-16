@@ -5,3 +5,4 @@ with a sideboard stage on the right and a Christmas tree on the left. It is driv
 and a budget mini projector.
 
 - 📋 Plan and agreed structure: [docs/PLAN.md](docs/PLAN.md)
+- 🎛️ Mapper app (calibration + test + demo): [app/](app/README.md)

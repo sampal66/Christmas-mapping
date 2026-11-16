@@ -1,191 +1,169 @@
-# Christmas Mapping — Project Plan (v1, draft for agreement)
+# Christmas Mapping — Project Plan (v2)
 
-A 10–12 minute home projection-mapping show for Christmas Eve 2026, in Spanish,
-made for the family and the baby's first Christmas. Developed in Claude cloud
-sessions from an iPad; the same iPad runs the show.
+A ~12 minute home projection-mapping show for Christmas Eve 2026. The show is **mostly light show**, with
+**short story moments** in between. Narration is in Spanish (neutral, "Disney dub" accent) and everything
+else in the project is in English. It is made for the family and the baby's **first Christmas**.
+Development happens in Claude cloud sessions from an iPad, and the same iPad runs the show.
+
+> **Privacy:** this repository is public. Personal details (the baby's name, family photos, narration audio
+> that says her name) are **kept out of git**. Docs use the placeholder `{BABY}`. Personal media goes into a
+> local "media pack" on the iPad (see §3), or into the repo only once it is made private.
 
 ---
 
-## 1. The stage (from the room photos)
+## 1. The stage (measured)
 
 ```
-        ceiling (~2.4 m)
- ┌──────────────────────────────────────────┐ ← corner (camera top-right)
- │                                          │
- │   [ projected area ≈ 2.7 × 1.5 m ]       │
- │                                          │
- │    /\                   ┌────────────┐   │
- │   /  \   TREE           │ SIDEBOARD  │   │
- │  /    \  (left)         │ (stage top)│   │
- │ /______\                │            │   │
- │   ||                    └────────────┘   │
- └──────────────────────────────────────────┘ floor
-   doorway edge                       right side wall (sconce)
+ ceiling 2.20 m ┌──────────────────────── 2.10 m ────────────────────────┐┐
+                │                                                         ││
+                │   ★                 BACKDROP (wall above sideboard)     ││ right wall
+                │  /▲\                  ≈1.07 × 1.41 m                    ││ (small strip,
+     hallway    │ /▲▲▲\                                                   ││  ambient FX)
+     doorway    │/▲▲▲▲▲\  TREE        ┌──────────────────────────────┐   ││
+   (open, left) │▲▲▲▲▲▲▲\ 2.0 m tall  │ SIDEBOARD = STAGE  0.79 m    │   ││
+                │  ▕▏      Ø 0.9 m    │ 1.07 w × 0.79 h × 0.41 d     │   ││
+          floor └─────────────────────┴──────────────────────────────┴───┘┘
 ```
 
-- **Wall**: white, matte, about 2.5–3 m wide between the doorway edge and the corner. Great surface.
-- **Right**: the sideboard moves toward the corner. Its top is the **stage** where characters stand.
-  The wall above it is the **backdrop** (scenery, windows, the night sky).
-- **Left**: the tree, between the doorway edge and the sideboard.
-- **Projector**: about 3.5 m back, where the photos were taken. A budget mini projector
-  (throw ratio about 1.2–1.4) gives an image about 2.5–2.9 m wide × 1.4–1.6 m tall (16:9).
-  - That height can't cover floor-to-ceiling. We aim it at **about 0.6 m to 2.2 m above the floor**.
-    That covers the sideboard top, the backdrop and most of the tree. The tree's base stays unlit
-    (presents go there).
-  - Place the projector on a shelf or stool about 1 m high. That avoids heavy tilt and
-    keeps people's heads out of the beam.
-- **To prepare**:
-  - Take the framed painting down (or swap in a white card). It would muddy everything projected on it.
-  - Turn off the sconce and the hallway lights.
-  - Close the doorway or darken it.
-  - A white or flocked tree, or one with few lights, takes projection best. A green tree works
-    with strong colours.
-
-## 2. Hardware (budget: as cheap as possible, < USD 100 total for the projector)
-
-| Item | Target | Notes |
+| Element | Size | Position |
 |---|---|---|
-| Projector | ≤ USD 100 on Black Friday (Nov 27) | See checklist below. The Wowlink you found is fine if it drops to ≈ USD 50–60. |
-| USB-C → HDMI adapter **with USB-C power pass-through** | ≈ USD 15–20 | Keeps the iPad charging during the show. |
-| HDMI cable 1–2 m | often in the projector box | Wired only. No wireless mirroring for the show. |
-| Speaker | anything you already have | Wired or Bluetooth from the iPad. The projector speaker is weak. |
-| Extension cord | — | Projector + iPad charger. |
+| Wall | 2.10 m wide, 2.20 m to ceiling | white and matte; the painting comes down |
+| Tree | 2.0 m tall, Ø 0.9 m, flocked white tips, cool-white LEDs | left, next to the hallway |
+| Sideboard ("stage") | 1.07 w × 0.79 h × 0.41 d m | pushed against the right wall |
+| Right wall | — | a narrow strip near the corner can get ambient effects (snow, glow) |
+| Projector | **HAPPRUN H1** (native 1080p) | about 3.5 m back, centred |
 
-**Projector checklist (what matters for mapping, in order):**
-1. **HDMI input.** Required.
-2. **Auto keystone / auto focus can be switched OFF.** Required. Auto-correction ruins the mapping.
-3. **Native 1080p** if the budget allows. Many "4K support" models are **native 720p**
-   (the Wowlink/HY300 family is 720p). 720p is acceptable for this wall.
-4. Brightness: ignore "lumen" marketing. In a dark room, any of these is OK for 2.7 m.
-5. Bonus: a rotating base (like the Wowlink) makes aiming easy for future projects.
+**Projection geometry (HAPPRUN H1, throw ratio about 1.35, to be verified on arrival)**
+- At 3.5 m the image is about **2.6 × 1.45 m**. It covers the whole 2.10 m width with some spare.
+  The spare light falls into the dark hallway on the left and grazes the right wall, which we can use for ambient effects.
+- The useful height is the sideboard top (0.79 m) up to the ceiling (2.20 m) = **1.41 m**. That fits the 1.45 m image
+  almost exactly, and covers the tree from about 0.8 m up to the star. The lower tree, gifts and skirt glow
+  with their own lights.
+- **Projector height:** start with the lens at about 0.8 m (a small table or stool), level, then tilt slightly if needed.
+  Keep keystone at 0. The app does all the correction.
+- Tree lights stay **off** for the show until the finale (see scene 9).
 
-**Recommended pick (Nov 16 check): HAPPRUN H1 Native 1080P, USD 59.99** (list price USD 109.99).
-- Native 1920×1080, 300 ANSI lumens (as listed), 4.3★ from about 14k ratings.
-- Manual focus, and no auto keystone to fight with.
-- Its throw distance should put an image about 2.5 m wide on the wall from 3.5 m.
+**Extra set pieces (cheap, white = projectable)**
+- **2–3 white gift boxes** of different sizes on the sideboard top. Cubes are the classic mapping trick:
+  each face lights separately, presents "open", and characters pop out from behind them.
+- Optional: a **white foam-board cut-out** (a small cottage or village silhouette) standing at the back of the sideboard
+  as a 3D layer in front of the backdrop.
 
-Compared with the Wowlink W210 (USD 59.99): that one is native 720p and 200 ANSI lumens, uses auto keystone,
-and its listing gives a maximum throw distance of 2.5 m (too short for a 3.5 m spot).
+## 2. Hardware
 
-Other examples to check on Black Friday:
-- HY300 / HY320-class models (the Wowlink is one)
-- "native 1080p" listings around USD 80–100, such as HAPPRUN, YGSKK and Fudoni GC888A
-
-Always read "native resolution" in the spec table.
+| Item | Status | Notes |
+|---|---|---|
+| HAPPRUN H1 Native 1080P | buy on Black Friday (≈ USD 60) | keystone 0, manual focus |
+| USB-C → HDMI adapter **with USB-C charging pass-through** | buy now (≈ USD 15) | needed for TV tests now |
+| Samsung soundbar | have | Bluetooth from the iPad; the app has an **audio-delay slider** to fix Bluetooth lag |
+| TV with HDMI | have | stands in for the projector until it arrives |
+| iPad Air 5 (M1, iPadOS 27) | have | Stage Manager external display → true 1920×1080 output |
 
 ## 3. Software architecture
 
 ```
- cloud session (Claude)                 iPad Air 5 (Safari)              projector
- ─────────────────────                  ───────────────────              ─────────
- code + assets in GitHub  ──deploy──▶  Web app (GitHub Pages, PWA)  ──USB-C/HDMI──▶ wall
-                                         ├─ CALIBRATE mode
-                                         └─ SHOW mode
+ cloud session (Claude) ──git──▶ GitHub ──deploy──▶ Mapper web app (Safari, works offline)
+                                                       ├─ PREVIEW   scenes drawn over a photo of the wall
+                                                       ├─ CALIBRATE drag zone corners on the real wall
+                                                       └─ SHOW      timeline + audio, one tap
+                                                       iPad ──USB-C/HDMI──▶ projector (or TV)
 ```
 
-**The web app ("Mapper")**
-- **Calibrate mode**: the projector shows outlines of each zone: `backdrop`, `stage` (sideboard top edge),
-  `tree` (polygon mask) and `frame` (the whole projected area). You drag the corners and points
-  on the iPad until they match the real objects. The positions are saved on the device.
-  You can also export them so I can use them.
-- **Show mode**: a timeline plays scenes. Each scene draws into one or more zones,
-  in sync with one master audio track (narration + music + effects).
-- **Rendering**: WebGL canvas with corner-pin (homography) warping per zone and polygon masks for the tree.
-  **Black = no light**, so characters drawn on black need no transparency tricks.
-- **Two kinds of content**:
-  1. **Effects written as code**: snow, light chases on the edges, tree colour washes, ornaments
-     popping, sparkles, text, fireworks. Fast to iterate on.
-  2. **Pre-made video clips**: classic-style character animation on a black background,
-     placed into a zone.
+- **Zones** (each one is warped with its own corner pin):
+  `wall` (full), `backdrop` (above sideboard), `stage` (sideboard front + top edge), `boxes` (one zone per visible face),
+  `tree` (polygon mask), `star` (the top point), `rightStrip`.
+- **Rendering:** WebGL with per-zone homography warp and masks. **Black = no light**, so characters drawn on black need
+  no transparency.
+- **Content types:** (1) effects written as code: snow, chases, washes, sparkles, text, fireworks;
+  (2) character clips/cut-outs on black.
+- **Timeline engine:** scenes keyed to one master audio track. It has **hold points** that loop until the operator taps
+  (for the live star moment).
+- **Media pack:** personal files (photos, narration with the baby's name, the final mix) are loaded from the iPad
+  (Files app) and stored on the device, never committed while the repo is public.
+- **Safety net:** a cloud-rendered **1080p MP4** of the calibrated show, playable from Files or a USB stick
+  (with a manual pause for the live moment).
+- **Testing on the TV:** the TV shows exactly what the projector will show. We use it for output, timing,
+  audio sync and the calibration UI against a flat "virtual wall". Real geometry is done on the actual wall
+  once the projector arrives.
 
-**Getting a full 16:9 picture from the iPad Air 5**
-- A plain mirrored iPad screen (1.44:1) leaves side bars. That wastes about 20% of the width.
-- **Plan A**: Stage Manager external display (supported on the M1 iPad Air). Safari runs full screen
-  on the projector at 1920×1080. The iPad screen keeps the controls.
-- **Plan B (safety net)**: I render the whole calibrated show into **one 1080p MP4** in the cloud,
-  with the mapping baked in. You play it full screen from the iPad (Files app) or from a USB stick
-  in the projector. This backup is produced before Christmas Eve no matter what.
+## 4. Cast and look
 
-## 4. Look and characters
+**Style:** classic hand-drawn Disney-era animation (1930s–50s): warm, bouncy, soft ink lines, painted backgrounds,
+a light film-grain pass.
 
-- **Style**: classic hand-drawn animation. Rubber-hose 1930s cartoons and storybook watercolour,
-  warm colours, a light film-grain / vignette pass.
-- **Cast**:
-  - **Our own characters, drawn in that style** (main cast, ideas to choose from):
-    a teddy bear who lights the star, a little mouse with a scarf, a reindeer pup,
-    a snowman narrator-helper.
-  - **Public-domain cameos**: *Steamboat Willie* Mickey (1928, black & white) and Pooh as drawn
-    by E.H. Shepard. **Not** Disney's red-shirt Pooh, and **not Paddington** (still under copyright).
-    Their public-domain status is clear in the US and may differ by country. This is a private
-    family show; we keep them as cameos.
-- **How they get made**:
-  1. ElevenLabs image generation for character model sheets (front/side poses) in the vintage style.
-  2. Image-to-video for short actions (walk in, wave, jump, sit) on a **black background**.
-  3. Simple moves (bobbing, blinking, walking across the stage) are done in code with cut-out art.
-     This saves credits.
+| Character | Who | Design notes | Personality |
+|---|---|---|---|
+| **Connor** | husky, the biggest | black and white, white head that looks "bald", ice-blue eyes, big fluffy tail | gentle giant, timid, **scared of loud noises**, brave when it counts |
+| **Alaska** | pomsky | blonde/cream, looks like a giant Pomeranian, brown eyes, plume tail | overexcited, **rules the house**, bossy leader |
+| **Orion** | European common cat (tabby) | brown tabby, yellow-green eyes, lip lifted on one side (missing tooth) → permanent grumpy look | grumpy but lovable |
+| **Gandalf** | Russian Blue, the youngest | sleek grey, big ears, huge yellow-green eyes | the most playful, **mischief-maker** |
+| Cameos | public-domain versions only | *Steamboat Willie* Mickey (1928, B&W) and Pooh as drawn by E.H. Shepard | short helper moments |
 
-## 5. Audio (ElevenLabs, all Spanish)
+**Making them:** pet photos → AI model sheets in the classic style → cut-out puppets animated in code, plus a few
+AI image-to-video actions on black. The star element (a gold star like the real one) is shared by story and finale.
 
-- **Narrator**: one warm Spanish voice. Short lines only, about 2–3 minutes of speech across the show.
-  The narrator *presents the light show* and addresses the baby by name.
-- **Character voices**: a few short lines each (or none, if cartoon sounds and music tell it better).
-- **Music**: original instrumental pieces in a "vintage orchestra / music box / big band" feel.
-  Public-domain carols arranged fresh: *Noche de Paz*, *Campana sobre Campana*, *Los Peces en el Río*,
-  *Jingle Bells*, *El Tamborilero*.
-- **Sound effects**: sleigh bells, sparkles, footsteps, a magic "whoosh".
-- **Credit budget**:
-  - Narration ≈ 3 min of TTS: cheap.
-  - Music is the expensive part. Aim for 4–5 tracks of 2–3 min, then loop or extend in editing.
-  - Video generation may not fit the plan at all. Code animation covers the gaps.
-- **Baby-friendly mix**:
-  - Moderate volume, no sudden loud bangs.
-  - **No fast strobe flashes**: fireworks fade in and out instead of flickering.
+## 5. Audio
 
-## 6. Show outline (≈ 12 min) — first draft
+- **Narrator:** bright, warm storyteller, classic Disney-Christmas feel, **neutral Latin American Spanish**
+  (dubbing accent). Short lines only; about 2–3 minutes of speech in total.
+- **Music:** instrumental public-domain classic American and European Christmas music, in English or instrumental:
+  *Carol of the Bells* (instrumental), *Jingle Bells*, *Deck the Halls*, *We Wish You a Merry Christmas*,
+  *O Christmas Tree*, *Joy to the World*, *God Rest Ye Merry Gentlemen*, *Silent Night*, plus **Tchaikovsky's
+  Nutcracker** (perfect for light shows).
+  - **Avoid** modern songs that are still copyrighted (*Sleigh Ride*, *Rudolph*, *Frosty*, *White Christmas*, …).
+  - **Sources:**
+    1. Public-domain recordings, e.g. **US military band** Christmas recordings (US federal works) and Musopen / CC0
+       Nutcracker recordings. Free, and they spare ElevenLabs credits. Licence to be verified per track.
+    2. ElevenLabs Music for original underscore, stingers and transitions.
+- **Sound effects:** ElevenLabs (sleigh bells, sparkles, paws, magic whoosh, a soft "boing").
+- **Baby-friendly and Connor-friendly:** moderate volume, **no loud bangs**, no fast strobe. Fireworks are soft and fading.
 
-| # | Scene | Zones | Time | Content |
+## 6. Show outline (≈ 12 min, light show first, story in short beats)
+
+| # | Scene | Type | Zones | ≈ Time |
 |---|---|---|---|---|
-| 0 | **Pre-show** | all | loop | A soft "starfield" waiting screen. Press play. |
-| 1 | **La pared despierta** | frame, backdrop | 1:00 | Lights trace the wall edges and the sideboard. Snow begins. Narrator: *"Esta noche, en esta casa, la Navidad tiene una invitada muy especial…"* (baby's name). |
-| 2 | **El árbol cobra vida** | tree | 1:30 | Colour waves climb the tree. Ornaments pop to the music. The star lights at the top. |
-| 3 | **Se abre el telón** | stage, backdrop | 1:00 | A theatre curtain opens above the sideboard. The vintage title card *"Show de Luces de Navidad"* appears with film flicker. |
-| 4 | **La estrella perdida** (story pt. 1) | stage, backdrop, tree | 2:30 | Our characters discover the tree's star is missing. They search; the backdrop becomes a snowy village. |
-| 5 | **Interludio musical** | all | 1:30 | Mapping-only light show to a carol: wall panels, tree pulses, sideboard outline. No characters. |
-| 6 | **La estrella perdida** (story pt. 2) | stage, tree | 2:00 | Public-domain cameo(s) help. The star flies onto the tree. |
-| 7 | **Para ti, pequeña** | backdrop | 1:00 | A gentle lullaby moment. Name in lights, stars, a short message from mom and dad. |
-| 8 | **Gran final** | all | 1:30 | Big carol, soft fireworks (no strobe), *"¡Feliz Navidad!"* from the family. |
+| 0 | **Pre-show**: slow starfield, "press play" | loop | wall | — |
+| 1 | **La pared despierta**: lines trace the wall, sideboard and boxes; snow begins. Narrator welcomes everyone to `{BABY}`'s first Christmas | light + 1 line | all | 1:00 |
+| 2 | **El árbol cobra vida**: colour waves climb the tree to *Carol of the Bells* | light show | tree, star | 1:30 |
+| 3 | **Story beat 1**: the pets get the house ready; Gandalf plays with the star… and it's gone | story | stage, backdrop, boxes | 1:00 |
+| 4 | **Cajas mágicas**: the gift boxes light face by face to the *Nutcracker* (*Dance of the Sugar Plum Fairy*) | light show | boxes, backdrop | 1:30 |
+| 5 | **Story beat 2**: Alaska organises the search; Connor gets spooked by jingle bells (comic); Orion grumbles; Mickey whistles a clue | story | stage, backdrop | 1:15 |
+| 6 | **Interludio**: full-wall light show to *Jingle Bells* / *Deck the Halls*; snow spills onto the right wall | light show | all | 1:30 |
+| 7 | **Story beat 3**: Pooh finds the star in his honey pot; brave Connor carries it; the star flies to the top of the tree | story | stage, tree, star | 1:15 |
+| 8 | **Para ti, `{BABY}`**: gentle *Silent Night*, family photos in vintage frames, "¡Feliz primera Navidad, `{BABY}`!" from Papá and Mamá | tender | backdrop | 1:00 |
+| 9 | **La estrella de verdad** (live): projected star fades; **Papá lifts `{BABY}` to place the real star**; someone plugs in the tree lights | **hold point** | star spotlight only | ~1:00 |
+| 10 | **Gran final**: *Joy to the World* / *We Wish You a Merry Christmas*, soft fireworks, the pets wave goodbye, "¡Feliz Navidad!" | light show | all | 1:30 |
+
+During the live moment (9) the projector shows only a soft glow on the tree top. That avoids lighting Papá and the baby
+harshly or shining into their eyes.
 
 ## 7. Timeline to Christmas Eve
 
 | Week | Dates | Goals |
 |---|---|---|
-| 1 | Nov 16–22 | Agree plan. Pick the projector. Build **Mapper v0** (calibrate + test patterns). Write the Spanish script. |
-| 2 | Nov 23–29 | **Buy projector (Black Friday Nov 27).** Set up the room. First calibration on the real wall. Character designs. Pick the narrator voice. |
-| 3 | Nov 30–Dec 6 | Scenes 1, 2, 3, 5 (code effects). Narration generated. Show timeline engine. |
-| 4 | Dec 7–13 | Character scenes 4 and 6. Music tracks. |
-| 5 | Dec 14–20 | Scenes 7–8. Full run-throughs on the wall. Polish timing. **Render the MP4 backup.** |
-| 6 | Dec 21–24 | Dress rehearsal. Spare day for fixes. **Show on Dec 24.** |
+| 1 | Nov 16–22 | ✅ Plan. **Mapper v0** (zones, calibration, test patterns, preview). Spanish script draft. Buy HDMI adapter; first TV test. |
+| 2 | Nov 23–29 | **Buy HAPPRUN (Black Friday, Nov 27).** Character model sheets. Narrator voice. Timeline engine + audio sync. |
+| 3 | Nov 30–Dec 6 | First calibration on the real wall. Scenes 1, 2, 4, 6 (code effects). Music sourced. |
+| 4 | Dec 7–13 | Story beats 3, 5, 7 (characters). Narration generated. |
+| 5 | Dec 14–20 | Scenes 8–10. Full run-throughs. **MP4 backup.** |
+| 6 | Dec 21–24 | Dress rehearsal (practise the star moment!). **Show on Dec 24.** |
 
-## 8. Repo structure (planned)
+## 8. Repo structure
 
 ```
 christmas-mapping/
-├─ docs/            plan, script (guion), shot list, setup guide
-├─ app/             the Mapper web app (calibrate + show)
-│  ├─ scenes/       one file per scene (code-driven effects)
-│  └─ engine/       warping, masks, timeline, audio sync
-├─ assets/
-│  ├─ characters/   model sheets, cut-outs, clips (black bg)
-│  ├─ audio/        narration, music, sfx (final master track)
-│  └─ video/        AI clips
-└─ tools/           cloud scripts: MP4 export of the calibrated show
+├─ docs/            plan, script (guion), setup guide
+├─ app/             Mapper web app
+│  ├─ engine/       warping, masks, timeline, audio
+│  └─ scenes/       one file per scene
+├─ assets/          non-personal art, music, sfx
+└─ tools/           cloud scripts (MP4 export)
 ```
 
-## 9. Open questions
+## 9. Still open
 
-1. **Baby's name** (and what the family calls her) for the narration. Also how mom and dad want to be named.
-2. Main cast: pick 2–3 from the ideas in §4, or describe your own.
-3. Story: is *"La estrella perdida"* good, or do you prefer another?
-4. Narrator voice: female or male? Warm grandparent tone, or bright storyteller tone?
-5. ElevenLabs: the connector needs to be reconnected with full permissions (see the note in chat)
-   so I can check credits and generate audio.
+- Make the repo **private**? It would then hold personal media. Hosting a private repo needs GitHub Pro for Pages,
+  or a free alternative such as Cloudflare Pages.
+- More photos of each pet (full body, side view) when convenient.
+- A straight-on photo of the arranged wall (later).
+- Soundbar model (later). Reconnect the ElevenLabs connector from a PC with full permissions.
