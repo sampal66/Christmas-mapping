@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Status** | v1 |
+| **Status** | v1.1 |
 | **Last updated** | 2026-11-16 |
 
 ---
@@ -35,8 +35,8 @@ One Claude session usually plays several roles. Spawn sub-agents only when the o
 ## 03 · Workflow
 
 ```
- task received → read docs (this file first) → plan briefly → build → test (smoke + screenshot)
-      → update docs + changelogs → commit on the working branch → push → PR (draft) → owner reviews/tests
+ WP brief (from CONTROL.md) → read only what the brief lists → plan briefly → build → test (smoke + screenshot)
+      → update docs + changelogs + CONTROL handoff → commit on the session branch → push → draft PR → owner reviews/merges
 ```
 
 1. **Branch:** work on the session's `claude/...` branch; never push to `main` directly.
@@ -47,16 +47,36 @@ One Claude session usually plays several roles. Spawn sub-agents only when the o
    changelog line in each document you touch.
 5. **PR:** one draft PR per branch, with a description of what changed and how it was tested. The owner merges.
 
+## 03a · Session strategy (small context windows)
+
+The owner wants **lean sessions**. Big parts are never built in one long conversation.
+
+1. **One work package (WP) per session.** WPs are listed on [CONTROL.md](CONTROL.md), and each has a
+   self-contained brief in `docs/work-packages/`. A new session gets only the copy-paste kickoff prompt from
+   CONTROL.md.
+2. **Read narrowly.**
+   - Read `CLAUDE.md` → this file → CONTROL.md → your WP brief, and only the doc sections and code files the brief lists.
+   - Don't read whole docs "just in case". Don't open images, media or large generated files unless the task needs them.
+   - Prefer `grep`/`sed -n` ranges over full-file reads.
+3. **Keep output small.**
+   - Pipe noisy commands through `tail`/`head`.
+   - Don't paste large files or logs into the chat.
+   - Use screenshots only to check visuals, at small sizes.
+4. **Split early.** If a WP is clearly growing past its brief, stop at a clean point and finish what's
+   committed. Then write a follow-up brief (`WP-XXb`), add it to the board, and hand off.
+5. **Handoff is mandatory.**
+   - Before ending, update the CONTROL board status and append **≤ 5 lines** to its handoff log: done, left, gotchas.
+   - The next session relies on that, not on chat history.
+6. **The planning/coordination session** (like WP-00) writes and updates briefs and the board. It doesn't build big features itself.
+7. **Writing a new WP brief:** copy `docs/work-packages/_TEMPLATE.md`. Briefs must stand alone: goal, files to read,
+   steps, out of scope, acceptance checklist.
+
 ## 04 · Example task prompt
 
 ```
-/agent code
-Implement the show timeline (PRD M5–M7).
-Requirements:
-- timeline.js scheduler keyed to the master <audio> clock (ARCHITECTURE §4.4)
-- hold points with a Continue button
-- audio delay slider saved in layout.audioOffsetMs
-- add a Show mode to the panel; smoke test passes; update PRD status
+Work package WP-01. Read CLAUDE.md, then docs/CONTROL.md and docs/work-packages/WP-01-timeline.md only
+(open other docs just for the sections that brief links to). Build exactly what the brief says, follow the
+Definition of Done, then update docs/CONTROL.md (status + handoff note) and open a draft PR.
 ```
 
 ## 05 · Tools and integrations
@@ -112,6 +132,7 @@ Requirements:
 - [ ] It respects the DESIGN_SYSTEM safety limits and palette.
 - [ ] Docs are updated (PRD status, ARCHITECTURE decisions, changelogs).
 - [ ] No personal data or unlicensed assets are in the diff.
+- [ ] CONTROL.md board status and handoff log are updated.
 - [ ] It's in a draft PR with a test description.
 
 ## 09 · Future enhancements
@@ -120,4 +141,5 @@ Requirements:
 - An auto-calibration agent (projected pattern + iPad camera).
 
 ## Changelog
+- **2026-11-16** — v1.1: §03a session strategy (one WP per session, narrow reads, mandatory handoff); CONTROL.md.
 - **2026-11-16** — v1: roles, workflow, hard rules (privacy, copyright, safety, language), credits policy, DoD.

@@ -6,6 +6,7 @@ a sideboard stage on the right and a Christmas tree on the left, driven by an iP
 ## Docs
 | Doc | Purpose |
 |---|---|
+| [CONTROL](docs/CONTROL.md) | **Start here:** work-package board, session kickoff prompt, handoff log |
 | [PRD](docs/PRD.md) | What we're building and why, plus feature status |
 | [DESIGN_SYSTEM](docs/DESIGN_SYSTEM.md) | Palette, typography, characters, motion safety, audio, assets |
 | [ARCHITECTURE](docs/ARCHITECTURE.md) | Tech stack, structure, zones/layout model, timeline, decisions |

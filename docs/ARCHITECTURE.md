@@ -51,6 +51,8 @@ christmas-mapping/
 │  ├─ DESIGN_SYSTEM.md       look, sound, safety rules
 │  ├─ ARCHITECTURE.md        this file
 │  ├─ AGENTS.md              rules for AI agents
+│  ├─ CONTROL.md             work-package board + handoff log
+│  ├─ work-packages/         one self-contained brief per WP
 │  ├─ PLAN.md                timeline and room notes
 │  └─ SCRIPT.md              (planned) Spanish narration script with {BABY} placeholder
 ├─ app/                      the Mapper web app (deployed as-is)
@@ -64,7 +66,7 @@ christmas-mapping/
 │     ├─ (planned) audio.js      master track, delay offset
 │     ├─ (planned) media.js      media pack import (IndexedDB)
 │     └─ (planned) scenes/       one module per scene (s00-preshow.js … s10-finale.js)
-├─ assets/                   (planned) non-personal art, PD music, sfx
+├─ assets/                   non-personal art, PD music, sfx; CREDITS.md; layouts/
 ├─ tools/
 │  ├─ smoke-test.js          headless app test
 │  └─ (planned) export-mp4.js
@@ -157,6 +159,8 @@ export default {
 | 2026-11-16 | Personal media in IndexedDB, not git | the repo is public |
 | 2026-11-16 | GitHub Pages from `main` | free hosting for a public repo |
 | 2026-11-16 | Public-domain recordings for carols | saves ElevenLabs credits; legal clarity |
+| 2026-11-16 | Repo stays public (open source); personal photos and audio stay on-device | owner decision |
+| 2026-11-16 | Build in work packages, one per session | keeps context windows small (AGENTS §03a) |
 
 ## Changelog
 - **2026-11-16** — v1: documented Mapper v0 as built; designed timeline, media pack and export.
