@@ -1,18 +1,30 @@
 import { cssMatrixForQuad, stageToUnit, unitToStage } from './homography.js';
 import { defaultLayout, STAGE_W, STAGE_H } from './layout.js';
-import { calibrationPattern, demoEffects } from './effects.js';
+import { calibrationPattern, demoEffects, stars } from './effects.js';
+import { MasterClock, beep } from './audio.js';
+import { Timeline, fmtTime } from './timeline.js';
+import { scenes, holds } from './scenes/index.js';
 
 const STORAGE_KEY = 'christmas-mapping.layout.v1';
 
 // ---------- state ----------
 let layout = loadLayout();
-let mode = 'calibrate';          // calibrate | test | demo
+let mode = 'calibrate';          // calibrate | test | demo | show
 let testPattern = 'grid';        // grid | white | colors
 let selectedId = 'wall';
 let editMask = false;
 let activeHandle = null;         // { zoneId, kind: 'corner'|'mask'|'move', index }
 let nudgeStep = 2;
 const t0 = performance.now();
+
+// show state
+const clock = new MasterClock();
+const timeline = new Timeline(scenes, holds);
+let started = false;             // false = pre-show loop
+let holding = null;              // active hold point while looping
+let syncTest = false;
+let syncBase = 0, lastBeep = -1;
+let uiTick = 0;
 
 // ---------- DOM ----------
 const stage = document.getElementById('stage');
@@ -170,8 +182,28 @@ function maskPath(ctx, z) {
   ctx.closePath();
 }
 
+function updateShow() {
+  if (!started) return;
+  let st = clock.showTime;
+  if (clock.playing) {
+    // Once a hold is reached it stays active (looping) until Continue releases it.
+    if (!holding) holding = timeline.holdAt(st);
+    if (holding && st >= holding.loop[1]) { clock.seek(holding.loop[0]); st = holding.loop[0]; }
+    if (st >= timeline.duration) { stopShow(); return; }
+  }
+  return st;
+}
+
 function frame(now) {
   const t = (now - t0) / 1000;
+  const showT = mode === 'show' ? updateShow() : undefined;
+  let syncFlash = false;
+  if (syncTest) {
+    const raw = (now - syncBase) / 1000;
+    if (Math.floor(raw) !== lastBeep) { lastBeep = Math.floor(raw); beep(); }
+    const vis = raw - layout.audioOffsetMs / 1000;
+    syncFlash = vis >= 0 && vis % 1 < 0.12;
+  }
   for (const z of layout.zones) {
     if (z.hidden) continue;
     const { ctx } = views.get(z.id);
@@ -186,6 +218,19 @@ function frame(now) {
       if (testPattern === 'white') { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); }
       else if (testPattern === 'colors') { ctx.fillStyle = z.color; ctx.fillRect(0, 0, w, h); }
       else calibrationPattern(ctx, w, h, z, false);
+    } else if (mode === 'show') {
+      if (syncTest) {
+        if (syncFlash && (z.id === 'star' || z.id === 'backdrop')) { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); }
+      } else if (!started) {
+        if (z.id === 'wall') stars(ctx, w, h, t);          // pre-show loop
+      } else {
+        const scene = timeline.sceneFor(z.id, showT);
+        if (scene) {
+          timeline.enterIfNeeded(scene);
+          try { scene.draw(z.id, ctx, w, h, showT, showT - scene.start); }
+          catch (e) { console.error(`scene ${scene.id} draw failed`, e); }
+        }
+      }
     } else if (demoEffects[z.id]) {
       demoEffects[z.id](ctx, w, h, t);
     }
@@ -194,8 +239,81 @@ function frame(now) {
       maskPath(ctx, z); ctx.strokeStyle = z.color; ctx.lineWidth = 4; ctx.stroke();
     }
   }
+  if (mode === 'show' && ++uiTick % 6 === 0) updateShowUI(showT);
   requestAnimationFrame(frame);
 }
+
+// ---------- show controls ----------
+const $ = (id) => document.getElementById(id);
+
+function stopShow() {
+  clock.pause(); clock.seek(0); timeline.reset();
+  started = false; holding = null; updateShowUI(0);
+}
+
+async function togglePlay() {
+  if (syncTest) toggleSync(false);
+  if (clock.playing) { clock.pause(); }
+  else { if (!started) { timeline.reset(); clock.seek(0); started = true; } await clock.play(); }
+  updateShowUI(clock.showTime);
+}
+
+function jumpTo(t) {
+  timeline.reset(); timeline.releaseBefore(t);
+  clock.seek(t); started = true; holding = null;
+  updateShowUI(t);
+}
+
+function continueHold() {
+  if (!holding) return;
+  timeline.released.add(holding.id);
+  clock.seek(holding.at); holding = null;
+}
+
+function toggleSync(on = !syncTest) {
+  syncTest = on;
+  if (on) { clock.pause(); syncBase = performance.now(); lastBeep = -1; beep(); }
+  $('syncBtn').classList.toggle('on', on);
+}
+
+function updateShowUI(st = 0) {
+  $('playBtn').textContent = clock.playing ? '❚❚ Pause' : '▶ Play';
+  $('continueBtn').disabled = !holding;
+  $('continueBtn').classList.toggle('on', !!holding);
+  $('timeLabel').textContent = started ? `${fmtTime(st)} / ${fmtTime(timeline.duration)}` : `pre-show · ${fmtTime(timeline.duration)}`;
+  if (!seeking) $('seekBar').value = started ? String(st / timeline.duration) : '0';
+  const cur = started ? timeline.sceneAt(st) : null;
+  $('sceneLabel').textContent = holding ? '⏸ Waiting for Continue…' : (cur ? cur.title || cur.id : '');
+}
+
+let seeking = false;
+function buildShowPanel() {
+  $('sceneSelect').innerHTML = '<option value="">Jump to scene…</option>' +
+    timeline.scenes.map((s) => `<option value="${s.start}">${fmtTime(s.start)} · ${s.title || s.id}</option>`).join('');
+  $('delayRange').value = String(layout.audioOffsetMs);
+  $('delayValue').textContent = `${layout.audioOffsetMs} ms`;
+  clock.latencyMs = layout.audioOffsetMs;
+}
+
+$('playBtn').addEventListener('click', togglePlay);
+$('restartBtn').addEventListener('click', () => { const wasPlaying = clock.playing; stopShow(); if (wasPlaying) togglePlay(); });
+$('continueBtn').addEventListener('click', continueHold);
+$('syncBtn').addEventListener('click', () => toggleSync());
+$('sceneSelect').addEventListener('change', (e) => { if (e.target.value !== '') jumpTo(Number(e.target.value)); e.target.value = ''; });
+$('seekBar').addEventListener('input', () => { seeking = true; });
+$('seekBar').addEventListener('change', (e) => { seeking = false; jumpTo(Number(e.target.value) * timeline.duration); });
+$('delayRange').addEventListener('input', (e) => {
+  layout.audioOffsetMs = Number(e.target.value);
+  clock.latencyMs = layout.audioOffsetMs;
+  $('delayValue').textContent = `${layout.audioOffsetMs} ms`;
+  save();
+});
+// Temporary music loader until the media pack (WP-02) exists. The file stays on the device.
+$('musicFile').addEventListener('change', (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  stopShow(); clock.load(URL.createObjectURL(f));
+  $('musicName').textContent = f.name;
+});
 
 // ---------- panel ----------
 function setMode(m) {
@@ -203,6 +321,9 @@ function setMode(m) {
   document.querySelectorAll('[data-mode]').forEach((b) => b.classList.toggle('on', b.dataset.mode === m));
   document.getElementById('calibTools').hidden = m !== 'calibrate';
   document.getElementById('testTools').hidden = m !== 'test';
+  document.getElementById('showTools').hidden = m !== 'show';
+  if (m === 'show') updateShowUI(started ? clock.showTime : 0);
+  if (m !== 'show') { if (clock.playing) clock.pause(); if (syncTest) toggleSync(false); }
   renderHandles();
 }
 
@@ -289,11 +410,15 @@ window.addEventListener('keydown', (e) => {
   if (e.key === '1') setMode('calibrate');
   if (e.key === '2') setMode('test');
   if (e.key === '3') setMode('demo');
+  if (e.key === '4') setMode('show');
+  if (mode === 'show' && e.key === ' ') { e.preventDefault(); togglePlay(); }
+  if (mode === 'show' && e.key === 'c') continueHold();
 });
 
 // ---------- go ----------
 fitStage();
 buildViews();
+buildShowPanel();
 setMode('calibrate');
 document.getElementById('maskBtn').hidden = !zoneById(selectedId).mask;
 requestAnimationFrame(frame);

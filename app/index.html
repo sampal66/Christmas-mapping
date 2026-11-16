@@ -26,6 +26,7 @@
       <button data-mode="calibrate">Calibrate</button>
       <button data-mode="test">Test</button>
       <button data-mode="demo">Demo</button>
+      <button data-mode="show">Show</button>
     </div>
 
     <section id="calibTools">
@@ -51,6 +52,25 @@
         <button data-pattern="white">White</button>
         <button data-pattern="colors">Colours</button>
       </div>
+    </section>
+
+    <section id="showTools" hidden>
+      <div class="row seg">
+        <button id="playBtn">▶ Play</button>
+        <button id="restartBtn">⟲ Restart</button>
+      </div>
+      <button id="continueBtn" disabled>Continue ▶▶</button>
+      <div class="row"><span id="timeLabel" class="mono"></span></div>
+      <input type="range" id="seekBar" min="0" max="1" step="0.001" value="0">
+      <div class="hint" id="sceneLabel"></div>
+      <select id="sceneSelect"></select>
+      <label>Bluetooth audio delay <span id="delayValue" class="mono">0 ms</span>
+        <input type="range" id="delayRange" min="0" max="500" step="10" value="0">
+      </label>
+      <button id="syncBtn">Sync test (beep + flash)</button>
+      <p class="hint">Run the sync test and move the slider until the flash and the beep happen together.</p>
+      <label class="filebtn">Load music (temporary)<input type="file" id="musicFile" accept="audio/*"></label>
+      <div class="hint" id="musicName">No music: silent clock</div>
     </section>
 
     <details>

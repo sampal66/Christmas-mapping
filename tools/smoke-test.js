@@ -57,6 +57,28 @@ function serve() {
       await page.waitForTimeout(800);
       if (shots) await page.screenshot({ path: path.join(shots, `${m}.png`) });
     }
+
+    // Show mode: play advances time; hold point loops until Continue.
+    await page.click('[data-mode=show]');
+    const label = () => page.locator('#timeLabel').textContent();
+    check((await label()).startsWith('pre-show'), 'pre-show shown before play');
+    await page.click('#playBtn');
+    await page.waitForTimeout(1600);
+    check(/^0:0[1-9]/.test(await label()), `show time advances (got "${await label()}")`);
+    if (shots) await page.screenshot({ path: path.join(shots, 'show.png') });
+    // jump into the hold window (hold at 0:15, loop 13–15)
+    await page.selectOption('#sceneSelect', { index: 2 });   // scene B starts at 0:10
+    await page.waitForTimeout(6000);
+    check(await page.locator('#continueBtn').isEnabled(), 'hold point reached, Continue enabled');
+    check(/^0:1[345]/.test(await label()), `looping inside hold window (got "${await label()}")`);
+    await page.click('#continueBtn');
+    await page.waitForTimeout(1500);
+    check(/^0:1[6-9]/.test(await label()), `continues past hold (got "${await label()}")`);
+    // delay persists
+    await page.locator('#delayRange').fill('120');
+    await page.waitForTimeout(300);
+    const off = await page.evaluate(() => JSON.parse(localStorage.getItem('christmas-mapping.layout.v1')).audioOffsetMs);
+    check(off === 120, `audio delay saved (got ${off})`);
   } catch (e) {
     errors.push(e.message);
   } finally {

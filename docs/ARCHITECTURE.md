@@ -62,10 +62,10 @@ christmas-mapping/
 │     ├─ homography.js       quad ↔ rectangle math, CSS matrix3d
 │     ├─ layout.js           default zones, stage size
 │     ├─ effects.js          calibration pattern and demo effects
-│     ├─ (planned) timeline.js   scene scheduler, hold points, clock
-│     ├─ (planned) audio.js      master track, delay offset
+│     ├─ timeline.js         scene scheduler, hold points
+│     ├─ audio.js            master clock (audio or silent), latency, sync beep
 │     ├─ (planned) media.js      media pack import (IndexedDB)
-│     └─ (planned) scenes/       one module per scene (s00-preshow.js … s10-finale.js)
+│     └─ scenes/             index.js (running order + holds) + one module per scene
 ├─ assets/                   non-personal art, PD music, sfx; CREDITS.md; layouts/
 ├─ tools/
 │  ├─ smoke-test.js          headless app test
@@ -104,7 +104,7 @@ christmas-mapping/
 | Calibrate | ID-coloured grid and label per zone; tree outline | corners, move, mask points; arrow nudge |
 | Test | grid / white / zone colours | — |
 | Demo | `demoEffects[zoneId]` placeholder effects | — |
-| Show *(planned)* | timeline scenes, synced to audio | — |
+| Show | pre-show starfield → timeline scenes synced to the clock; sync test | — |
 
 ### 4.4 Timeline engine (planned, M5–M7)
 ```js
@@ -116,7 +116,9 @@ export default {
   draw(zoneId, ctx2d, w, h, t, local) {},           // t = show time, local = t - start
 };
 ```
-- **Clock:** `showTime = audio.currentTime + audioOffsetMs / 1000`. Every frame, each active scene draws the
+- **Clock** (`audio.js`, `MasterClock`): `showTime = mediaTime − audioOffsetMs / 1000`. Here `audioOffsetMs` is the
+  Bluetooth latency (0–500 ms) and delays the visuals. `mediaTime` comes from the `<audio>` element, or from a silent
+  `performance.now()` clock when no music is loaded. Every frame, each active scene draws the
   zones it owns. Zones without an active scene render black.
 - **Hold points:** `{ at: 640.0, loop: [632.0, 640.0] }`. The audio and visuals loop that segment until the
   operator taps **Continue** (live star moment).
@@ -163,4 +165,5 @@ export default {
 | 2026-11-16 | Build in work packages, one per session | keeps context windows small (AGENTS §03a) |
 
 ## Changelog
+- **2026-11-16** — WP-01: clock/timeline/holds built; Show mode documented.
 - **2026-11-16** — v1: documented Mapper v0 as built; designed timeline, media pack and export.

@@ -57,7 +57,8 @@ body:not(.ui-hidden) #hotCorner { display: none; }
 #panel header .ver { opacity: 0.6; font-size: 12px; }
 #panel header button { margin-left: auto; }
 .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.seg button { flex: 1; }
+.seg { flex-wrap: nowrap; }
+.seg button { flex: 1; padding: 8px 4px; }
 button, select, .filebtn {
   font: inherit; color: var(--panel-fg); background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px; min-height: 40px;
@@ -74,3 +75,8 @@ details > * + * { margin-top: 6px; }
 .dpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .dpad select { min-height: 40px; padding: 4px; text-align: center; }
 input[type=range] { flex: 1; }
+
+.mono { font-variant-numeric: tabular-nums; font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
+button:disabled { opacity: 0.4; }
+#showTools { display: flex; flex-direction: column; gap: 8px; }
+#showTools[hidden] { display: none; }
