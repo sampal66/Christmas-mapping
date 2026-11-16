@@ -58,7 +58,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 ## Open decisions / waiting on owner
 
-- **Projector purchase (Nov 27):** depends on the spot. On the counter (2.9 m) it needs a throw ratio ≤ ≈1.05–1.2. On a tripod behind the bar (≈3.7–3.9 m) the HAPPRUN H1 works. See [STAGE_SURVEY §03c–d](STAGE_SURVEY.md). Owner: tape the floor → star-top height.
+- **Projector purchase (Nov 27):** depends on the spot. On the counter (2.9 m) it needs a throw ratio ≤ ≈1.05–1.2. On a tripod behind the bar (≥ 3.3 m, ideally ≥ 3.5 m) the HAPPRUN H1 works (star top taped at 2.03 m). See [STAGE_SURVEY §03d](STAGE_SURVEY.md). Owner: measure the bar-tripod distance.
 - Tape-measure the remaining items in [STAGE_SURVEY §05](STAGE_SURVEY.md) (star size, counter height).
 - Merge PR #1 and enable GitHub Pages.
 - Reconnect the ElevenLabs connector with full permissions (from a PC). This blocks WP-04 and WP-05.

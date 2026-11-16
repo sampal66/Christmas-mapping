@@ -148,7 +148,7 @@ at 1.0 m). It must cover:
 - **The star** is gold, openwork and glittery, **25 cm tall**, on a spiral holder.
   - From `IMG_8523` its top sits ≈2.0 m up (photo estimate), well below the ceiling. That also suggests the bare tip
     is nearer 1.8 m than 2.0 m (the tape's 2.0 m may include the stand).
-  - **Tape the floor → star-top height**: it sets the projector requirement.
+  - **Taped: floor → star top = 2.03 m** (the photo estimate of ≈2.0 m was right).
 - **Decorations** (balls, small plushies) are coming.
   - Prefer **matte, light-coloured** pieces: they take projected colour.
   - Avoid mirror balls and tinsel: they throw glints into eyes and make speckles.
@@ -157,11 +157,13 @@ at 1.0 m). It must cover:
   - Many small projectors have a 1/4″ tripod thread underneath: check the chosen model. Otherwise a tripod
     projector/laptop tray (≈USD 10–15) does it.
 
-| Spot | Distance | Throw ratio needed (star top 2.0 m / 2.2 m) | Notes |
+Requirements with the taped **star top of 2.03 m** (no riser):
+
+| Spot | Distance | Throw ratio needed | Notes |
 |---|---|---|---|
-| A · on the counter | 2.9 m, lens 1.10 m | ≤ 1.21 / ≤ 1.04 | No tripod; off-axis left. |
-| **B · tripod in the kitchen, just behind the bar** | **≈3.5–3.9 m**, lens ≈1.3 m (projecting over the bar top) | **≤ 1.49–1.68 / ≤ 1.28–1.43** | Same direction as A but further back. **The H1 (≈1.35) works at ≈3.7 m+.** The beam clears the 1.06 m bar top; keep the bar clear. |
-| C · tripod in the entry corridor | ≈4.5 m+, offset right | ≤ 2.0 / ≤ 1.76 | Most distance, but it's the front-door path (traffic, dog), the dining table is in the beam, and the end of the right wall may block the view to the corner. Needs a photo from there at tripod height. |
+| A · on the counter | 2.9 m, lens 1.10 m | ≤ 1.18 (≤ 1.25 with a riser) | No tripod; off-axis left. The H1 doesn't fit. |
+| **B · tripod in the kitchen, just behind the bar** | **≈3.3–3.9 m**, lens ≈1.3 m (projecting over the bar top) | **3.3 m ≤ 1.37 · 3.5 m ≤ 1.46 · 3.7 m ≤ 1.55 · 3.9 m ≤ 1.63** | Same direction as A but further back. **The H1 (≈1.35) works from ≈3.3 m; aim for ≥ 3.5 m for margin.** The beam clears the 1.06 m bar top; keep the bar clear. |
+| C · tripod in the entry corridor | ≈4.5 m+, offset right | ≤ ≈2.0 | Most distance, but it's the front-door path (traffic, dog), the dining table is in the beam, and the end of the right wall may block the view to the corner. Needs a photo from there at tripod height. |
 
 **Recommendation:** spot B. It makes the cheap H1 viable, and spot A with a ≈1.05 projector stays the fallback.
 
@@ -176,6 +178,8 @@ corner, ≈1.85 m high**. The dining table, its chairs and the leaning painting 
 | **Ambient strip** (current) | Snow, glow and "spill-over" on the first ≈0.7–0.9 m of the right wall next to the corner | Very stretched (grazing light), so it's only good for soft ambience | ✅ keep |
 | Aim the projector into the corner | A two-wall "wrap" that feels immersive | Only ≈2.8 m of image for both walls, but the main wall alone needs 2.1 m plus the tree. The main wall gets oblique, and the tree shadow grows. | ❌ with one projector |
 | A second projector for the right wall | A real second canvas: the wall above the table, ≈0.75–2.2 m high | Another purchase. The sconce sits in the middle of it. Two outputs from one iPad isn't simple. | later / next year |
+
+Earlier sections (§03 point 1, §03c) assumed a 2.18–2.2 m star top. With the taped 2.03 m, use the table above.
 
 ## 04 · Zone defaults (stage pixels, 1920 × 1080)
 
@@ -213,6 +217,7 @@ these. They are starting points only. Calibrate mode moves them onto the real ob
 Photos stay on the iPad or in chat; they are never committed.
 
 ## Changelog
+- **2026-11-16** — v1.6: star top taped at 2.03 m; requirements redone; zone defaults for the behind-the-bar set-up.
 - **2026-11-16** — v1.5: 25 cm star; decoration advice; tripod spots B (behind the bar) and C (corridor) (§03d).
 - **2026-11-16** — v1.4: counter height 1.06 m (lens ≈1.10 m; requirement unchanged); right-wall size and sconce position.
 - **2026-11-16** — v1.3: the counter is 2.9 m from the wall (taped); added the field-of-view / throw-ratio requirement (§03c) ahead of the projector purchase.
