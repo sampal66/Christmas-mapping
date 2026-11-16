@@ -143,6 +143,28 @@ at 1.0 m). It must cover:
   ≈20–30 cm (with the star) falls outside the image. The show then needs re-framing (a WP-10 decision).
 - **Further back** (≥ 3.6 m) would also fix it, if there's a stable spot in line with the wall.
 
+## 03d · Star, decorations and alternative projector spots (owner info, 2026-11-16)
+
+- **The star** is gold, openwork and glittery, **25 cm tall**, on a spiral holder.
+  - From `IMG_8523` its top sits ≈2.0 m up (photo estimate), well below the ceiling. That also suggests the bare tip
+    is nearer 1.8 m than 2.0 m (the tape's 2.0 m may include the stand).
+  - **Tape the floor → star-top height**: it sets the projector requirement.
+- **Decorations** (balls, small plushies) are coming.
+  - Prefer **matte, light-coloured** pieces: they take projected colour.
+  - Avoid mirror balls and tinsel: they throw glints into eyes and make speckles.
+  - Keep the top ≈30 cm around the star fairly clear for the star moment. Tree lights stay off until the finale.
+- **The owner has a tripod** (> 1 m, 1/4″ screw, no plate).
+  - Many small projectors have a 1/4″ tripod thread underneath: check the chosen model. Otherwise a tripod
+    projector/laptop tray (≈USD 10–15) does it.
+
+| Spot | Distance | Throw ratio needed (star top 2.0 m / 2.2 m) | Notes |
+|---|---|---|---|
+| A · on the counter | 2.9 m, lens 1.10 m | ≤ 1.21 / ≤ 1.04 | No tripod; off-axis left. |
+| **B · tripod in the kitchen, just behind the bar** | **≈3.5–3.9 m**, lens ≈1.3 m (projecting over the bar top) | **≤ 1.49–1.68 / ≤ 1.28–1.43** | Same direction as A but further back. **The H1 (≈1.35) works at ≈3.7 m+.** The beam clears the 1.06 m bar top; keep the bar clear. |
+| C · tripod in the entry corridor | ≈4.5 m+, offset right | ≤ 2.0 / ≤ 1.76 | Most distance, but it's the front-door path (traffic, dog), the dining table is in the beam, and the end of the right wall may block the view to the corner. Needs a photo from there at tripod height. |
+
+**Recommendation:** spot B. It makes the cheap H1 viable, and spot A with a ≈1.05 projector stays the fallback.
+
 ## 03a · Using the right wall
 
 From the straight-on photos of the right wall (`IMG_8519`/`8520`), it is **≈3.4 m long**, running from the corner to the
@@ -191,6 +213,7 @@ these. They are starting points only. Calibrate mode moves them onto the real ob
 Photos stay on the iPad or in chat; they are never committed.
 
 ## Changelog
+- **2026-11-16** — v1.5: 25 cm star; decoration advice; tripod spots B (behind the bar) and C (corridor) (§03d).
 - **2026-11-16** — v1.4: counter height 1.06 m (lens ≈1.10 m; requirement unchanged); right-wall size and sconce position.
 - **2026-11-16** — v1.3: the counter is 2.9 m from the wall (taped); added the field-of-view / throw-ratio requirement (§03c) ahead of the projector purchase.
 - **2026-11-16** — v1.2: counter view: sideboard 0.79 m and tree ≈2.0 m confirmed (v1 estimates were wrong); star budget redone; off-axis counter (§03b).
