@@ -8,9 +8,16 @@ A browser-based projection-mapping tool for the iPad. It has no build step: plai
 - **Test**: grid / full white / per-zone colours, for checking coverage and light spill.
 - **Demo**: placeholder effects (snow, stars, tree colour waves, gift boxes, edge chase, star glow) to prove the pipeline.
 - **Show**: Play/Pause, Restart, seek bar, jump to scene, **Continue** (releases a hold point), **Bluetooth audio
-  delay** slider with a **sync test** (beep + flash once a second: move the slider until they match), and temporary
-  music loading (the file stays on the device). It shows a pre-show starfield until Play. Keys: `4` Show, space
+  delay** slider with a **sync test** (beep + flash once a second: move the slider until they match), and
+  music from `master-mix` in the media pack (silent clock when it's missing). It shows a pre-show starfield until Play. Keys: `4` Show, space
   play/pause, `c` continue.
+- **Media pack**: add private files (family photos, narration, the final mix) from the Files app. Each is stored
+  under its name without the extension (`photo-1.jpg` → `photo-1`). Expected names: `master-mix`, `photo-1…6`,
+  `narration-*`. The list shows sizes, a delete button and storage used.
+  **Personal files never leave the device**: they live in the browser's IndexedDB on the iPad, are never uploaded,
+  and must never be committed (the repo is public; `.gitignore` blocks `media/`, `*.private.*`, `assets/private/`).
+- **Offline**: a service worker (`sw.js`) caches the app after the first visit, so it opens with no Wi-Fi. Use
+  Share → **Add to Home Screen** for a fullscreen app. After changing any app file, bump `VERSION` in `sw.js`.
 - **Room model** (`model.html`, linked under Layout file): a metric model of the stage and projector.
   It shows the projector, top and side views, whether the projector covers everything (throw ratio), and editable
   measurements. "Use in Mapper" loads zones generated from the model. The default zones also come from it.

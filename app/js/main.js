@@ -4,6 +4,7 @@ import { calibrationPattern, demoEffects, stars } from './effects.js';
 import { MasterClock, beep } from './audio.js';
 import { Timeline, fmtTime } from './timeline.js';
 import { scenes, holds } from './scenes/index.js';
+import * as media from './media.js';
 
 const STORAGE_KEY = 'christmas-mapping.layout.v1';
 
@@ -308,12 +309,61 @@ $('delayRange').addEventListener('input', (e) => {
   $('delayValue').textContent = `${layout.audioOffsetMs} ms`;
   save();
 });
-// Temporary music loader until the media pack (WP-02) exists. The file stays on the device.
-$('musicFile').addEventListener('change', (e) => {
-  const f = e.target.files[0]; if (!f) return;
-  stopShow(); clock.load(URL.createObjectURL(f));
-  $('musicName').textContent = f.name;
+
+// ---------- media pack ----------
+// Private files live in IndexedDB on this device (see media.js); scenes fetch them with media.objectUrl(name).
+async function renderMediaList() {
+  const items = await media.list();
+  const ul = $('mediaList');
+  ul.replaceChildren(...items.map(({ name, size }) => {
+    const li = document.createElement('li');
+    li.dataset.name = name;
+    const label = document.createElement('span');
+    label.textContent = `${name} · ${media.fmtBytes(size)}`;
+    const del = document.createElement('button');
+    del.textContent = 'Delete';
+    del.addEventListener('click', async () => {
+      if (!confirm(`Delete "${name}" from this device?`)) return;
+      try { await media.remove(name); } catch (err) { alert(err.message); }
+      if (name === 'master-mix') loadMasterMix();
+      renderMediaList();
+    });
+    li.append(label, del);
+    return li;
+  }));
+  if (!items.length) ul.innerHTML = '<li class="hint">No files yet.</li>';
+  const est = await media.storageEstimate();
+  $('mediaStatus').textContent = est
+    ? `Storage used: ${media.fmtBytes(est.usage)} of ${media.fmtBytes(est.quota)}`
+    : 'Storage used: unknown on this browser';
+}
+
+// The final mix drives the show clock when present; otherwise the clock runs silent.
+async function loadMasterMix() {
+  const url = await media.objectUrl('master-mix');
+  if (!url) { $('musicName').textContent = 'No master-mix in the media pack: silent clock'; return; }
+  stopShow(); clock.load(url);
+  $('musicName').textContent = 'Music: master-mix (media pack)';
+}
+
+$('mediaFiles').addEventListener('change', async (e) => {
+  const files = [...e.target.files];
+  e.target.value = '';
+  let failed = '';
+  for (const f of files) {
+    try { await media.put(media.logicalName(f.name), f); } catch (err) { failed = err.message; }
+  }
+  media.persist();
+  await renderMediaList();
+  if (failed) $('mediaStatus').textContent = failed;
+  if (files.some((f) => media.logicalName(f.name) === 'master-mix')) loadMasterMix();
 });
+
+async function initMedia() {
+  try { await media.check(); } catch (err) { $('mediaStatus').textContent = err.message; return; }
+  await renderMediaList();
+  loadMasterMix();
+}
 
 // ---------- panel ----------
 function setMode(m) {
@@ -422,3 +472,9 @@ buildShowPanel();
 setMode('calibrate');
 document.getElementById('maskBtn').hidden = !zoneById(selectedId).mask;
 requestAnimationFrame(frame);
+initMedia();
+
+// Offline: cache the app shell (sw.js). Service workers need https or localhost.
+if ('serviceWorker' in navigator && window.isSecureContext) {
+  navigator.serviceWorker.register('sw.js').catch((err) => console.warn('Service worker not registered', err));
+}
