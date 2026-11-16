@@ -1,6 +1,7 @@
 // Headless smoke test for the Mapper app.
 // Usage: node tools/smoke-test.js [screenshotDir]
-// Serves app/ on a free port, loads it in Chromium, exercises calibrate/test/demo,
+// Serves app/ on a free port, loads it in Chromium, exercises calibrate/test/demo/show, the media pack
+// and offline reload,
 // and fails on any page error or console error.
 const http = require('http');
 const fs = require('fs');
@@ -8,7 +9,18 @@ const path = require('path');
 const { chromium } = require('playwright');
 
 const ROOT = path.join(__dirname, '..', 'app');
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png' };
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png',
+  '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json' };
+// 1×1 PNG used to exercise the media-pack import.
+const TINY_PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
+
+// Every shell file (.html/.css/.js) must be precached by sw.js, or the app breaks offline.
+function missingFromShell() {
+  const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
+  const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((d) =>
+    d.isDirectory() ? walk(path.join(dir, d.name)) : [path.relative(ROOT, path.join(dir, d.name))]);
+  return walk(ROOT).filter((f) => /\.(html|css|js)$/.test(f) && f !== 'sw.js' && !sw.includes(`'${f}'`));
+}
 
 function serve() {
   return new Promise((resolve) => {
@@ -79,6 +91,37 @@ function serve() {
     await page.waitForTimeout(300);
     const off = await page.evaluate(() => JSON.parse(localStorage.getItem('christmas-mapping.layout.v1')).audioOffsetMs);
     check(off === 120, `audio delay saved (got ${off})`);
+
+    // Media pack: import a file, survive a reload, delete it.
+    const missing = missingFromShell();
+    check(!missing.length, `sw.js SHELL is missing: ${missing.join(', ')}`);
+    page.on('dialog', (d) => d.accept());
+    await page.locator('#mediaPack summary').click();
+    await page.setInputFiles('#mediaFiles', { name: 'photo-1.png', mimeType: 'image/png', buffer: TINY_PNG });
+    await page.locator('#mediaList li[data-name="photo-1"]').waitFor({ timeout: 3000 });
+    check(/storage used/i.test(await page.locator('#mediaStatus').textContent()), 'storage readout shown');
+    if (shots) await page.screenshot({ path: path.join(shots, 'media.png') });
+    await page.reload();
+    await page.locator('#mediaPack summary').click();
+    await page.locator('#mediaList li[data-name="photo-1"]').waitFor({ timeout: 3000 })
+      .catch(() => errors.push('assert: photo-1 still listed after reload'));
+    const size = await page.evaluate(async () => (await (await import('./js/media.js')).get('photo-1'))?.size);
+    check(size === TINY_PNG.length, `stored blob intact (got ${size} bytes)`);
+
+    // Offline: once the service worker controls the page, a reload with no network still opens the app.
+    await page.evaluate(() => navigator.serviceWorker.ready);
+    if (!(await page.evaluate(() => !!navigator.serviceWorker.controller))) await page.reload();
+    check(await page.evaluate(() => !!navigator.serviceWorker.controller), 'service worker controls the page');
+    await page.context().setOffline(true);
+    await page.reload();
+    await page.waitForTimeout(600);
+    check(await page.locator('canvas.zone').count() >= 8, 'app opens offline');
+    await page.context().setOffline(false);
+
+    await page.locator('#mediaPack summary').click();
+    await page.locator('#mediaList li[data-name="photo-1"] button').click();
+    await page.waitForTimeout(300);
+    check(await page.locator('#mediaList li[data-name="photo-1"]').count() === 0, 'delete removes the file');
   } catch (e) {
     errors.push(e.message);
   } finally {

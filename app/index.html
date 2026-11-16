@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
   <title>Christmas Mapper</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-180.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -69,9 +73,19 @@
       </label>
       <button id="syncBtn">Sync test (beep + flash)</button>
       <p class="hint">Run the sync test and move the slider until the flash and the beep happen together.</p>
-      <label class="filebtn">Load music (temporary)<input type="file" id="musicFile" accept="audio/*"></label>
       <div class="hint" id="musicName">No music: silent clock</div>
+      <p class="hint">Music comes from <code>master-mix</code> in the Media pack below.</p>
     </section>
+
+    <details id="mediaPack">
+      <summary>Media pack</summary>
+      <p class="hint">Private files stay on this iPad only. Each file is saved under its name without the
+        extension. Expected names: <code>master-mix</code>, <code>photo-1</code>…<code>photo-6</code>,
+        <code>narration-s01</code> (etc.).</p>
+      <label class="filebtn">Add files…<input type="file" id="mediaFiles" multiple accept="image/*,audio/*,video/*"></label>
+      <ul id="mediaList"></ul>
+      <div class="hint" id="mediaStatus"></div>
+    </details>
 
     <details>
       <summary>Room photo preview</summary>

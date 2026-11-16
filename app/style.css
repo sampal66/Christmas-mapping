@@ -80,3 +80,9 @@ input[type=range] { flex: 1; }
 button:disabled { opacity: 0.4; }
 #showTools { display: flex; flex-direction: column; gap: 8px; }
 #showTools[hidden] { display: none; }
+
+/* media pack */
+#mediaList { list-style: none; margin: 0; padding: 0; max-height: 180px; overflow-y: auto; }
+#mediaList li { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+#mediaList li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+code { font-size: 12px; }
