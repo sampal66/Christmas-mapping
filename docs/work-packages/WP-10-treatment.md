@@ -13,6 +13,7 @@ to one agreed plan.
 - `CLAUDE.md` → `docs/AGENTS.md` §03a, §06 (copyright, safety, privacy), §07 (credits)
 - `docs/PRD.md` §03, §04, §5.2, §07, §08
 - `docs/PLAN.md` §1 (stage), §4 (cast and look), §5 (audio), §6 (show outline), §7 (timeline)
+- `docs/STAGE_SURVEY.md` §02–§03 (real room geometry; on main once PR #4 merges)
 - `docs/DESIGN_SYSTEM.md` all sections (it's the review subject), skim §10
 - `docs/CONTROL.md` "Open decisions"
 - No code, no images or media.
