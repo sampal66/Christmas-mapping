@@ -1,0 +1,6 @@
+# Privacy guard: personal media (photos, narration with the baby's name, the final mix) never goes in git.
+media/
+*.private.*
+assets/private/
+node_modules/
+.DS_Store

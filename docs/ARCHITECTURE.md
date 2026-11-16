@@ -5,7 +5,7 @@
 
 | | |
 |---|---|
-| **Status** | v1 — Mapper v0 built; timeline, audio, media pack and export designed, not yet built |
+| **Status** | v1 — Mapper v0, timeline/audio and media pack + offline built; export designed, not yet built |
 | **Last updated** | 2026-11-16 |
 
 ---
@@ -125,11 +125,21 @@ export default {
 - **Operator controls:** Play, Pause, Restart, Jump to scene, Continue (hold), audio-delay slider (±500 ms).
   A test tone and flash help set the delay by eye and ear.
 
-### 4.5 Media pack (planned, M8)
-- Personal files (family photos, narration WAVs that say the baby's name, the final mix) are **never in git**.
-- They are imported on the iPad via `<input type="file" multiple>` and stored in IndexedDB as Blobs, keyed by
-  logical name (e.g. `photo-1`, `narration-s01`, `master-mix`). Scenes request media by name, with a placeholder
-  fallback when it's missing.
+### 4.5 Media pack and offline (built, M8/M9 — WP-02)
+- Personal files (family photos, narration WAVs that say the baby's name, the final mix) are **never in git**
+  (`.gitignore` blocks `media/`, `*.private.*`, `assets/private/`).
+- They are imported on the iPad via the panel's **Media pack** section (`<input type="file" multiple>`) and stored
+  by `app/js/media.js` in IndexedDB (`christmas-mapping-media`, store `files`) as Blobs keyed by logical name =
+  file name without extension (`photo-1.jpg` → `photo-1`). API: `put`, `get → Blob|null`, `list`, `remove`,
+  `objectUrl(name)` (cached; `null` when missing, so scenes draw a placeholder). Every call is try/catch'd and the
+  panel shows a clear message when storage is blocked. The panel also shows `navigator.storage.estimate()` and asks
+  for `navigator.storage.persist()` after an import.
+- `master-mix`, when present, is loaded into the MasterClock at startup (and after import/delete); otherwise the
+  clock runs silent. This replaces WP-01's temporary music loader.
+- **Offline:** `app/sw.js` precaches the app shell (HTML, CSS, JS, manifest, icons) cache-first under a versioned
+  cache name (`christmas-mapper-vN`) and deletes old caches on activate. **Bump `VERSION` in `sw.js` whenever a
+  shell file changes**, or the iPad keeps the old copy. The smoke test fails if a `.html/.css/.js` file is missing
+  from `SHELL`. `app/manifest.webmanifest` + icons enable "Add to Home Screen" (fullscreen, landscape).
 
 ### 4.6 MP4 export (planned, M10)
 - `tools/export-mp4.js` loads the app in headless Chromium with `?render=1&layout=<json>`. It replaces the
@@ -163,7 +173,10 @@ export default {
 | 2026-11-16 | Public-domain recordings for carols | saves ElevenLabs credits; legal clarity |
 | 2026-11-16 | Repo stays public (open source); personal photos and audio stay on-device | owner decision |
 | 2026-11-16 | Build in work packages, one per session | keeps context windows small (AGENTS §03a) |
+| 2026-11-16 | Cache-first service worker with a hand-kept, versioned shell list | show night must work with no Wi-Fi; a smoke-test check keeps the list complete |
+| 2026-11-16 | `master-mix` from the media pack drives the show clock | one source of truth for the final mix; no per-session file picking |
 
 ## Changelog
+- **2026-11-16** — WP-02: media pack (IndexedDB) and offline service worker built; §4.5 updated.
 - **2026-11-16** — WP-01: clock/timeline/holds built; Show mode documented.
 - **2026-11-16** — v1: documented Mapper v0 as built; designed timeline, media pack and export.
