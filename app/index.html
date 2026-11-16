@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Christmas Mapper</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="stage">
+    <div id="bg" hidden></div>
+    <div id="handles"></div>
+  </div>
+
+  <div id="hotCorner" title="Show controls"></div>
+
+  <aside id="panel">
+    <header>
+      <strong>Christmas Mapper</strong> <span class="ver">v0</span>
+      <button id="hideUI" title="Hide controls (tap top-left corner to bring back)">Hide ✕</button>
+    </header>
+
+    <div class="row seg">
+      <button data-mode="calibrate">Calibrate</button>
+      <button data-mode="test">Test</button>
+      <button data-mode="demo">Demo</button>
+      <button data-mode="show">Show</button>
+    </div>
+
+    <section id="calibTools">
+      <label>Zone <select id="zoneSelect"></select></label>
+      <div class="row">
+        <button id="maskBtn">Edit outline</button>
+        <label class="chk"><input type="checkbox" id="hideZone"> Off</label>
+        <button id="resetZone">Reset</button>
+      </div>
+      <p class="hint">Drag the corners onto the real object. Tap a handle, then use the arrows for fine moves.</p>
+      <div class="dpad">
+        <span></span><button data-nudge="0,-1">▲</button><span></span>
+        <button data-nudge="-1,0">◀</button>
+        <select id="stepSel"><option value="1">1px</option><option value="2" selected>2px</option><option value="10">10px</option></select>
+        <button data-nudge="1,0">▶</button>
+        <span></span><button data-nudge="0,1">▼</button><span></span>
+      </div>
+    </section>
+
+    <section id="testTools" hidden>
+      <div class="row seg">
+        <button data-pattern="grid" class="on">Grid</button>
+        <button data-pattern="white">White</button>
+        <button data-pattern="colors">Colours</button>
+      </div>
+    </section>
+
+    <section id="showTools" hidden>
+      <div class="row seg">
+        <button id="playBtn">▶ Play</button>
+        <button id="restartBtn">⟲ Restart</button>
+      </div>
+      <button id="continueBtn" disabled>Continue ▶▶</button>
+      <div class="row"><span id="timeLabel" class="mono"></span></div>
+      <input type="range" id="seekBar" min="0" max="1" step="0.001" value="0">
+      <div class="hint" id="sceneLabel"></div>
+      <select id="sceneSelect"></select>
+      <label>Bluetooth audio delay <span id="delayValue" class="mono">0 ms</span>
+        <input type="range" id="delayRange" min="0" max="500" step="10" value="0">
+      </label>
+      <button id="syncBtn">Sync test (beep + flash)</button>
+      <p class="hint">Run the sync test and move the slider until the flash and the beep happen together.</p>
+      <label class="filebtn">Load music (temporary)<input type="file" id="musicFile" accept="audio/*"></label>
+      <div class="hint" id="musicName">No music: silent clock</div>
+    </section>
+
+    <details>
+      <summary>Room photo preview</summary>
+      <p class="hint">Show a photo of the wall behind the zones (stays on this device only).</p>
+      <input type="file" id="photoFile" accept="image/*">
+      <div class="row">
+        <input type="range" id="photoOpacity" min="0.1" max="1" step="0.05" value="0.6" disabled>
+        <button id="photoClear">Remove</button>
+      </div>
+    </details>
+
+    <details>
+      <summary>Layout file</summary>
+      <div class="row">
+        <button id="exportBtn">Export</button>
+        <label class="filebtn">Import<input type="file" id="importFile" accept="application/json,.json"></label>
+      </div>
+    </details>
+
+    <div class="row">
+      <button id="fullscreenBtn">Fullscreen</button>
+    </div>
+  </aside>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
