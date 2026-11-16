@@ -1,5 +1,8 @@
 # Christmas Mapping — Project Plan (v2)
 
+> Timeline and room notes. Source-of-truth docs: [PRD](PRD.md) (what/why) · [DESIGN_SYSTEM](DESIGN_SYSTEM.md) (look/sound/safety) ·
+> [ARCHITECTURE](ARCHITECTURE.md) (how) · [AGENTS](AGENTS.md) (rules for AI agents).
+
 A ~12 minute home projection-mapping show for Christmas Eve 2026. The show is **mostly light show**, with
 **short story moments** in between. Narration is in Spanish (neutral, "Disney dub" accent) and everything
 else in the project is in English. It is made for the family and the baby's **first Christmas**.
@@ -72,7 +75,7 @@ Development happens in Claude cloud sessions from an iPad, and the same iPad run
 - **Zones** (each one is warped with its own corner pin):
   `wall` (full), `backdrop` (above sideboard), `stage` (sideboard front + top edge), `boxes` (one zone per visible face),
   `tree` (polygon mask), `star` (the top point), `rightStrip`.
-- **Rendering:** WebGL with per-zone homography warp and masks. **Black = no light**, so characters drawn on black need
+- **Rendering:** per-zone canvases warped with CSS `matrix3d` homographies, plus masks (WebGL later if needed). **Black = no light**, so characters drawn on black need
   no transparency.
 - **Content types:** (1) effects written as code: snow, chases, washes, sparkles, text, fireworks;
   (2) character clips/cut-outs on black.
