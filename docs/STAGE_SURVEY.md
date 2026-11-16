@@ -112,7 +112,7 @@ From `IMG_8518`, taken at counter height:
 - **It's off-axis.** The ceiling line slopes down toward the corner, the sideboard front looks like a trapezoid with
   its left end nearer, and a lot of the right wall is visible. So the counter sits **left of the wall's centre**
   (towards the tree and doorway), and the projector must be **turned ≈20–25° towards the corner**.
-- **Distance:** roughly **3.1–3.4 m** from the wall. The yaw makes this estimate loose: **tape it**.
+- **Distance: 2.9 m** to the wall (owner's tape). The photo estimate of 3.1–3.4 m was too long.
 - **What off-axis means:**
   - The image lands as a trapezoid. The app's corner-pin corrects it, at the cost of some pixels and brightness on
     the far side.
@@ -120,6 +120,26 @@ From `IMG_8518`, taken at counter height:
   - The tree's shadow falls almost straight behind it (good).
   - The right wall is hit less obliquely, so the right-wall strip gets wider and less stretched (good).
 - **The dining table** (bottom right of the photo) is right at the edge of the beam's path: clear it for the show.
+
+## 03c · What the projector must cover from the counter (2.9 m), and the purchase decision
+
+The projector sits 2.9 m out, ≈0.1–0.5 m right of the doorway jamb, with the lens at ≈1.0 m. It must cover:
+- across: the tree's left edge (it overhangs the doorway) to the right corner
+- up and down: the box tops to the tree tip, or to the star top
+
+| Case | Field of view needed | Max throw ratio |
+|---|---|---|
+| Star top in, boxes on the sideboard | ≈44° × 30° | **≤ 1.05** |
+| Star top in, boxes on a 15 cm riser | ≈44° × 27° | ≤ 1.17 |
+| Tree tip only (no star), riser | ≈44° × 23° | ≤ 1.25 |
+| **HAPPRUN H1** (throw ratio ≈1.35, unverified) | gives ≈41° × 24° (2.15 × 1.21 m image) | ✗ short in both directions |
+
+- **Before buying (Black Friday, Nov 27):** look for a native-1080p projector with a **throw ratio ≤ ≈1.05** (often sold
+  as "short throw" or listed as "100″ at ≈2.3 m"). A 1.2 ratio works only with the riser and the star left out of the
+  image.
+- **If the H1 is kept:** the right-wall strip goes, the tree's left edge or the corner gets cropped, and the tree's top
+  ≈20–30 cm (with the star) falls outside the image. The show then needs re-framing (a WP-10 decision).
+- **Further back** (≥ 3.6 m) would also fix it, if there's a stable spot in line with the wall.
 
 ## 03a · Using the right wall
 
@@ -165,6 +185,7 @@ these. They are starting points only. Calibrate mode moves them onto the real ob
 Photos stay on the iPad or in chat; they are never committed.
 
 ## Changelog
+- **2026-11-16** — v1.3: the counter is 2.9 m from the wall (taped); added the field-of-view / throw-ratio requirement (§03c) ahead of the projector purchase.
 - **2026-11-16** — v1.2: counter view: sideboard 0.79 m and tree ≈2.0 m confirmed (v1 estimates were wrong); star budget redone; off-axis counter (§03b).
 - **2026-11-16** — v1.1: counter placement, dining-table clipping, right-wall options (§03a), extra photos asked for.
 - **2026-11-16** — v1: photo-based survey; projector distance, sideboard front, star budget and new zone defaults.

@@ -58,7 +58,8 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 ## Open decisions / waiting on owner
 
-- Tape-measure the items in [STAGE_SURVEY §05](STAGE_SURVEY.md) (sideboard, tree + star, projector distance).
+- **Projector purchase (Nov 27):** from the counter (2.9 m) the show needs a throw ratio ≤ ≈1.05; the HAPPRUN H1 (≈1.35) is too narrow. See [STAGE_SURVEY §03c](STAGE_SURVEY.md).
+- Tape-measure the remaining items in [STAGE_SURVEY §05](STAGE_SURVEY.md) (star size, counter height).
 - Merge PR #1 and enable GitHub Pages.
 - Reconnect the ElevenLabs connector with full permissions (from a PC). This blocks WP-04 and WP-05.
 - More pet photos (full body, side view) for WP-04.
