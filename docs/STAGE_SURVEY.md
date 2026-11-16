@@ -79,6 +79,28 @@ The photos are **not in the repo**: they show the inside of the home, and the re
 6. **Audience placement.** Nobody should stand between the projector and the wall. Seat people to the sides of the
    projector or behind it. The dining chairs on the right work.
 
+7. **Projector on the kitchen counter (owner has no tripod).**
+   - The counter is ≈1 m high, which is in the recommended lens range, so no tripod is needed. Tilt the projector
+     with a small wedge or book, put it at the back edge of the counter to gain distance, and clear the counter
+     around it.
+   - Its distance to the wall is still unknown. The photos taken there are ultra-wide, which suggests ≈3.2–3.5 m but
+     can't be trusted. If it's under ≈3.7 m, use the box riser or accept a cropped star (point 1).
+   - If the counter isn't centred on the wall, that's fine: the corner-pin corrects the trapezoid.
+   - Keep it where nobody bumps it during the show: any knock means recalibrating.
+8. **The dining table may clip the lower-right of the beam.**
+   - The table sits near the corner, along the right wall. Its top (≈0.75 m, plus whatever is on it) can cut into
+     the beam near the boxes and the right-wall strip.
+   - Clear the table, or slide it back, for the show.
+9. **The right wall:** see §03a.
+
+## 03a · Using the right wall
+
+| Option | What you get | Cost / problems | Verdict |
+|---|---|---|---|
+| **Ambient strip** (current) | Snow, glow and "spill-over" on the first ≈0.7–0.9 m of the right wall next to the corner | Very stretched (grazing light), so it's only good for soft ambience | ✅ keep |
+| Aim the projector into the corner | A two-wall "wrap" that feels immersive | Only ≈2.8 m of image for both walls, but the main wall alone needs 2.1 m plus the tree. The main wall gets oblique, and the tree shadow grows. | ❌ with one projector |
+| A second projector for the right wall | A real second canvas: the wall above the table, ≈0.75–2.2 m high | Another purchase. The sconce sits in the middle of it. Two outputs from one iPad isn't simple. | later / next year |
+
 ## 04 · Zone defaults (stage pixels, 1920 × 1080)
 
 `app/js/layout.js` defaults were recomputed from this model, for the **recommended set-up**: 3.8 m, lens ≈0.95 m,
@@ -103,5 +125,16 @@ image ≈0.60–2.19 m. They are starting points only. Calibrate mode moves them
 5. Gift boxes, once bought: sizes and where they sit on the sideboard top.
 6. When the projector arrives: the throw at a known distance (image width at 3.0 m) to confirm the ≈1.35 ratio.
 
+## 06 · Photos that would help (owner)
+
+1. **From the projector spot:** camera on the counter where the projector will sit, at counter height, **1× lens
+   (not 0.5×)**, landscape, whole wall in frame. This is close to what the projector will see.
+   - Load it into the app's **Room photo preview** to pre-calibrate the zones before the projector arrives.
+2. **The right wall, straight on,** from the middle of the room.
+3. **A tape measure in shot** (or the measurements in §05).
+
+Photos stay on the iPad or in chat; they are never committed.
+
 ## Changelog
+- **2026-11-16** — v1.1: counter placement, dining-table clipping, right-wall options (§03a), extra photos asked for.
 - **2026-11-16** — v1: photo-based survey; projector distance, sideboard front, star budget and new zone defaults.
