@@ -34,7 +34,7 @@ Development happens in Claude cloud sessions from an iPad, and the same iPad run
 | Tree | 2.0 m tall, Ø 0.9 m, flocked white tips, cool-white LEDs. **Photos confirm ≈2.0 m, Ø ≈1.0 m** | left; axis ≈0.4 m from the doorway jamb, ≈0.45 m out from the wall; overhangs the doorway ≈0.1 m |
 | Sideboard ("stage") | 1.07 w × 0.79 h × 0.41 d m. **0.79 m height confirmed from photos** | pushed against the right wall; black top, dark wood drawers |
 | Right wall | — | a narrow strip near the corner can get ambient effects (snow, glow) |
-| Projector | **HAPPRUN H1** (native 1080p) | **tripod just behind the kitchen bar: ≈3.6 m from the wall (3.5 m measured spot + ≈10 cm), head 1.45 m** (off-axis left). On the counter itself (2.9 m) it would need a throw ratio ≤ 1.18 ([survey §03d](STAGE_SURVEY.md)) |
+| Projector | **HAPPRUN H1** (native 1080p) | **tripod just behind the kitchen bar: 3.5 m from the wall (its furthest spot), head 1.45 m** (off-axis left). On the counter itself (2.9 m) it would need a throw ratio ≤ 1.18 ([survey §03d](STAGE_SURVEY.md)) |
 
 > **Stage survey (2026-11-16):** the owner's photos were measured in [STAGE_SURVEY.md](STAGE_SURVEY.md). Main points:
 > - the star needs ≈1.6 m of image height (≈4 m throw); the counter is closer, so plan a box riser or a smaller star
@@ -63,7 +63,7 @@ Development happens in Claude cloud sessions from an iPad, and the same iPad run
 
 | Item | Status | Notes |
 |---|---|---|
-| HAPPRUN H1 Native 1080P | buy on Black Friday (≈ USD 60). **Throw ratio 1.4 (manual) ✔ fits from the tripod at ≈3.6 m.** Check it runs on the home's voltage (manual says 220 V) | keystone 0, manual focus. From the counter (2.9 m) the show needs a **throw ratio ≤ ≈1.05**; the H1's ≈1.35 is too narrow ([survey §03c](STAGE_SURVEY.md)) |
+| HAPPRUN H1 Native 1080P | buy on Black Friday (≈ USD 60). **Throw ratio 1.4 (manual) ✔ fits from the tripod at ≈3.6 m.** The listing says 110 V ✔ | keystone 0, manual focus. From the counter (2.9 m) the show needs a **throw ratio ≤ ≈1.05**; the H1's ≈1.35 is too narrow ([survey §03c](STAGE_SURVEY.md)) |
 | USB-C → HDMI adapter **with USB-C charging pass-through** | buy now (≈ USD 15) | needed for TV tests now |
 | Samsung soundbar | have | Bluetooth from the iPad; the app has an **audio-delay slider** to fix Bluetooth lag |
 | TV with HDMI | have | stands in for the projector until it arrives |
