@@ -41,6 +41,11 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
+- **2026-11-16 · Stage survey** (done in the WP-02 session at the owner's request). The owner's room photos were measured
+  → `docs/STAGE_SURVEY.md`; PLAN §1 and the `layout.js` defaults were updated. Main points: projector ≈3.8 m back
+  (at 3.5 m the star is cropped); the tree is ≈1.77 m and overhangs the doorway; the sideboard front is out of the image.
+  Photos are NOT committed (privacy). Next: owner tape-measures (survey §05). WP-10 should read survey §02–§03.
+
 - **2026-11-16 · WP-01** (built in the setup session at the owner's request). `audio.js` MasterClock (audio or silent clock,
   latency = `layout.audioOffsetMs`), `timeline.js` (scenes + holds), Show mode panel, sync test, 2 placeholder scenes
   with a hold at 0:15. Smoke test covers play, hold, continue and delay persistence. Gotchas: a hold stays active once
@@ -53,6 +58,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 ## Open decisions / waiting on owner
 
+- Tape-measure the items in [STAGE_SURVEY §05](STAGE_SURVEY.md) (sideboard, tree + star, projector distance).
 - Merge PR #1 and enable GitHub Pages.
 - Reconnect the ElevenLabs connector with full permissions (from a PC). This blocks WP-04 and WP-05.
 - More pet photos (full body, side view) for WP-04.
