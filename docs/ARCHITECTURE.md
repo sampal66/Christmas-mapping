@@ -131,6 +131,29 @@ export default {
   logical name (e.g. `photo-1`, `narration-s01`, `master-mix`). Scenes request media by name, with a placeholder
   fallback when it's missing.
 
+### 4.7 Room model (built, M12)
+- `app/js/stage-model.js` holds the measured stage in metres: wall, right wall, sideboard, tree (cone), star, gift
+  boxes, fixtures and the projector pose and throw ratio. Data comes from [STAGE_SURVEY](STAGE_SURVEY.md).
+  - **World axes:** origin = floor at the doorway jamb on the main-wall plane; x along the wall, y into the room,
+    z up.
+  - **Projector:** a pinhole camera, focal length = throw ratio × 1920 px, auto-aimed at the middle of the stage's
+    angular extent.
+  - **`layoutFromModel()`** projects each object's front plane into stage pixels and returns a normal layout:
+    - zones are clipped so the handles stay inside the image
+    - the tree mask is generated from the cone
+    - the hidden sideboard strip starts `hidden`
+  - **`coverage()`** and **`requiredThrowRatio()`** check the projector fit.
+- **`layout.js` `defaultLayout()` = `layoutFromModel(loadModel())`.** Hand-written default quads are gone.
+  `model-store.js` keeps the owner's edits on the device.
+- **`app/model.html`** (Room model page):
+  - shows a projector view, a top view and a side view
+  - shows the fit (needed vs actual throw ratio) and editable numbers
+  - "Use in Mapper" writes the generated zones into the saved layout
+- **When the projector arrives:** enter its real distance, height and throw ratio, press "Use in Mapper", then
+  fine-tune in Calibrate.
+- **Limits:** front faces only (the box side faces are not zones yet). The tree and star are vertical cards facing
+  the projector. Lens offset is ignored (only the field of view matters for coverage).
+
 ### 4.6 MP4 export (planned, M10)
 - `tools/export-mp4.js` loads the app in headless Chromium with `?render=1&layout=<json>`. It replaces the
   clock with a deterministic frame counter (30 or 60 fps), captures each stage frame, and pipes it to ffmpeg
@@ -163,7 +186,9 @@ export default {
 | 2026-11-16 | Public-domain recordings for carols | saves ElevenLabs credits; legal clarity |
 | 2026-11-16 | Repo stays public (open source); personal photos and audio stay on-device | owner decision |
 | 2026-11-16 | Build in work packages, one per session | keeps context windows small (AGENTS §03a) |
+| 2026-11-16 | Default zones are generated from a metric room model, not hand-placed | one set of measurements drives the zones, coverage checks and the projector choice; re-aiming is just new numbers |
 
 ## Changelog
+- **2026-11-16** — §4.7 room model (stage-model.js, model.html); default zones are generated from it.
 - **2026-11-16** — WP-01: clock/timeline/holds built; Show mode documented.
 - **2026-11-16** — v1: documented Mapper v0 as built; designed timeline, media pack and export.

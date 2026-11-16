@@ -79,6 +79,20 @@ function serve() {
     await page.waitForTimeout(300);
     const off = await page.evaluate(() => JSON.parse(localStorage.getItem('christmas-mapping.layout.v1')).audioOffsetMs);
     check(off === 120, `audio delay saved (got ${off})`);
+
+    // Room model page: renders, reports the fit, and pushes model-generated zones into the Mapper.
+    await page.goto(url + 'model.html');
+    await page.waitForTimeout(500);
+    check(/throw ratio/.test(await page.locator('#verdict').textContent()), 'model page shows the projector fit');
+    check(await page.locator('#coverage li').count() >= 6, 'model page lists coverage points');
+    if (shots) await page.screenshot({ path: path.join(shots, 'model.png'), fullPage: true });
+    page.once('dialog', (d) => d.accept());
+    await page.click('#useBtn');
+    await page.waitForURL(url);
+    const zones = await page.evaluate(() => JSON.parse(localStorage.getItem('christmas-mapping.layout.v1')).zones);
+    check(zones.length === 8 && zones.every((z) => z.quad.flat().every(Number.isFinite)), 'model zones saved to the Mapper');
+    await page.waitForTimeout(300);
+    check(await page.locator('canvas.zone').count() >= 8, 'Mapper renders the model zones');
   } catch (e) {
     errors.push(e.message);
   } finally {

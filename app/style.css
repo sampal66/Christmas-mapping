@@ -80,3 +80,4 @@ input[type=range] { flex: 1; }
 button:disabled { opacity: 0.4; }
 #showTools { display: flex; flex-direction: column; gap: 8px; }
 #showTools[hidden] { display: none; }
+a.filebtn { color: inherit; text-decoration: none; }

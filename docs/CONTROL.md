@@ -41,6 +41,12 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
+- **2026-11-16 · Room model** (same session, owner's request). `stage-model.js` (metric stage + projector pinhole) generates the
+  default zones; `model.html` shows projector/top/side views + fit; "Use in Mapper" pushes zones. Checked against the
+  tripod-top photo. Gotcha: once PR #2 (sw.js) merges, add `model.html`, `js/stage-model.js`, `js/model-store.js`,
+  `js/model-view.js` to `SHELL` and bump `VERSION` (the smoke test enforces it). New zones (e.g. box side faces) go in
+  `layoutFromModel()`.
+
 - **2026-11-16 · Stage survey** (done in the WP-02 session at the owner's request). The owner's room photos were measured
   → `docs/STAGE_SURVEY.md`; PLAN §1 and the `layout.js` defaults were updated. Main points: the tape values hold (tree 2.0 m,
   sideboard 0.79 m); the counter is off-axis at ≈3.1–3.4 m, so the star top is cropped (fix: box riser or smaller star); the sideboard front is out of the image.

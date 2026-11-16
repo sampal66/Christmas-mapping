@@ -64,6 +64,7 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 | M9 | Works offline once loaded (no Wi-Fi needed on show night) | Should | ⏳ |
 | M10 | 1080p **MP4 export** of the calibrated show as a backup | Must | ⏳ |
 | M11 | Pre-show idle loop | Should | ✅ WP-01 (starfield) |
+| M12 | **Room model**: a spatial model of the real stage and projector that generates the default zones and checks projector fit | Should | ✅ stage survey |
 
 ### 5.2 Show content
 | ID | Feature | Priority | Status |
@@ -133,5 +134,6 @@ The detailed outline and timings are in [PLAN.md §6](PLAN.md). The full script 
 | Tree too bright or green | Tree lights off until the finale; the flocked tips take colour well. |
 
 ## Changelog
+- **2026-11-16** — M12 room model added and done (stage survey session).
 - **2026-11-16** — M5, M6, M7, M11 done (WP-01).
 - **2026-11-16** — v1 created from the agreed plan (pets cast, HAPPRUN, measured room, live star finale).
