@@ -63,7 +63,7 @@ Development happens in Claude cloud sessions from an iPad, and the same iPad run
 
 | Item | Status | Notes |
 |---|---|---|
-| HAPPRUN H1 Native 1080P | buy on Black Friday (≈ USD 60). **Throw ratio 1.4 (manual) ✔ fits from the tripod at ≈3.6 m.** The listing says 110 V ✔ | keystone 0, manual focus. From the counter (2.9 m) the show needs a **throw ratio ≤ ≈1.05**; the H1's ≈1.35 is too narrow ([survey §03c](STAGE_SURVEY.md)) |
+| HAPPRUN H1 Native 1080P | buy on Black Friday (≈ USD 60). **Throw ratio 1.4 (manual) ✔ fits from the tripod at 3.5 m (≈1–2 cm lost at two unimportant corners).** The listing says 110 V ✔ | keystone 0, manual focus. From the counter (2.9 m) the show needs a **throw ratio ≤ ≈1.05**; the H1's ≈1.35 is too narrow ([survey §03c](STAGE_SURVEY.md)) |
 | USB-C → HDMI adapter **with USB-C charging pass-through** | buy now (≈ USD 15) | needed for TV tests now |
 | Samsung soundbar | have | Bluetooth from the iPad; the app has an **audio-delay slider** to fix Bluetooth lag |
 | TV with HDMI | have | stands in for the projector until it arrives |
