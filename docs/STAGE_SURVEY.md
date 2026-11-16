@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Status** | v1: photo estimate, **to be confirmed with a tape measure** (checklist in §5) |
+| **Status** | v1.2: photo estimates corrected by the view from the counter. **Confirm with a tape measure** (§05) |
 | **Last updated** | 2026-11-16 |
 
 The photos are **not in the repo**: they show the inside of the home, and the repo is public.
@@ -14,6 +14,14 @@ The photos are **not in the repo**: they show the inside of the home, and the re
 ---
 
 ## 01 · Method
+
+> **Correction (v1.2).** The first model (v1) misread the floor line in the straight-on photo. It under-estimated
+> the sideboard (0.66 m) and the tree (1.77 m).
+> - **Sideboard:** the view from the counter (`IMG_8518`), measured along the room corner (ceiling → sideboard top →
+>   floor all lie on one vertical line at the same depth), gives a top height of **0.79 m**, exactly the tape value.
+> - **Tree:** the horizon method gives **≈1.95–2.0 m** to the bare tip, matching the tape value.
+>
+> The **tape values are right**. The numbers below use them.
 
 - **Which photos:** six were sent. Four used the 0.5× ultra-wide lens and are too distorted to measure. One
   straight-on 1× photo was measured.
@@ -28,10 +36,10 @@ The photos are **not in the repo**: they show the inside of the home, and the re
 | Element | PLAN §1 | Photo estimate | Notes |
 |---|---|---|---|
 | Wall | 2.10 × 2.20 m | ✔ 2.10 × 2.18 m | Matte white. A **nail hole at ≈1.65 m, centre**: fill it. Painting already down. |
-| Sideboard | 1.07 w × 0.79 h × 0.41 d | **≈1.01 w × 0.66 h** | Against the right wall, left edge ≈1.08 m from the doorway jamb. **Re-measure.** |
+| Sideboard | 1.07 w × 0.79 h × 0.41 d | ✔ 0.79 h confirmed (corner method) | Against the right wall, left edge ≈1.03 m from the doorway jamb. |
 | Sideboard surfaces | — | **black top, brown wood-grain drawers, black handles** | The top is a natural black (good). The front is a **poor screen**: dark, warm tint, visible grain. |
-| Tree | 2.0 m tall, Ø 0.9 m | **≈1.77 m to the bare tip, Ø ≈1.0 m** | Its axis is ≈0.4 m right of the doorway jamb, ≈0.45 m out from the wall. Its left side **overhangs the doorway by ≈0.1 m**. It currently **leans**: straighten and fix it before calibrating. Flocked tips catch colour; dark needles swallow it (a sparkly look). No lights on it yet. |
-| Star (to be placed) | — | top ≈1.95–2.0 m | Assuming a 0.2 m star on the tip. Its top sits ≈0.2 m under the ceiling. |
+| Tree | 2.0 m tall, Ø 0.9 m | ✔ ≈1.95–2.0 m to the bare tip, Ø ≈1.0 m | Its axis is ≈0.4 m right of the doorway jamb, ≈0.45 m out from the wall. Its left side **overhangs the doorway by ≈0.1 m**. It currently **leans**: straighten and fix it before calibrating. Flocked tips catch colour; dark needles swallow it (a sparkly look). No lights on it yet. |
+| Star (to be placed) | — | top ≈2.15–2.2 m | Assuming a 0.15–0.2 m star on the tip: **it nearly touches the ceiling.** |
 | Gap tree ↔ sideboard | — | ≈0.15–0.2 m | |
 | Right wall | "narrow strip" | large white wall | **Glass wall sconce** ≈0.8 m from the corner near the ceiling (keep it off; it will glow if spill reaches it). The dining table and chairs sit along this wall. |
 | Corner | — | **security camera** at the top of the corner, cable down the corner | White, so it catches light. Its IR LEDs may glow in the dark. Decide whether it should record during the show. |
@@ -45,20 +53,25 @@ The photos are **not in the repo**: they show the inside of the home, and the re
 1. **The vertical budget is tight, and the star sets it.**
    - The tree stands ≈0.45 m in front of the wall, closer to the projector. So, from the projector's point of view,
      its top lands ≈15% higher on the wall than it really is.
-   - The star top (≈2.0 m real) therefore needs the image to reach **≈2.15 m on the wall**, while the box tops
-     need it to start at **≈0.6 m**. That's **≈1.55 m of image height → ≈2.75 m width**.
-   - With the H1's throw ratio of ≈1.35 (still to be verified), the projector needs to be **≈3.7–3.8 m** from the wall:
+   - The star top (≈2.18 m real) therefore needs the image to reach **≈2.35 m** in the wall plane (part of that falls
+     on the ceiling, which is fine). The gift-box tops need it to start at **≈0.74 m**. That's **≈1.6 m of image
+     height → ≈2.85 m width**.
+   - With the H1's throw ratio of ≈1.35 (still to be verified) and the lens at ≈1.0 m:
 
-   | Projector distance | Image | Wall span (box tops in) | Star |
+   | Projector distance | Image | Wall span (box tops in) | Star top |
    |---|---|---|---|
-   | 3.2 m | 2.37 × 1.33 m | 0.60–1.93 m | cut by ≈23 cm |
-   | 3.5 m (PLAN) | 2.59 × 1.46 m | 0.60–2.06 m | cut by ≈8 cm |
-   | **3.8 m** | **2.81 × 1.58 m** | **0.60–2.19 m** | **fits** |
+   | 3.2 m | 2.37 × 1.33 m | 0.74–2.07 m | cut by ≈30 cm |
+   | 3.5 m | 2.59 × 1.46 m | 0.74–2.20 m | cut by ≈15 cm |
+   | 3.8 m | 2.81 × 1.58 m | 0.74–2.33 m | just fits |
+   | 4.0 m | 2.96 × 1.67 m | 0.75–2.41 m | fits |
 
-   - If 3.8 m isn't possible, there are three options:
-     - stand the boxes on a ≈10 cm white riser and raise the image
-     - accept a slightly cropped star (the projected star is mainly needed for scene 7)
-     - use a smaller star
+   - **The counter looks like ≈3.1–3.4 m** (§03b), so the full star won't fit as things stand. The levers, best first:
+     - stand the boxes on a **≈15 cm white riser**: the image can start ≈0.9 m, which buys ≈15 cm
+     - use a **smaller star** (≈10 cm)
+     - let the projected star "land" just under the tip. The real star goes on live in scene 9; only a soft glow is
+       needed there, and the tip itself (≈2.16 m projected) is close to the edge.
+     - set up the projector further back if the counter allows
+   - WP-10 decides how the star scenes use this.
 2. **Lens height ≈0.9–1.3 m, tilted down slightly, keystone 0.**
    - The kitchen counter is a good spot. The app's corner-pin corrects the tilt.
    - A higher lens reduces the tree's "upward stretch" a little. It also keeps the beam above a lying dog and
@@ -93,6 +106,21 @@ The photos are **not in the repo**: they show the inside of the home, and the re
    - Clear the table, or slide it back, for the show.
 9. **The right wall:** see §03a.
 
+## 03b · The view from the counter (projector spot)
+
+From `IMG_8518`, taken at counter height:
+- **It's off-axis.** The ceiling line slopes down toward the corner, the sideboard front looks like a trapezoid with
+  its left end nearer, and a lot of the right wall is visible. So the counter sits **left of the wall's centre**
+  (towards the tree and doorway), and the projector must be **turned ≈20–25° towards the corner**.
+- **Distance:** roughly **3.1–3.4 m** from the wall. The yaw makes this estimate loose: **tape it**.
+- **What off-axis means:**
+  - The image lands as a trapezoid. The app's corner-pin corrects it, at the cost of some pixels and brightness on
+    the far side.
+  - With manual focus, one side may be slightly softer. Focus on the tree/sideboard area.
+  - The tree's shadow falls almost straight behind it (good).
+  - The right wall is hit less obliquely, so the right-wall strip gets wider and less stretched (good).
+- **The dining table** (bottom right of the photo) is right at the edge of the beam's path: clear it for the show.
+
 ## 03a · Using the right wall
 
 | Option | What you get | Cost / problems | Verdict |
@@ -103,17 +131,18 @@ The photos are **not in the repo**: they show the inside of the home, and the re
 
 ## 04 · Zone defaults (stage pixels, 1920 × 1080)
 
-`app/js/layout.js` defaults were recomputed from this model, for the **recommended set-up**: 3.8 m, lens ≈0.95 m,
-image ≈0.60–2.19 m. They are starting points only. Calibrate mode moves them onto the real objects.
+`app/js/layout.js` defaults were recomputed (v1.2) for a **centred reference set-up**: 3.8 m, lens ≈1.0 m,
+image ≈0.74–2.33 m (its top ≈0.13 m falls on the ceiling). The real counter is off-axis, so calibration will skew
+these. They are starting points only. Calibrate mode moves them onto the real objects.
 
 | Zone | Old default | New default | Why |
 |---|---|---|---|
-| wall | x 185–1735 | x 244–1676 | wider image → the wall takes fewer pixels |
-| backdrop | y 0–939 | y 0–1039, x 980–1676 | the sideboard is lower (0.66 m) |
-| stage | 141 px strip | 41 px strip | only the top edge is reachable |
-| tree | 664 × 1043 at x 185 | 800 × 885 at x 72, from y 195 | the tree is shorter and wider, and overhangs the doorway |
-| star | 120 × 110 at y 0 | 155 × 170 at y 37 | sits on the tip at ≈1.77 m |
-| box1 / box2 | above a 0.79 m top | sit on a 0.66 m top | 0.30 m and 0.40 m cubes assumed |
+| wall | x 185–1735, y 0–1080 | x 244–1676, y 87–1049 | wider image; the ceiling is inside the image top |
+| backdrop | y 0–939 | x 946–1676, y 87–1049 | from the ceiling down to the sideboard top |
+| stage | 141 px strip | 31 px strip at the bottom | the drawers are below the image |
+| tree | 664 × 1043 at x 185 | 774 × 948 at x 109, from y 132 | the tree is 0.45 m out (looks bigger), and overhangs the doorway |
+| star | 120 × 110 at y 0 | 139 × 139 at y 0 | sits on the tip; it may poke above the image (§03 point 1) |
+| box1 / box2 | assumed 0.30 / 0.40 m cubes | same, standing on the 0.79 m top | |
 | rightStrip | x 1735–1920 | x 1676–1920 | follows the new wall edge |
 
 ## 05 · Tape-measure checklist (owner)
@@ -136,5 +165,6 @@ image ≈0.60–2.19 m. They are starting points only. Calibrate mode moves them
 Photos stay on the iPad or in chat; they are never committed.
 
 ## Changelog
+- **2026-11-16** — v1.2: counter view: sideboard 0.79 m and tree ≈2.0 m confirmed (v1 estimates were wrong); star budget redone; off-axis counter (§03b).
 - **2026-11-16** — v1.1: counter placement, dining-table clipping, right-wall options (§03a), extra photos asked for.
 - **2026-11-16** — v1: photo-based survey; projector distance, sideboard front, star budget and new zone defaults.

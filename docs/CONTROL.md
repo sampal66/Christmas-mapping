@@ -42,8 +42,8 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
 - **2026-11-16 · Stage survey** (done in the WP-02 session at the owner's request). The owner's room photos were measured
-  → `docs/STAGE_SURVEY.md`; PLAN §1 and the `layout.js` defaults were updated. Main points: projector ≈3.8 m back
-  (at 3.5 m the star is cropped); the tree is ≈1.77 m and overhangs the doorway; the sideboard front is out of the image.
+  → `docs/STAGE_SURVEY.md`; PLAN §1 and the `layout.js` defaults were updated. Main points: the tape values hold (tree 2.0 m,
+  sideboard 0.79 m); the counter is off-axis at ≈3.1–3.4 m, so the star top is cropped (fix: box riser or smaller star); the sideboard front is out of the image.
   Photos are NOT committed (privacy). Next: owner tape-measures (survey §05). WP-10 should read survey §02–§03.
 
 - **2026-11-16 · WP-01** (built in the setup session at the owner's request). `audio.js` MasterClock (audio or silent clock,

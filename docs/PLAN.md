@@ -31,13 +31,13 @@ Development happens in Claude cloud sessions from an iPad, and the same iPad run
 | Element | Size | Position |
 |---|---|---|
 | Wall | 2.10 m wide, 2.20 m to ceiling (photo check: 2.18 m ✔) | white and matte; the painting is down; fill the nail hole at ≈1.65 m |
-| Tree | 2.0 m tall, Ø 0.9 m, flocked white tips, cool-white LEDs. **Photo estimate: ≈1.77 m to the bare tip, Ø ≈1.0 m** | left; axis ≈0.4 m from the doorway jamb, ≈0.45 m out from the wall; overhangs the doorway ≈0.1 m |
-| Sideboard ("stage") | 1.07 w × 0.79 h × 0.41 d m. **Photo estimate: ≈1.01 w × 0.66 h**: re-measure | pushed against the right wall; black top, dark wood drawers |
+| Tree | 2.0 m tall, Ø 0.9 m, flocked white tips, cool-white LEDs. **Photos confirm ≈2.0 m, Ø ≈1.0 m** | left; axis ≈0.4 m from the doorway jamb, ≈0.45 m out from the wall; overhangs the doorway ≈0.1 m |
+| Sideboard ("stage") | 1.07 w × 0.79 h × 0.41 d m. **0.79 m height confirmed from photos** | pushed against the right wall; black top, dark wood drawers |
 | Right wall | — | a narrow strip near the corner can get ambient effects (snow, glow) |
-| Projector | **HAPPRUN H1** (native 1080p) | **≈3.8 m back** (3.5 m crops the star), centred, lens ≈0.9–1.3 m |
+| Projector | **HAPPRUN H1** (native 1080p) | on the **kitchen counter** (≈1 m high, off-axis left, turned ≈20–25° toward the corner, ≈3.1–3.4 m: tape it). The star needs ≈4 m, so use a box riser / smaller star (survey §03) |
 
 > **Stage survey (2026-11-16):** the owner's photos were measured in [STAGE_SURVEY.md](STAGE_SURVEY.md). Main points:
-> - the star needs ≈1.55 m of image height, so the projector goes ≈3.8 m back
+> - the star needs ≈1.6 m of image height (≈4 m throw); the counter is closer, so plan a box riser or a smaller star
 > - the sideboard front is out of the image and a poor surface: the gift boxes on the black top are the stage
 > - mind the corner security camera and the right-wall sconce
 >
