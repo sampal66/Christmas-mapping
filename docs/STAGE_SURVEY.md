@@ -112,7 +112,8 @@ From `IMG_8518`, taken at counter height:
 - **It's off-axis.** The ceiling line slopes down toward the corner, the sideboard front looks like a trapezoid with
   its left end nearer, and a lot of the right wall is visible. So the counter sits **left of the wall's centre**
   (towards the tree and doorway), and the projector must be **turned ≈20–25° towards the corner**.
-- **Distance: 2.9 m** to the wall (owner's tape). The photo estimate of 3.1–3.4 m was too long.
+- **Distance: 2.9 m** to the wall, **counter height 1.06 m** (owner's tape), so the lens sits at ≈1.10 m. The photo
+  estimate of 3.1–3.4 m was too long.
 - **What off-axis means:**
   - The image lands as a trapezoid. The app's corner-pin corrects it, at the cost of some pixels and brightness on
     the far side.
@@ -123,7 +124,8 @@ From `IMG_8518`, taken at counter height:
 
 ## 03c · What the projector must cover from the counter (2.9 m), and the purchase decision
 
-The projector sits 2.9 m out, ≈0.1–0.5 m right of the doorway jamb, with the lens at ≈1.0 m. It must cover:
+The projector sits 2.9 m out, ≈0.1–0.5 m right of the doorway jamb, with the lens at ≈1.10 m (results are the same
+at 1.0 m). It must cover:
 - across: the tree's left edge (it overhangs the doorway) to the right corner
 - up and down: the box tops to the tree tip, or to the star top
 
@@ -142,6 +144,10 @@ The projector sits 2.9 m out, ≈0.1–0.5 m right of the doorway jamb, with the
 - **Further back** (≥ 3.6 m) would also fix it, if there's a stable spot in line with the wall.
 
 ## 03a · Using the right wall
+
+From the straight-on photos of the right wall (`IMG_8519`/`8520`), it is **≈3.4 m long**, running from the corner to the
+kitchen opening. It's clean white from the table height (≈0.75 m) to the ceiling. The **sconce sits ≈1.3 m from the
+corner, ≈1.85 m high**. The dining table, its chairs and the leaning painting stand along its lower part.
 
 | Option | What you get | Cost / problems | Verdict |
 |---|---|---|---|
@@ -169,7 +175,7 @@ these. They are starting points only. Calibrate mode moves them onto the real ob
 
 1. Sideboard: width, height (floor → top) and depth.
 2. Tree with the star on: total height to the star's top, widest diameter, and how far the trunk is from the wall.
-3. Distance from the kitchen counter (or wherever the projector will sit) to the wall, and the counter's height.
+3. ~~Counter distance and height~~: done, 2.9 m and 1.06 m.
 4. Right wall: distance from the corner to the sconce, and the sconce's height.
 5. Gift boxes, once bought: sizes and where they sit on the sideboard top.
 6. When the projector arrives: the throw at a known distance (image width at 3.0 m) to confirm the ≈1.35 ratio.
@@ -185,6 +191,7 @@ these. They are starting points only. Calibrate mode moves them onto the real ob
 Photos stay on the iPad or in chat; they are never committed.
 
 ## Changelog
+- **2026-11-16** — v1.4: counter height 1.06 m (lens ≈1.10 m; requirement unchanged); right-wall size and sconce position.
 - **2026-11-16** — v1.3: the counter is 2.9 m from the wall (taped); added the field-of-view / throw-ratio requirement (§03c) ahead of the projector purchase.
 - **2026-11-16** — v1.2: counter view: sideboard 0.79 m and tree ≈2.0 m confirmed (v1 estimates were wrong); star budget redone; off-axis counter (§03b).
 - **2026-11-16** — v1.1: counter placement, dining-table clipping, right-wall options (§03a), extra photos asked for.
