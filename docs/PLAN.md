@@ -59,7 +59,15 @@ sessions from an iPad; the same iPad runs the show.
 4. Brightness: ignore "lumen" marketing. In a dark room, any of these is OK for 2.7 m.
 5. Bonus: a rotating base (like the Wowlink) makes aiming easy for future projects.
 
-Examples to check on Black Friday:
+**Recommended pick (Nov 16 check): HAPPRUN H1 Native 1080P, USD 59.99** (list price USD 109.99).
+- Native 1920×1080, 300 ANSI lumens (as listed), 4.3★ from about 14k ratings.
+- Manual focus, and no auto keystone to fight with.
+- Its throw distance should put an image about 2.5 m wide on the wall from 3.5 m.
+
+Compared with the Wowlink W210 (USD 59.99): that one is native 720p and 200 ANSI lumens, uses auto keystone,
+and its listing gives a maximum throw distance of 2.5 m (too short for a 3.5 m spot).
+
+Other examples to check on Black Friday:
 - HY300 / HY320-class models (the Wowlink is one)
 - "native 1080p" listings around USD 80–100, such as HAPPRUN, YGSKK and Fudoni GC888A
 
