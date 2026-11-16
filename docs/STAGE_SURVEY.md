@@ -167,6 +167,23 @@ Requirements with the taped **star top of 2.03 m** (no riser):
 
 **Recommendation:** spot B. It makes the cheap H1 viable, and spot A with a ≈1.05 projector stays the fallback.
 
+### Spot B confirmed (owner, 2026-11-16)
+- **Set-up:** tripod in the kitchen walkway, **3.5 m** from the main wall, tripod head at **1.45 m**. The view from the
+  tripod head (`IMG_8531`) sees the whole main wall, the tree with the star, the sideboard, the corner and part of the
+  right wall.
+- **Requirement:** a throw ratio of **≤ 1.44–1.50** (≤ 1.40–1.44 if the right-wall strip is included). The **H1 (≈1.35)
+  fits**, with a ≈2.6 × 1.46 m image at the wall.
+- **Keep the bar clear.** The beam passes ≈0.3 m above the bar top, so anything taller than ≈25–30 cm on the bar
+  (plant, bottle) blocks it.
+- **Clear the beam path:** the dining table clutter and the tall cardboard box by the right wall are at the right
+  edge of the beam.
+- **The painting is hung on the main wall again**, in the backdrop area: take it down for the show (glass and frame
+  reflect). Keep the sideboard top clear for the gift boxes.
+- **Tripod in a walkway:** mark the leg positions on the floor with tape (it can go back exactly after a bump), add
+  weight on the centre hook, and keep the dog's bowl clear. Kitchen lights off during the show.
+- **Pre-calibration:** `IMG_8531` is close to the projector's own view. Load it into the app's Room photo preview to
+  pre-place the zones.
+
 ## 03a · Using the right wall
 
 From the straight-on photos of the right wall (`IMG_8519`/`8520`), it is **≈3.4 m long**, running from the corner to the
@@ -217,6 +234,7 @@ these. They are starting points only. Calibrate mode moves them onto the real ob
 Photos stay on the iPad or in chat; they are never committed.
 
 ## Changelog
+- **2026-11-16** — v1.7: spot B confirmed (3.5 m, tripod head 1.45 m); the H1 fits; bar clearance and set-up notes.
 - **2026-11-16** — v1.6: star top taped at 2.03 m; requirements redone; zone defaults for the behind-the-bar set-up.
 - **2026-11-16** — v1.5: 25 cm star; decoration advice; tripod spots B (behind the bar) and C (corridor) (§03d).
 - **2026-11-16** — v1.4: counter height 1.06 m (lens ≈1.10 m; requirement unchanged); right-wall size and sconce position.
