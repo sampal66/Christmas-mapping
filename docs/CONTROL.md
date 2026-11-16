@@ -43,6 +43,16 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
+- **2026-11-16 · Room model** (same session, owner's request). `stage-model.js` (metric stage + projector pinhole) generates the
+  default zones; `model.html` shows projector/top/side views + fit; "Use in Mapper" pushes zones. Checked against the
+  tripod-top photo. The model files are in `sw.js` `SHELL` (VERSION v2). New zones (e.g. box side faces) go in
+  `layoutFromModel()`.
+
+- **2026-11-16 · Stage survey** (done in the WP-02 session at the owner's request). The owner's room photos were measured
+  → `docs/STAGE_SURVEY.md`; PLAN §1 and the `layout.js` defaults were updated. Main points: the tape values hold (tree 2.0 m,
+  sideboard 0.79 m); the counter is off-axis at ≈3.1–3.4 m, so the star top is cropped (fix: box riser or smaller star); the sideboard front is out of the image.
+  Photos are NOT committed (privacy). Next: owner tape-measures (survey §05). WP-10 should read survey §02–§03.
+
 - **2026-11-16 · WP-10 brief** (written in the WP-02 session at the owner's request). New planning WP: show treatment
   (spine, arcs, beat sheet, live-star plan) + design system review, before the script and scene builds. WP-03, WP-04
   and WP-06 now wait on it. Run it as a docs-only conversation with the owner.
@@ -65,6 +75,9 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 ## Open decisions / waiting on owner
 
+- **Projector purchase (Nov 27):** depends on the spot. On the counter (2.9 m) it needs a throw ratio ≤ ≈1.05–1.2. **Decided:** HAPPRUN H1 (throw ratio 1.4, 110 V listing ✔, 1/4″ tripod hole) on the tripod at 3.5 m (its furthest spot), head 1.45 m. Only ≈1–2 cm is lost at two unimportant corners. See [STAGE_SURVEY §03e](STAGE_SURVEY.md).
+- WP-10 design note: LCD black glows faintly; plan scenes that never sit on pure black (survey §03e).
+- Tape-measure the remaining items in [STAGE_SURVEY §05](STAGE_SURVEY.md) (star size, counter height).
 - Merge PR #1 and enable GitHub Pages.
 - Reconnect the ElevenLabs connector with full permissions (from a PC). This blocks WP-04 and WP-05.
 - More pet photos (full body, side view) for WP-04.

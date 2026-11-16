@@ -141,6 +141,29 @@ export default {
   shell file changes**, or the iPad keeps the old copy. The smoke test fails if a `.html/.css/.js` file is missing
   from `SHELL`. `app/manifest.webmanifest` + icons enable "Add to Home Screen" (fullscreen, landscape).
 
+### 4.7 Room model (built, M12)
+- `app/js/stage-model.js` holds the measured stage in metres: wall, right wall, sideboard, tree (cone), star, gift
+  boxes, fixtures and the projector pose and throw ratio. Data comes from [STAGE_SURVEY](STAGE_SURVEY.md).
+  - **World axes:** origin = floor at the doorway jamb on the main-wall plane; x along the wall, y into the room,
+    z up.
+  - **Projector:** a pinhole camera, focal length = throw ratio × 1920 px, auto-aimed at the middle of the stage's
+    angular extent.
+  - **`layoutFromModel()`** projects each object's front plane into stage pixels and returns a normal layout:
+    - zones are clipped so the handles stay inside the image
+    - the tree mask is generated from the cone
+    - the hidden sideboard strip starts `hidden`
+  - **`coverage()`** and **`requiredThrowRatio()`** check the projector fit.
+- **`layout.js` `defaultLayout()` = `layoutFromModel(loadModel())`.** Hand-written default quads are gone.
+  `model-store.js` keeps the owner's edits on the device.
+- **`app/model.html`** (Room model page):
+  - shows a projector view, a top view and a side view
+  - shows the fit (needed vs actual throw ratio) and editable numbers
+  - "Use in Mapper" writes the generated zones into the saved layout
+- **When the projector arrives:** enter its real distance, height and throw ratio, press "Use in Mapper", then
+  fine-tune in Calibrate.
+- **Limits:** front faces only (the box side faces are not zones yet). The tree and star are vertical cards facing
+  the projector. Lens offset is ignored (only the field of view matters for coverage).
+
 ### 4.6 MP4 export (planned, M10)
 - `tools/export-mp4.js` loads the app in headless Chromium with `?render=1&layout=<json>`. It replaces the
   clock with a deterministic frame counter (30 or 60 fps), captures each stage frame, and pipes it to ffmpeg
@@ -176,7 +199,10 @@ export default {
 | 2026-11-16 | Cache-first service worker with a hand-kept, versioned shell list | show night must work with no Wi-Fi; a smoke-test check keeps the list complete |
 | 2026-11-16 | `master-mix` from the media pack drives the show clock | one source of truth for the final mix; no per-session file picking |
 
+| 2026-11-16 | Default zones are generated from a metric room model, not hand-placed | one set of measurements drives the zones, coverage checks and the projector choice; re-aiming is just new numbers |
+
 ## Changelog
+- **2026-11-16** — §4.7 room model (stage-model.js, model.html); default zones are generated from it.
 - **2026-11-16** — WP-02: media pack (IndexedDB) and offline service worker built; §4.5 updated.
 - **2026-11-16** — WP-01: clock/timeline/holds built; Show mode documented.
 - **2026-11-16** — v1: documented Mapper v0 as built; designed timeline, media pack and export.

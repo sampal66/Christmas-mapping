@@ -18,6 +18,9 @@ A browser-based projection-mapping tool for the iPad. It has no build step: plai
   and must never be committed (the repo is public; `.gitignore` blocks `media/`, `*.private.*`, `assets/private/`).
 - **Offline**: a service worker (`sw.js`) caches the app after the first visit, so it opens with no Wi-Fi. Use
   Share → **Add to Home Screen** for a fullscreen app. After changing any app file, bump `VERSION` in `sw.js`.
+- **Room model** (`model.html`, linked under Layout file): a metric model of the stage and projector.
+  It shows the projector, top and side views, whether the projector covers everything (throw ratio), and editable
+  measurements. "Use in Mapper" loads zones generated from the model. The default zones also come from it.
 - **Room photo preview**: put a photo of the wall behind the zones. The photo stays on the device and is never uploaded.
 - **Layout file**: export/import the calibration as JSON.
 - Scenes live in `js/scenes/` (running order and hold points in `js/scenes/index.js`).
