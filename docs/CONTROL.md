@@ -48,6 +48,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
   PLAN §4–6, PRD §04/§07, DESIGN_SYSTEM v1.1 (LCD black → `dusk` base, louder music with no impulsive sounds), ARCHITECTURE §07, WP-03 brief updated.
   Left: owner to approve the ⏳ items (arcs, beat details, design proposals TREATMENT §08 #3–8, pets don't speak). s09 moved to WP-03.
   Owner PR notes: no photos (one photo → closing constellation), pets talk, full Santa and sleigh, no "MS Paint" look → TREATMENT §09.
+  Style test: owner liked Gandalf #4; the clip works on black; keep props (star) in code. Creator plan for WP-04.
   Gotcha: WP-04 and WP-05 still need briefs (copy `_TEMPLATE.md`, source everything from TREATMENT §03–§04).
 
 - **2026-11-16 · Room model** (same session, owner's request). `stage-model.js` (metric stage + projector pinhole) generates the
@@ -82,7 +83,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 ## Open decisions / waiting on owner
 
-- ✅ Animation approach A (AI video clips) chosen; style test running. **Check the ElevenLabs credit balance**: ≈30 clips ≈ 45–65k credits on the cheaper video models (TREATMENT §09).
+- ✅ Animation approach A chosen; style test passed (Gandalf #4, kling-2.5-turbo ≈2.1k credits per 5 s clip). Owner will buy **Creator** (121k/mo) for the character work. **Check the ElevenLabs credit balance**: ≈30 clips ≈ 45–65k credits on the cheaper video models (TREATMENT §09).
 - **Approve the ⏳ items in [TREATMENT.md](TREATMENT.md)** (in the WP-10 PR review): arcs (§03), beat-sheet details (§04), design proposals §08 #3–8, "pets don't speak".
 - ✅ Projector decided: HAPPRUN H1 (throw ratio 1.4) on the tripod at 3.5 m, head 1.45 m; buy Nov 27. See [STAGE_SURVEY §03e](STAGE_SURVEY.md).
 - ✅ LCD-black design note: handled in DESIGN_SYSTEM §02 (`dusk` base, fade to starfield). Check the `dusk` value on the wall in WP-09.

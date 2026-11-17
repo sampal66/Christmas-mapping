@@ -177,6 +177,13 @@ The owner doesn't want an "MS Paint" look. The honest split: what code does well
 Video price per ≈5 s clip (estimates): kling-2.5-turbo ≈2,100 · ltx-v2-fast ≈1,450 · wan-2.6 ≈3,000 · seedance-v2-fast ≈7,300 ·
 seedance-v2.5 ≈14,000 credits. **At ≈30 clips even the cheap models need ≈45–65k credits**: check the plan's balance before WP-04.
 
+**Result (2026-11-17):** owner likes the still style (Gandalf #4 chosen as the reference). Test clip: kling-2.5-turbo, 5 s, 1080p,
+2,121 credits. The character stays on model, the motion is bouncy cel-style, and the background stays pure black (it composites
+cleanly). Weak spot: props can glitch (the star jumped back in mid-clip), so **keep props in code** (the star, sparkles) and let
+clips carry only the character. Budget: Starter has ≈37k credits left, not enough for ≈30 clips plus voices; the owner will move to
+**Creator (121k/mo)** for this project if needed. Plan: ~30 clips × ≈2.1k ≈ 64k + voices/sfx ≈ 15k, plus a few re-takes.
+Gotcha: the session network needs `elevenlabsusercontent.com` allowed to download results (added to the environment).
+
 **Original recommendation:** A for every character shot and Santa, with B as the fallback for any shot that fails; code only for the mapped light
 effects, held to the quality bar above. **First, a style test before committing:** (1) a free code FX test page
 (glow, sparkles, star trace, constellation) with screenshots; (2) with the owner's OK on credits, one Gandalf model
