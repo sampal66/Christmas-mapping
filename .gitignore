@@ -7,3 +7,8 @@ node_modules/
 
 # Rendered demo reels / exports (large; shared outside the repo)
 *.mp4
+
+# Music files (kept on the device; see assets/CREDITS.md)
+*.mp3
+*.ogg
+*.wav

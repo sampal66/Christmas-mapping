@@ -91,8 +91,8 @@ Band works (public domain as US federal works), from music.af.mil via Wikimedia 
 s01 *O Christmas Tree* (Airmen of Note, jazz big band) · s02 **Carol of the Bells** (Band of the Rockies) · s06 *Waltz of
 the Flowers* (Concert Band; its soft theme → tutti → peak shape carries the rollercoaster: the canis ride lands on the
 tutti, the cut ride on the peak) · s08 *Silent Nights* (Band of the Rockies) · s10 *Jingle Bells* (Band of Mid-America,
-whole track; s10 is now 1:56). **Open:** s04 *Sugar Plum* (no PD/CC0 recording found), the ElevenLabs music-box loop and
-three underscores (need the owner's go-ahead), and an owner listen for drum hits in s01/s10.
+whole track; s10 is now 1:56). s04 *Sugar Plum*, the s00/s09 music-box loop and the three story underscores are ElevenLabs originals (owner go-ahead,
+1 take each). **Open:** an owner listen for drum hits in s01/s10 and for the loop seam.
 
 **Master-mix running order (draft).** Each scene's excerpt starts at its scene start; fade the tail over the scene's
 last 4 s (`out` → end); the story scenes' underscores fill s03, s05, s07.
@@ -101,13 +101,13 @@ last 4 s (`out` → end); the story scenes' underscores fill s03, s05, s07.
 |---|---|---|
 | s01 | 1:00 | O Christmas Tree 0:00–1:00, fade from 0:56 |
 | s02 | 1:24 | Carol of the Bells 0:00–1:24 (section ends 1:22) |
-| s03 | 1:15 | underscore (ElevenLabs) |
-| s04 | 1:15 | *Sugar Plum* — to choose |
-| s05 | 1:00 | underscore (ElevenLabs) |
+| s03 | 1:15 | s03 underscore (ElevenLabs), whole |
+| s04 | 1:15 | Sugar Plum (ElevenLabs celesta arrangement), whole |
+| s05 | 1:00 | s05 underscore (ElevenLabs), whole |
 | s06 | 1:30 | Waltz of the Flowers 1:28.94–2:58.94, fade from 2:54.9 |
-| s07 | 1:15 | underscore (ElevenLabs) |
+| s07 | 1:15 | s07 underscore (ElevenLabs), whole |
 | s08 | 1:00 | Silent Nights, 1:00 chosen by ear under the narration |
-| s09 | 0:22 + hold | music-box loop (loops 0:08–0:20 during the hold) |
+| s09 | 0:22 + hold | music-box loop from file 1.64 s (its first downbeat); the hold loops scene 0:08–0:20 = file 9.64–21.64 |
 | s10 | 1:56 | Jingle Bells, whole track |
 
 **Licence note:** every composition above is public domain. Each **recording** still needs a verified licence

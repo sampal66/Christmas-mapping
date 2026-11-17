@@ -1,7 +1,7 @@
 // Beat maps for the light-show scenes (WP-05): scene-local beat times in seconds, first entry on a downbeat.
 // Made with tools/beats.js from the recordings in assets/CREDITS.md and fixed by ear in beats.html (the tap tool
 // exports one entry of this object). Scenes spread these into their `beats`; their placeholder `bpm` is only a
-// fallback. s04 keeps its placeholder tempo until its recording is chosen (see CONTROL.md open decisions).
+// fallback.
 export const BEATMAPS = {
   // "O Christmas Tree", Airmen of Note (USAF Band), file 0:00–1:00 (fade 0:56–1:00); 152 bpm swing 4/4
   's01-wall-wakes': { perBar: 4, times: [
@@ -32,6 +32,15 @@ export const BEATMAPS = {
     74.84, 75.32, 75.803, 76.287, 76.77, 77.24, 77.71, 78.18, 78.657, 79.133, 79.61, 80.077, 80.543, 81.01,
     81.473, 81.937, 82.4, 82.863, 83.327, 83.79
   ] },
+  // "Dance of the Sugar Plum Fairy" (Tchaikovsky), original ElevenLabs celesta/music-box arrangement, 1:15 whole; ≈72 bpm 2/4
+  's04-magic-boxes': { perBar: 2, times: [
+    0.81, 1.65, 2.48, 3.32, 4.15, 4.99, 5.83, 6.67, 7.5, 8.34, 9.17, 10.01, 10.84, 11.68, 12.53, 13.39, 14.2,
+    15.04, 15.87, 16.71, 17.54, 18.39, 19.22, 20.06, 20.89, 21.73, 22.57, 23.4, 24.24, 25.09, 25.92, 26.77,
+    27.6, 28.46, 29.28, 30.1, 30.93, 31.77, 32.61, 33.44, 34.27, 35.11, 35.95, 36.78, 37.62, 38.46, 39.29,
+    40.13, 40.96, 41.8, 42.64, 43.47, 44.31, 45.15, 45.98, 46.85, 47.65, 48.51, 49.33, 50.15, 50.99, 51.84,
+    52.67, 53.51, 54.34, 55.17, 56.01, 56.84, 57.68, 58.51, 59.35, 60.19, 61.01, 61.84, 62.68, 63.51, 64.35,
+    65.19, 66.02, 66.86, 67.69, 68.53, 69.36, 70.21, 71.06, 71.9, 72.71, 73.54, 74.38
+  ] },
   // "Waltz of the Flowers", USAF Band Concert Band, file 1:28.94–2:58.94 (main waltz theme); bars tracked at ≈59/min, split in 3 (≈176 bpm)
   's06-constellations': { perBar: 3, times: [
     0.33, 0.697, 1.063, 1.43, 1.783, 2.137, 2.49, 2.843, 3.197, 3.55, 3.877, 4.203, 4.53, 4.863, 5.197, 5.53,
@@ -54,7 +63,7 @@ export const BEATMAPS = {
     84.427, 84.77, 85.103, 85.437, 85.77, 86.113, 86.457, 86.8, 87.133, 87.467, 87.8, 88.14, 88.48, 88.82,
     89.167, 89.513, 89.86, 90.21
   ] },
-  // music-box loop spec (ElevenLabs, not yet generated): exactly 90 bpm 3/4, 12 s = 6 bars; re-check with tools/beats.js once generated
+  // music-box loop (ElevenLabs original, 24 s): exactly 90 bpm 3/4 (checked with tools/beats.js); the mix starts the file at 1.64 s, its first downbeat
   's09-real-star': { perBar: 3, times: [
     0, 0.667, 1.333, 2, 2.667, 3.333, 4, 4.667, 5.333, 6, 6.667, 7.333, 8, 8.667, 9.333, 10, 10.667, 11.333, 12,
     12.667, 13.333, 14, 14.667, 15.333, 16, 16.667, 17.333, 18, 18.667, 19.333, 20, 20.667, 21.333, 22

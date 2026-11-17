@@ -73,7 +73,7 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 | C2 | 4 pet characters in classic hand-drawn style (Connor, Alaska, Orion, Gandalf) | Must | ⏳ |
 | C3 | Public-domain cameos: *Steamboat Willie* Mickey (1928) and E.H. Shepard-style Pooh | Should | ⏳ |
 | C4 | Spanish narration: bright, warm storyteller, neutral Latin American accent, plus pet character voices; ≈3 min of speech in total | Must | ⏳ |
-| C5 | Instrumental public-domain Christmas music, plus original stingers and effects | Must | 🟡 WP-05: PD recordings chosen for s01, s02, s06, s08, s10 (assets/CREDITS.md); s04 open; ElevenLabs loop + underscores pending |
+| C5 | Instrumental public-domain Christmas music, plus original stingers and effects | Must | 🟡 WP-05: every music cue sourced (PD USAF Band recordings + ElevenLabs originals, assets/CREDITS.md); owner listening checks + master-mix assembly left |
 | C6 | Tender first-Christmas message from Papá and Mamá; no photos on screen, but one family photo becomes the closing constellation (processed on device) | Must | ⏳ |
 | C7 | Live finale: real star placed with the baby, tree lights plugged in, big closing | Must | ⏳ |
 
