@@ -106,6 +106,8 @@ sparkles) are drawn in code, not in the clip.
   beat (speed 0.65–1.35×); accents swell in and decay smoothly; draw-ons glide from beat to beat.
 - **Tree:** a turning 3D "mega-tree" of light points running pro light-show patterns (rings, candy-cane bars,
   helix, meteors, shockwaves, galaxy, plasma; reference: xLights / Light-O-Rama mega trees, Twinkly), not flat bands.
+- **Constellation art:** the real 1822 Jamieson atlas engravings as light lines (ice) behind the stars, lines
+  thickened ≈1 px so they survive projection.
 - **Drone-show style (owner, 2026-11-17):** constellations, the closing family constellation, the greeting and the
   fireworks are **3D point formations**: identical small light points in real depth, turning slowly, morphing
   shape-to-shape along staggered curved paths, with colour sweeping through the swarm (reference: Disney's night-time

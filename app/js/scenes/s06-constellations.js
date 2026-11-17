@@ -2,8 +2,8 @@
 // as turning 3D figures (Orion, Canis Major and Minor, Felis), then the lost star, which slips away; slow shooting
 // stars; snow on the right wall (TREATMENT §04). The pets-as-constellation smiles are WP-08.
 import { cueSheet, beatGrid, twinkleStars, shootingStars, starHalo, glowSprite, dot, additive, sparkleBurst,
-  cloudScatter, cloudConstellation, cloudGroup, cloudStar, cloudFigure, formation, renderCloud, sweepColors, nebula,
-  ORION_FIGURE, CANIS_MAJOR_FIGURE, CANIS_MINOR_FIGURE, FELIS_FIGURE, STAR_HALO_FIGURE,
+  cloudScatter, cloudConstellation, cloudGroup, cloudStar, formation, renderCloud, sweepColors, nebula,
+  drawCard, shapeRect, loadAtlasArt,
   ORION, CANIS_MAJOR, CANIS_MINOR, FELIS, easeInOutSine, clamp } from '../fx/index.js';
 import { skyBase, stripSnow, beatClock } from './common.js';
 
@@ -27,12 +27,21 @@ const duration = 90;
 // figure turning slowly. Placed on the open right half of the wall (the tree covers u 0.17–0.5 lower down).
 const N = 600;
 // Between the tree tip and the gift tower (its top is at v ≈ 0.52, from u ≈ 0.77), clear of the top edge.
-const SWARM = { cx: 0.66, cy: 0.36, scale: 0.19 };
+const SWARM = { cx: 0.645, cy: 0.35, scale: 0.215 };
 const NORTH_STAR = [0.5, 0.06];
-// Behind the stars, a faint star-atlas drawing of each figure (the hunter, the dogs, the cat) sits deeper in 3D,
-// so it shifts against the stars as the formation turns. It morphs along with the stars.
-const NF = 480;
-let seq = null, figSeq = null;
+// Behind the stars, the real atlas engraving of each figure (Jamieson, 1822: the hunter, the two dogs, the cat),
+// drawn as light lines in the same 3D view, so it turns with its stars; it fades in once the stars have formed and
+// out as the swarm re-forms. Stars come from the same engravings, so they sit exactly on the drawings.
+const ART = [
+  { from: 'orion', to: 'canis', parts: [{ shape: ORION, size: 1.05 }] },
+  { from: 'canis', to: 'felis', parts: [{ shape: CANIS_MAJOR, size: 0.78, x: -0.2, y: 0.22 }, { shape: CANIS_MINOR, size: 0.32, x: 0.62, y: -0.62 }] },
+  { from: 'felis', to: 'cut', parts: [{ shape: FELIS, size: 1.05 }] },
+];
+const art = new Map();                                    // src → tinted canvas, once loaded
+function loadArt() {
+  for (const g of ART) for (const p of g.parts) loadAtlasArt(p.shape.src, 'ice').then((c) => { if (c) art.set(p.shape.src, c); });
+}
+let seq = null;
 function sequence() {
   if (seq) return seq;
   // starts spread across the whole sky, so the stars visibly gather into the first figure
@@ -48,13 +57,6 @@ function sequence() {
     { at: C.at('felis'), cloud: felis, dur: 7 },
     { at: C.at('cut'), cloud: star, dur: 5.5 },
   ];
-  figSeq = [
-    { at: 0, cloud: cloudScatter(NF, { w: 6.5, h: 3.4, d: 2, seed: 33 }) },
-    { at: C.at('orion') + 2, cloud: cloudFigure([{ figure: ORION_FIGURE, size: 1.05 }], NF), dur: 8 },
-    { at: C.at('canis') + 2, cloud: cloudFigure([{ figure: CANIS_MAJOR_FIGURE, x: -0.2, y: 0.22, size: 0.78 }, { figure: CANIS_MINOR_FIGURE, x: 0.62, y: -0.62, size: 0.32 }], NF), dur: 8 },
-    { at: C.at('felis') + 2, cloud: cloudFigure([{ figure: FELIS_FIGURE, size: 1.05 }], NF), dur: 8 },
-    { at: C.at('cut'), cloud: cloudFigure([{ figure: STAR_HALO_FIGURE, size: 1.15 }], NF, { zBase: -0.2 }), dur: 6 },
-  ];
   return seq;
 }
 
@@ -65,7 +67,7 @@ export default {
   cues,
   beats,
   zones: ['wall', 'backdrop', 'tree', 'star', 'rightStrip'],
-  enter() { sequence(); },
+  enter() { sequence(); loadArt(); },
   draw(zoneId, ctx, w, h, t, local) {
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
     const sky = B.steps(local, C.at('sky'), 15);
@@ -87,12 +89,14 @@ export default {
           rotY: isStar ? 0.5 * Math.sin(bt * 0.25) + away * 4 : 0.5 * Math.sin(bt * 0.16),
           rotX: 0.16 * Math.sin(bt * 0.12),
         };
-        // the dim figure drawing (fades in once a figure has formed, out as the star leaves)
-        const figA = local < C.at('orion') ? 0 : clamp((local - C.at('orion') - 3) / 4);
-        renderCloud(ctx, w, h, bt, formation(local, figSeq, { lift: 0.3 }), {
-          ...view, color: isStar ? 'gold' : sweepColors(['ice', 'plum', 'ice'], bt, 0.05), size: 0.85, twinkle: 0.05,
-          alpha: A * 0.5 * figA * (1 - clamp((g - 6) / 3)),
-        });
+        // the atlas engraving behind the stars
+        for (const g of ART) {
+          const k = Math.min(clamp((local - C.at(g.from) - 4) / 4), 1 - clamp((local - C.at(g.to) + 1) / 3));
+          if (k <= 0) continue;
+          for (const p of g.parts) {
+            drawCard(ctx, w, h, art.get(p.shape.src), view, shapeRect(p.shape, p.size, p.x, p.y), { z: -0.12, alpha: A * 0.6 * easeInOutSine(k) * (0.9 + 0.1 * bar) });
+          }
+        }
         renderCloud(ctx, w, h, bt, cloud, {
           ...view,
           color: isStar ? sweepColors(['gold', 'candle', 'gold', 'snow'], bt, 0.12) : sweepColors(['snow', 'ice', 'snow', 'plum'], bt, 0.08),

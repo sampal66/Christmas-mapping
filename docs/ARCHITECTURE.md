@@ -233,6 +233,7 @@ export default {
 | 2026-11-17 | Gift boxes stacked (small on big); the room model generates a zone per face the projector can see (`box1`/`box2` fronts, `box1Side`/`box2Side`) | owner: real box mapping uses several surfaces; from the projector (left, 1.45 m) the fronts and left sides are lit, tops are slivers |
 | 2026-11-17 | The tree is a 3D cone of points with layered surface patterns (`fx/megatree.js`), mixed per point in one pass | owner wanted more dynamic tree effects; one draw per light keeps it affordable |
 | 2026-11-17 | Constellations get dim star-atlas figure art (`fx/figures.js`) set back in depth, plus a nebula glow | owner: constellations looked flat and too simple |
+| 2026-11-17 | Constellation art = real public-domain atlas engravings (Jamieson 1822), cut out and tinted, drawn as cards in the swarm's 3D view; star positions come from the same plates | owner wanted authentic star-atlas art; one image draw per figure is cheap |
 | 2026-11-17 | Hold-loop visuals use periods that divide the loop length | the s09 loop seam is invisible (flash-check verifies it) |
 
 ## Changelog

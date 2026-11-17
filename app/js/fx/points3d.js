@@ -245,3 +245,41 @@ export function cloudFigure(parts, n, { zBase = -0.35, seed = 19 } = {}) {
   });
   return c;
 }
+
+/** The camera transform renderCloud uses, as a function (x, y, z) → [screenX, screenY, depthScale]. */
+export function projector(w, h, { cx = 0.5, cy = 0.5, scale = 0.25, rotX = 0, rotY = 0, rotZ = 0, dist = 3.2 } = {}) {
+  const S = Math.min(w, h) * scale;
+  const [sx, cxr, sy, cyr, sz, czr] = [Math.sin(rotX), Math.cos(rotX), Math.sin(rotY), Math.cos(rotY), Math.sin(rotZ), Math.cos(rotZ)];
+  return (x, y, z) => {
+    let t1 = x * czr - y * sz; y = x * sz + y * czr; x = t1;
+    t1 = x * cyr + z * sy; z = -x * sy + z * cyr; x = t1;
+    t1 = y * cxr - z * sx; z = y * sx + z * cxr; y = t1;
+    const f = dist / (dist + z);
+    return [cx * w + x * S * f, cy * h + y * S * f, f];
+  };
+}
+
+/**
+ * Draws an image as a flat card in the same 3D view as a point cloud (affine fit through three projected
+ * corners), so artwork turns together with its stars. rect: [x0, y0, x1, y1] in cloud units at depth z.
+ */
+export function drawCard(ctx, w, h, img, view, rect, { z = 0, alpha = 1 } = {}) {
+  if (!img || alpha <= 0.002) return;
+  const P = projector(w, h, view);
+  const [x0, y0, x1, y1] = rect;
+  const a = P(x0, y0, z), b = P(x1, y0, z), c = P(x0, y1, z);
+  const iw = img.width, ih = img.height;
+  ctx.save();
+  ctx.globalAlpha *= alpha;
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.transform((b[0] - a[0]) / iw, (b[1] - a[1]) / iw, (c[0] - a[0]) / ih, (c[1] - a[1]) / ih, a[0], a[1]);
+  ctx.drawImage(img, 0, 0);
+  ctx.restore();
+}
+
+/** The cloud-unit rectangle a constellation's art covers (same mapping as cloudConstellation). */
+export function shapeRect(shape, size = 1, x = 0, y = 0) {
+  const aspect = shape.aspect ?? 1;
+  const sx = aspect >= 1 ? size : size * aspect, sy = aspect >= 1 ? size / aspect : size;
+  return [x - sx, y - sy, x + sx, y + sy];
+}

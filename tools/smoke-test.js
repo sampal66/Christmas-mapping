@@ -17,7 +17,7 @@ function missingFromShell() {
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
   const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((d) =>
     d.isDirectory() ? walk(path.join(dir, d.name)) : [path.relative(ROOT, path.join(dir, d.name))]);
-  return walk(ROOT).filter((f) => /\.(html|css|js|woff2)$/.test(f) && f !== 'sw.js' && !sw.includes(`'${f}'`));
+  return walk(ROOT).filter((f) => /\.(html|css|js|woff2|png)$/.test(f) && f !== 'sw.js' && !sw.includes(`'${f}'`));
 }
 
 const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Number); return m * 60 + ss; };
