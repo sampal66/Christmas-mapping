@@ -18,13 +18,16 @@
 | WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | ✅ done (PR #6) | `claude/wp-03-effects-scenes` | C1 (s00, s01, s02, s04, s06, s09, s10) + owner notes (3D swarm, mega-tree, box tower, atlas art) |
 | WP-04 | Character pipeline: 4 pets + Mickey 1928 + Shepard Pooh + **Santa and sleigh**; approach pending (TREATMENT §09: AI video clips recommended, not code puppets) | WP-03, WP-10, ElevenLabs connector | ⚪ needs brief | — | C2, C3 |
 | WP-05 | [Music sourcing + beat maps](work-packages/WP-05-music-beats.md): PD military-band carols, Musopen Tchaikovsky, ElevenLabs music box + 3 underscores; beat maps (auto + tap tool) applied to the light-show scenes | WP-03, WP-10 | 🟡 in review (PR #7) | `claude/wp-05-music-beats` | C5, C1 beat sync |
-| WP-06 | Spanish script (`docs/SCRIPT.md`) + narration and **pet voices** (≈3 min of speech; TREATMENT §03–§04) | WP-10, owner go-ahead | ⏸️ deferred by owner | — | C4 |
+| WP-06 | Spanish script (`docs/SCRIPT.md`) + narration and **pet voices** (≈3 min of speech; TREATMENT §03–§04); writes its own brief first | WP-10 | 🟢 ready (**next**, owner go-ahead 2026-11-17) | — | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
 | WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10 | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-09 | On-wall calibration + rehearsal checklist | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
 
 Status keys: 🟢 ready to start · 🔵 in progress · 🟡 in review (PR open) · ✅ done · ⚪ waiting on a dependency · ⏸️ deferred
+
+**Order agreed with the owner (2026-11-17): WP-06 → WP-04 → WP-08** (script and voices fix shot content and timings, so the
+character clips are made once at the right length; WP-08 needs both). WP-09 runs when the projector arrives (~Nov 27); WP-07 fills any gap.
 
 WP-01 and WP-02 can run **in parallel** (they touch different files). **WP-10 comes before WP-03/04/05/06/08**: it fixes
 the story, timeline and style they build on ([TREATMENT.md](TREATMENT.md)). Merge each PR before starting a WP that depends on it.
@@ -116,5 +119,4 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 - Reconnect the ElevenLabs connector with full permissions (from a PC). This blocks WP-04 and WP-05.
 - More pet photos (full body, side view) for WP-04.
 - Soundbar model (for WP-01 delay defaults; optional).
-- Go-ahead for the script (WP-06).
 - WP-05: OK the drum kits in s01/s10 Jingle Bells (or swap s10 to a concert-band version); listen to the music-box loop seam.
