@@ -97,3 +97,28 @@ export function shootingStars(ctx, w, h, t, opts = {}) {
     dot(ctx, glowSprite(color), x, y, Math.min(w, h) / 45);
   });
 }
+
+/**
+ * Soft nebula glow: a few large, faint colour clouds drifting very slowly behind the stars, giving the sky depth.
+ * Gradients are limited to each cloud's bounding box to stay cheap. opts: alpha, colors, area [u0, v0, u1, v1].
+ */
+export function nebula(ctx, w, h, t, opts = {}) {
+  const { alpha = 1, colors = ['plum', 'ice'], area = [0.5, 0, 1, 0.8], seed = 23 } = opts;
+  if (alpha <= 0.002) return;
+  const [u0, v0, u1, v1] = area;
+  const op = ctx.globalCompositeOperation;
+  ctx.globalCompositeOperation = 'lighter';
+  colors.forEach((c, i) => {
+    const k = seed + i * 7;
+    const x = (u0 + (u1 - u0) * (0.2 + 0.6 * rand(k)) + 0.03 * Math.sin(t * 0.03 + k)) * w;
+    const y = (v0 + (v1 - v0) * (0.2 + 0.6 * rand(k + 0.5)) + 0.03 * Math.cos(t * 0.025 + k)) * h;
+    const R = Math.min(w, h) * (0.28 + 0.12 * rand(k + 0.9));
+    const g = ctx.createRadialGradient(x, y, 0, x, y, R);
+    g.addColorStop(0, rgba(c, 0.09 * alpha));
+    g.addColorStop(0.5, rgba(c, 0.04 * alpha));
+    g.addColorStop(1, rgba(c, 0));
+    ctx.fillStyle = g;
+    ctx.fillRect(x - R, y - R, R * 2, R * 2);
+  });
+  ctx.globalCompositeOperation = op;
+}

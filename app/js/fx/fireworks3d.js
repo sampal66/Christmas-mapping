@@ -34,7 +34,7 @@ function shellDirs(type, n, seed, tilt) {
  */
 export function firework3d(ctx, w, h, t, opts = {}) {
   const { t0 = 0, x = 0.5, y = 0.35, color = 'gold', color2 = 'snow', radius = 0.2, rise = 1.0, type = 'peony',
-    tilt = 1.1, spin = 0.25, alpha = 1, seed = 1, count = 90 } = opts;
+    tilt = 1.1, spin = 0.25, alpha = 1, seed = 1, count = 80 } = opts;
   const life = type === 'willow' ? 4.2 : 3.2;
   const age = t - t0;
   if (age < 0 || age > rise + life) return;
@@ -68,9 +68,9 @@ export function firework3d(ctx, w, h, t, opts = {}) {
   for (const [scaleR, col] of shells) {
     const dirs = shellDirs(type === 'double' ? 'peony' : type, count, seed, tilt);
     const sCore = glowSprite(col, 0.3), sAlt = glowSprite(color2, 0.3);
-    // Three samples along each point's path give it a short tail (motion trail).
-    for (let k = 2; k >= 0; k--) {
-      const ak = Math.max(0, a - k * 0.07);
+    // Two samples along each point's path give it a short tail (motion trail).
+    for (let k = 1; k >= 0; k--) {
+      const ak = Math.max(0, a - k * 0.08);
       const ex = 1 - Math.exp(-3.2 * ak);               // fast burst, air drag slows it
       for (let i = 0; i < count; i++) {
         let dx = dirs[i * 3], dy = dirs[i * 3 + 1], dz = dirs[i * 3 + 2];
@@ -80,7 +80,7 @@ export function firework3d(ctx, w, h, t, opts = {}) {
         const py = by + dy * R * scaleR * ex * f + grav * ak * ak;
         const depth = clamp(0.4 + 0.6 * (f - 0.75) / 0.5);
         const r = m * (k ? 0.006 : 0.0095) * f;
-        ctx.globalAlpha = ga * alpha * bloom * fade * depth * (k ? 0.28 / k : 1);
+        ctx.globalAlpha = ga * alpha * bloom * fade * depth * (k ? 0.3 : 1);
         const sp = i % 4 === 0 ? sAlt : sCore;
         ctx.drawImage(sp, px - r, py - r, r * 2, r * 2);
       }

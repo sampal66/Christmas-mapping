@@ -23,6 +23,17 @@ export function outlineOf(env, inset = 0.02) {
   return [[a, b], [a, a], [b, a], [b, b]];
 }
 
+/**
+ * Gift-box faces: 'box1' / 'box1Side' (small box, on top of the tower) and 'box2' / 'box2Side' (big box, bottom).
+ * Returns null for other zones.
+ */
+export function boxFace(zoneId) {
+  const m = /^(box[12])(Side)?$/.exec(zoneId);
+  if (!m) return null;
+  return { box: m[1], face: m[2] ? 'side' : 'front', top: m[1] === 'box1' };
+}
+export const BOX_ZONES = ['box1', 'box1Side', 'box2', 'box2Side'];
+
 /** A point of another zone expressed in this zone's 0..1 coordinates (fallback when unknown). */
 export function from(env, zoneId, u, v, fallback = [0.5, 0.5]) {
   return env?.from?.(zoneId, u, v) || fallback;

@@ -104,6 +104,8 @@ sparkles) are drawn in code, not in the clip.
   rush), but their underscore cues also start on a beat where possible.
 - **Feel of the beat:** motion never stops or lurches. It flows continuously and breathes a little faster on each
   beat (speed 0.65–1.35×); accents swell in and decay smoothly; draw-ons glide from beat to beat.
+- **Tree:** a turning 3D "mega-tree" of light points running pro light-show patterns (rings, candy-cane bars,
+  helix, meteors, shockwaves, galaxy, plasma; reference: xLights / Light-O-Rama mega trees, Twinkly), not flat bands.
 - **Drone-show style (owner, 2026-11-17):** constellations, the closing family constellation, the greeting and the
   fireworks are **3D point formations**: identical small light points in real depth, turning slowly, morphing
   shape-to-shape along staggered curved paths, with colour sweeping through the swarm (reference: Disney's night-time
@@ -126,7 +128,7 @@ sparkles) are drawn in code, not in the clip.
 | `wall` | big canvas | snow, sky, edge traces, fireworks |
 | `backdrop` | scenery behind the stage; the characters' set | night sky, title cards, photo frames; pets walk on a ground line just above the (black, non-reflecting) sideboard top |
 | `stage` | thin strip at the sideboard top (the front is out of the beam) | footlights only |
-| `box1…n` | gift boxes | faces light up, "open", characters peek out |
+| `box1`, `box1Side`, `box2`, `box2Side` | gift-box tower (small box stacked on the big one); front and left side of each are mapped | faces light up, ribbons and light sweeps wrap round the corner, boxes "open", characters peek out |
 | `tree` | the star of the light show | colour waves, sparkles, spirals, ornament pops |
 | `star` | tree top | glow, the star's arrival, the finale spotlight |
 | `rightStrip` | ambience | snow spill, glow continuation |
@@ -168,6 +170,7 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 - The UI must be hideable (Hide ✕, top-left corner to restore), because whatever is on screen is projected.
 
 ## Changelog
+- **2026-11-17** — §06 mega-tree patterns; §07 stacked gift tower with front + side faces (owner notes, WP-03).
 - **2026-11-17** — §06: smooth beat feel (no surges) and the 3D drone-show point style for stars and fireworks (owner notes).
 - **2026-11-17** — §06: every light-show animation moves to the beat (owner note, WP-03); beat-accent safety cap.
 - **2026-11-17** — §04: Mountains of Christmas is Apache 2.0 (not OFL); both fonts are bundled in `app/fonts/` (WP-03).

@@ -52,6 +52,9 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
   → The **WP-05 brief must deliver a beat map** per light-show scene (beat times → `beats.times`, plus re-timed `cues`); WP-08 underscores start cues on beats.
   Owner notes 2: motion felt forced → beat motion now flows (speed 1±0.35, soft accents). Stars + fireworks are now a **3D drone-show point swarm**
   (`fx/points3d.js`: s06 sky → Orion → Canis → Felis → lost star; s10 sparks → family/heart → "¡Feliz Navidad!"; `fx/fireworks3d.js`). Demo reels in `demo/` (not committed).
+  Owner notes 3: **boxes stacked** (small on big; model `boxes[].z0`), zones `box1Side`/`box2Side` (front + left side lit; tops are slivers);
+  **mega-tree** (`fx/megatree.js`, layered patterns); constellations get star-atlas figure art + nebula. Render cost is up (s10 ≈18–31 ms
+  software raster): **if the iPad drops frames in WP-09, lower N in s06/s10, firework `count`, or mega-tree `rings`.** Saved Room-model edits keep old box positions.
 
 - **2026-11-17 · WP-10** — `docs/TREATMENT.md`: owner decisions (adult audience, 10–15 min → ≈12, tradition + Santa + constellations
   spine, both cameos tiny, Papá taps Continue), arcs, beat sheet with music licence/zones/cues, live-moment plan, cut list (→ ≈10 min).

@@ -230,9 +230,13 @@ export default {
 | 2026-11-17 | Every light-show animation is driven by a per-scene beat grid (warp clock, accents, beat-stepped progress, beat-snapped cues) | owner: the show should move to the music; one `beats` entry per scene swaps placeholder tempo for the real beat map |
 | 2026-11-17 | Beat motion uses a smooth speed modulation (1 ± 0.35 per beat) and soft-attack accents, not eased surges | owner: the stepped surges looked forced |
 | 2026-11-17 | Stars and fireworks are 3D point clouds (`fx/points3d.js`, `fx/fireworks3d.js`): perspective projection, slow rotation, staggered curved morphs | owner wants the drone-show look; one swarm re-forming keeps transitions continuous |
+| 2026-11-17 | Gift boxes stacked (small on big); the room model generates a zone per face the projector can see (`box1`/`box2` fronts, `box1Side`/`box2Side`) | owner: real box mapping uses several surfaces; from the projector (left, 1.45 m) the fronts and left sides are lit, tops are slivers |
+| 2026-11-17 | The tree is a 3D cone of points with layered surface patterns (`fx/megatree.js`), mixed per point in one pass | owner wanted more dynamic tree effects; one draw per light keeps it affordable |
+| 2026-11-17 | Constellations get dim star-atlas figure art (`fx/figures.js`) set back in depth, plus a nebula glow | owner: constellations looked flat and too simple |
 | 2026-11-17 | Hold-loop visuals use periods that divide the loop length | the s09 loop seam is invisible (flash-check verifies it) |
 
 ## Changelog
+- **2026-11-17** — WP-03 owner notes 3: stacked box tower with side faces, mega-tree, constellation figures (§07).
 - **2026-11-17** — WP-03 owner notes: smooth beat feel; 3D point-cloud swarm and fireworks (§03, §07).
 - **2026-11-17** — WP-03 (owner note): §4.4 beat grid for all light-show scenes; §07 decision.
 - **2026-11-17** — WP-03: §03 fx/, palette, fonts, flash-check; §4.4 scene interface as built (cues, env, holds, placeholders); §07 decisions.

@@ -1,8 +1,9 @@
 // s04 · Cajas mágicas (1:15). The gift boxes light face by face to the music; each one "opens" with sparkles
-// (box 2 releases a jack-in-the-box spring of light); footlights chase (TREATMENT §04). Gandalf popping out of a
+// (box 2 releases a jack-in-the-box spring of light); footlights chase (TREATMENT §04). The boxes stand as a stacked
+// tower with each box's front and side mapped. Gandalf popping out of a
 // box is character animation (WP-08), laid over this later.
-import { cueSheet, beatGrid, boxFaces, boxOpen, footlights, sparkleBurst, twinkleStars, snowfall, glowStroke, additive, clamp, easeInOutSine } from '../fx/index.js';
-import { from, beatClock } from './common.js';
+import { cueSheet, beatGrid, boxFaces, boxOpen, wrapSweep, footlights, sparkleBurst, twinkleStars, snowfall, glowStroke, additive, clamp, easeInOutSine } from '../fx/index.js';
+import { from, beatClock, boxFace, BOX_ZONES } from './common.js';
 
 const cues = [
   { t: 14, name: 'box1-open' },
@@ -44,33 +45,45 @@ export default {
   duration,
   cues,
   beats,
-  zones: ['box1', 'box2', 'backdrop', 'stage'],
+  zones: [...BOX_ZONES, 'backdrop', 'stage'],
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = easeInOutSine(clamp(local / 2)) * (1 - easeInOutSine(C.prog(local, 'out', duration)));
     const fin = B.steps(local, C.at('finale'), 2);
     const { bt, pulse } = beatClock(B, t - local, local);
     switch (zoneId) {
-      case 'box1':
-      case 'box2': {
-        const one = zoneId === 'box1';
-        const openCue = one ? 'box1-open' : 'box2-open';
+      case 'box1': case 'box1Side': case 'box2': case 'box2Side': {
+        // The tower: big box (box2) at the bottom, small box (box1) on top. Each box's front and side are
+        // separate surfaces; effects line up across the corner so the tower reads as a solid object.
+        const f = boxFace(zoneId);
+        const openCue = f.top ? 'box1-open' : 'box2-open';
         const opened = local >= C.at(openCue);
+        const build = f.top ? B.steps(local, 5, 8) : 1;          // the top box joins after the bottom one
         // Second sequence (box2-open → cut, skipped by the cut list): finer 3×3 grid.
         const second = local >= C.at('box2-open') + 6 && local < C.at('finale');
         boxFaces(ctx, w, h, local, {
-          beats: B, shift: one ? 0 : B.beatLen / 2,          // box 2 answers half a beat behind box 1
-          colors: COLORS[zoneId], grid: second ? 3 : 2,
+          beats: B, shift: f.top ? 0 : B.beatLen / 2,          // the boxes answer each other half a beat apart
+          colors: COLORS[f.box], grid: second ? 3 : 2, face: f.face,
           mode: fin > 0 ? 'all' : 'cells',
-          level: A * (opened ? 0.85 : 0.6 + 0.2 * clamp(local / 10)),
-          seed: one ? 1 : 2,
+          level: A * build * (opened ? 0.85 : 0.6 + 0.2 * clamp(local / 10)),
+          seed: (f.top ? 1 : 2) + (f.face === 'side' ? 10 : 0),
         });
-        boxOpen(ctx, w, h, bt, { open: C.env(local, openCue, C.at(openCue) + 8, 0.6, 3) + 0.6 * fin, color: COLORS[zoneId][1], alpha: A });
+        // Light sweeps round the corner (side → front), one per bar; bottom and top travel in opposite
+        // directions, so the tower seems to turn. Twice as often in the second sequence.
+        const per = (second ? 1 : 2) * B.perBar * B.beatLen;
+        for (let k = 0; k < 2; k++) {
+          const age = ((local - B.time(0)) % per) / per - k * 0.5;
+          if (age < 0 || age > 1) continue;
+          const p = f.top ? -0.3 + age * 2.6 : 2.3 - age * 2.6;
+          wrapSweep(ctx, w, h, local, { p, face: f.face, color: f.top ? 'rose' : 'gold', alpha: A * build * (fin > 0 ? 0.4 : 0.7) });
+        }
+        boxOpen(ctx, w, h, bt, { open: (C.env(local, openCue, C.at(openCue) + 8, 0.6, 3) + 0.6 * fin) * (f.face === 'side' ? 0.7 : 1), color: COLORS[f.box][1], alpha: A * build });
         break;
       }
       case 'backdrop': {
         twinkleStars(ctx, w, h, bt, { seed: 45, density: 0.3, alpha: 0.6 * A });
-        const [x1, y1] = from(env, 'box1', 0.5, 0, [0.5, 0.8]);
-        const [x2, y2] = from(env, 'box2', 0.5, 0, [0.85, 0.72]);
+        // box 1 opens at the top of the tower; box 2's spring rises from its shoulder, beside the small box
+        const [x1, y1] = from(env, 'box1', 0.5, 0, [0.72, 0.5]);
+        const [x2, y2] = from(env, 'box2', 0.94, 0, [0.95, 0.72]);
         sparkleBurst(ctx, w, h, local, { t0: C.at('box1-open'), x: x1, y: y1, up: 0.65, spread: 0.4, count: 48, colors: ['plum', 'rose', 'snow'], duration: 2.4, alpha: A });
         lightSpring(ctx, w, h, local - C.at('box2-open'), x2, y2, A * (1 - C.prog(local, C.at('box2-open') + 7, { after: 2 })), pulse);
         if (fin > 0) {

@@ -2,13 +2,13 @@
 // A warm ripple from the lit star, footlights burst, a sparkle trail where the sleigh will fly, soft fireworks,
 // then the stars gather into the family constellation (from one media-pack photo, processed on the iPad) and
 // "¡Feliz Navidad!". Fades to the starfield (TREATMENT §04).
-import { cueSheet, beatGrid, treeWaves, treeWash, twinkleStars, firework3d, sparkleBurst, footlights, boxFaces, snowfall,
+import { cueSheet, beatGrid, megaTree, firework3d, sparkleBurst, footlights, boxFaces, snowfall,
   starHalo, projectedStar, photoToConstellation, fallbackConstellation, loadFonts,
   cloudScatter, cloudConstellation, cloudHeart, cloudText, formation, renderCloud, sweepColors,
   glowSprite, dot, additive, glowStroke, easeInOutSine, clamp, rand } from '../fx/index.js';
 import { SHOW_HUES } from '../palette.js';
 import * as media from '../media.js';
-import { skyBase, stripSnow, from, beatClock } from './common.js';
+import { skyBase, stripSnow, from, beatClock, boxFace, BOX_ZONES } from './common.js';
 
 const cues = [
   { t: 0, name: 'ripple' },
@@ -71,8 +71,9 @@ async function loadFamily() {
 
 // The closing swarm (drone-show style): sparks rise and gather into the family constellation as a turning 3D
 // figure, then re-form as "¡Feliz Navidad!" written in points.
-const N = 1000;
-const SWARM = { cx: 0.765, cy: 0.42, scale: 0.24 };
+const N = 820;
+// Above the gift tower (its top is at v ≈ 0.52).
+const SWARM = { cx: 0.72, cy: 0.27, scale: 0.21 };
 let seq = null, seqFonts = false;
 const fontsReady = () => typeof document === 'undefined' || !document.fonts || document.fonts.status === 'loaded';
 function sequence() {
@@ -97,7 +98,7 @@ export default {
   beats,
   // Live-moment fallback (TREATMENT §05): show the projected star if the real one isn't on the tree.
   options: { projectedStar: false },
-  zones: ['wall', 'rightStrip', 'backdrop', 'stage', 'box1', 'box2', 'tree', 'star'],
+  zones: ['wall', 'rightStrip', 'backdrop', 'stage', ...BOX_ZONES, 'tree', 'star'],
   enter() { loadFonts(); loadFamily(); sequence(); },
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
@@ -155,23 +156,22 @@ export default {
       case 'stage':
         footlights(ctx, w, h, bt, { warm: A * (0.85 + 0.15 * pulse), chase: 0.5 + 0.4 * C.env(local, 'ripple', 'sleigh', 0.5, 4), speed: 2 / B.beatLen });
         break;
-      case 'box1':
-      case 'box2':
-        boxFaces(ctx, w, h, local, { beats: B, shift: zoneId === 'box2' ? B.beatLen / 2 : 0, mode: fw > 0.5 ? 'all' : 'cells',
-          colors: zoneId === 'box1' ? ['plum', 'rose'] : ['cranberry', 'gold'], level: A * (0.4 + 0.4 * fw) * (1 - 0.5 * fam), seed: 5 });
+      case 'box1': case 'box1Side': case 'box2': case 'box2Side': {
+        const f = boxFace(zoneId);
+        boxFaces(ctx, w, h, local, { beats: B, shift: f.top ? 0 : B.beatLen / 2, mode: fw > 0.5 ? 'all' : 'cells', face: f.face,
+          colors: f.top ? ['plum', 'rose'] : ['cranberry', 'gold'], level: A * (0.4 + 0.4 * fw) * (1 - 0.5 * fam), seed: f.top ? 5 : 6 });
         break;
+      }
       case 'tree': {
-        // A warm wave rolls down from the lit star, then gentle colour waves; quiet gold for the constellation.
-        const rip = B.steps(local, C.at('ripple'), 7);
-        if (rip < 1) {
-          const y = easeInOutSine(rip) * 1.3 - 0.15;
-          const g = ctx.createLinearGradient(0, (y - 0.15) * h, 0, (y + 0.15) * h);
-          g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.5, 'rgba(255,176,102,0.9)'); g.addColorStop(1, 'rgba(0,0,0,0)');
-          additive(ctx, A, () => { ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); });
-        }
-        treeWaves(ctx, w, h, bt - (t - local), { hueSweep: true, speed: 0.22, alpha: A * (0.6 + 0.15 * pulse) * C.prog(local, 2, 5) * (1 - 0.7 * fam) });
-        if (fam > 0) treeWash(ctx, w, h, t, { color: 'gold', alpha: (0.14 + 0.06 * bar) * fam * A });
-        twinkleStars(ctx, w, h, bt, { seed: 65, density: 0.8, colors: ['gold', 'snow'], size: 1.6, alpha: 0.6 * A });
+        // Mega-tree: a warm shockwave rolls down from the lit star on the first two downbeats, then a rainbow helix
+        // turns through the fireworks; quiet gold plasma under the family constellation.
+        const lt = bt - (t - local), spin = lt * 0.45;
+        megaTree(ctx, w, h, lt, { spin, alpha: A, layers: [
+          ...[0, 1].map((j) => ({ pattern: 'shockwave', t: local, params: { t0: B.time(j * B.perBar), u0: 0, k0: 0, speed: 0.55, width: 0.09, life: 2.6 }, colors: ['candle'] })),
+          { pattern: 'helix', params: { count: 4, turns: 2, speed: 0.4, width: 0.15 }, colors: ['gold', 'cranberry', 'pine', 'ice', 'plum', 'rose'], alpha: C.prog(local, 2, 5) * (1 - 0.8 * fam) * (0.85 + 0.15 * pulse) },
+          { pattern: 'twinkle', colors: ['gold', 'snow'], alpha: 0.45 },
+          { pattern: 'plasma', colors: ['gold', 'candle', 'gold', 'rose'], alpha: 0.45 * fam * (0.8 + 0.2 * bar) },
+        ] });
         break;
       }
       case 'star': {

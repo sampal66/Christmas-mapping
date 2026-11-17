@@ -4,11 +4,14 @@ import { rand, clamp, glowSprite, dot, additive, glowStroke, easeOutBack } from 
 
 /**
  * Box face sequencer: the face is split into a grid whose cells light in turn on the beat, with a soft decay
- * (never a hard on/off), plus a ribbon cross and a glowing outline. opts: beats (beatGrid), shift (s), level 0..1,
+ * (never a hard on/off), plus a ribbon cross and a glowing outline. The ribbon sits at the centre of every face, so
+ * it lines up across the box's corner. opts: beats (beatGrid), shift (s), level 0..1, face ('front' | 'side'),
  * colors, ribbon (token), grid (cells per side), mode ('cells' | 'all' | 'outline'), seed.
  */
 export function boxFaces(ctx, w, h, t, opts = {}) {
-  const { beats, shift = 0, level = 1, colors = ['plum', 'cranberry'], ribbon = 'gold', grid = 2, mode = 'cells', seed = 1 } = opts;
+  const { beats, shift = 0, colors = ['plum', 'cranberry'], ribbon = 'gold', grid = 2, mode = 'cells', seed = 1, face = 'front' } = opts;
+  // The side face is shaded a little darker, so the tower reads as a solid 3D object.
+  const level = (opts.level ?? 1) * (face === 'side' ? 0.72 : 1);
   if (level <= 0 || !beats) return;
   const { n, phase: ph } = beats.at(t - shift);
   const decay = Math.exp(-ph * 2.2);                      // soft fall-off between beats
@@ -82,4 +85,21 @@ export function footlights(ctx, w, h, t, opts = {}) {
       dot(ctx, glowSprite(colors[i % colors.length], 0.3), (i + 0.5) * w / count, h * 0.55, h * (0.45 + 0.25 * c * chase));
     }
   });
+}
+
+/**
+ * A soft vertical band of light travelling round a box: position p runs 0..1 across the side face (back edge →
+ * corner) and 1..2 across the front (corner → right edge), so one sweep wraps continuously round the corner.
+ * opts: p, face ('front' | 'side'), color, width (share of a face), alpha.
+ */
+export function wrapSweep(ctx, w, h, t, opts = {}) {
+  const { p = 0, face = 'front', color = 'snow', width = 0.35, alpha = 1 } = opts;
+  const x = (p - (face === 'side' ? 0 : 1)) * w;
+  const bw = width * w;
+  if (x < -bw || x > w + bw || alpha <= 0) return;
+  const g = ctx.createLinearGradient(x - bw, 0, x + bw, 0);
+  g.addColorStop(0, rgba(color, 0));
+  g.addColorStop(0.5, rgba(color, 0.85 * (face === 'side' ? 0.75 : 1)));
+  g.addColorStop(1, rgba(color, 0));
+  additive(ctx, alpha, () => { ctx.fillStyle = g; ctx.fillRect(Math.max(0, x - bw), 0, bw * 2, h); });
 }

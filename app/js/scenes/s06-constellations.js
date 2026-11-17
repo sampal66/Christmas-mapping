@@ -2,7 +2,8 @@
 // as turning 3D figures (Orion, Canis Major and Minor, Felis), then the lost star, which slips away; slow shooting
 // stars; snow on the right wall (TREATMENT §04). The pets-as-constellation smiles are WP-08.
 import { cueSheet, beatGrid, twinkleStars, shootingStars, starHalo, glowSprite, dot, additive, sparkleBurst,
-  cloudScatter, cloudConstellation, cloudGroup, cloudStar, formation, renderCloud, sweepColors,
+  cloudScatter, cloudConstellation, cloudGroup, cloudStar, cloudFigure, formation, renderCloud, sweepColors, nebula,
+  ORION_FIGURE, CANIS_MAJOR_FIGURE, CANIS_MINOR_FIGURE, FELIS_FIGURE, STAR_HALO_FIGURE,
   ORION, CANIS_MAJOR, CANIS_MINOR, FELIS, easeInOutSine, clamp } from '../fx/index.js';
 import { skyBase, stripSnow, beatClock } from './common.js';
 
@@ -24,17 +25,21 @@ const duration = 90;
 // The constellations are a drone swarm: one set of light points that gathers out of the sky into Orion, re-forms
 // as Canis Major + Minor, then Felis, then the lost star, which slips away at the glint. Each shape is a real 3D
 // figure turning slowly. Placed on the open right half of the wall (the tree covers u 0.17–0.5 lower down).
-const N = 700;
-const SWARM = { cx: 0.765, cy: 0.38, scale: 0.3 };
+const N = 600;
+// Between the tree tip and the gift tower (its top is at v ≈ 0.52, from u ≈ 0.77), clear of the top edge.
+const SWARM = { cx: 0.66, cy: 0.36, scale: 0.19 };
 const NORTH_STAR = [0.5, 0.06];
-let seq = null;
+// Behind the stars, a faint star-atlas drawing of each figure (the hunter, the dogs, the cat) sits deeper in 3D,
+// so it shifts against the stars as the formation turns. It morphs along with the stars.
+const NF = 480;
+let seq = null, figSeq = null;
 function sequence() {
   if (seq) return seq;
   // starts spread across the whole sky, so the stars visibly gather into the first figure
   const sky = cloudScatter(N, { w: 6.5, h: 3.4, d: 2, seed: 31 });
-  const orion = cloudConstellation(ORION, N, { size: 1.05, seed: 41 });
+  const orion = cloudConstellation(ORION, N, { size: 1.05, depth: 0.4, seed: 41 });
   const canis = cloudGroup([{ shape: CANIS_MAJOR, x: -0.2, y: 0.22, size: 0.78 }, { shape: CANIS_MINOR, x: 0.62, y: -0.62, size: 0.32 }], N, 51);
-  const felis = cloudConstellation(FELIS, N, { size: 1.05, seed: 61 });
+  const felis = cloudConstellation(FELIS, N, { size: 1.05, depth: 0.4, seed: 61 });
   const star = cloudStar(N, { size: 0.8, seed: 71 });
   seq = [
     { at: 0, cloud: sky },
@@ -42,6 +47,13 @@ function sequence() {
     { at: C.at('canis'), cloud: canis, dur: 7 },
     { at: C.at('felis'), cloud: felis, dur: 7 },
     { at: C.at('cut'), cloud: star, dur: 5.5 },
+  ];
+  figSeq = [
+    { at: 0, cloud: cloudScatter(NF, { w: 6.5, h: 3.4, d: 2, seed: 33 }) },
+    { at: C.at('orion') + 2, cloud: cloudFigure([{ figure: ORION_FIGURE, size: 1.05 }], NF), dur: 8 },
+    { at: C.at('canis') + 2, cloud: cloudFigure([{ figure: CANIS_MAJOR_FIGURE, x: -0.2, y: 0.22, size: 0.78 }, { figure: CANIS_MINOR_FIGURE, x: 0.62, y: -0.62, size: 0.32 }], NF), dur: 8 },
+    { at: C.at('felis') + 2, cloud: cloudFigure([{ figure: FELIS_FIGURE, size: 1.05 }], NF), dur: 8 },
+    { at: C.at('cut'), cloud: cloudFigure([{ figure: STAR_HALO_FIGURE, size: 1.15 }], NF, { zBase: -0.2 }), dur: 6 },
   ];
   return seq;
 }
@@ -62,16 +74,27 @@ export default {
       case 'wall': {
         skyBase(zoneId, ctx, w, h, soft);
         // the sky breathes once per bar (the waltz's ONE-two-three)
-        twinkleStars(ctx, w, h, bt, { seed: 81, density: 1.1 * sky, alpha: A * (0.8 + 0.2 * bar), size: 0.9 });
+        twinkleStars(ctx, w, h, bt, { seed: 81, density: 0.6 * sky, alpha: A * (0.8 + 0.2 * bar), size: 0.9 });
+        // Nebula glow behind the figures, for depth.
+        nebula(ctx, w, h, t, { alpha: A * sky * (0.85 + 0.15 * bar), area: [0.5, 0, 1, 0.75] });
         // The swarm. Constellations turn gently (they're 3D figures); the star spins as it leaves.
         const cloud = formation(local, sequence());
         const g = C.since(local, 'glint');
         const away = g > 0 ? easeInOutSine(B.steps(local, C.at('glint') + 1.5, 26)) : 0;
         const isStar = local >= C.at('cut');
+        const view = {
+          cx: SWARM.cx + away * 0.42, cy: SWARM.cy - away * 0.3, scale: SWARM.scale * (1 - 0.82 * away), dist: 2.6,
+          rotY: isStar ? 0.5 * Math.sin(bt * 0.25) + away * 4 : 0.5 * Math.sin(bt * 0.16),
+          rotX: 0.16 * Math.sin(bt * 0.12),
+        };
+        // the dim figure drawing (fades in once a figure has formed, out as the star leaves)
+        const figA = local < C.at('orion') ? 0 : clamp((local - C.at('orion') - 3) / 4);
+        renderCloud(ctx, w, h, bt, formation(local, figSeq, { lift: 0.3 }), {
+          ...view, color: isStar ? 'gold' : sweepColors(['ice', 'plum', 'ice'], bt, 0.05), size: 0.85, twinkle: 0.05,
+          alpha: A * 0.5 * figA * (1 - clamp((g - 6) / 3)),
+        });
         renderCloud(ctx, w, h, bt, cloud, {
-          cx: SWARM.cx + away * 0.42, cy: SWARM.cy - away * 0.3, scale: SWARM.scale * (1 - 0.82 * away),
-          rotY: isStar ? 0.5 * Math.sin(bt * 0.25) + away * 4 : 0.45 * Math.sin(bt * 0.16),
-          rotX: 0.14 * Math.sin(bt * 0.12),
+          ...view,
           color: isStar ? sweepColors(['gold', 'candle', 'gold', 'snow'], bt, 0.12) : sweepColors(['snow', 'ice', 'snow', 'plum'], bt, 0.08),
           alpha: A * (local < C.at('orion') ? 0.55 * sky : 1) * (0.88 + 0.12 * bar) * (1 - clamp((g - 10) / 3)),
           size: isStar ? 1.15 : 1,

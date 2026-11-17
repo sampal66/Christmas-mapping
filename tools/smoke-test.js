@@ -36,7 +36,7 @@ const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Num
   try {
     await page.goto(url);
     await page.waitForTimeout(600);
-    check(await page.locator('canvas.zone').count() >= 8, 'zone canvases rendered');
+    check(await page.locator('canvas.zone').count() >= 10, 'zone canvases rendered (incl. box sides)');
 
     // drag the first corner handle and confirm the layout is saved
     const h = await page.locator('.handle').first().boundingBox();
@@ -155,7 +155,7 @@ const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Num
     await page.click('#useBtn');
     await page.waitForURL(url);
     const zones = await page.evaluate(() => JSON.parse(localStorage.getItem('christmas-mapping.layout.v1')).zones);
-    check(zones.length === 8 && zones.every((z) => z.quad.flat().every(Number.isFinite)), 'model zones saved to the Mapper');
+    check(zones.length === 10 && zones.every((z) => z.quad.flat().every(Number.isFinite)), 'model zones saved to the Mapper');
     await page.waitForTimeout(300);
     check(await page.locator('canvas.zone').count() >= 8, 'Mapper renders the model zones');
   } catch (e) {

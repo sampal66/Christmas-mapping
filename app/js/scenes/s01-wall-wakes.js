@@ -1,7 +1,7 @@
 // s01 · La pared despierta (1:00). The mapping "wow": light lines trace the wall, the sideboard top, both boxes
 // and the tree; footlights warm up; snow begins and spills round the corner (TREATMENT §04).
 import { cueSheet, beatGrid, edgeTrace, snowfall, footlights, sparkleBurst, projectedStar, twinkleStars, boxOpen, easeInOutSine } from '../fx/index.js';
-import { skyBase, outlineOf, from, beatClock } from './common.js';
+import { skyBase, outlineOf, from, beatClock, boxFace, BOX_ZONES } from './common.js';
 
 const cues = [
   { t: 2, name: 'trace' },
@@ -22,7 +22,7 @@ export default {
   duration,
   cues,
   beats,
-  zones: ['wall', 'rightStrip', 'backdrop', 'stage', 'box1', 'box2', 'tree', 'star'],
+  zones: ['wall', 'rightStrip', 'backdrop', 'stage', ...BOX_ZONES, 'tree', 'star'],
   draw(zoneId, ctx, w, h, t, local, env) {
     // Content fades back to the bare starfield at the end (never to black).
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
@@ -47,8 +47,9 @@ export default {
       case 'backdrop': {
         // A rising shower of sparkles from both boxes on the beats of the welcome line.
         const wt = C.at('welcome');
-        for (const [i, id] of ['box1', 'box2'].entries()) {
-          const [x, y] = from(env, id, 0.5, 0, [0.4 + i * 0.3, 0.75]);
+        // (from the top of the tower, then from the big box's shoulder beside it)
+        for (const [i, [id, u]] of [['box1', 0.5], ['box2', 0.95]].entries()) {
+          const [x, y] = from(env, id, u, 0, [0.6 + i * 0.1, 0.55 + i * 0.2]);
           sparkleBurst(ctx, w, h, local, { t0: B.nextBeat(wt + i * 0.01), x, y, up: 0.7, spread: 0.35, count: 36, colors: ['gold', 'snow', 'rose'], duration: 2.6, seed: 3 + i, alpha: A });
         }
         twinkleStars(ctx, w, h, bt, { seed: 43, density: 0.25 * snow, alpha: 0.7 * A });
@@ -58,11 +59,13 @@ export default {
         edgeTrace(ctx, w, h, bt, { path: [[0, 0.5], [1, 0.5]], closed: false, progress: trace(3, 6), color: 'candle', width: h * 0.18, alpha: A * settle });
         footlights(ctx, w, h, bt, { warm: B.steps(local, 10, 15) * A * (0.85 + 0.15 * pulse), chase: 0.35, speed: 3 });
         break;
-      case 'box1':
-      case 'box2': {
-        const i = zoneId === 'box1' ? 0 : 1;
-        edgeTrace(ctx, w, h, bt, { progress: trace(5 + i * 1.2, 6), color: i ? 'plum' : 'cranberry', alpha: A });
-        boxOpen(ctx, w, h, bt, { open: (0.38 + 0.1 * (i ? bar : pulse)) * C.env(local, 'welcome', 'out', 1.2, 3), color: i ? 'plum' : 'rose', alpha: A });
+      case 'box1': case 'box1Side': case 'box2': case 'box2Side': {
+        // The tower traces from the bottom up: big box side, big front, small side, small front.
+        const f = boxFace(zoneId);
+        const i = (f.top ? 2 : 0) + (f.face === 'front' ? 1 : 0);
+        const col = f.top ? 'cranberry' : 'plum';
+        edgeTrace(ctx, w, h, bt, { progress: trace(5 + i * 0.9, 5), color: col, alpha: A * (f.face === 'side' ? 0.8 : 1) });
+        boxOpen(ctx, w, h, bt, { open: (0.38 + 0.1 * (f.top ? pulse : bar)) * C.env(local, 'welcome', 'out', 1.2, 3) * (f.face === 'side' ? 0.7 : 1), color: f.top ? 'rose' : 'plum', alpha: A });
         break;
       }
       case 'tree':

@@ -1,6 +1,7 @@
-// s02 · El árbol cobra vida (1:30). The tree is the light-show star: colour waves on the beat, ornament pops,
-// a spiral garland, and the star glowing gold at the climax. Soft colour echo on the wall (TREATMENT §04).
-import { cueSheet, beatGrid, treeWaves, ornamentPops, spiral, treeWash, twinkleStars, starHalo, projectedStar, additive, easeInOutSine } from '../fx/index.js';
+// s02 · El árbol cobra vida (1:30). The tree is the light-show star: a turning 3D mega-tree of light points running
+// pro light-show patterns on the beat (rings, candy-cane bars, shockwaves, helix, meteors, galaxy, plasma), ornament
+// pops, and the star glowing gold at the climax. Soft colour echo on the wall (TREATMENT §04).
+import { cueSheet, beatGrid, megaTree, ornamentPops, starHalo, projectedStar, additive, easeInOutSine } from '../fx/index.js';
 import { SHOW_HUES, mix } from '../palette.js';
 import { skyBase, from, beatClock } from './common.js';
 
@@ -32,25 +33,31 @@ export default {
     const glow = B.steps(local, C.at('star-glow'), 9);
     const { bt, soft, pulse, bar } = beatClock(B, t - local, local);
     if (zoneId === 'tree') {
-      const wavesA = A * (0.25 + 0.55 * build + 0.2 * drop) * (1 - 0.4 * C.prog(local, 'spiral', { after: 4 })) * (1 - 0.5 * glow);
-      // Waves climb in surges on each beat (bt); the build doubles their pace at the drop.
-      treeWaves(ctx, w, h, bt - (t - local), {
-        speed: local < C.at('drop') ? 0.16 : 0.32,
-        hueSweep: local >= C.at('drop') && local < C.at('star-glow'),
-        colors: ['gold', 'cranberry', 'pine', 'ice'],
-        alpha: wavesA * (0.8 + 0.2 * pulse),
-      });
-      if (local >= C.at('drop')) {
-        ornamentPops(ctx, w, h, local, { grid: B, from: C.at('drop'), every: 1, perBeat: 1, alpha: A * drop * (1 - 0.6 * glow) });
+      // The tree as a turning 3D mega-tree of light points. Sections cross-fade over ~1.5 s:
+      //   build: twinkle + slow rising rings · drop: candy-cane bars spinning, a shockwave from the tip every bar
+      //   spiral: rainbow helix + falling meteors · cut: galaxy swirl · star-glow: flowing gold plasma + sparkle
+      const sec = (a2, b2) => C.env(local, a2, b2, 1.5, 1.5);
+      const spin = (bt - (t - local)) * (local < C.at('drop') ? 0.25 : 0.55);   // the tree turns, faster after the drop
+      const lt = bt - (t - local);
+      const layers = [
+        { pattern: 'twinkle', colors: ['gold', 'snow', 'ice'], alpha: (0.35 + 0.5 * build) * (1 - 0.7 * drop) + 0.5 * glow },
+        { pattern: 'rings', params: { count: 3, speed: -0.25, width: 0.25 }, colors: ['gold', 'cranberry', 'pine', 'ice'], alpha: build * sec('build', 'drop') * (0.85 + 0.15 * pulse) },
+        { pattern: 'bars', params: { count: 6, twist: 0.45, speed: 0.5 }, colors: ['cranberry', 'snow', 'pine', 'snow'], alpha: sec('drop', 'spiral') * (0.85 + 0.15 * pulse) },
+        { pattern: 'helix', params: { count: 3, turns: 2.5, speed: 0.35, width: 0.16 }, colors: ['gold', 'rose', 'ice', 'pine', 'plum', 'cranberry'], alpha: sec('spiral', 'star-glow') * (0.85 + 0.15 * pulse) },
+        { pattern: 'meteors', params: { count: 16, speed: 0.9 }, colors: ['snow', 'ice'], alpha: 0.7 * sec('spiral', 'cut') },
+        { pattern: 'galaxy', params: { count: 3, twist: 2.4, speed: 0.35 }, colors: ['plum', 'ice', 'gold'], alpha: sec('cut', 'star-glow') },
+        { pattern: 'plasma', colors: ['gold', 'candle', 'gold', 'snow'], alpha: glow * (0.75 + 0.25 * bar) },
+      ];
+      // A shockwave from the tip on every downbeat during the drop (pattern time = scene time, so it lands on the bar).
+      if (local >= C.at('drop') && local < C.at('spiral') + 2) {
+        const { bar: barN } = B.at(local);
+        for (let j = Math.max(B.at(C.at('drop')).bar, barN - 1); j <= barN; j++) {
+          layers.push({ pattern: 'shockwave', t: local, params: { t0: B.time(j * B.perBar), u0: 0, k0: 0, speed: 0.75, width: 0.07, life: 2 }, colors: ['gold'], alpha: sec('drop', 'spiral') });
+        }
       }
-      spiral(ctx, w, h, bt - (t - local), {
-        grow: B.steps(local, C.at('spiral'), 12),
-        colors: glow > 0 ? ['gold', 'snow'] : ['gold', 'cranberry'],
-        alpha: A * (0.6 + 0.4 * glow) * (0.8 + 0.2 * pulse),
-      });
-      if (glow > 0) {
-        treeWash(ctx, w, h, t, { color: 'gold', alpha: (0.26 + 0.08 * bar) * glow * A });
-        twinkleStars(ctx, w, h, bt, { seed: 71, density: 1.6, colors: ['gold', 'snow'], size: 1.8, alpha: glow * A });
+      megaTree(ctx, w, h, lt, { layers, spin, alpha: A });
+      if (local >= C.at('drop')) {
+        ornamentPops(ctx, w, h, local, { grid: B, from: C.at('drop'), every: 2, perBeat: 1, alpha: 0.7 * A * drop * (1 - 0.6 * glow) });
       }
     } else if (zoneId === 'star') {
       projectedStar(ctx, w, h, bt, { alpha: A * (0.4 + 0.2 * drop + 0.4 * glow) * (0.85 + 0.15 * pulse), spin: 1 });

@@ -215,3 +215,33 @@ export function formation(local, seq, opts = {}) {
   const k = clamp((local - cur.at) / cur.dur);
   return k >= 1 ? cur.cloud : morphClouds(prev.cloud, cur.cloud, k, { seed: 17 + i * 31, ...opts });
 }
+
+/**
+ * Figure art as a faint point cloud: points spaced along polylines, set back in depth (zBase) so the figure sits
+ * behind its stars and shifts against them as the formation turns. parts: [{ figure: { polys, aspect }, x, y, size }].
+ */
+export function cloudFigure(parts, n, { zBase = -0.35, seed = 19 } = {}) {
+  const c = makeCloud(n);
+  const segs = [];
+  for (const q of parts) {
+    const { polys, aspect = 1 } = q.figure;
+    const size = q.size ?? 1;
+    const sx = aspect >= 1 ? size : size * aspect, sy = aspect >= 1 ? size / aspect : size;
+    for (const pl of polys) for (let i = 1; i < pl.length; i++) {
+      const a = [(pl[i - 1][0] - 0.5) * 2 * sx + (q.x ?? 0), (pl[i - 1][1] - 0.5) * 2 * sy + (q.y ?? 0)];
+      const b = [(pl[i][0] - 0.5) * 2 * sx + (q.x ?? 0), (pl[i][1] - 0.5) * 2 * sy + (q.y ?? 0)];
+      segs.push([a, b, Math.hypot(b[0] - a[0], b[1] - a[1])]);
+    }
+  }
+  const total = segs.reduce((s, g) => s + g[2], 0) || 1;
+  let k = 0;
+  segs.forEach(([a, b, len], si) => {
+    const m = si === segs.length - 1 ? n - k : Math.round((n * len) / total);
+    for (let j = 0; j < m && k < n; j++, k++) {
+      const f = (j + rand(seed + k) * 0.6) / m;
+      c.p.set([a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, zBase + (rand(seed + k + 0.5) - 0.5) * 0.08], k * 3);
+      c.s[k] = 0.55;
+    }
+  });
+  return c;
+}

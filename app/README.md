@@ -26,6 +26,8 @@ A browser-based projection-mapping tool for the iPad. It has no build step: plai
 - Scenes live in `js/scenes/` (running order and hold points in `js/scenes/index.js`); effects in `js/fx/`, colours in
   `js/palette.js`. Show also has **Cut ⏭** (jump to the current scene's `cut` cue, for the on-the-night cut list), a
   **Finale: projected star** checkbox (live-moment fallback) and an fps/draw-time readout.
+- **Gift-box tower:** the small box stands on the big one. Each box has two zones to calibrate, its front and its
+  left side (`Gift box 1 · front`, `Gift box 1 · side`, …), so effects wrap round the corner.
 - **Family constellation:** the finale turns one media-pack photo whose name starts with `family` (e.g.
   `family-photo.jpg`) into star points on the iPad. Without it, a heart-shaped constellation is used.
 - Hide the controls with **Hide ✕**. Tap the top-left corner to bring them back. Keys: `1/2/3` switch modes,
