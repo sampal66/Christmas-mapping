@@ -1,6 +1,7 @@
 // Sky effects: the dusk starfield base, twinkling stars, layered snow and slow shooting stars.
 import { rgba, mix } from '../palette.js';
 import { TAU, rand, clamp, glowSprite, dot, additive, loopWave, easeInOutSine } from './util.js';
+import { starSprite, randomClass } from './stars.js';
 
 const scaleOf = (w, h) => Math.max(0.5, Math.min(w, h) / 1080 + 0.35);
 
@@ -9,8 +10,11 @@ const scaleOf = (w, h) => Math.max(0.5, Math.min(w, h) / 1080 + 0.35);
  * period (seconds: twinkle cycles divide it exactly, for seamless hold loops), area [u0, v0, u1, v1].
  */
 export function twinkleStars(ctx, w, h, t, opts = {}) {
-  const { seed = 1, colors = ['snow', 'snow', 'snow', 'gold', 'ice'], size = 1, alpha = 1, period = 0,
-    density = 1, area = [0, 0, 1, 1] } = opts;
+  const { seed = 1, size = 1, alpha = 1, period = 0, density = 1, area = [0, 0, 1, 1] } = opts;
+  // Without explicit colours these are real night-sky stars: spectral colours, mostly faint, a few bright ones with
+  // diffraction spikes. With colours (tree sparkle, decorative fields) they stay soft glow dots.
+  const real = !opts.colors;
+  const colors = opts.colors || [];
   const [u0, v0, u1, v1] = area;
   const count = opts.count ?? Math.round(density * (w * h * (u1 - u0) * (v1 - v0)) / 9000);
   const s = scaleOf(w, h) * size;
@@ -23,6 +27,14 @@ export function twinkleStars(ctx, w, h, t, opts = {}) {
       const tw = period
         ? loopWave(t, period, 1 + Math.floor(rand(k + 0.73) * 3), rand(k + 0.91) * TAU)
         : 0.5 + 0.5 * Math.sin(t * (0.5 + rand(k + 0.73) * 1.4) + rand(k + 0.91) * TAU);
+      if (real) {
+        const m = mag ** 4.5;                             // brightness follows a steep power law: most stars are faint
+        const bright = m > 0.55;
+        const r = (bright ? 10 + 30 * (m - 0.55) / 0.45 : 2.5 + 9 * m) * s;
+        ctx.globalAlpha = alpha * (0.55 + 0.45 * tw) * (0.4 + 0.6 * m);
+        ctx.drawImage(starSprite(randomClass(k + 0.13), bright), x - r, y - r, r * 2, r * 2);
+        continue;
+      }
       // Gentle twinkle (never below ~45%): stars shimmer, they don't blink.
       ctx.globalAlpha = alpha * (0.45 + 0.55 * tw) * (0.35 + 0.65 * mag);
       const r = (2.5 + mag * mag * 7) * s;

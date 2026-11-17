@@ -64,7 +64,7 @@ Development happens in Claude cloud sessions from an iPad, and the same iPad run
 | Item | Status | Notes |
 |---|---|---|
 | HAPPRUN H1 Native 1080P | buy on Black Friday (≈ USD 60). **Throw ratio 1.4 (manual) ✔ fits from the tripod at 3.5 m (≈1–2 cm lost at two unimportant corners).** The listing says 110 V ✔ | keystone 0, manual focus. From the counter (2.9 m) the show needs a **throw ratio ≤ ≈1.05**; the H1's ≈1.35 is too narrow ([survey §03c](STAGE_SURVEY.md)) |
-| USB-C → HDMI adapter **with USB-C charging pass-through** | buy now (≈ USD 15) | needed for TV tests now |
+| USB-C → HDMI adapter **with USB-C charging pass-through** (a multiport USB-C hub is fine) | buy now (≈ USD 15–40) | needed for TV tests now. **Must have:** HDMI by DisplayPort Alt Mode (works with iPad, no drivers; **not** a DisplayLink hub), **1080p at 60 Hz** ("4K 30 Hz" hubs still do 1080p60), **USB-C PD pass-through** (≥ 60 W input; plug the charger in *before* HDMI, some hubs blank the screen when power is connected later). Nice: HDMI also carries audio (backup to Bluetooth); a USB-A port for a stick with the media pack. Test with the TV now: extended (not mirrored) display, then a 20-minute run on charger. |
 | Samsung soundbar | have | Bluetooth from the iPad; the app has an **audio-delay slider** to fix Bluetooth lag |
 | TV with HDMI | have | stands in for the projector until it arrives |
 | iPad Air 5 (M1, iPadOS 27) | have | Stage Manager external display → true 1920×1080 output |
@@ -189,4 +189,5 @@ christmas-mapping/
 - Soundbar model (later). Reconnect the ElevenLabs connector from a PC with full permissions.
 
 ## Changelog
+- **2026-11-17** — §2: USB-C hub requirements (owner question, WP-03 session).
 - **2026-11-17** — §4, §5, §6 updated to the WP-10 treatment (new scene titles, music per scene, adult audience, live-moment operator).

@@ -190,6 +190,7 @@ effects, held to the quality bar above. **First, a style test before committing:
 sheet plus one 5 s clip on black, judged on the real projector or the TV.
 
 ## Changelog
+- **2026-11-17** — Owner: the star's journey is visible throughout. It turns into a night-sky star when batted off (s03), crosses each constellation in s06, is found in Pooh's pot, carried by Connor (s07), and becomes the five-point star again on the tree (WP-03 draws the motion; WP-08 adds the characters around it).
 - **2026-11-17** — s06 (owner): rollercoaster pacing, explosive cosmic rides between calm constellation pauses; real atlas engravings with dimmed Spanish names (WP-03).
 - **2026-11-17** — §07: the gift boxes are a stacked tower (small on big), front and side faces mapped (WP-03, owner).
 - **2026-11-17** — v1.2: owner approved everything (arcs, beat sheet, design review, animation approach A).

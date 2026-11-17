@@ -39,7 +39,7 @@ export function cloudConstellation(shape, n, { size = 1, depth = 0.18, seed = 5 
   const sx = aspect >= 1 ? size : size * aspect, sy = aspect >= 1 ? size / aspect : size;
   const at = (u, v) => [(u - 0.5) * 2 * sx, (v - 0.5) * 2 * sy];
   const zOf = stars.map((_, i) => (rand(seed + i * 3.1) - 0.5) * 2 * depth);
-  const perStar = Math.max(4, Math.min(14, Math.floor((n * 0.35) / stars.length)));
+  const perStar = Math.max(3, Math.min(8, Math.floor((n * 0.2) / stars.length)));
   let k = 0;
   for (let i = 0; i < stars.length && k < n; i++) {
     const [x, y] = at(stars[i][0], stars[i][1]);
@@ -47,7 +47,8 @@ export function cloudConstellation(shape, n, { size = 1, depth = 0.18, seed = 5 
     for (let j = 0; j < perStar && k < n; j++, k++) {
       const a = rand(seed + k) * TAU, b = Math.acos(2 * rand(seed + k + 0.4) - 1), r = 0.035 * size * (0.4 + mag) * rand(seed + k + 0.7) ** 0.5;
       c.p.set([x + Math.sin(b) * Math.cos(a) * r, y + Math.sin(b) * Math.sin(a) * r, zOf[i] + Math.cos(b) * r], k * 3);
-      c.s[k] = j === 0 ? 1.8 + mag : 1.1 + mag * 0.4;
+      // small anchor points: the star itself is drawn as a realistic star on top (see `anchors`)
+      c.s[k] = j === 0 ? 0.9 + 0.4 * mag : 0.6 + mag * 0.2;
     }
   }
   const lens = lines.map(([a, b]) => { const [x1, y1] = at(stars[a][0], stars[a][1]); const [x2, y2] = at(stars[b][0], stars[b][1]); return Math.hypot(x2 - x1, y2 - y1); });
@@ -59,10 +60,12 @@ export function cloudConstellation(shape, n, { size = 1, depth = 0.18, seed = 5 
     for (let j = 0; j < m && k < n; j++, k++) {
       const f = (j + 0.5) / m;
       c.p.set([x1 + (x2 - x1) * f, y1 + (y2 - y1) * f, zOf[a] + (zOf[b] - zOf[a]) * f], k * 3);
-      c.s[k] = 0.75;
+      c.s[k] = 0.42;                                     // fine line points, like an atlas's thin lines
     }
   });
   for (; k < n; k++) { const j = k % Math.max(1, stars.length); c.p.set(c.p.subarray(j * 3, j * 3 + 3), k * 3); }
+  // The named stars, for drawing as realistic stars: [x, y, z, mag, spectral class].
+  c.anchors = stars.map(([u, v, mag], i) => { const [x, y] = at(u, v); return [x, y, zOf[i], mag ?? 0.6, shape.spec?.[i] || 'A']; });
   return c;
 }
 
@@ -75,6 +78,7 @@ export function cloudGroup(parts, n, seed = 7) {
   parts.forEach((q, i) => {
     const m = i === parts.length - 1 ? n - k : Math.round((n * weights[i]) / tot);
     const sub = cloudConstellation(q.shape, m, { size: q.size, seed: seed + i * 13 });
+    c.anchors = (c.anchors || []).concat(sub.anchors.map(([x, y, z, mg, cl]) => [x + q.x, y + q.y, z, mg, cl]));
     for (let j = 0; j < m; j++, k++) {
       c.p.set([sub.p[j * 3] + q.x, sub.p[j * 3 + 1] + q.y, sub.p[j * 3 + 2]], k * 3);
       c.s[k] = sub.s[j];
@@ -282,4 +286,12 @@ export function shapeRect(shape, size = 1, x = 0, y = 0) {
   const aspect = shape.aspect ?? 1;
   const sx = aspect >= 1 ? size : size * aspect, sy = aspect >= 1 ? size / aspect : size;
   return [x - sx, y - sy, x + sx, y + sy];
+}
+
+/** Like formation(), but also says which shape is forming and how far: { cloud, i, k } (k = morph progress 0..1). */
+export function formationState(local, seq, opts = {}) {
+  let i = 0;
+  while (i + 1 < seq.length && local >= seq[i + 1].at) i++;
+  const k = i === 0 ? 1 : clamp((local - seq[i].at) / seq[i].dur);
+  return { cloud: formation(local, seq, opts), i, k, prev: i > 0 ? seq[i - 1].cloud : null, cur: seq[i].cloud };
 }

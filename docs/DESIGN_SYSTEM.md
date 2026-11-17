@@ -109,6 +109,11 @@ sparkles) are drawn in code, not in the clip.
 - **Pacing like a rollercoaster (owner, 2026-11-17):** alternate explosive *rides* (warp-speed stars, comets, aurora,
   galaxies sweeping past) with calm *pauses* that hold on each figure. Rides build for ≈3–4 s, peak, and settle;
   intensity always ramps (never jumps), so the flash limits still hold.
+- **Stars look like stars:** sky stars use real spectral colours (blue-white O/B → white A → yellow-white F/G →
+  orange K → red-orange M), mostly faint with a few bright ones carrying thin diffraction spikes, and gentle
+  scintillation; no flat round dots. The story's **lost star** is the warmest and brightest (gold-white, slowly turning
+  spikes): five-point on the tree, night-sky star while lost (s03 escape → s06 constellations → s07 honey pot and
+  Connor), five-point again once it's back on the tree.
 - **Constellation art:** the real 1822 Jamieson atlas engravings as light lines (ice) behind the stars, lines
   thickened ≈1 px so they survive projection; each figure's name, dimmed, in spaced engraved capitals (Spanish).
   The art appears a couple of seconds after the stars have formed.

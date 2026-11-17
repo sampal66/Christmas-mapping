@@ -59,6 +59,9 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
   star positions read off the plates (`fx/constellations.js`, `app/assets/atlas/`). Next: merge PR #6, then WP-05 (brief written) in a new session.
   Owner notes 5: s06 is a **rollercoaster**: rides (`fx/cosmos.js`: warp field, aurora, galaxy, comets, tree meteors) between calm pauses;
   dimmed engraved Spanish labels (`atlasLabel`). Rides are the costliest frames (software ≈30–55 ms): check on the iPad in WP-09.
+  Owner notes 6: realistic stars (`fx/stars.js`: spectral colours, spikes, scintillation) everywhere; the **lost star's journey** is drawn:
+  s03 escape (5-point → night star → sky), s06 rests in each constellation, s07 pot → carried → flies → 5-point (`scenes/star-story.js`).
+  **WP-08 must keep this motion** and place Pooh/Connor on it (paths in star-story.js). Hub requirements in PLAN §2.
 
 - **2026-11-17 · WP-10** — `docs/TREATMENT.md`: owner decisions (adult audience, 10–15 min → ≈12, tradition + Santa + constellations
   spine, both cameos tiny, Papá taps Continue), arcs, beat sheet with music licence/zones/cues, live-moment plan, cut list (→ ≈10 min).

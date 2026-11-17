@@ -15,3 +15,4 @@ export * from './fireworks3d.js';
 export * from './megatree.js';
 export * from './atlas.js';
 export * from './cosmos.js';
+export * from './stars.js';

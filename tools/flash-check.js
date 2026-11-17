@@ -149,7 +149,7 @@ function report(id, { series, ms, frameMs, worst, hold }) {
     await page.goto(url);
     const ids = await page.evaluate(async () => {
       const { scenes, preshow } = await import('/js/scenes/index.js');
-      return [preshow.id, ...scenes.filter((s) => !s.placeholder).map((s) => s.id)];
+      return [preshow.id, ...scenes.filter((s) => !s.placeholder || s.zones.length > 1).map((s) => s.id)];   // story stand-ins with effects too
     });
     const todo = ids.filter((x) => !ONLY || x.includes(ONLY));
     const pages = [page, ...await Promise.all(Array.from({ length: Math.min(PAR, todo.length) - 1 }, async () => {

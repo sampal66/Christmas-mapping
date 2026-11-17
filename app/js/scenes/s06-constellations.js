@@ -6,6 +6,7 @@
 import { cueSheet, beatGrid, twinkleStars, shootingStars, starHalo, glowSprite, dot, additive, sparkleBurst,
   cloudScatter, cloudConstellation, cloudGroup, cloudStar, formation, renderCloud, sweepColors, nebula,
   drawCard, shapeRect, loadAtlasArt, atlasLabel, warpField, aurora, galaxy, megaTree, prog, smooth,
+  formationState, projector, drawStar, lostStar,
   ORION, CANIS_MAJOR, CANIS_MINOR, FELIS, easeInOutSine, clamp } from '../fx/index.js';
 import { skyBase, stripSnow, beatClock } from './common.js';
 
@@ -25,7 +26,7 @@ const C = cueSheet(cues, B);
 const duration = 90;
 
 // The constellations are a drone swarm: one set of light points that gathers out of the sky into Orion, re-forms
-// as Canis Major + Minor, then Felis, then the lost star, which slips away at the glint. Each shape is a real 3D
+// as Canis Major + Minor, then Felis, then dissolves back into the sky while the lost star slips away. Each shape is a real 3D
 // figure turning slowly. Placed on the open right half of the wall (the tree covers u 0.17–0.5 lower down).
 const N = 600;
 // Between the tree tip and the gift tower (its top is at v ≈ 0.52, from u ≈ 0.77), clear of the top edge.
@@ -67,15 +68,49 @@ function sequence() {
   const orion = cloudConstellation(ORION, N, { size: 1.05, depth: 0.4, seed: 41 });
   const canis = cloudGroup([{ shape: CANIS_MAJOR, x: -0.2, y: 0.22, size: 0.78 }, { shape: CANIS_MINOR, x: 0.62, y: -0.62, size: 0.32 }], N, 51);
   const felis = cloudConstellation(FELIS, N, { size: 1.05, depth: 0.4, seed: 61 });
-  const star = cloudStar(N, { size: 0.8, seed: 71 });
+  // after the last pause the swarm dissolves back into the sky (the lost star slips away on its own)
+  const dissolve = cloudScatter(N, { w: 6.5, h: 3.4, d: 2, seed: 37 });
   seq = [
     { at: 0, cloud: sky },
     { at: C.at('orion'), cloud: orion, dur: 7 },
     { at: C.at('canis'), cloud: canis, dur: 7 },
     { at: C.at('felis'), cloud: felis, dur: 7 },
-    { at: C.at('cut'), cloud: star, dur: 5.5 },
+    { at: C.at('cut'), cloud: dissolve, dur: 6 },
   ];
   return seq;
+}
+
+// The lost star (the tree's five-point star, now a night-sky star since it escaped in s03) travels through the
+// whole scene: it arrives from the sky where it vanished, rides with the swarm into each constellation and rests
+// there during the pause ("this is where the star has been"), then slips away to the right, towards Pooh (s07).
+const starPt = (shape, size, x, y, i, du = 0, dv = 0) => {
+  const [x0, y0, x1, y1] = shapeRect(shape, size, x, y);
+  return [x0 + (shape.stars[i][0] + du) * (x1 - x0), y0 + (shape.stars[i][1] + dv) * (y1 - y0)];
+};
+const REST = [
+  (() => { const a = starPt(ORION, 1.05, 0, 0, 4), b = starPt(ORION, 1.05, 0, 0, 7); return [(a[0] + b[0]) / 2 + 0.12, (a[1] + b[1]) / 2]; })(),
+  starPt(CANIS_MAJOR, 0.78, -0.2, 0.22, 0, -0.22, -0.1),
+  starPt(FELIS, 1.05, 0, 0, 9, 0.12, -0.08),
+];
+const ENTER = [0.86, 0.12], EXIT = [1.12, 0.03];          // wall fractions: where s03 left it, and off towards Pooh
+function lostStarPos(local, w, h, P) {
+  const rest = REST.map(([x, y]) => P(x, y, 0.15));
+  const legs = [
+    [C.at('orion') - 3.5, C.at('orion') + 4, [ENTER[0] * w, ENTER[1] * h], rest[0]],
+    [C.at('canis') - 3.5, C.at('canis') + 4, rest[0], rest[1]],
+    [C.at('felis') - 3.5, C.at('felis') + 4, rest[1], rest[2]],
+    [C.at('glint'), C.at('glint') + 7, rest[2], [EXIT[0] * w, EXIT[1] * h]],
+  ];
+  let pos = [ENTER[0] * w, ENTER[1] * h], moving = 0;
+  for (const [a, b, p0, p1] of legs) {
+    if (local < a) break;
+    const k = easeInOutSine(clamp((local - a) / (b - a)));
+    // a curved hop, lifted towards the top of the sky
+    const cx = (p0[0] + p1[0]) / 2, cy = Math.min(p0[1], p1[1]) - 0.12 * h;
+    pos = [(1 - k) ** 2 * p0[0] + 2 * k * (1 - k) * cx + k * k * p1[0], (1 - k) ** 2 * p0[1] + 2 * k * (1 - k) * cy + k * k * p1[1]];
+    moving = local < b ? Math.sin(Math.PI * k) : 0;
+  }
+  return { pos, moving };
 }
 
 export default {
@@ -100,12 +135,9 @@ export default {
         // The swarm. Constellations turn gently (they're 3D figures); the star spins as it leaves.
         const cloud = formation(local, sequence());
         const g = C.since(local, 'glint');
-        const away = g > 0 ? easeInOutSine(B.steps(local, C.at('glint') + 1.5, 26)) : 0;
-        const isStar = local >= C.at('cut');
         const view = {
-          cx: SWARM.cx + away * 0.42, cy: SWARM.cy - away * 0.3, scale: SWARM.scale * (1 - 0.82 * away), dist: 2.6,
-          rotY: isStar ? 0.5 * Math.sin(bt * 0.25) + away * 4 : 0.5 * Math.sin(bt * 0.16),
-          rotX: 0.16 * Math.sin(bt * 0.12),
+          cx: SWARM.cx, cy: SWARM.cy, scale: SWARM.scale, dist: 2.6,
+          rotY: 0.5 * Math.sin(bt * 0.16), rotX: 0.16 * Math.sin(bt * 0.12),
         };
         // The ride between constellations: aurora, a galaxy sweeping past, warp-speed stars and comets.
         const R = ride(local);
@@ -131,10 +163,28 @@ export default {
         }
         renderCloud(ctx, w, h, bt, cloud, {
           ...view,
-          color: isStar ? sweepColors(['gold', 'candle', 'gold', 'snow'], bt, 0.12) : sweepColors(['snow', 'ice', 'snow', 'plum'], bt, 0.08),
-          alpha: A * (local < C.at('orion') ? 0.55 * sky : 1) * (0.88 + 0.12 * bar) * (1 - clamp((g - 10) / 3)),
-          size: isStar ? 1.15 : 1,
+          color: sweepColors(['snow', 'ice', 'snow', 'plum'], bt, 0.08),
+          alpha: A * (local < C.at('orion') ? 0.55 * sky : 0.8) * (0.88 + 0.12 * bar),
         });
+        // The named stars as real stars (spectral colours, spikes on the bright ones) once each figure has formed.
+        const P = projector(w, h, view);
+        const F = formationState(local, sequence());
+        const unit = Math.min(w, h) / 1080;
+        const op = ctx.globalCompositeOperation; ctx.globalCompositeOperation = 'lighter';
+        const drawAnchors = (cl, a) => {
+          if (!cl?.anchors || a <= 0.01) return;
+          cl.anchors.forEach(([x, y, z, mg, cls], i) => {
+            const [sx, sy, f] = P(x, y, z);
+            drawStar(ctx, sx, sy, bt, { mag: 0.45 + 0.55 * mg, cls, seed: i + 1, unit: unit * f * 1.35, twinkle: 0.15, alpha: A * a });
+          });
+        };
+        drawAnchors(F.cur, F.k ** 2);
+        drawAnchors(F.prev, 1 - clamp(F.k * 3));
+        ctx.globalCompositeOperation = op;
+        // The lost star, on its journey (see lostStarPos).
+        const L = lostStarPos(local, w, h, P);
+        const trail = L.moving > 0.05 ? [6, 5, 4, 3, 2, 1].map((j) => lostStarPos(local - j * 0.07, w, h, P).pos) : null;
+        lostStar(ctx, L.pos[0], L.pos[1], bt, { size: Math.min(w, h) * 0.07 * (1 + 0.2 * L.moving), alpha: A * clamp((local + 0.5) / 2) * (1 - clamp((g - 5.5) / 1.5)), trail });
         // The North Star, steady.
         additive(ctx, A * sky * (0.8 + 0.2 * bar), () => dot(ctx, glowSprite('snow', 0.2), NORTH_STAR[0] * w, NORTH_STAR[1] * h, Math.min(w, h) * 0.035));
         // a shooting star every 6 bars, launched on the downbeat

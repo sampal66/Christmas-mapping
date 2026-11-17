@@ -9,15 +9,19 @@ import s06 from './s06-constellations.js';
 import s09 from './s09-real-star.js';
 import s10 from './s10-finale.js';
 import { storyPlaceholder } from './placeholder.js';
+import { drawEscape, drawReturn, drawWarmStar } from './star-story.js';
 
 const s03 = storyPlaceholder({ id: 's03-star-escapes', title: 's03 · La estrella se escapa', duration: 75,
-  cues: [{ t: 0, name: 'pets-in' }, { t: 15, name: 'tradition' }, { t: 40, name: 'bat' }, { t: 50, name: 'escape' }, { t: 71, name: 'out' }] });
+  cues: [{ t: 0, name: 'pets-in' }, { t: 15, name: 'tradition' }, { t: 40, name: 'bat' }, { t: 50, name: 'escape' }, { t: 71, name: 'out' }],
+  zones: ['wall', 'star'], draw: drawEscape });
 const s05 = storyPlaceholder({ id: 's05-where-is-the-star', title: 's05 · ¿Dónde está la estrella?', duration: 60,
   cues: [{ t: 0, name: 'regroup' }, { t: 15, name: 'jingle' }, { t: 30, name: 'mickey-in' }, { t: 45, name: 'mickey-out' }, { t: 45, name: 'cut' }, { t: 56, name: 'out' }] });
 const s07 = storyPlaceholder({ id: 's07-honey-pot', title: 's07 · El tarro de miel', duration: 75,
-  cues: [{ t: 0, name: 'pooh-in' }, { t: 15, name: 'found' }, { t: 30, name: 'carry' }, { t: 50, name: 'fly' }, { t: 60, name: 'settle' }, { t: 71, name: 'out' }] });
+  cues: [{ t: 0, name: 'pooh-in' }, { t: 15, name: 'found' }, { t: 30, name: 'carry' }, { t: 50, name: 'fly' }, { t: 60, name: 'settle' }, { t: 71, name: 'out' }],
+  zones: ['wall', 'star'], draw: drawReturn });
 const s08 = storyPlaceholder({ id: 's08-for-baby', title: 's08 · Para ti, {BABY}', duration: 60,
-  cues: [{ t: 0, name: 'gather' }, { t: 20, name: 'message' }, { t: 45, name: 'missing' }, { t: 56, name: 'out' }] });
+  cues: [{ t: 0, name: 'gather' }, { t: 20, name: 'message' }, { t: 45, name: 'missing' }, { t: 56, name: 'out' }],
+  zones: ['star'], draw: drawWarmStar });
 
 const order = [s01, s02, s03, s04, s05, s06, s07, s08, s09, s10];
 
