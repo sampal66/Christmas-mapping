@@ -12,10 +12,12 @@ export const STAGE_MODEL = {
   // Tree: cone around a vertical axis. The tip is the bare top; the star sits on it.
   tree: { x: 0.55, y: 0.45, baseZ: 0.15, tipZ: 1.80, radius: 0.50 },
   star: { size: 0.25, topZ: 2.03 },
-  // Planned white gift boxes (not bought yet): cubes standing on the sideboard top.
+  // Planned white gift boxes (not bought yet), stacked as a gift tower (owner, 2026-11-17): the big box on the
+  // sideboard, the small one centred on top. z0 = the box's base height (default: the sideboard top).
+  // From the projector (left, 1.45 m up) each box shows its front and its left side; the tops are slivers.
   boxes: [
-    { id: 'box1', x0: 1.25, y0: 0.05, size: 0.30 },
-    { id: 'box2', x0: 1.60, y0: 0.00, size: 0.40 },
+    { id: 'box1', x0: 1.60, y0: 0.05, z0: 1.19, size: 0.30 },
+    { id: 'box2', x0: 1.55, y0: 0.00, size: 0.40 },
   ],
   rightStrip: { depth: 0.8 },
   fixtures: { sconce: { y: 1.25, z: 1.85 }, securityCamera: { z: 2.15 } },
@@ -204,10 +206,23 @@ export function layoutFromModel(m, cam = projectorCamera(m)) {
     { id: 'backdrop', label: 'Backdrop', color: '#81c784', res: [1024, 1200], quad: toPx(cam, wallRect(sb.x0, W, bz0, bz1)) },
     // The drawers sit mostly below the image (and are dark wood), so this is only a thin footlight strip.
     { id: 'stage', label: 'Sideboard front', color: '#ffb74d', res: [1024, 64], quad: clampV(stageQuad), occlude: true, ...(stageOff ? { hidden: true } : {}) },
-    ...m.boxes.map((b, i) => {
-      const face = (a, c) => wallRect(b.x0, b.x0 + b.size, a, c, b.y0 + b.size);
-      const [z0, z1] = clipZ(cam, face, sb.height, sb.height + b.size);
-      return { id: b.id, label: `Gift box ${i + 1}`, color: i % 2 ? '#ba68c8' : '#f06292', res: [256, 256], occlude: true, quad: toPx(cam, face(z0, z1)) };
+    ...m.boxes.flatMap((b, i) => {
+      const base = b.z0 ?? sb.height;
+      const color = i % 2 ? '#ba68c8' : '#f06292';
+      const front = (a, c) => wallRect(b.x0, b.x0 + b.size, a, c, b.y0 + b.size);
+      const [z0, z1] = clipZ(cam, front, base, base + b.size);
+      const out = [{ id: b.id, label: `Gift box ${i + 1} · front`, color, res: [256, 256], occlude: true, quad: toPx(cam, front(z0, z1)) }];
+      // The side that faces the projector (left when the projector is left of the box). A face is only mapped
+      // when the projector can see it.
+      const leftSeen = eye[0] < b.x0, rightSeen = eye[0] > b.x0 + b.size;
+      if (leftSeen || rightSeen) {
+        const x = leftSeen ? b.x0 : b.x0 + b.size;
+        // corners ordered as seen from the projector: back edge on the image-left for a left face
+        const side = (a, c) => (leftSeen ? rightWallRect(x, b.y0, b.y0 + b.size, a, c) : rightWallRect(x, b.y0 + b.size, b.y0, a, c));
+        const [s0, s1] = clipZ(cam, side, base, base + b.size);
+        out.push({ id: `${b.id}Side`, label: `Gift box ${i + 1} · side`, color, res: [256, 256], occlude: true, quad: toPx(cam, side(s0, s1)) });
+      }
+      return out;
     }),
     { id: 'tree', label: 'Tree', color: '#aed581', res: [768, 1024], occlude: true,
       quad: toPx(cam, billboard(eye, tree.x, tree.y, treeRadiusAt(tree, tz0), tz0, tz1)), mask: treeMask(tree, tz0, tz1) },

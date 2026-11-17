@@ -15,9 +15,9 @@
 | WP-00 | Project structure, docs, Mapper v0 | — | ✅ done (PR #1) | this setup session | M1–M4 |
 | WP-01 | [Show timeline, audio sync, hold points](work-packages/WP-01-timeline.md) | WP-00 | ✅ done (PR #1) | setup session | M5, M6, M7, M11 |
 | WP-02 | [Media pack + offline mode](work-packages/WP-02-media-offline.md) | WP-00 | ✅ done (PR #2) | `claude/wp-02-media-offline` | M8, M9 |
-| WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | 🟢 ready (**next**) | — | C1 (s00, s01, s02, s04, s06 constellations, s09 live hold, s10 visuals) |
+| WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | ✅ done (PR #6) | `claude/wp-03-effects-scenes` | C1 (s00, s01, s02, s04, s06, s09, s10) + owner notes (3D swarm, mega-tree, box tower, atlas art) |
 | WP-04 | Character pipeline: 4 pets + Mickey 1928 + Shepard Pooh + **Santa and sleigh**; approach pending (TREATMENT §09: AI video clips recommended, not code puppets) | WP-03, WP-10, ElevenLabs connector | ⚪ needs brief | — | C2, C3 |
-| WP-05 | Music and sfx sourcing: 8 PD pieces + 3 short original underscores + soft sfx, per TREATMENT §04 (no barks/meows/bangs) | WP-10 | ⚪ needs brief (owner OK on credits) | — | C5 |
+| WP-05 | [Music sourcing + beat maps](work-packages/WP-05-music-beats.md): PD military-band carols, Musopen Tchaikovsky, ElevenLabs music box + 3 underscores; beat maps (auto + tap tool) applied to the light-show scenes | WP-03, WP-10 | 🟢 ready (**next**) | new session | C5, C1 beat sync |
 | WP-06 | Spanish script (`docs/SCRIPT.md`) + narration and **pet voices** (≈3 min of speech; TREATMENT §03–§04) | WP-10, owner go-ahead | ⏸️ deferred by owner | — | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
 | WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10 | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
@@ -42,6 +42,26 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-17 · WP-03** — `app/js/fx/` (pure `(ctx,w,h,t,opts)` effects), `palette.js`, fonts bundled in `app/fonts/`; scenes s00 (pre-show), s01, s02, s04, s06,
+  s09 (hold, seamless 12 s loop), s10 (+ `projectedStar` checkbox, family constellation from media file `family…`); s03/s05/s07/s08 are timed placeholders.
+  Show panel: **Cut ⏭**, fps readout. `tools/flash-check.js` (in the smoke test) passes: worst 2 flashes/s (box faces), max jump 0.37.
+  Gotcha: headless here caps at ~43 fps even on `main` (software compositor); render cost is 3–15 ms/frame avg (s10 worst 27 ms). **Check real fps on the iPad (WP-09).**
+  Next: WP-04/WP-05 briefs; WP-08 replaces `storyPlaceholder(...)` entries in `scenes/index.js` and uses `env.from()` to place clips.
+  Owner note (same session): **all light-show animation moves to the beat**. Each scene has `beats` + `beatGrid()`; tempos are placeholders.
+  → The **WP-05 brief must deliver a beat map** per light-show scene (beat times → `beats.times`, plus re-timed `cues`); WP-08 underscores start cues on beats.
+  Owner notes 2: motion felt forced → beat motion now flows (speed 1±0.35, soft accents). Stars + fireworks are now a **3D drone-show point swarm**
+  (`fx/points3d.js`: s06 sky → Orion → Canis → Felis → lost star; s10 sparks → family/heart → "¡Feliz Navidad!"; `fx/fireworks3d.js`). Demo reels in `demo/` (not committed).
+  Owner notes 3: **boxes stacked** (small on big; model `boxes[].z0`), zones `box1Side`/`box2Side` (front + left side lit; tops are slivers);
+  **mega-tree** (`fx/megatree.js`, layered patterns); constellations get star-atlas figure art + nebula. Render cost is up (s10 ≈18–31 ms
+  software raster): **if the iPad drops frames in WP-09, lower N in s06/s10, firework `count`, or mega-tree `rings`.** Saved Room-model edits keep old box positions.
+  Owner notes 4: constellations use the **real Jamieson atlas engravings** (1822, PD; plates 24–26 from Commons) as tinted cards in the swarm's 3D view;
+  star positions read off the plates (`fx/constellations.js`, `app/assets/atlas/`). Next: merge PR #6, then WP-05 (brief written) in a new session.
+  Owner notes 5: s06 is a **rollercoaster**: rides (`fx/cosmos.js`: warp field, aurora, galaxy, comets, tree meteors) between calm pauses;
+  dimmed engraved Spanish labels (`atlasLabel`). Rides are the costliest frames (software ≈30–55 ms): check on the iPad in WP-09.
+  Owner notes 6: realistic stars (`fx/stars.js`: spectral colours, spikes, scintillation) everywhere; the **lost star's journey** is drawn:
+  s03 escape (5-point → night star → sky), s06 rests in each constellation, s07 pot → carried → flies → 5-point (`scenes/star-story.js`).
+  **WP-08 must keep this motion** and place Pooh/Connor on it (paths in star-story.js). Hub requirements in PLAN §2.
 
 - **2026-11-17 · WP-10** — `docs/TREATMENT.md`: owner decisions (adult audience, 10–15 min → ≈12, tradition + Santa + constellations
   spine, both cameos tiny, Papá taps Continue), arcs, beat sheet with music licence/zones/cues, live-moment plan, cut list (→ ≈10 min).

@@ -127,7 +127,7 @@ All cuts: ≈12:15 → ≈10:00, which is still inside the agreed 10–15 min.
 | `wall` | s01, s02, s03, s06, s07, s08, s10 | sky, snow, edge traces, the star's flight, fireworks |
 | `backdrop` | s00, s03–s10 | the characters' "set": the pets walk on a ground line at the sideboard/wall join; photos; Mickey's film |
 | `stage` | s01, s03, s04, s05, s07, s10 | thin footlight strip only (the sideboard front is out of the beam, survey §03) |
-| `box1`, `box2` | s01, s03, s04, s05, s07 | faces light up, "open"; pets hide and peek from behind them |
+| `box1`, `box2` (+ `…Side` faces; stacked tower, owner 2026-11-17) | s01, s03, s04, s05, s07, s10 | faces light up, "open"; pets hide and peek from behind them |
 | `tree` | s01, s02, s06, s07, s10 | colour waves and sparkles; **dark** during s09 |
 | `star` | s02, s03, s06, s07, s08, s09, s10 | glow, the escape, the return, the halo for the real star |
 | `rightStrip` | s00, s01, s06, s09, s10 | ambient snow and stars continuing round the corner |
@@ -190,6 +190,9 @@ effects, held to the quality bar above. **First, a style test before committing:
 sheet plus one 5 s clip on black, judged on the real projector or the TV.
 
 ## Changelog
+- **2026-11-17** — Owner: the star's journey is visible throughout. It turns into a night-sky star when batted off (s03), crosses each constellation in s06, is found in Pooh's pot, carried by Connor (s07), and becomes the five-point star again on the tree (WP-03 draws the motion; WP-08 adds the characters around it).
+- **2026-11-17** — s06 (owner): rollercoaster pacing, explosive cosmic rides between calm constellation pauses; real atlas engravings with dimmed Spanish names (WP-03).
+- **2026-11-17** — §07: the gift boxes are a stacked tower (small on big), front and side faces mapped (WP-03, owner).
 - **2026-11-17** — v1.2: owner approved everything (arcs, beat sheet, design review, animation approach A).
 - **2026-11-17** — v1.1 (owner PR notes): no family photos → one photo becomes the closing constellation; the pets talk; Santa's full sleigh in the finale; §09 animation production review.
 - **2026-11-17** — v1 (WP-10): owner decisions, logline, arcs, beat sheet, live-moment plan, cut list, zone roles, design review.

@@ -62,13 +62,19 @@ christmas-mapping/
 │     ├─ homography.js       quad ↔ rectangle math, CSS matrix3d
 │     ├─ layout.js           default zones, stage size
 │     ├─ effects.js          calibration pattern and demo effects
+│     ├─ palette.js          DESIGN_SYSTEM §03 colour tokens (rgb/rgba/mix helpers)
+│     ├─ fx/                 effect library: pure (ctx, w, h, t, opts) functions, cue sheets, beat grid,
+│     │                      3D point clouds (points3d.js) and 3D fireworks (fireworks3d.js)
 │     ├─ timeline.js         scene scheduler, hold points
 │     ├─ audio.js            master clock (audio or silent), latency, sync beep
-│     ├─ (planned) media.js      media pack import (IndexedDB)
+│     ├─ media.js            media pack (IndexedDB)
 │     └─ scenes/             index.js (running order + holds) + one module per scene
+│  └─ fonts/                 bundled title fonts (offline) + licences
 ├─ assets/                   non-personal art, PD music, sfx; CREDITS.md; layouts/
 ├─ tools/
-│  ├─ smoke-test.js          headless app test
+│  ├─ smoke-test.js          headless app test (runs flash-check.js too)
+│  ├─ flash-check.js         renders every scene; fails on > 3 flashes/s or > 50% jumps; logs render cost
+│  ├─ serve.js               static server shared by the tools
 │  └─ (planned) export-mp4.js
 └─ .github/workflows/pages.yml
 ```
@@ -106,7 +112,7 @@ christmas-mapping/
 | Demo | `demoEffects[zoneId]` placeholder effects | — |
 | Show | pre-show starfield → timeline scenes synced to the clock; sync test | — |
 
-### 4.4 Timeline engine (planned, M5–M7)
+### 4.4 Timeline engine and scenes (built: WP-01 engine, WP-03 scenes)
 ```js
 // scenes/s02-tree.js
 export default {
@@ -116,6 +122,20 @@ export default {
   draw(zoneId, ctx2d, w, h, t, local) {},           // t = show time, local = t - start
 };
 ```
+- **As built (WP-03):** a scene module exports `{ id, title, duration, zones, cues: [{ t, name }], enter?(), draw(zoneId,
+  ctx, w, h, t, local, env) }`; `scenes/index.js` lays the starts end to end in running order, so re-timing one scene
+  never moves the others by hand. `env.zone` is the zone being drawn and `env.from(otherZone, u, v)` maps a point of
+  another zone into this zone's 0..1 coordinates (e.g. sparkles rising out of box 2 on the backdrop). Effects key
+  off cue names through `cueSheet(cues, grid)`, so music re-timing only edits numbers. **Beat sync:** each light-show
+  scene exports `beats: { bpm, perBar, offset?, times? }` and builds `beatGrid(beats)`. All motion runs on
+  `grid.warp()` (a clock that surges on each beat), brightness accents use `pulse()`/`barPulse()`, progress uses
+  `steps()` (one eased step per beat), and cues snap to the nearest beat. Today `bpm` is a placeholder; WP-05
+  fills `times` with the real beat times of each recording (scene-local seconds), and nothing else changes. Every scene has `out`; scenes on the
+  cut list have `cut` (Show panel **Cut ⏭** jumps to it). s09 declares `hold: { loop: [from, to] }`, which
+  `index.js` turns into the timeline hold. s00 (pre-show) is drawn whenever the show isn't playing. Sky zones (`wall`,
+  `rightStrip`) that no scene owns get the dusk starfield, never black. s10 has `options.projectedStar` (Show-panel
+  checkbox, saved in `localStorage` `christmas-mapping.show.v1`) and reads one media-pack photo named `family…` to
+  build the closing constellation on the device (heart-shaped fallback when it's missing).
 - **Clock** (`audio.js`, `MasterClock`): `showTime = mediaTime − audioOffsetMs / 1000`. Here `audioOffsetMs` is the
   Bluetooth latency (0–500 ms) and delays the visuals. `mediaTime` comes from the `<audio>` element, or from a silent
   `performance.now()` clock when no music is loaded. Every frame, each active scene draws the
@@ -202,8 +222,25 @@ export default {
 | 2026-11-17 | Every scene exports a `cut` cue (and `out`); the operator can jump to it on the night | lets the show shrink from ≈12 to ≈10 min without breaking the story (TREATMENT §06) |
 | 2026-11-17 | Scenes end on, and sit over, the dim `dusk` starfield, never pure black | the LCD projector's black glows; a night-sky base hides the rectangle (DESIGN_SYSTEM §02) |
 | 2026-11-17 | s09 (live star) is built with the effects scenes in WP-03, not WP-08 | it's effects only (halo, dim sky, loop); the story WP gets lighter |
+| 2026-11-17 | Scene starts are computed from durations in running order; story scenes get timed placeholders | the master timeline and cut list can be rehearsed now, and WP-08 just swaps the placeholder modules |
+| 2026-11-17 | Scenes get an `env` with `from(zone, u, v)` (homography between zones) | effects line up across zones (sparkles from a box onto the backdrop, ripples from the star) and follow calibration |
+| 2026-11-17 | Unowned sky zones draw the dusk starfield; the backdrop stays transparent over the wall's sky | no black gaps between scenes and no seam where the backdrop sits on the wall |
+| 2026-11-17 | Glows are cached sprites/gradients with additive blending; titles are cached bitmaps | keeps hundreds of soft particles and blurred text inside the iPad frame budget |
+| 2026-11-17 | Safety is tested, not eyeballed: `tools/flash-check.js` measures per-zone luminance at 20 fps | DESIGN_SYSTEM §06 limits are non-negotiable (baby and dog in the audience) |
+| 2026-11-17 | Every light-show animation is driven by a per-scene beat grid (warp clock, accents, beat-stepped progress, beat-snapped cues) | owner: the show should move to the music; one `beats` entry per scene swaps placeholder tempo for the real beat map |
+| 2026-11-17 | Beat motion uses a smooth speed modulation (1 ± 0.35 per beat) and soft-attack accents, not eased surges | owner: the stepped surges looked forced |
+| 2026-11-17 | Stars and fireworks are 3D point clouds (`fx/points3d.js`, `fx/fireworks3d.js`): perspective projection, slow rotation, staggered curved morphs | owner wants the drone-show look; one swarm re-forming keeps transitions continuous |
+| 2026-11-17 | Gift boxes stacked (small on big); the room model generates a zone per face the projector can see (`box1`/`box2` fronts, `box1Side`/`box2Side`) | owner: real box mapping uses several surfaces; from the projector (left, 1.45 m) the fronts and left sides are lit, tops are slivers |
+| 2026-11-17 | The tree is a 3D cone of points with layered surface patterns (`fx/megatree.js`), mixed per point in one pass | owner wanted more dynamic tree effects; one draw per light keeps it affordable |
+| 2026-11-17 | Constellations get dim star-atlas figure art (`fx/figures.js`) set back in depth, plus a nebula glow | owner: constellations looked flat and too simple |
+| 2026-11-17 | Constellation art = real public-domain atlas engravings (Jamieson 1822), cut out and tinted, drawn as cards in the swarm's 3D view; star positions come from the same plates | owner wanted authentic star-atlas art; one image draw per figure is cheap |
+| 2026-11-17 | Hold-loop visuals use periods that divide the loop length | the s09 loop seam is invisible (flash-check verifies it) |
 
 ## Changelog
+- **2026-11-17** — WP-03 owner notes 3: stacked box tower with side faces, mega-tree, constellation figures (§07).
+- **2026-11-17** — WP-03 owner notes: smooth beat feel; 3D point-cloud swarm and fireworks (§03, §07).
+- **2026-11-17** — WP-03 (owner note): §4.4 beat grid for all light-show scenes; §07 decision.
+- **2026-11-17** — WP-03: §03 fx/, palette, fonts, flash-check; §4.4 scene interface as built (cues, env, holds, placeholders); §07 decisions.
 - **2026-11-17** — §07: `cut` cues, `dusk` base instead of black, s09 moves to WP-03 (WP-10 treatment).
 - **2026-11-16** — §4.7 room model (stage-model.js, model.html); default zones are generated from it.
 - **2026-11-16** — WP-02: media pack (IndexedDB) and offline service worker built; §4.5 updated.

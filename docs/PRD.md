@@ -69,7 +69,7 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 ### 5.2 Show content
 | ID | Feature | Priority | Status |
 |---|---|---|---|
-| C1 | 11 scenes (see §07 and [TREATMENT](TREATMENT.md)), ≈12 minutes (10–15), light show first | Must | ⏳ (treatment done) |
+| C1 | 11 scenes (see §07 and [TREATMENT](TREATMENT.md)), ≈12 minutes (10–15), light show first | Must | ⏳ light-show scenes built (s00, s01, s02, s04, s06, s09, s10 visuals; WP-03); story scenes s03/s05/s07/s08 are timed placeholders (WP-08) |
 | C2 | 4 pet characters in classic hand-drawn style (Connor, Alaska, Orion, Gandalf) | Must | ⏳ |
 | C3 | Public-domain cameos: *Steamboat Willie* Mickey (1928) and E.H. Shepard-style Pooh | Should | ⏳ |
 | C4 | Spanish narration: bright, warm storyteller, neutral Latin American accent, plus pet character voices; ≈3 min of speech in total | Must | ⏳ |
@@ -138,6 +138,7 @@ Target ≈12 min (agreed range 10–15). The beat sheet, live-moment plan and cu
 | Tree too bright or green | Tree lights off until the finale; the flocked tips take colour well. |
 
 ## Changelog
+- **2026-11-17** — WP-03: C1 progress (effects library + seven light-show scenes built; story scenes are placeholders).
 - **2026-11-17** — WP-10 owner notes: C4 pet voices, C6 photo → constellation, no photos on screen.
 - **2026-11-17** — WP-10: §04 audience is the adults; §07 new scene titles and logline from TREATMENT; C1/C4 targets.
 - **2026-11-16** — M12 room model added and done (stage survey session).

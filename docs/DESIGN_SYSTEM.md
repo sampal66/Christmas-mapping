@@ -67,7 +67,7 @@
 
 | Role | Font | Notes |
 |---|---|---|
-| Title cards | **Mountains of Christmas** (Google Fonts, OFL), bold | vintage, festive; **≥ 96 px**, two lines allowed, 4–6 px light stroke/glow |
+| Title cards | **Mountains of Christmas** (Google Fonts, Apache 2.0), bold | vintage, festive; **≥ 96 px**, two lines allowed, 4–6 px light stroke/glow |
 | Secondary titles and names | **Playfair Display** (OFL), italic | elegant storybook; ≥ 72 px |
 | Small captions | Playfair Display, regular | ≥ 48 px; use rarely |
 
@@ -98,7 +98,31 @@ sparkles) are drawn in code, not in the clip.
 ## 06 · Motion
 
 - **Use the 12 principles of animation:** squash and stretch, anticipation, follow-through, arcs, ease-in/out.
-- **Timing:** light-show effects land **on the beat**. Story beats move at storytelling pace (no rush).
+- **Timing:** in the light-show scenes (s01, s02, s04, s06, s09, s10: music only, no narration) **every animation
+  moves to the music**: motion surges on each beat, accents land on beats, big changes on downbeats, events start on
+  a beat. Each scene's beat grid comes from its real recording (WP-05). Story beats move at storytelling pace (no
+  rush), but their underscore cues also start on a beat where possible.
+- **Feel of the beat:** motion never stops or lurches. It flows continuously and breathes a little faster on each
+  beat (speed 0.65–1.35×); accents swell in and decay smoothly; draw-ons glide from beat to beat.
+- **Tree:** a turning 3D "mega-tree" of light points running pro light-show patterns (rings, candy-cane bars,
+  helix, meteors, shockwaves, galaxy, plasma; reference: xLights / Light-O-Rama mega trees, Twinkly), not flat bands.
+- **Pacing like a rollercoaster (owner, 2026-11-17):** alternate explosive *rides* (warp-speed stars, comets, aurora,
+  galaxies sweeping past) with calm *pauses* that hold on each figure. Rides build for ≈3–4 s, peak, and settle;
+  intensity always ramps (never jumps), so the flash limits still hold.
+- **Stars look like stars:** sky stars use real spectral colours (blue-white O/B → white A → yellow-white F/G →
+  orange K → red-orange M), mostly faint with a few bright ones carrying thin diffraction spikes, and gentle
+  scintillation; no flat round dots. The story's **lost star** is the warmest and brightest (gold-white, slowly turning
+  spikes): five-point on the tree, night-sky star while lost (s03 escape → s06 constellations → s07 honey pot and
+  Connor), five-point again once it's back on the tree.
+- **Constellation art:** the real 1822 Jamieson atlas engravings as light lines (ice) behind the stars, lines
+  thickened ≈1 px so they survive projection; each figure's name, dimmed, in spaced engraved capitals (Spanish).
+  The art appears a couple of seconds after the stars have formed.
+- **Drone-show style (owner, 2026-11-17):** constellations, the closing family constellation, the greeting and the
+  fireworks are **3D point formations**: identical small light points in real depth, turning slowly, morphing
+  shape-to-shape along staggered curved paths, with colour sweeping through the swarm (reference: Disney's night-time
+  drone shows).
+- **Beat accents and safety:** per-beat brightness accents stay small; large areas pulse at most once per bar;
+  accents never exceed 2.5 per second at any tempo (the beat grid enforces it).
 - **Easing:** `easeInOutSine` for glows and washes, `easeOutBack` for pops, `linear` only for chases and snow.
 - **Transitions:** iris wipes, page-turns, snow swirls and fades through black. No hard cuts.
 - **Intensity:** the audience is adult, so bold colour changes, big washes and firework blooms are fine, as long as
@@ -115,7 +139,7 @@ sparkles) are drawn in code, not in the clip.
 | `wall` | big canvas | snow, sky, edge traces, fireworks |
 | `backdrop` | scenery behind the stage; the characters' set | night sky, title cards, photo frames; pets walk on a ground line just above the (black, non-reflecting) sideboard top |
 | `stage` | thin strip at the sideboard top (the front is out of the beam) | footlights only |
-| `box1…n` | gift boxes | faces light up, "open", characters peek out |
+| `box1`, `box1Side`, `box2`, `box2Side` | gift-box tower (small box stacked on the big one); front and left side of each are mapped | faces light up, ribbons and light sweeps wrap round the corner, boxes "open", characters peek out |
 | `tree` | the star of the light show | colour waves, sparkles, spirals, ornament pops |
 | `star` | tree top | glow, the star's arrival, the finale spotlight |
 | `rightStrip` | ambience | snow spill, glow continuation |
@@ -157,6 +181,10 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 - The UI must be hideable (Hide ✕, top-left corner to restore), because whatever is on screen is projected.
 
 ## Changelog
+- **2026-11-17** — §06 mega-tree patterns; §07 stacked gift tower with front + side faces (owner notes, WP-03).
+- **2026-11-17** — §06: smooth beat feel (no surges) and the 3D drone-show point style for stars and fireworks (owner notes).
+- **2026-11-17** — §06: every light-show animation moves to the beat (owner note, WP-03); beat-accent safety cap.
+- **2026-11-17** — §04: Mountains of Christmas is Apache 2.0 (not OFL); both fonts are bundled in `app/fonts/` (WP-03).
 - **2026-11-17** — v1.2: owner approved TREATMENT §08 #3–8: no painted backgrounds or grain, lines ≥ 6 px, light rims, lifted darks, titles ≥ 96 px, colour check.
 - **2026-11-17** — v1.1 (WP-10): LCD black → `dusk` base and fade to starfield; adult audience; louder music with no
   impulsive sounds; banned pet-trigger sfx. Further style changes proposed in TREATMENT §08.

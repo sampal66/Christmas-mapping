@@ -158,7 +158,7 @@ function drawSide() {
   ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(X(0), Z(room.ceiling)); ctx.lineTo(X(4.0), Z(room.ceiling)); ctx.stroke();
   ctx.fillStyle = '#7a5230'; ctx.fillRect(X(0), Z(sb.height), sb.depth * s, sb.height * s);
   ctx.fillStyle = '#f4f7ff';
-  for (const b of model.boxes) ctx.fillRect(X(b.y0), Z(sb.height + b.size), b.size * s, b.size * s);
+  for (const b of model.boxes) ctx.fillRect(X(b.y0), Z((b.z0 ?? sb.height) + b.size), b.size * s, b.size * s);
   ctx.fillStyle = 'rgba(76,195,138,.5)';
   ctx.beginPath(); ctx.moveTo(X(tree.y), Z(tree.tipZ)); ctx.lineTo(X(tree.y + tree.radius), Z(tree.baseZ)); ctx.lineTo(X(tree.y - tree.radius), Z(tree.baseZ)); ctx.closePath(); ctx.fill();
   ctx.fillStyle = '#ffd54f'; ctx.fillRect(X(tree.y) - 5, Z(star.topZ), 10, star.size * s);

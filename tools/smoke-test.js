@@ -1,16 +1,14 @@
 // Headless smoke test for the Mapper app.
-// Usage: node tools/smoke-test.js [screenshotDir]
+// Usage: node tools/smoke-test.js [screenshotDir] [--no-flash]
 // Serves app/ on a free port, loads it in Chromium, exercises calibrate/test/demo/show, the media pack
 // and offline reload,
 // and fails on any page error or console error.
-const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 const { chromium } = require('playwright');
+const { serve, ROOT } = require('./serve');
 
-const ROOT = path.join(__dirname, '..', 'app');
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png',
-  '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json' };
 // 1×1 PNG used to exercise the media-pack import.
 const TINY_PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
 
@@ -19,24 +17,13 @@ function missingFromShell() {
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
   const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((d) =>
     d.isDirectory() ? walk(path.join(dir, d.name)) : [path.relative(ROOT, path.join(dir, d.name))]);
-  return walk(ROOT).filter((f) => /\.(html|css|js)$/.test(f) && f !== 'sw.js' && !sw.includes(`'${f}'`));
+  return walk(ROOT).filter((f) => /\.(html|css|js|woff2|png)$/.test(f) && f !== 'sw.js' && !sw.includes(`'${f}'`));
 }
 
-function serve() {
-  return new Promise((resolve) => {
-    const server = http.createServer((req, res) => {
-      const rel = decodeURIComponent(req.url.split('?')[0]).replace(/\/$/, '/index.html');
-      const file = path.join(ROOT, path.normalize(rel));
-      if (!file.startsWith(ROOT) || !fs.existsSync(file)) { res.writeHead(404); return res.end(); }
-      res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
-      fs.createReadStream(file).pipe(res);
-    });
-    server.listen(0, () => resolve(server));
-  });
-}
+const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Number); return m * 60 + ss; };
 
 (async () => {
-  const shots = process.argv[2];
+  const shots = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : '';
   const server = await serve();
   const url = `http://localhost:${server.address().port}/`;
   const browser = await chromium.launch();
@@ -49,7 +36,7 @@ function serve() {
   try {
     await page.goto(url);
     await page.waitForTimeout(600);
-    check(await page.locator('canvas.zone').count() >= 8, 'zone canvases rendered');
+    check(await page.locator('canvas.zone').count() >= 10, 'zone canvases rendered (incl. box sides)');
 
     // drag the first corner handle and confirm the layout is saved
     const h = await page.locator('.handle').first().boundingBox();
@@ -78,14 +65,50 @@ function serve() {
     await page.waitForTimeout(1600);
     check(/^0:0[1-9]/.test(await label()), `show time advances (got "${await label()}")`);
     if (shots) await page.screenshot({ path: path.join(shots, 'show.png') });
-    // jump into the hold window (hold at 0:15, loop 13–15)
-    await page.selectOption('#sceneSelect', { index: 2 });   // scene B starts at 0:10
-    await page.waitForTimeout(6000);
+    // Running order + the s09 hold window, from the app's own modules.
+    const show = await page.evaluate(async () => {
+      const { scenes, holds } = await import('./js/scenes/index.js');
+      const last = scenes.at(-1);
+      return { total: last.start + last.duration, holds, unbeaten: scenes.filter((x) => !x.placeholder && !x.beats?.bpm && !x.beats?.times).map((x) => x.id),
+        scenes: scenes.map((x) => ({ id: x.id, start: x.start, duration: x.duration })) };
+    });
+    const seek = (t) => page.evaluate(({ v }) => { const b = document.getElementById('seekBar'); b.value = String(v); b.dispatchEvent(new Event('change')); }, { v: t / show.total });
+    check(show.scenes.length === 10 && show.holds.length === 1, 'ten scenes and one hold (s09) on the timeline');
+    check(!show.unbeaten.length, `every light-show scene has a beat grid (missing: ${show.unbeaten.join(', ')})`);
+    // Cut: from the start of s01, Cut jumps to its `cut` cue (0:40).
+    await page.selectOption('#sceneSelect', { index: 1 });
+    await page.waitForTimeout(300);
+    await page.click('#cutBtn');
+    await page.waitForTimeout(400);
+    check(secs(await label()) >= 40 && secs(await label()) < 45, `Cut jumps to s01's cut cue (got "${await label()}")`);
+    // Hold: seek just before the s09 hold point; it loops until Continue.
+    const hold = show.holds[0];
+    await seek(hold.at - 2);
+    await page.waitForTimeout(3500);
     check(await page.locator('#continueBtn').isEnabled(), 'hold point reached, Continue enabled');
-    check(/^0:1[345]/.test(await label()), `looping inside hold window (got "${await label()}")`);
+    const inLoop = secs(await label());
+    check(inLoop >= Math.floor(hold.loop[0]) && inLoop <= hold.loop[1], `looping inside hold window (got "${await label()}")`);
+    if (shots) await page.screenshot({ path: path.join(shots, 'hold.png') });
     await page.click('#continueBtn');
     await page.waitForTimeout(1500);
-    check(/^0:1[6-9]/.test(await label()), `continues past hold (got "${await label()}")`);
+    check(secs(await label()) >= Math.floor(hold.at), `continues past hold (got "${await label()}")`);
+    // Projected-star fallback toggle persists.
+    await page.check('#projStar');
+    check(await page.evaluate(() => JSON.parse(localStorage.getItem('christmas-mapping.show.v1')).projectedStar === true), 'projected-star option saved');
+    await page.uncheck('#projStar');
+    // Frame rate per scene in Show mode (logged; headless here is capped by its software compositor).
+    const fpsLog = [];
+    for (const sc of show.scenes) {
+      await seek(sc.start + sc.duration / 2);
+      await page.waitForTimeout(250);
+      const ms = await page.evaluate(() => new Promise((r) => {
+        const ts = []; const f = (n) => { ts.push(n); if (ts.length < 61) requestAnimationFrame(f); else r((ts.at(-1) - ts[0]) / 60); };
+        requestAnimationFrame(f);
+      }));
+      fpsLog.push(`${sc.id} ${ms.toFixed(1)} ms (${Math.round(1000 / ms)} fps)`);
+    }
+    console.log('show-mode frame time:\n  ' + fpsLog.join('\n  '));
+    await page.click('#restartBtn');
     // delay persists
     await page.locator('#delayRange').fill('120');
     await page.waitForTimeout(300);
@@ -132,7 +155,7 @@ function serve() {
     await page.click('#useBtn');
     await page.waitForURL(url);
     const zones = await page.evaluate(() => JSON.parse(localStorage.getItem('christmas-mapping.layout.v1')).zones);
-    check(zones.length === 8 && zones.every((z) => z.quad.flat().every(Number.isFinite)), 'model zones saved to the Mapper');
+    check(zones.length === 10 && zones.every((z) => z.quad.flat().every(Number.isFinite)), 'model zones saved to the Mapper');
     await page.waitForTimeout(300);
     check(await page.locator('canvas.zone').count() >= 8, 'Mapper renders the model zones');
   } catch (e) {
@@ -140,6 +163,12 @@ function serve() {
   } finally {
     await browser.close();
     server.close();
+  }
+
+  // Flash / brightness safety for every scene (DESIGN_SYSTEM §06).
+  if (!process.argv.includes('--no-flash')) {
+    try { console.log(execFileSync('node', [path.join(__dirname, 'flash-check.js')], { encoding: 'utf8' }).split('\n').filter((l) => !l.startsWith('  ✓')).join('\n')); }
+    catch (e) { errors.push(`flash-check failed:\n${e.stdout || ''}${e.stderr || ''}`); }
   }
 
   if (errors.length) { console.error('SMOKE TEST FAILED\n' + errors.join('\n')); process.exit(1); }
