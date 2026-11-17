@@ -94,6 +94,13 @@ dialogue in s03, s05, s07 and s10 (the "Narration" column lists the narrator onl
   bell-driven "magic train journey" loop (original, in that spirit; no film melody). The s00 pre-show keeps the music box.
 - **s05: Mickey also appears drawn in stars**, a moving constellation of the 1928 Mickey that whistles and points up as
   he gives the clue.
+- **Built in WP-11:** s04 objects (20 kinds) burst from the boxes in waves on the cues and bars, bounce and pile up
+  left of the tower, sparkle away at `cut` and `out`; lids pop, ears/tails peek (placeholders for WP-04's clips).
+  s05: at `mickey-in` the film frame, a flat screen of drones, flies apart into a **3D drone-swarm Mickey** (solid
+  volumes: sphere head, thick ears, tube limbs; owner: drone-show depth), who whistles with notes, then points up
+  while a few drones drift up from his fingertip into the sky (owner: subtle), gone by `mickey-out`. s06 pets as star figures → WP-11b.
+  Quality pass: s01 gets edge comets and a drone snowflake → star on its swells; s10 fireworks build to a barrage and
+  a willow crown, with spark fountains on the floor line.
 
 **Music as sourced (WP-05, details and licence evidence in `assets/CREDITS.md`).** All chosen recordings are US Air Force
 Band works (public domain as US federal works), from music.af.mil via Wikimedia Commons:
@@ -223,6 +230,7 @@ effects, held to the quality bar above. **First, a style test before committing:
 sheet plus one 5 s clip on black, judged on the real projector or the TV.
 
 ## Changelog
+- **2026-11-17** — WP-11: s04 box chaos and the s05 star Mickey built; audit → WP-11b (s06 pet star figures).
 - **2026-11-17** — Owner: new s04 box-chaos music and s09 bell loop (master-mix rows updated); music box stays on s00.
 - **2026-11-17** — Owner notes: s04 box chaos, s05 Mickey constellation (→ WP-11).
 - **2026-11-17** — WP-05: music as sourced + master-mix running order in §04; s02 is 1:24, s10 1:56 (whole Jingle Bells).

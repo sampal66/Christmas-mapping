@@ -69,9 +69,9 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 ### 5.2 Show content
 | ID | Feature | Priority | Status |
 |---|---|---|---|
-| C1 | 11 scenes (see §07 and [TREATMENT](TREATMENT.md)), ≈12 minutes (10–15), light show first | Must | ⏳ light-show scenes built (s00, s01, s02, s04, s06, s09, s10 visuals; WP-03); story scenes s03/s05/s07/s08 are timed placeholders (WP-08) |
+| C1 | 11 scenes (see §07 and [TREATMENT](TREATMENT.md)), ≈12 minutes (10–15), light show first | Must | ⏳ light-show scenes built (s00, s01, s02, s04, s06, s09, s10 visuals; WP-03); story scenes s03/s05/s07/s08 are timed placeholders (WP-08); s04 box chaos + s05 drone Mickey built, s01/s10 polished (WP-11); s06 pet star figures → WP-11b |
 | C2 | 4 pet characters in classic hand-drawn style (Connor, Alaska, Orion, Gandalf) | Must | ⏳ |
-| C3 | Public-domain cameos: *Steamboat Willie* Mickey (1928) and E.H. Shepard-style Pooh | Should | ⏳ |
+| C3 | Public-domain cameos: *Steamboat Willie* Mickey (1928) and E.H. Shepard-style Pooh | Should | ⏳ star-figure Mickey (1928 design) built for s05 (WP-11); clips WP-04 |
 | C4 | Spanish narration: bright, warm storyteller, neutral Latin American accent, plus pet character voices; ≈3 min of speech in total | Must | 🔵 WP-06: script approved ([SCRIPT.md](SCRIPT.md)); 6 voices cast, all lines generated; take picks pending |
 | C5 | Instrumental public-domain Christmas music, plus original stingers and effects | Must | 🟡 WP-05: every music cue sourced (PD USAF Band recordings + ElevenLabs originals, assets/CREDITS.md); owner listening checks + master-mix assembly left |
 | C6 | Tender first-Christmas message from Papá and Mamá; no photos on screen, but one family photo becomes the closing constellation (processed on device) | Must | ⏳ |
@@ -138,6 +138,7 @@ Target ≈12 min (agreed range 10–15). The beat sheet, live-moment plan and cu
 | Tree too bright or green | Tree lights off until the finale; the flocked tips take colour well. |
 
 ## Changelog
+- **2026-11-17** — WP-11: C1/C3 status (s04 box chaos, s05 star Mickey; WP-11b for s06 pet figures).
 - **2026-11-17** — WP-06: C4 script drafted in SCRIPT.md.
 - **2026-11-17** — WP-05: C5 status (music sourced, beat maps applied to s01, s02, s06, s09, s10).
 - **2026-11-17** — WP-03: C1 progress (effects library + seven light-show scenes built; story scenes are placeholders).

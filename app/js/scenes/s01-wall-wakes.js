@@ -1,6 +1,7 @@
 // s01 · La pared despierta (1:00). The mapping "wow": light lines trace the wall, the sideboard top, both boxes
 // and the tree; footlights warm up; snow begins and spills round the corner (TREATMENT §04).
-import { cueSheet, beatGrid, edgeTrace, snowfall, footlights, sparkleBurst, projectedStar, twinkleStars, boxOpen, easeInOutSine } from '../fx/index.js';
+import { cueSheet, beatGrid, edgeTrace, edgeRunners, snowfall, footlights, sparkleBurst, projectedStar, twinkleStars, boxOpen, easeInOutSine,
+  cloudScatter, cloudSnowflake, cloudStar, formation, renderCloud, sweepColors, clamp } from '../fx/index.js';
 import { BEATMAPS } from './beatmaps.js';
 import { skyBase, outlineOf, from, beatClock, boxFace, BOX_ZONES } from './common.js';
 
@@ -16,6 +17,27 @@ const beats = { bpm: 152, ...BEATMAPS['s01-wall-wakes'] };
 const B = beatGrid(beats);
 const C = cueSheet(cues, B);
 const duration = 60;
+
+// WP-11 review (owner: s01 felt thin after the traces): once each outline is drawn, comets of light chase round it
+// on the beat, and a drone swarm rises from the floor line into a turning 3D snowflake on the snow swell, becomes a
+// star on the second swell, then lets go and falls as snow. Drone-show language, like s06 and s10.
+const N = 640;
+const SWARM = { cx: 0.66, cy: 0.3, scale: 0.27 };
+let seq = null;
+function sequence() {
+  if (seq) return seq;
+  const ground = cloudScatter(N, { w: 3.4, h: 0.15, d: 1.2, seed: 21 });
+  for (let i = 0; i < N; i++) ground.p[i * 3 + 1] += 2.9;           // waiting on the floor line, below the frame
+  const fall = cloudScatter(N, { w: 4.4, h: 3.2, d: 1.6, seed: 23 });
+  for (let i = 0; i < N; i++) fall.p[i * 3 + 1] += 1.2;              // drifting down and out, into the snowfall
+  seq = [
+    { at: 0, cloud: ground },
+    { at: C.at('snow') - 4, cloud: cloudSnowflake(N, { size: 1.05 }), dur: 6 },
+    { at: C.at('cut'), cloud: cloudStar(N, { size: 0.95 }), dur: 4 },
+    { at: C.at('out') - 6, cloud: fall, dur: 7 },
+  ];
+  return seq;
+}
 
 export default {
   id: 's01-wall-wakes',
@@ -37,7 +59,21 @@ export default {
       case 'wall':
         skyBase(zoneId, ctx, w, h, soft);
         edgeTrace(ctx, w, h, bt, { progress: trace(0, 9), color: 'ice', alpha: A * settle * (0.85 + 0.15 * bar), path: outlineOf(env, 0.012) });
+        // comets of light round the wall's edge once it is traced (two per lap, they surge on the beat)
+        edgeRunners(ctx, w, h, bt, { path: outlineOf(env, 0.012), count: 3, speed: 0.045, tail: 0.07, size: 22, color: 'gold', alpha: A * B.steps(local, C.at('trace') + 6, 4) * settle });
         snowfall(ctx, w, h, soft, { density: 0.9 * snow, alpha: A });
+        {
+          // the drone swarm: rises (from 21 s), snowflake on the snow swell, star on the second swell, then falls as snow
+          const rise = clamp((local - (C.at('snow') - 4)) / 1.5);
+          if (rise > 0) {
+            const star = local >= C.at('cut');
+            renderCloud(ctx, w, h, bt, formation(local, sequence()), {
+              ...SWARM, rotY: 0.5 * Math.sin(bt * 0.22), rotX: 0.18 * Math.sin(bt * 0.15), rotZ: star ? 0 : bt * 0.05,
+              color: star ? sweepColors(['gold', 'gold', 'candle', 'snow'], bt, 0.1) : sweepColors(['ice', 'snow', 'ice', 'plum'], bt, 0.08),
+              alpha: A * rise * (0.9 + 0.1 * bar), size: 1,
+            });
+          }
+        }
         break;
       case 'rightStrip':
         skyBase(zoneId, ctx, w, h, soft);
@@ -66,11 +102,13 @@ export default {
         const i = (f.top ? 2 : 0) + (f.face === 'front' ? 1 : 0);
         const col = f.top ? 'cranberry' : 'plum';
         edgeTrace(ctx, w, h, bt, { progress: trace(5 + i * 0.9, 5), color: col, alpha: A * (f.face === 'side' ? 0.8 : 1) });
+        edgeRunners(ctx, w, h, bt, { count: 1, speed: 0.25, tail: 0.18, color: 'snow', alpha: A * B.steps(local, C.at('trace') + 12 + i, 4) });
         boxOpen(ctx, w, h, bt, { open: (0.38 + 0.1 * (f.top ? pulse : bar)) * C.env(local, 'welcome', 'out', 1.2, 3) * (f.face === 'side' ? 0.7 : 1), color: f.top ? 'rose' : 'plum', alpha: A });
         break;
       }
       case 'tree':
         edgeTrace(ctx, w, h, bt, { path: outlineOf(env), progress: trace(8, 9), color: 'pine', alpha: A * settle * (0.85 + 0.15 * pulse) });
+        edgeRunners(ctx, w, h, bt, { path: outlineOf(env), count: 3, speed: 0.11, tail: 0.1, color: 'gold', alpha: A * B.steps(local, C.at('trace') + 13, 4) });
         twinkleStars(ctx, w, h, bt, { seed: 61, density: 0.9 * snow, colors: ['snow', 'gold', 'ice'], size: 1.6, alpha: (0.6 + 0.3 * pulse) * A });
         break;
       case 'star':

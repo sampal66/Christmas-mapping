@@ -5,7 +5,7 @@
 import { cueSheet, beatGrid, megaTree, firework3d, sparkleBurst, footlights, boxFaces, snowfall,
   starHalo, projectedStar, photoToConstellation, fallbackConstellation, loadFonts,
   cloudScatter, cloudConstellation, cloudHeart, cloudText, formation, renderCloud, sweepColors,
-  glowSprite, dot, additive, glowStroke, easeInOutSine, clamp, rand } from '../fx/index.js';
+  glowSprite, dot, additive, glowStroke, easeInOutSine, clamp, rand, sparkFountain } from '../fx/index.js';
 import { SHOW_HUES } from '../palette.js';
 import * as media from '../media.js';
 import { BEATMAPS } from './beatmaps.js';
@@ -28,25 +28,51 @@ const B = beatGrid(beats);
 const C = cueSheet(cues, B);
 const duration = 116;
 
-// Fireworks: 3D point shells (sphere, tilted ring, double, willow), launched so each bloom lands on a beat (every
-// second beat, bigger ones on the downbeat), across open sky (left edge and right half; the tree is in between).
+// Fireworks: 3D point shells (sphere, tilted ring, double, willow), launched so each bloom lands on a beat, across
+// open sky (left edge and right half; the tree is in between). They build like a real display (WP-11 review: the
+// finale felt sparse): singles every second beat → volleys on each downbeat → a barrage on every beat with gold
+// willow canopies → a crown of willows, then the sky clears for the pets' wave.
 const RISE = 1.0;
 const FIREWORKS = [];
-for (let i = 0, n = B.at(C.at('fireworks')).n + 2; B.time(n) < C.at('wave') - 2; i++, n += 2) {
-  const left = rand(i + 0.1) < 0.25;
-  const down = n % B.perBar === 0;
-  FIREWORKS.push({
-    t0: B.time(n) - RISE, rise: RISE, seed: i,
-    x: left ? 0.03 + rand(i + 0.2) * 0.12 : 0.56 + rand(i + 0.3) * 0.38,
-    y: 0.14 + rand(i + 0.4) * 0.3,
-    color: SHOW_HUES[i % SHOW_HUES.length],
-    radius: (down ? 0.18 : 0.12) + rand(i + 0.5) * 0.07,
-    type: ['peony', 'ring', 'double', 'willow'][i % 4],
-    tilt: 1.0 + rand(i + 0.6) * 0.45,                 // ring seen as a tilted ellipse, never edge-on
-    color2: i % 4 === 3 ? 'candle' : 'snow',
-    ...(i % 4 === 3 ? { color: 'gold' } : {}),
-  });
+{
+  const f0 = B.at(C.at('fireworks')).n + 2, fEnd = B.at(C.at('wave') - 2).n;
+  const span = fEnd - f0;
+  const shell = (n, i, o = {}) => {
+    const left = o.left ?? rand(i + 0.1) < 0.25;
+    FIREWORKS.push({
+      t0: B.time(n) - RISE, rise: RISE, seed: i,
+      x: o.x ?? (left ? 0.03 + rand(i + 0.2) * 0.12 : 0.56 + rand(i + 0.3) * 0.38),
+      y: o.y ?? 0.12 + rand(i + 0.4) * 0.3,
+      color: o.color ?? SHOW_HUES[i % SHOW_HUES.length],
+      radius: o.radius ?? 0.14 + rand(i + 0.5) * 0.08,
+      type: o.type ?? ['peony', 'ring', 'double', 'willow'][i % 4],
+      tilt: 1.0 + rand(i + 0.6) * 0.45,                 // ring seen as a tilted ellipse, never edge-on
+      color2: o.color2 ?? (i % 4 === 3 ? 'candle' : 'snow'),
+      count: o.count ?? 90,
+      ...((o.type ?? ['peony', 'ring', 'double', 'willow'][i % 4]) === 'willow' && !o.color ? { color: 'gold', color2: 'candle' } : {}),
+    });
+  };
+  let i = 0;
+  for (let n = f0; n < fEnd - 2 * B.perBar; n++) {
+    const k = (n - f0) / span, down = (n % B.perBar) === 0;
+    if (k < 0.3) { if (n % 2 === 0) shell(n, i++, { radius: (down ? 0.2 : 0.14) + rand(i) * 0.06 }); }
+    else if (k < 0.65) {
+      if (down) { shell(n, i++, { left: true, radius: 0.18 }); shell(n, i++, { left: false, radius: 0.24 }); }
+      else if (n % 2 === 0) shell(n, i++);
+    } else {
+      shell(n, i++, { radius: 0.15 + rand(i) * 0.08 });
+      if (down) [0.6, 0.75, 0.9].forEach((x, j) => shell(n, i++, { x, y: 0.16 + 0.05 * j, type: 'willow', radius: 0.2, count: 70 }));
+    }
+  }
+  // The crown: five gold willows across the sky on the last downbeat, hanging as the music turns.
+  const crown = fEnd - 2 * B.perBar;
+  [0.08, 0.58, 0.7, 0.82, 0.94].forEach((x, j) => shell(crown, i++, { x, y: 0.14 + (j % 2) * 0.06, type: 'willow', radius: 0.26, count: 90, color: 'gold', color2: 'candle' }));
 }
+// Gold spark fountains on the floor line (between the tree and the tower, and at the far left) under the volleys.
+const FOUNTAINS = (() => {
+  const a = C.at('fireworks'), z = C.at('wave') - 2, k = (q) => B.quantize(a + (z - a) * q);
+  return [{ x: 0.52, t0: k(0.3), t1: z, seed: 3 }, { x: 0.6, t0: k(0.3), t1: z, seed: 7 }, { x: 0.06, t0: k(0.65), t1: z, seed: 11 }];
+})();
 
 // Family constellation: computed once from a media-pack photo named "family…" (never leaves the device).
 let family = fallbackConstellation();
@@ -129,6 +155,7 @@ export default {
             additive(ctx, A * (1 - j / 26), () => dot(ctx, glowSprite(j % 3 ? 'gold' : 'snow', 0.3), x, y + Math.sin(j * 1.7 + bt * 3) * 6, (j ? 12 : 26 + 10 * pulse) * (1 - j / 40)));
           }
         }
+        for (const f of FOUNTAINS) sparkFountain(ctx, w, h, local, { ...f, y: 0.97, height: 0.3, alpha: 0.85 * A, surge: pulse });
         for (const f of FIREWORKS) firework3d(ctx, w, h, local, { ...f, alpha: A });
         snowfall(ctx, w, h, soft, { density: 0.5 * B.steps(local, C.at('wave'), 8), alpha: A });
         // The swarm: sparks gather into the family constellation, then spell the greeting.
