@@ -23,7 +23,7 @@
 | WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10; places and mixes voices + sound effects (made in WP-06; generate only missing/odd ones); **must fix the silence-check items in SCRIPT §07** (s08 26–45 s: constellations twinkle as a callback + star warms on the swell, owner's choice; loop the s00 music box while idle/after the finale) | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
-| WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | 🟡 in review | `claude/wp-11b-pet-constellations` | C1, C2 |
+| WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | 🟡 in review (PR #10) | `claude/wp-11b-pet-constellations` | C1, C2 |
 | WP-09 | On-wall calibration + rehearsal checklist | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
 
 Status keys: 🟢 ready to start · 🔵 in progress · 🟡 in review (PR open) · ✅ done · ⚪ waiting on a dependency · ⏸️ deferred
