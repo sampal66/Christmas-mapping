@@ -86,6 +86,12 @@ dialogue in s03, s05, s07 and s10 (the "Narration" column lists the narrator onl
 | **s09** | La estrella de verdad (**live**) | The real star goes on with `{BABY}` | See §05. The projected star bows and fades to a soft gold halo at the tip; dim starfield; the tree zone stays dark. **Hold** until Papá taps Continue. | star (halo), backdrop, rightStrip (dim) | *O Christmas Tree* music-box loop (same as s00) | hold (~1:00) | no | — | `bow`, `hold` |
 | **s10** | Gran final | Celebration | Tree lights are already on (plugged in during s09). A light ripple and footlights burst; **Santa in his sleigh with reindeer** flies across the sky, following the star; soft fireworks bloom and fade across the wall; the pets wave goodbye from the stage. **Closing image: the stars gather into the family constellation** (drawn from one family photo) with "¡Feliz Navidad!". Fade to the starfield (s00), never to black. | all | *Jingle Bells* (Pierpont 1857, PD) into *We Wish You a Merry Christmas* (trad., PD) or *Joy to the World* (PD); PD/CC0 recordings | 1:30 | yes, goodbye lines (pets + narrator) | all 4 pets, Santa + sleigh | `ripple`, `sleigh`, `fireworks`, `wave`, `family-constellation`, `title`, `out` |
 
+**Owner notes (2026-11-17, WP-06 session) → [WP-11](work-packages/WP-11-box-chaos-mickey-stars.md):**
+- **s04 must be chaotic, not just lights:** the pets have dived into the boxes searching for the star, and a mess of
+  Christmas, pet and cameo objects bursts out on the music. Impressive, still no star.
+- **s05: Mickey also appears drawn in stars**, a moving constellation of the 1928 Mickey that whistles and points up as
+  he gives the clue.
+
 **Music as sourced (WP-05, details and licence evidence in `assets/CREDITS.md`).** All chosen recordings are US Air Force
 Band works (public domain as US federal works), from music.af.mil via Wikimedia Commons:
 s01 *O Christmas Tree* (Airmen of Note, jazz big band) · s02 **Carol of the Bells** (Band of the Rockies) · s06 *Waltz of
@@ -214,6 +220,7 @@ effects, held to the quality bar above. **First, a style test before committing:
 sheet plus one 5 s clip on black, judged on the real projector or the TV.
 
 ## Changelog
+- **2026-11-17** — Owner notes: s04 box chaos, s05 Mickey constellation (→ WP-11).
 - **2026-11-17** — WP-05: music as sourced + master-mix running order in §04; s02 is 1:24, s10 1:56 (whole Jingle Bells).
 - **2026-11-17** — Owner: the star's journey is visible throughout. It turns into a night-sky star when batted off (s03), crosses each constellation in s06, is found in Pooh's pot, carried by Connor (s07), and becomes the five-point star again on the tree (WP-03 draws the motion; WP-08 adds the characters around it).
 - **2026-11-17** — s06 (owner): rollercoaster pacing, explosive cosmic rides between calm constellation pauses; real atlas engravings with dimmed Spanish names (WP-03).
