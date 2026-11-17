@@ -58,19 +58,20 @@ export function spiral(ctx, w, h, t, opts = {}) {
 
 /**
  * Ornament pops on the beat: a seeded spot on the tree swells (easeOutBack) and fades over `life` seconds.
- * opts: bpm, offset, every (beats), life, colors, alpha, seed, perBeat.
+ * opts: grid (beatGrid), from (first second pops may start), every (beats), life, colors, alpha, seed, perBeat.
  */
 export function ornamentPops(ctx, w, h, t, opts = {}) {
-  const { bpm = 120, offset = 0, every = 2, life = 1.2, colors = SHOW_HUES, alpha = 1, seed = 21, perBeat = 2 } = opts;
-  const beatLen = (60 / bpm) * every;
-  const nowN = Math.floor((t - offset) / beatLen);
-  const back = Math.ceil(life / beatLen);
+  const { grid, from = 0, every = 2, life = 1.2, colors = SHOW_HUES, alpha = 1, seed = 21, perBeat = 2 } = opts;
+  if (!grid) return;
+  const { n: now } = grid.at(t);
+  const back = Math.ceil(life / grid.beatLen) + every;
   const unit = Math.min(w, h) / 1024;
   additive(ctx, alpha, () => {
-    for (let n = nowN - back; n <= nowN; n++) {
-      if (n < 0) continue;
-      const age = t - offset - n * beatLen;
-      if (age < 0 || age > life) continue;
+    for (let n = now - back; n <= now; n++) {
+      if (n < 0 || n % every) continue;
+      const t0 = grid.time(n);
+      const age = t - t0;
+      if (t0 < from || age < 0 || age > life) continue;
       for (let j = 0; j < perBeat; j++) {
         const k = seed * 97 + n * 7 + j;
         const v = 0.2 + rand(k) * 0.75;                   // inside the cone

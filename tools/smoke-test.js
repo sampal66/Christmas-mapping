@@ -69,10 +69,12 @@ const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Num
     const show = await page.evaluate(async () => {
       const { scenes, holds } = await import('./js/scenes/index.js');
       const last = scenes.at(-1);
-      return { total: last.start + last.duration, holds, scenes: scenes.map((x) => ({ id: x.id, start: x.start, duration: x.duration })) };
+      return { total: last.start + last.duration, holds, unbeaten: scenes.filter((x) => !x.placeholder && !x.beats?.bpm && !x.beats?.times).map((x) => x.id),
+        scenes: scenes.map((x) => ({ id: x.id, start: x.start, duration: x.duration })) };
     });
     const seek = (t) => page.evaluate(({ v }) => { const b = document.getElementById('seekBar'); b.value = String(v); b.dispatchEvent(new Event('change')); }, { v: t / show.total });
     check(show.scenes.length === 10 && show.holds.length === 1, 'ten scenes and one hold (s09) on the timeline');
+    check(!show.unbeaten.length, `every light-show scene has a beat grid (missing: ${show.unbeaten.join(', ')})`);
     // Cut: from the start of s01, Cut jumps to its `cut` cue (0:40).
     await page.selectOption('#sceneSelect', { index: 1 });
     await page.waitForTimeout(300);

@@ -98,7 +98,12 @@ sparkles) are drawn in code, not in the clip.
 ## 06 · Motion
 
 - **Use the 12 principles of animation:** squash and stretch, anticipation, follow-through, arcs, ease-in/out.
-- **Timing:** light-show effects land **on the beat**. Story beats move at storytelling pace (no rush).
+- **Timing:** in the light-show scenes (s01, s02, s04, s06, s09, s10: music only, no narration) **every animation
+  moves to the music**: motion surges on each beat, accents land on beats, big changes on downbeats, events start on
+  a beat. Each scene's beat grid comes from its real recording (WP-05). Story beats move at storytelling pace (no
+  rush), but their underscore cues also start on a beat where possible.
+- **Beat accents and safety:** per-beat brightness accents stay small; large areas pulse at most once per bar;
+  accents never exceed 2.5 per second at any tempo (the beat grid enforces it).
 - **Easing:** `easeInOutSine` for glows and washes, `easeOutBack` for pops, `linear` only for chases and snow.
 - **Transitions:** iris wipes, page-turns, snow swirls and fades through black. No hard cuts.
 - **Intensity:** the audience is adult, so bold colour changes, big washes and firework blooms are fine, as long as
@@ -157,6 +162,7 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 - The UI must be hideable (Hide ✕, top-left corner to restore), because whatever is on screen is projected.
 
 ## Changelog
+- **2026-11-17** — §06: every light-show animation moves to the beat (owner note, WP-03); beat-accent safety cap.
 - **2026-11-17** — §04: Mountains of Christmas is Apache 2.0 (not OFL); both fonts are bundled in `app/fonts/` (WP-03).
 - **2026-11-17** — v1.2: owner approved TREATMENT §08 #3–8: no painted backgrounds or grain, lines ≥ 6 px, light rims, lifted darks, titles ≥ 96 px, colour check.
 - **2026-11-17** — v1.1 (WP-10): LCD black → `dusk` base and fade to starfield; adult audience; louder music with no

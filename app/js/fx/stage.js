@@ -4,14 +4,13 @@ import { rand, clamp, glowSprite, dot, additive, glowStroke, easeOutBack } from 
 
 /**
  * Box face sequencer: the face is split into a grid whose cells light in turn on the beat, with a soft decay
- * (never a hard on/off), plus a ribbon cross and a glowing outline. opts: bpm, offset, level 0..1 (overall),
+ * (never a hard on/off), plus a ribbon cross and a glowing outline. opts: beats (beatGrid), shift (s), level 0..1,
  * colors, ribbon (token), grid (cells per side), mode ('cells' | 'all' | 'outline'), seed.
  */
 export function boxFaces(ctx, w, h, t, opts = {}) {
-  const { bpm = 120, offset = 0, level = 1, colors = ['plum', 'cranberry'], ribbon = 'gold', grid = 2, mode = 'cells', seed = 1 } = opts;
-  if (level <= 0) return;
-  const b = Math.max(0, (t - offset) * bpm / 60);
-  const n = Math.floor(b), ph = b - n;
+  const { beats, shift = 0, level = 1, colors = ['plum', 'cranberry'], ribbon = 'gold', grid = 2, mode = 'cells', seed = 1 } = opts;
+  if (level <= 0 || !beats) return;
+  const { n, phase: ph } = beats.at(t - shift);
   const decay = Math.exp(-ph * 2.2);                      // soft fall-off between beats
   const cells = grid * grid;
   const [r, g_, bl] = rgb(colors[n % colors.length]);
@@ -68,7 +67,7 @@ export function boxOpen(ctx, w, h, t, opts = {}) {
  * speed (bulbs/s), count, colors, alpha.
  */
 export function footlights(ctx, w, h, t, opts = {}) {
-  const { warm = 1, chase = 0.6, speed = 6, count = 18, colors = ['candle', 'gold'], alpha = 1 } = opts;
+  const { warm = 1, chase = 0.6, speed = 6, count = 18, colors = ['candle', 'gold'], alpha = 1 } = opts;   // pass grid.warp() as t to chase on the beat
   if (warm <= 0) return;
   const g = ctx.createLinearGradient(0, h, 0, 0);
   g.addColorStop(0, rgba('candle', 0.35 * warm));

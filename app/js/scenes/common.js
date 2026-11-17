@@ -27,3 +27,14 @@ export function outlineOf(env, inset = 0.02) {
 export function from(env, zoneId, u, v, fallback = [0.5, 0.5]) {
   return env?.from?.(zoneId, u, v) || fallback;
 }
+
+/**
+ * Beat-driven clocks for one frame (DESIGN_SYSTEM §06: light-show motion lands on the beat).
+ *   bt    show-time-like clock that surges on every beat (for chases, waves, spirals, twinkles, shimmer)
+ *   soft  the same, blended 40% with real time (for snow and the sky base, so they drift rather than lurch)
+ *   pulse per-beat accent 0..1;  bar  per-bar accent 0..1 (use for large areas)
+ */
+export function beatClock(B, start, local) {
+  const w = B.warp(local);
+  return { bt: start + w, soft: start + local + 0.4 * (w - local), pulse: B.pulse(local), bar: B.barPulse(local) };
+}

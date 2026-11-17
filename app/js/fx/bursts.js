@@ -62,19 +62,24 @@ export function softFirework(ctx, w, h, t, opts = {}) {
   const bloom = easeInOutSine(clamp(a / 0.4));            // gentle ramp in: never a hard flash
   const fade = 1 - easeInOutSine(clamp((a - 0.6) / (bloomLen - 0.6)));
   const R = radius * m * easeOutCubic(clamp(a / 1.6));
-  const n = 46;
+  const n = 40;
   additive(ctx, alpha * bloom * fade, () => {
     // soft centre glow, kept dim so the frame brightness barely moves
-    ctx.globalAlpha = alpha * bloom * fade * 0.35;
-    dot(ctx, glowSprite(color, 0.1), bx, by, R * 1.1);
+    // (a gradient over its bounding box: far cheaper than scaling a sprite this big)
+    const Rg = Math.max(1, R * 1.1);
+    const cg = ctx.createRadialGradient(bx, by, 0, bx, by, Rg);
+    cg.addColorStop(0, rgba(color, 0.35));
+    cg.addColorStop(1, rgba(color, 0));
+    ctx.fillStyle = cg;
+    ctx.fillRect(bx - Rg, by - Rg, Rg * 2, Rg * 2);
     for (let i = 0; i < n; i++) {
       const k = seed * 71 + i;
       const ang = (i / n) * TAU + rand(k) * 0.2;
       const rr = R * (0.8 + rand(k + 0.5) * 0.25);
       const droop = (a / bloomLen) ** 2 * m * 0.08;
       const sprite = glowSprite(i % 3 ? color : color2, 0.3);
-      for (let j = 0; j < 3; j++) {
-        const back = 1 - j * 0.12;
+      for (let j = 0; j < 2; j++) {
+        const back = 1 - j * 0.14;
         ctx.globalAlpha = alpha * bloom * fade * (j ? 0.3 : 0.95);
         dot(ctx, sprite, bx + Math.cos(ang) * rr * back, by + Math.sin(ang) * rr * back + droop, m * (j ? 0.008 : 0.013));
       }

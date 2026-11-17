@@ -125,7 +125,11 @@ export default {
   ctx, w, h, t, local, env) }`; `scenes/index.js` lays the starts end to end in running order, so re-timing one scene
   never moves the others by hand. `env.zone` is the zone being drawn and `env.from(otherZone, u, v)` maps a point of
   another zone into this zone's 0..1 coordinates (e.g. sparkles rising out of box 2 on the backdrop). Effects key
-  off cue names through `cueSheet(cues)`, so music re-timing only edits numbers. Every scene has `out`; scenes on the
+  off cue names through `cueSheet(cues, grid)`, so music re-timing only edits numbers. **Beat sync:** each light-show
+  scene exports `beats: { bpm, perBar, offset?, times? }` and builds `beatGrid(beats)`. All motion runs on
+  `grid.warp()` (a clock that surges on each beat), brightness accents use `pulse()`/`barPulse()`, progress uses
+  `steps()` (one eased step per beat), and cues snap to the nearest beat. Today `bpm` is a placeholder; WP-05
+  fills `times` with the real beat times of each recording (scene-local seconds), and nothing else changes. Every scene has `out`; scenes on the
   cut list have `cut` (Show panel **Cut ⏭** jumps to it). s09 declares `hold: { loop: [from, to] }`, which
   `index.js` turns into the timeline hold. s00 (pre-show) is drawn whenever the show isn't playing. Sky zones (`wall`,
   `rightStrip`) that no scene owns get the dusk starfield, never black. s10 has `options.projectedStar` (Show-panel
@@ -222,9 +226,11 @@ export default {
 | 2026-11-17 | Unowned sky zones draw the dusk starfield; the backdrop stays transparent over the wall's sky | no black gaps between scenes and no seam where the backdrop sits on the wall |
 | 2026-11-17 | Glows are cached sprites/gradients with additive blending; titles are cached bitmaps | keeps hundreds of soft particles and blurred text inside the iPad frame budget |
 | 2026-11-17 | Safety is tested, not eyeballed: `tools/flash-check.js` measures per-zone luminance at 20 fps | DESIGN_SYSTEM §06 limits are non-negotiable (baby and dog in the audience) |
+| 2026-11-17 | Every light-show animation is driven by a per-scene beat grid (warp clock, accents, beat-stepped progress, beat-snapped cues) | owner: the show should move to the music; one `beats` entry per scene swaps placeholder tempo for the real beat map |
 | 2026-11-17 | Hold-loop visuals use periods that divide the loop length | the s09 loop seam is invisible (flash-check verifies it) |
 
 ## Changelog
+- **2026-11-17** — WP-03 (owner note): §4.4 beat grid for all light-show scenes; §07 decision.
 - **2026-11-17** — WP-03: §03 fx/, palette, fonts, flash-check; §4.4 scene interface as built (cues, env, holds, placeholders); §07 decisions.
 - **2026-11-17** — §07: `cut` cues, `dusk` base instead of black, s09 moves to WP-03 (WP-10 treatment).
 - **2026-11-16** — §4.7 room model (stage-model.js, model.html); default zones are generated from it.
