@@ -88,3 +88,8 @@ button:disabled { opacity: 0.4; }
 code { font-size: 12px; }
 
 a.filebtn { color: inherit; text-decoration: none; }
+
+/* Show fonts, bundled for offline use (DESIGN_SYSTEM §04; licences in app/fonts/). */
+@font-face { font-family: "Mountains of Christmas"; font-weight: 700; font-display: swap; src: url("fonts/mountains-of-christmas-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: italic; font-weight: 400; font-display: swap; src: url("fonts/playfair-display-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/playfair-display-latin-400-normal.woff2") format("woff2"); }

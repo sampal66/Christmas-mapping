@@ -12,7 +12,7 @@ A browser-based projection-mapping tool for the iPad. It has no build step: plai
   music from `master-mix` in the media pack (silent clock when it's missing). It shows a pre-show starfield until Play. Keys: `4` Show, space
   play/pause, `c` continue.
 - **Media pack**: add private files (family photos, narration, the final mix) from the Files app. Each is stored
-  under its name without the extension (`photo-1.jpg` → `photo-1`). Expected names: `master-mix`, `photo-1…6`,
+  under its name without the extension (`photo-1.jpg` → `photo-1`). Expected names: `master-mix`, `family-photo`, `photo-1…6`,
   `narration-*`. The list shows sizes, a delete button and storage used.
   **Personal files never leave the device**: they live in the browser's IndexedDB on the iPad, are never uploaded,
   and must never be committed (the repo is public; `.gitignore` blocks `media/`, `*.private.*`, `assets/private/`).
@@ -23,7 +23,11 @@ A browser-based projection-mapping tool for the iPad. It has no build step: plai
   measurements. "Use in Mapper" loads zones generated from the model. The default zones also come from it.
 - **Room photo preview**: put a photo of the wall behind the zones. The photo stays on the device and is never uploaded.
 - **Layout file**: export/import the calibration as JSON.
-- Scenes live in `js/scenes/` (running order and hold points in `js/scenes/index.js`).
+- Scenes live in `js/scenes/` (running order and hold points in `js/scenes/index.js`); effects in `js/fx/`, colours in
+  `js/palette.js`. Show also has **Cut ⏭** (jump to the current scene's `cut` cue, for the on-the-night cut list), a
+  **Finale: projected star** checkbox (live-moment fallback) and an fps/draw-time readout.
+- **Family constellation:** the finale turns one media-pack photo whose name starts with `family` (e.g.
+  `family-photo.jpg`) into star points on the iPad. Without it, a heart-shaped constellation is used.
 - Hide the controls with **Hide ✕**. Tap the top-left corner to bring them back. Keys: `1/2/3` switch modes,
   `h` toggles the controls, the arrows nudge.
 

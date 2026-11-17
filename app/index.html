@@ -63,11 +63,16 @@
         <button id="playBtn">▶ Play</button>
         <button id="restartBtn">⟲ Restart</button>
       </div>
-      <button id="continueBtn" disabled>Continue ▶▶</button>
+      <div class="row seg">
+        <button id="continueBtn" disabled>Continue ▶▶</button>
+        <button id="cutBtn" disabled title="Jump to this scene's cut point (on-the-night cut list)">Cut ⏭</button>
+      </div>
       <div class="row"><span id="timeLabel" class="mono"></span></div>
       <input type="range" id="seekBar" min="0" max="1" step="0.001" value="0">
       <div class="hint" id="sceneLabel"></div>
       <select id="sceneSelect"></select>
+      <label class="chk"><input type="checkbox" id="projStar"> Finale: projected star (real star didn't go on)</label>
+      <div class="hint mono" id="perfLabel"></div>
       <label>Bluetooth audio delay <span id="delayValue" class="mono">0 ms</span>
         <input type="range" id="delayRange" min="0" max="500" step="10" value="0">
       </label>

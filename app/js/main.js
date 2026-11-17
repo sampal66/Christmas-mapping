@@ -1,9 +1,10 @@
 import { cssMatrixForQuad, stageToUnit, unitToStage } from './homography.js';
 import { defaultLayout, STAGE_W, STAGE_H } from './layout.js';
-import { calibrationPattern, demoEffects, stars } from './effects.js';
+import { calibrationPattern, demoEffects } from './effects.js';
 import { MasterClock, beep } from './audio.js';
 import { Timeline, fmtTime } from './timeline.js';
-import { scenes, holds } from './scenes/index.js';
+import { scenes, holds, preshow, cutTime } from './scenes/index.js';
+import { skyBase, SKY_ZONES } from './scenes/common.js';
 import * as media from './media.js';
 
 const STORAGE_KEY = 'christmas-mapping.layout.v1';
@@ -61,6 +62,24 @@ function save() {
 }
 
 const zoneById = (id) => layout.zones.find((z) => z.id === id);
+
+// What a scene's draw() gets besides the canvas: its zone, and a way to find points of other zones in its own
+// 0..1 coordinates (e.g. "the top of box 2, in backdrop space"), so effects can line up across zones.
+function sceneEnv(z) {
+  return {
+    zone: z,
+    from(id, u, v) {
+      const o = zoneById(id);
+      if (!o || o.hidden) return null;
+      const [x, y] = unitToStage(o.quad, u, v);
+      return stageToUnit(z.quad, x, y);
+    },
+  };
+}
+
+// Rolling frame stats for the Show panel (and the smoke test's fps check).
+const perf = { frames: 0, frameMs: 0, drawMs: 0, last: 0 };
+window.__perf = perf;
 
 // ---------- build zone canvases ----------
 function buildViews() {
@@ -196,6 +215,7 @@ function updateShow() {
 }
 
 function frame(now) {
+  const drawStart = performance.now();
   const t = (now - t0) / 1000;
   const showT = mode === 'show' ? updateShow() : undefined;
   let syncFlash = false;
@@ -223,13 +243,18 @@ function frame(now) {
       if (syncTest) {
         if (syncFlash && (z.id === 'star' || z.id === 'backdrop')) { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); }
       } else if (!started) {
-        if (z.id === 'wall') stars(ctx, w, h, t);          // pre-show loop
+        if (preshow.zones.includes(z.id)) {
+          try { preshow.draw(z.id, ctx, w, h, t, t, sceneEnv(z)); }
+          catch (e) { console.error('pre-show draw failed', e); }
+        }
       } else {
         const scene = timeline.sceneFor(z.id, showT);
         if (scene) {
           timeline.enterIfNeeded(scene);
-          try { scene.draw(z.id, ctx, w, h, showT, showT - scene.start); }
+          try { scene.draw(z.id, ctx, w, h, showT, showT - scene.start, sceneEnv(z)); }
           catch (e) { console.error(`scene ${scene.id} draw failed`, e); }
+        } else if (SKY_ZONES.includes(z.id)) {
+          skyBase(z.id, ctx, w, h, showT);                 // sky zones never go black between scenes
         }
       }
     } else if (demoEffects[z.id]) {
@@ -240,6 +265,12 @@ function frame(now) {
       maskPath(ctx, z); ctx.strokeStyle = z.color; ctx.lineWidth = 4; ctx.stroke();
     }
   }
+  if (perf.last) {
+    const k = 0.05;                                        // exponential moving average
+    perf.frameMs += ((now - perf.last) - perf.frameMs) * k;
+    perf.drawMs += ((performance.now() - drawStart) - perf.drawMs) * k;
+  }
+  perf.last = now; perf.frames++;
   if (mode === 'show' && ++uiTick % 6 === 0) updateShowUI(showT);
   requestAnimationFrame(frame);
 }
@@ -265,6 +296,12 @@ function jumpTo(t) {
   updateShowUI(t);
 }
 
+function jumpToCut() {
+  if (!started) return;
+  const c = cutTime(timeline.sceneAt(clock.showTime));
+  if (c !== null && c > clock.showTime) jumpTo(c);
+}
+
 function continueHold() {
   if (!holding) return;
   timeline.released.add(holding.id);
@@ -280,6 +317,10 @@ function toggleSync(on = !syncTest) {
 function updateShowUI(st = 0) {
   $('playBtn').textContent = clock.playing ? '❚❚ Pause' : '▶ Play';
   $('continueBtn').disabled = !holding;
+  const cur0 = started ? timeline.sceneAt(st) : null;
+  const cut = cutTime(cur0);
+  $('cutBtn').disabled = holding || cut === null || cut <= st;
+  if (uiTick % 30 === 0) $('perfLabel').textContent = `${Math.round(1000 / (perf.frameMs || 16.7))} fps · draw ${perf.drawMs.toFixed(1)} ms`;
   $('continueBtn').classList.toggle('on', !!holding);
   $('timeLabel').textContent = started ? `${fmtTime(st)} / ${fmtTime(timeline.duration)}` : `pre-show · ${fmtTime(timeline.duration)}`;
   if (!seeking) $('seekBar').value = started ? String(st / timeline.duration) : '0';
@@ -287,8 +328,23 @@ function updateShowUI(st = 0) {
   $('sceneLabel').textContent = holding ? '⏸ Waiting for Continue…' : (cur ? cur.title || cur.id : '');
 }
 
+// Live-moment fallback (TREATMENT §05): project the star in the finale if the real one couldn't go on.
+const SHOW_KEY = 'christmas-mapping.show.v1';
+const finale = scenes.find((s) => s.options && 'projectedStar' in s.options);
+function setProjectedStar(on) {
+  if (finale) finale.options.projectedStar = !!on;
+  try { localStorage.setItem(SHOW_KEY, JSON.stringify({ projectedStar: !!on })); } catch { /* private mode: not persisted */ }
+}
+function loadShowOptions() {
+  let on = false;
+  try { on = !!JSON.parse(localStorage.getItem(SHOW_KEY) || '{}').projectedStar; } catch { /* ignore */ }
+  if (finale) finale.options.projectedStar = on;
+  $('projStar').checked = on;
+}
+
 let seeking = false;
 function buildShowPanel() {
+  loadShowOptions();
   $('sceneSelect').innerHTML = '<option value="">Jump to scene…</option>' +
     timeline.scenes.map((s) => `<option value="${s.start}">${fmtTime(s.start)} · ${s.title || s.id}</option>`).join('');
   $('delayRange').value = String(layout.audioOffsetMs);
@@ -299,6 +355,8 @@ function buildShowPanel() {
 $('playBtn').addEventListener('click', togglePlay);
 $('restartBtn').addEventListener('click', () => { const wasPlaying = clock.playing; stopShow(); if (wasPlaying) togglePlay(); });
 $('continueBtn').addEventListener('click', continueHold);
+$('cutBtn').addEventListener('click', jumpToCut);
+$('projStar').addEventListener('change', (e) => { setProjectedStar(e.target.checked); });
 $('syncBtn').addEventListener('click', () => toggleSync());
 $('sceneSelect').addEventListener('change', (e) => { if (e.target.value !== '') jumpTo(Number(e.target.value)); e.target.value = ''; });
 $('seekBar').addEventListener('input', () => { seeking = true; });

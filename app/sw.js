@@ -2,7 +2,7 @@
 // Bump VERSION whenever any shell file changes, or the iPad keeps serving the old copy.
 // The smoke test fails if a .html/.css/.js file in app/ is missing from SHELL.
 // Media-pack files live in IndexedDB, not here, and never go over the network.
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = `christmas-mapper-${VERSION}`;
 const SHELL = [
   './',
@@ -23,9 +23,31 @@ const SHELL = [
   'js/model-view.js',
   'js/timeline.js',
   'js/stage-model.js',
+  'js/palette.js',
+  'js/fx/index.js',
+  'js/fx/util.js',
+  'js/fx/cues.js',
+  'js/fx/sky.js',
+  'js/fx/lines.js',
+  'js/fx/tree.js',
+  'js/fx/bursts.js',
+  'js/fx/stage.js',
+  'js/fx/transitions.js',
+  'js/fx/title.js',
+  'js/fx/constellations.js',
   'js/scenes/index.js',
-  'js/scenes/s00-test-a.js',
-  'js/scenes/s00-test-b.js',
+  'js/scenes/common.js',
+  'js/scenes/placeholder.js',
+  'js/scenes/s00-preshow.js',
+  'js/scenes/s01-wall-wakes.js',
+  'js/scenes/s02-tree-alive.js',
+  'js/scenes/s04-magic-boxes.js',
+  'js/scenes/s06-constellations.js',
+  'js/scenes/s09-real-star.js',
+  'js/scenes/s10-finale.js',
+  'fonts/mountains-of-christmas-latin-700-normal.woff2',
+  'fonts/playfair-display-latin-400-italic.woff2',
+  'fonts/playfair-display-latin-400-normal.woff2',
 ];
 
 self.addEventListener('install', (e) => {
