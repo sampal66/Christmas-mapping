@@ -72,7 +72,7 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 | C1 | 11 scenes (see §07 and [TREATMENT](TREATMENT.md)), ≈12 minutes (10–15), light show first | Must | ⏳ light-show scenes built (s00, s01, s02, s04, s06, s09, s10 visuals; WP-03); story scenes s03/s05/s07/s08 are timed placeholders (WP-08) |
 | C2 | 4 pet characters in classic hand-drawn style (Connor, Alaska, Orion, Gandalf) | Must | ⏳ |
 | C3 | Public-domain cameos: *Steamboat Willie* Mickey (1928) and E.H. Shepard-style Pooh | Should | ⏳ |
-| C4 | Spanish narration: bright, warm storyteller, neutral Latin American accent, plus pet character voices; ≈3 min of speech in total | Must | ⏳ |
+| C4 | Spanish narration: bright, warm storyteller, neutral Latin American accent, plus pet character voices; ≈3 min of speech in total | Must | 🔵 WP-06: script drafted ([SCRIPT.md](SCRIPT.md)); voices pending owner OK |
 | C5 | Instrumental public-domain Christmas music, plus original stingers and effects | Must | 🟡 WP-05: every music cue sourced (PD USAF Band recordings + ElevenLabs originals, assets/CREDITS.md); owner listening checks + master-mix assembly left |
 | C6 | Tender first-Christmas message from Papá and Mamá; no photos on screen, but one family photo becomes the closing constellation (processed on device) | Must | ⏳ |
 | C7 | Live finale: real star placed with the baby, tree lights plugged in, big closing | Must | ⏳ |
@@ -116,7 +116,7 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 | 10 | Gran final: Santa's sleigh, soft fireworks, goodbye; one family photo as a constellation | light show |
 
 Target ≈12 min (agreed range 10–15). The beat sheet, live-moment plan and cut list are in
-[TREATMENT.md](TREATMENT.md); timings in [PLAN.md §6](PLAN.md). The full script will go in `docs/SCRIPT.md`.
+[TREATMENT.md](TREATMENT.md); timings in [PLAN.md §6](PLAN.md). The full script is in [SCRIPT.md](SCRIPT.md).
 
 ## 08 · Success metrics
 
@@ -138,6 +138,7 @@ Target ≈12 min (agreed range 10–15). The beat sheet, live-moment plan and cu
 | Tree too bright or green | Tree lights off until the finale; the flocked tips take colour well. |
 
 ## Changelog
+- **2026-11-17** — WP-06: C4 script drafted in SCRIPT.md.
 - **2026-11-17** — WP-05: C5 status (music sourced, beat maps applied to s01, s02, s06, s09, s10).
 - **2026-11-17** — WP-03: C1 progress (effects library + seven light-show scenes built; story scenes are placeholders).
 - **2026-11-17** — WP-10 owner notes: C4 pet voices, C6 photo → constellation, no photos on screen.

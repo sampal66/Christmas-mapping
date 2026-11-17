@@ -17,8 +17,8 @@
 | WP-02 | [Media pack + offline mode](work-packages/WP-02-media-offline.md) | WP-00 | ✅ done (PR #2) | `claude/wp-02-media-offline` | M8, M9 |
 | WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | ✅ done (PR #6) | `claude/wp-03-effects-scenes` | C1 (s00, s01, s02, s04, s06, s09, s10) + owner notes (3D swarm, mega-tree, box tower, atlas art) |
 | WP-04 | Character pipeline: 4 pets + Mickey 1928 + Shepard Pooh + **Santa and sleigh**; approach pending (TREATMENT §09: AI video clips recommended, not code puppets) | WP-03, WP-10, ElevenLabs connector | ⚪ needs brief | — | C2, C3 |
-| WP-05 | [Music sourcing + beat maps](work-packages/WP-05-music-beats.md): PD military-band carols, Musopen Tchaikovsky, ElevenLabs music box + 3 underscores; beat maps (auto + tap tool) applied to the light-show scenes | WP-03, WP-10 | 🟡 in review (PR #7) | `claude/wp-05-music-beats` | C5, C1 beat sync |
-| WP-06 | Spanish script (`docs/SCRIPT.md`) + narration and **pet voices** (≈3 min of speech; TREATMENT §03–§04); writes its own brief first | WP-10 | 🟢 ready (**next**, owner go-ahead 2026-11-17) | — | C4 |
+| WP-05 | [Music sourcing + beat maps](work-packages/WP-05-music-beats.md): PD military-band carols, Musopen Tchaikovsky, ElevenLabs music box + 3 underscores; beat maps (auto + tap tool) applied to the light-show scenes | WP-03, WP-10 | ✅ done (PR #7) | `claude/wp-05-music-beats` | C5, C1 beat sync |
+| WP-06 | [Spanish script + narration and pet voices](work-packages/WP-06-script-voices.md) (`docs/SCRIPT.md`, ≈3 min of speech; TREATMENT §03–§04) | WP-10 | 🔵 in progress: script in review, voices await credit OK | `claude/wp-06-script-voices` | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
 | WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10 | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
@@ -45,6 +45,10 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-17 · WP-06** — Brief written; `docs/SCRIPT.md` v0.1: cast (narrator + 4 pets + Pooh; Mickey whistles), 43 generated lines + 2 🔒 `{BABY}` lines (with non-personal alternatives) + Papá/Mamá's s08 message, timed to scene cues (`cue + offset`). Speech ≈ 2:56. Estimate ≈ 5.5–7k credits (2 takes, voice design).
+  Left: owner review of the script + 4 open questions (SCRIPT §05) and a go-ahead on credits; then design voices and generate. **Nothing generated yet.**
+  Gotchas: the ElevenLabs connector still needs reconnecting with full permissions (balance read failed). 🔒 lines are never generated from the repo. WP-08 places one file per line id.
 
 - **2026-11-17 · WP-05** — Music sourced (all USAF Band, PD): s01 O Christmas Tree, s02 **Carol of the Bells**, s06 Waltz of the Flowers, s08 Silent Nights, s10 Jingle Bells → `assets/CREDITS.md` + master-mix order in TREATMENT §04. Beat maps in `app/js/scenes/beatmaps.js` (s01, s02, s06, s09, s10); cues re-timed to musical moments; s02 → 1:24, s10 → 1:56. `tools/beats.js` (auto beats, `--subdivide` for waltzes, self-test in smoke) + `app/beats.html` tap tool.
   Same session (owner go-ahead): ElevenLabs originals, 1 take each (≈4.6k credits): s04 Sugar Plum (celesta, 72 bpm 2/4, beat map applied), music-box loop (exactly 90 bpm, mix starts at 1.64 s), s03/s05/s07 underscores. s06 atlas art now grows out of the stars (radial feathered reveal). Demo reels sent (not committed).
