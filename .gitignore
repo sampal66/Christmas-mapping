@@ -4,3 +4,6 @@ media/
 assets/private/
 node_modules/
 .DS_Store
+
+# Rendered demo reels / exports (large; shared outside the repo)
+*.mp4
