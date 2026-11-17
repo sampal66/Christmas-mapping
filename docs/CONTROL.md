@@ -48,9 +48,9 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
-- **2026-11-17 · WP-11b** — `fx/pet-stars.js` `petStars(ctx,w,h,t,age,{pet,x,y,size,end,source})`: Orion (grumpy → looks up → lopsided smile + glint), Connor (lying, head lifts, plume sways), Alaska (proud, eye-roll + "hmph", wagging), Gandalf (stalk → wiggle → pounce → land). Line-art drone figures: a small pen writes fixed-count strokes from keyframed poses.
-  s06 `PETS` table: each forms from its constellation's cloud at cue + 7.5–9 s, right of the figures (u ≈ 0.84–0.88, above the gift tower), and flies back by next cue − 1 s. Timing, cues, beat map and atlas art unchanged.
-  Flash check passes; s06 render cost unchanged within noise (≈22–27 ms avg headless). `sw.js` v14. **Owner: please check the four figures in the PR screenshots.**
+- **2026-11-17 · WP-11b** — `fx/pet-stars.js` `petStars(ctx,w,h,t,age,{pet,x,y,size,end,source})`: the four pets as small **3D drone swarms**, after owner review rejected the first dotted-outline version. Volumes are ellipsoids, tubes and cones, with tabby stripes and the husky's white face painted per point. Orion: grumpy → looks up → lopsided smile + glint. Connor: lifts his head, plume sways. Alaska: eye-roll + "hmph". Gandalf: pounces.
+  s06 `PETS` table: each pet forms from its constellation's cloud at cue + 7.5–9 s, right of the figures, and flies back by next cue − 1 s. Timing, cues and beat map unchanged. **Owner: the atlas plates' grid lines are removed** (PNG cleanup, CREDITS note).
+  Flash check passes. Each pet costs ≈2 ms/frame headless (the Canis pause has two). `sw.js` v15. Not the cartoon pets: those are WP-04 (ElevenLabs clips, approved Gandalf style).
   Next: WP-04 (character clips), then WP-08.
 
 - **2026-11-17 · WP-11** — Audit table in the brief (all beats built except s04 chaos, s05 star Mickey → done here; s06 pets-as-constellations → **WP-11b** brief).

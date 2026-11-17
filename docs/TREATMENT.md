@@ -100,7 +100,8 @@ dialogue in s03, s05, s07 and s10 (the "Narration" column lists the narrator onl
   volumes: sphere head, thick ears, tube limbs; owner: drone-show depth), who whistles with notes, then points up
   while a few drones drift up from his fingertip into the sky (owner: subtle), gone by `mickey-out`. s06 pets as star figures: built in WP-11b (see below).
 - **s06 pets as star figures (WP-11b):** in each calm pause, after the stars have formed, a few drones peel off the
-  constellation and re-form beside it, in the open sky right of the figures, as that pet drawn in light lines. Orion is grumpy,
+  constellation and re-form beside it, in the open sky right of the figures, as that pet: a small **3D drone swarm** with depth
+  (owner: no dotted outlines; smaller than the constellations). The atlas engravings no longer show the plates' coordinate grid (owner). Orion is grumpy,
   looks up at his constellation, then gives a slow lopsided smile (one lip lifted). Connor lies down, lifts his head and his plume tail sways.
   Alaska sits proud and unimpressed beside Canis Minor (nose up, eye-roll, "hmph", wagging tail). Gandalf
   stalks, wiggles and pounces towards Felis and the lost star. Each flies back into the swarm before the next ride.
@@ -235,7 +236,7 @@ effects, held to the quality bar above. **First, a style test before committing:
 sheet plus one 5 s clip on black, judged on the real projector or the TV.
 
 ## Changelog
-- **2026-11-17** — WP-11b: s06 pet star figures built (note under §04).
+- **2026-11-17** — WP-11b: s06 pet star figures built as 3D drone swarms; atlas grid lines removed (owner review) (note under §04).
 - **2026-11-17** — WP-11: s04 box chaos and the s05 star Mickey built; audit → WP-11b (s06 pet star figures).
 - **2026-11-17** — Owner: new s04 box-chaos music and s09 bell loop (master-mix rows updated); music box stays on s00.
 - **2026-11-17** — Owner notes: s04 box chaos, s05 Mickey constellation (→ WP-11).

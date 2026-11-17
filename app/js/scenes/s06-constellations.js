@@ -83,14 +83,15 @@ function sequence() {
 }
 
 // The pets as star figures (WP-11b): in each calm pause, after the stars have formed, a few drones peel off the
-// constellation and re-form beside it (the open sky right of the figures, above the gift tower) as that pet, then fly
+// constellation and re-form beside it (the open sky right of the figures, above the gift tower) as that pet, a 3D
+// drone figure smaller than the constellation, then fly
 // back before the next ride. from: seconds after the cue; gone 1 s before the next cue (back over its last 2 s).
 // src: the formation-sequence entry the drones come from.
 const PETS = [
-  { pet: 'orion', cue: 'orion', from: 9, to: 'canis', x: 0.85, y: 0.34, size: 0.27, src: 1 },
-  { pet: 'connor', cue: 'canis', from: 7.5, to: 'felis', x: 0.835, y: 0.45, size: 0.2, src: 2 },
-  { pet: 'alaska', cue: 'canis', from: 8, to: 'felis', x: 0.875, y: 0.2, size: 0.21, src: 2 },
-  { pet: 'gandalf', cue: 'felis', from: 7.5, to: 'cut', x: 0.875, y: 0.33, size: 0.26, src: 3 },
+  { pet: 'orion', cue: 'orion', from: 9, to: 'canis', x: 0.845, y: 0.33, size: 0.21, src: 1 },
+  { pet: 'connor', cue: 'canis', from: 7.5, to: 'felis', x: 0.835, y: 0.44, size: 0.165, src: 2 },
+  { pet: 'alaska', cue: 'canis', from: 8, to: 'felis', x: 0.875, y: 0.21, size: 0.17, src: 2 },
+  { pet: 'gandalf', cue: 'felis', from: 7.5, to: 'cut', x: 0.87, y: 0.33, size: 0.2, src: 3 },
 ];
 
 // The lost star (the tree's five-point star, now a night-sky star since it escaped in s03) travels through the
