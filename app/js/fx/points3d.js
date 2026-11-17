@@ -267,8 +267,32 @@ export function projector(w, h, { cx = 0.5, cy = 0.5, scale = 0.25, rotX = 0, ro
  * Draws an image as a flat card in the same 3D view as a point cloud (affine fit through three projected
  * corners), so artwork turns together with its stars. rect: [x0, y0, x1, y1] in cloud units at depth z.
  */
-export function drawCard(ctx, w, h, img, view, rect, { z = 0, alpha = 1 } = {}) {
-  if (!img || alpha <= 0.002) return;
+// One scratch canvas per image for the soft reveal mask, reused every frame (no per-frame allocation).
+const revealCache = new WeakMap();
+/** The image with a soft radial reveal: 0 = hidden, 1 = fully grown (corners still feathered). */
+function revealed(img, reveal) {
+  let c = revealCache.get(img);
+  if (!c) { c = document.createElement('canvas'); c.width = img.width; c.height = img.height; revealCache.set(img, c); }
+  const g = c.getContext('2d');
+  const iw = img.width, ih = img.height, R = Math.hypot(iw, ih) / 2;
+  g.globalCompositeOperation = 'source-over';
+  g.clearRect(0, 0, iw, ih);
+  g.drawImage(img, 0, 0);
+  g.globalCompositeOperation = 'destination-in';
+  // Even fully revealed, the corners stay feathered, so the card never shows a hard rectangular edge.
+  const r = reveal * R * 1.15, feather = 0.5;
+  const grad = g.createRadialGradient(iw / 2, ih / 2, 0, iw / 2, ih / 2, Math.max(1, r));
+  grad.addColorStop(0, 'rgba(0,0,0,1)');
+  grad.addColorStop(1 - feather, 'rgba(0,0,0,1)');
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, iw, ih);
+  return c;
+}
+
+export function drawCard(ctx, w, h, img, view, rect, { z = 0, alpha = 1, reveal = 1, soft = true } = {}) {
+  if (!img || alpha <= 0.002 || reveal <= 0) return;
+  if (soft) img = revealed(img, Math.min(1, reveal));
   const P = projector(w, h, view);
   const [x0, y0, x1, y1] = rect;
   const a = P(x0, y0, z), b = P(x1, y0, z), c = P(x0, y1, z);
