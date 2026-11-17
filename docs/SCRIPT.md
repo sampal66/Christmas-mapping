@@ -36,6 +36,21 @@
 | **Pooh** (Shepard cameo) | Gentle, slow, soft-spoken older bear; a little sleepy and kind. One line only. | `eleven_v3` |
 | **Mickey** (1928 cameo) | **Whistles only** (*Steamboat Bill*, 1910, PD). No speech. | sfx/whistle, WP-08 |
 
+### Saved voices (ElevenLabs, owner picks 2026-11-17)
+
+| Character | Voice name | voice_id |
+|---|---|---|
+| Narrador | CMS Narrador | `UKWT6S1zRc7tA6fyWocR` |
+| Gandalf | CMS Gandalf | `LWrHIVDJIHq8VRsGKrWC` |
+| Alaska | CMS Alaska | `bRPGMW3bLmeZxmFVnuaA` |
+| Connor | CMS Connor | `C241plScZxHDNe72ZOXT` |
+| Orion | CMS Orion | `5pC8wi2ibUVfMORndBWM` |
+| Pooh | CMS Pooh | `TAyICBNyjxfszzKuFMaC` |
+
+**Accent rule (owner):** neutral Latin American Spanish with no regional accent, like Mexican film dubbing. Never a
+Castilian (Spain) accent. Generation uses `eleven_v4` with a `[neutral Mexican Spanish accent]` tag at the start of each line,
+plus an emotion tag where the line needs one. Re-take any line that sounds Castilian.
+
 ## 03 · Lines by scene
 
 ### s01 · La pared despierta (1:00)
@@ -167,6 +182,7 @@ brave, Orion secretly helps, Alaska shares the lead.*
 Open: credit go-ahead + voice approach; reconnecting the ElevenLabs connector with full permissions.
 
 ## Changelog
+- **2026-11-17** — v1.1: saved voice ids, accent rule (neutral Latin American, Mexican-dub style; never Castilian).
 - **2026-11-17** — v1.0: owner approved the script.
 - **2026-11-17** — v0.2: owner decisions (male narrator, name lines spoken, narrator says the s08 message); alternatives dropped; totals re-counted.
 - **2026-11-17** — v0.1: first draft (WP-06): cast, all lines with cues, totals and credit estimate.
