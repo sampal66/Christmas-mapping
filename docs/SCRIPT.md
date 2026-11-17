@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Status** | v0.1 draft, for owner review (WP-06) |
+| **Status** | v0.2 draft, for owner review (WP-06) |
 | **Last updated** | 2026-11-17 |
 
 ---
@@ -17,9 +17,9 @@
 - **Cue:** the scene cue the line starts on, plus an offset in seconds (`tradition +0`). Cue times come from
   the scene files; WP-08 places the clips and may nudge offsets by ear.
 - **≈ s:** estimated spoken length (≈ 14 characters per second for calm narration, faster for Gandalf and Alaska).
-- **🔒 personal:** the line says `{BABY}` (or is spoken by Papá and Mamá). It is **never committed** and never
-  generated from this repo: the owner records it, or generates it in the ElevenLabs app with the cast voice and
-  the real name typed there. The file goes in the on-device media pack (WP-02).
+- **🔒 personal:** the line says `{BABY}`. The text here keeps the placeholder; the **real name is typed only at
+  generation time** in ElevenLabs (owner decision 2026-11-17: the name is the show's personal signature and may be
+  spoken in the audio). The audio file is **never committed**: it goes in the on-device media pack (WP-02).
 - **(opt)**: optional line; drop it if the scene feels busy. The script works without it.
 - Light-show scenes **s02, s04 and s09 have no speech** (music only). Sfx cues are noted in *italics* for WP-08.
 - No barks, meows, whines or squeaks anywhere (DESIGN_SYSTEM §08): the pets **talk**.
@@ -28,14 +28,13 @@
 
 | Character | Voice brief (for ElevenLabs voice design) | Model (proposed) |
 |---|---|---|
-| **Narrador** | Warm, bright storyteller; adult male or female, 40s; neutral Latin American Spanish; calm pace with a smile in the voice; classic Disney Christmas-special feel. | `eleven_multilingual_v2` (steady, consistent across lines) |
+| **Narrador** | Warm, bright storyteller; **adult male** (owner), 40s; neutral Latin American Spanish; calm pace with a smile in the voice; classic Disney Christmas-special feel. | `eleven_multilingual_v2` (steady, consistent across lines) |
 | **Gandalf** (Russian Blue, youngest) | Bright, giggly, hyperactive kid; speaks fast, voice cracks with excitement; sweet when sorry. | `eleven_v3` (expressive: [laughs], [excited]) |
 | **Alaska** (pomsky) | Fast, bossy young woman, a little diva; crisp diction, theatrical sighs; warm underneath. | `eleven_v3` |
 | **Connor** (husky) | Deep, soft, shy gentle giant; slow, hesitant, low volume; proud and fuller in the finale. | `eleven_v3` |
 | **Orion** (tabby) | Dry, grumbly middle-aged drawl; deadpan, slow; a secret soft spot. | `eleven_v3` |
 | **Pooh** (Shepard cameo) | Gentle, slow, soft-spoken older bear; a little sleepy and kind. One line only. | `eleven_v3` |
 | **Mickey** (1928 cameo) | **Whistles only** (*Steamboat Bill*, 1910, PD). No speech. | sfx/whistle, WP-08 |
-| **Papá y Mamá** | Their own voices, recorded on the iPad (s08). 🔒 | — |
 
 ## 03 · Lines by scene
 
@@ -45,7 +44,6 @@
 | Id | Cue | Speaker | ≈ s | Línea (ES) | Gloss (EN) |
 |---|---|---|---|---|---|
 | s01-narrador-01 🔒 | welcome +0 (0:32) | Narrador | 7 | Bienvenidos a una noche muy especial: la primera Nochebuena de {BABY}. | Welcome to a very special night: {BABY}'s first Christmas Eve. |
-| s01-narrador-01b | (alternative, not personal) | Narrador | 7 | Bienvenidos a una noche muy especial: la primera Nochebuena de nuestra pequeña. | …our little one's first Christmas Eve. |
 
 ### s02 · El árbol cobra vida (1:24) — no speech
 
@@ -58,7 +56,6 @@ Orion grumpy, Gandalf careless → owns it.*
 | s03-alaska-01 | pets-in +2 | Alaska | 5 | ¡A ver, equipo! Las esferas rojas arriba, las doradas abajo… ¡y nadie toca la estrella! | Right, team! Red baubles up top, gold ones below… and nobody touches the star! |
 | s03-orion-01 | pets-in +9 | Orion | 3 | Tanto alboroto… por un árbol. Dentro de la casa. | All this fuss… for a tree. Indoors. |
 | s03-narrador-01 🔒 | tradition +0 | Narrador | 9 | En esta casa hay una tradición: la estrella siempre la pone el más pequeño de la familia. Y este año, por primera vez, ese honor es de {BABY}. | This house has a tradition: the youngest always places the star. And this year, for the first time, that honour is {BABY}'s. |
-| s03-narrador-01b | (alternative, not personal) | Narrador | 8 | En esta casa hay una tradición: la estrella siempre la pone el más pequeño de la familia. Y este año, hay alguien nuevo en casa. | …And this year, there is someone new in the house. |
 | s03-narrador-02 | tradition +11 | Narrador | 7 | Dicen que su luz es la que guía a Santa hasta aquí… así que esta noche, esa estrella tiene que brillar. | They say its light guides Santa here… so tonight, that star has to shine. |
 | s03-gandalf-01 | bat −4 | Gandalf | 3 | ¡Uy, qué brillante! ¡Es una pelotita! ¡Mía, mía, mía! | Ooh, shiny! It's a little ball! Mine, mine, mine! |
 | s03-alaska-02 | bat +1 | Alaska | 2 | ¡Gandalf, nooo! | Gandalf, nooo! |
@@ -118,12 +115,12 @@ brave, Orion secretly helps, Alaska shares the lead.*
 | s07-gandalf-02 | settle +6 | Gandalf | 2 | ¡Lo logramos! ¡Todos juntos! | We did it! All together! |
 
 ### s08 · Para ti, `{BABY}` (1:00)
-*Silent Nights. The heart. The message is Papá and Mamá's own voices, recorded on the iPad.*
+*Silent Nights. The heart. The narrator speaks the message (owner decision).*
 
 | Id | Cue | Speaker | ≈ s | Línea (ES) | Gloss (EN) |
 |---|---|---|---|---|---|
 | s08-narrador-01 | gather +3 | Narrador | 7 | Esta noche, la casa entera brilla por alguien muy pequeñito… que llegó este año a llenarla de luz. | Tonight the whole house shines for someone very small… who arrived this year to fill it with light. |
-| s08-papas-01 🔒 | message +0 | Papá y Mamá | ≤ 15 | *Suggested:* ¡Feliz primera Navidad, {BABY}! Te amamos con todo el corazón. *(their own words)* | Happy first Christmas, {BABY}! We love you with all our hearts. |
+| s08-narrador-03 🔒 | message +0 | Narrador | 7 | ¡Feliz primera Navidad, {BABY}! Toda tu familia te quiere… con todo el corazón. | Happy first Christmas, {BABY}! Your whole family loves you… with all its heart. |
 | s08-narrador-02 | missing +0 | Narrador | 5 | Ya casi todo está listo… solo falta una cosa: la estrella de verdad. | Almost everything is ready… only one thing is missing: the real star. |
 | s08-gandalf-01 | missing +6 | Gandalf | 2.5 | *(softly)* Toma, chiquita. Esta te toca a ti. | Here, little one. This one's yours. |
 
@@ -146,25 +143,28 @@ brave, Orion secretly helps, Alaska shares the lead.*
 
 | | Lines | Speech | Characters (generated) |
 |---|---|---|---|
-| Narrador | 10 (+2 🔒, +2 alternatives) | ≈ 1:08 | ≈ 735 (+ ≈ 230 for the alternatives) |
+| Narrador | 13 (3 🔒) | ≈ 1:15 | ≈ 1,000 |
 | Pets + Pooh | 33 (4 optional) | ≈ 1:33 | ≈ 1,280 |
-| Papá y Mamá 🔒 | 1 | ≈ 0:15 | recorded, not generated |
-| **Total** | | **≈ 2:56** | **≈ 2,000–2,250** |
+| **Total** | 46 | **≈ 2:48** | **≈ 2,300** |
 
 **Credit estimate** (ElevenLabs bills text-to-speech per character; ≈ 1 credit per character on `eleven_v3` and
 `eleven_multilingual_v2`, 0.5 on the Flash/Turbo models):
-- Script lines, default 2 takes each: ≈ 2,250 × 2 ≈ **4,500 credits**.
+- Script lines (🔒 included), default 2 takes each: ≈ 2,300 × 2 ≈ **4,600 credits**.
 - Voice design for 6 new voices (3 previews each, short sample line): ≈ **1,000–2,000 credits** (or 0 if we pick
   existing library voices instead of designing).
-- The 🔒 personal lines are generated by the owner in the ElevenLabs app: ≈ 250 credits.
-- **Total ≈ 5,500–7,000 credits** (≈ 5% of one month on Creator). Not started: needs the owner's go-ahead (AGENTS §07).
+- **Total ≈ 5,600–6,600 credits** (≈ 5% of one month on Creator). Not started: needs the owner's go-ahead (AGENTS §07).
 
-## 05 · Open questions for the owner
+## 05 · Owner decisions and open items
 
-1. Narrator: male or female voice?
-2. Keep the 🔒 name lines (s01, s03), or use the non-personal alternatives so everything can be generated here?
-3. s08 message: will Papá and Mamá record it themselves (recommended), or should the narrator say it?
-4. Design new voices (more character, more credits) or pick existing library voices (cheaper)?
+| Topic | Decision (2026-11-17) |
+|---|---|
+| Narrator | Male. |
+| Name lines (s01, s03, s08) | Spoken with the real name; the name is typed only at generation time, never written in the repo. |
+| s08 message | Said by the narrator (not recorded by Papá and Mamá). |
+| Generation | **On hold**: the owner reviews the script first, then OKs the credits and chooses designed vs library voices. |
+
+Open: the owner's script edits; reconnecting the ElevenLabs connector with full permissions.
 
 ## Changelog
+- **2026-11-17** — v0.2: owner decisions (male narrator, name lines spoken, narrator says the s08 message); alternatives dropped; totals re-counted.
 - **2026-11-17** — v0.1: first draft (WP-06): cast, all lines with cues, totals and credit estimate.

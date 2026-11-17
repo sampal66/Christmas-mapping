@@ -46,9 +46,9 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
-- **2026-11-17 · WP-06** — Brief written; `docs/SCRIPT.md` v0.1: cast (narrator + 4 pets + Pooh; Mickey whistles), 43 generated lines + 2 🔒 `{BABY}` lines (with non-personal alternatives) + Papá/Mamá's s08 message, timed to scene cues (`cue + offset`). Speech ≈ 2:56. Estimate ≈ 5.5–7k credits (2 takes, voice design).
-  Left: owner review of the script + 4 open questions (SCRIPT §05) and a go-ahead on credits; then design voices and generate. **Nothing generated yet.**
-  Gotchas: the ElevenLabs connector still needs reconnecting with full permissions (balance read failed). 🔒 lines are never generated from the repo. WP-08 places one file per line id.
+- **2026-11-17 · WP-06** — Brief written; `docs/SCRIPT.md` v0.1: cast (narrator + 4 pets + Pooh; Mickey whistles), 46 lines incl. 3 🔒 `{BABY}` lines, timed to scene cues (`cue + offset`). Speech ≈ 2:48. Estimate ≈ 5.6–6.6k credits (2 takes + voice design). Owner: male narrator; name spoken in the audio (typed only at generation); narrator says the s08 message.
+  Left: owner reviews/edits the script, then OKs the credits and picks designed vs library voices; then generate. **Nothing generated yet (owner: review first).**
+  Gotchas: the ElevenLabs connector still needs reconnecting with full permissions (balance read failed). Never write the real name in any file or commit. WP-08 places one file per line id.
 
 - **2026-11-17 · WP-05** — Music sourced (all USAF Band, PD): s01 O Christmas Tree, s02 **Carol of the Bells**, s06 Waltz of the Flowers, s08 Silent Nights, s10 Jingle Bells → `assets/CREDITS.md` + master-mix order in TREATMENT §04. Beat maps in `app/js/scenes/beatmaps.js` (s01, s02, s06, s09, s10); cues re-timed to musical moments; s02 → 1:24, s10 → 1:56. `tools/beats.js` (auto beats, `--subdivide` for waltzes, self-test in smoke) + `app/beats.html` tap tool.
   Same session (owner go-ahead): ElevenLabs originals, 1 take each (≈4.6k credits): s04 Sugar Plum (celesta, 72 bpm 2/4, beat map applied), music-box loop (exactly 90 bpm, mix starts at 1.64 s), s03/s05/s07 underscores. s06 atlas art now grows out of the stars (radial feathered reveal). Demo reels sent (not committed).

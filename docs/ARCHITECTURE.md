@@ -237,7 +237,7 @@ export default {
 | 2026-11-17 | Hold-loop visuals use periods that divide the loop length | the s09 loop seam is invisible (flash-check verifies it) |
 | 2026-11-17 | Beat maps live in one data file, `scenes/beatmaps.js` (scene-local times, first beat = downbeat); scenes spread them into `beats` | the tap tool exports one entry, so fixing a map never touches scene code |
 | 2026-11-17 | Fast or rubato pieces are tracked at the bar pulse and split evenly (`tools/beats.js --subdivide`) | tracking 170–200 bpm waltz beats directly drifts; bars are steady and land on the "one" |
-| 2026-11-17 | Speech is one file per script line, named by its `SCRIPT.md` id (`s03-alaska-01`) and placed by WP-08 at `cue + offset`; lines that say `{BABY}` are 🔒 personal (owner-generated or recorded, media pack only) | re-takes swap one file without re-timing a scene; the real name never reaches git |
+| 2026-11-17 | Speech is one file per script line, named by its `SCRIPT.md` id (`s03-alaska-01`) and placed by WP-08 at `cue + offset`; lines that say `{BABY}` are 🔒 personal (real name typed only at generation time; audio in the media pack only) | re-takes swap one file without re-timing a scene; the real name never reaches git |
 | 2026-11-17 | Recordings stay off the repo; `tools/beats.js` decodes WAV itself and other formats via the system ffmpeg | repo size and "no new dependencies"; ffmpeg is only an optional convenience for the offline tool |
 
 ## Changelog
