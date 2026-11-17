@@ -28,3 +28,32 @@ export function loadAtlasArt(src, color = 'ice') {
   cache.set(key, p);
   return p;
 }
+
+const labelCache = new Map();
+/**
+ * A constellation name in the atlas's engraved style: spaced capitals in the period serif (Playfair Display), as a
+ * canvas for drawCard(). Cached once the bundled font is ready.
+ */
+export function atlasLabel(text, color = 'ice', px = 64) {
+  const ready = typeof document === 'undefined' || !document.fonts || document.fonts.status === 'loaded';
+  const key = `${text}|${color}|${px}`;
+  if (ready && labelCache.has(key)) return labelCache.get(key);
+  const font = `400 ${px}px "Playfair Display", Georgia, serif`;
+  const spacing = px * 0.28;
+  const probe = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(8, 8) : document.createElement('canvas');
+  const p = probe.getContext('2d'); p.font = font;
+  const chars = [...text];
+  const widths = chars.map((ch) => p.measureText(ch).width);
+  const W = Math.ceil(widths.reduce((a, b) => a + b, 0) + spacing * (chars.length - 1) + px * 0.4);
+  const H = Math.ceil(px * 1.5);
+  const c = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(W, H) : Object.assign(document.createElement('canvas'), { width: W, height: H });
+  const g = c.getContext('2d');
+  g.font = font; g.textBaseline = 'middle';
+  const [r, gg, b] = rgb(color);
+  g.fillStyle = `rgb(${r},${gg},${b})`;
+  g.shadowColor = `rgba(${r},${gg},${b},0.8)`; g.shadowBlur = px * 0.18;
+  let x = px * 0.2;
+  chars.forEach((ch, i) => { g.fillText(ch, x, H / 2); x += widths[i] + spacing; });
+  if (ready) labelCache.set(key, c);
+  return c;
+}

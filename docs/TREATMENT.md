@@ -190,6 +190,7 @@ effects, held to the quality bar above. **First, a style test before committing:
 sheet plus one 5 s clip on black, judged on the real projector or the TV.
 
 ## Changelog
+- **2026-11-17** — s06 (owner): rollercoaster pacing, explosive cosmic rides between calm constellation pauses; real atlas engravings with dimmed Spanish names (WP-03).
 - **2026-11-17** — §07: the gift boxes are a stacked tower (small on big), front and side faces mapped (WP-03, owner).
 - **2026-11-17** — v1.2: owner approved everything (arcs, beat sheet, design review, animation approach A).
 - **2026-11-17** — v1.1 (owner PR notes): no family photos → one photo becomes the closing constellation; the pets talk; Santa's full sleigh in the finale; §09 animation production review.

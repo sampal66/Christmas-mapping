@@ -57,6 +57,8 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
   software raster): **if the iPad drops frames in WP-09, lower N in s06/s10, firework `count`, or mega-tree `rings`.** Saved Room-model edits keep old box positions.
   Owner notes 4: constellations use the **real Jamieson atlas engravings** (1822, PD; plates 24–26 from Commons) as tinted cards in the swarm's 3D view;
   star positions read off the plates (`fx/constellations.js`, `app/assets/atlas/`). Next: merge PR #6, then WP-05 (brief written) in a new session.
+  Owner notes 5: s06 is a **rollercoaster**: rides (`fx/cosmos.js`: warp field, aurora, galaxy, comets, tree meteors) between calm pauses;
+  dimmed engraved Spanish labels (`atlasLabel`). Rides are the costliest frames (software ≈30–55 ms): check on the iPad in WP-09.
 
 - **2026-11-17 · WP-10** — `docs/TREATMENT.md`: owner decisions (adult audience, 10–15 min → ≈12, tradition + Santa + constellations
   spine, both cameos tiny, Papá taps Continue), arcs, beat sheet with music licence/zones/cues, live-moment plan, cut list (→ ≈10 min).
