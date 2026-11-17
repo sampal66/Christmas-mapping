@@ -15,13 +15,13 @@
 | WP-00 | Project structure, docs, Mapper v0 | — | ✅ done (PR #1) | this setup session | M1–M4 |
 | WP-01 | [Show timeline, audio sync, hold points](work-packages/WP-01-timeline.md) | WP-00 | ✅ done (PR #1) | setup session | M5, M6, M7, M11 |
 | WP-02 | [Media pack + offline mode](work-packages/WP-02-media-offline.md) | WP-00 | ✅ done (PR #2) | `claude/wp-02-media-offline` | M8, M9 |
-| WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | 🟢 ready once WP-10 merges (**next**) | — | C1 (s00, s01, s02, s04, s06 constellations, s09 live hold, s10 visuals) |
+| WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | 🟢 ready (**next**) | — | C1 (s00, s01, s02, s04, s06 constellations, s09 live hold, s10 visuals) |
 | WP-04 | Character pipeline: 4 pets + Mickey 1928 + Shepard Pooh + **Santa and sleigh**; approach pending (TREATMENT §09: AI video clips recommended, not code puppets) | WP-03, WP-10, ElevenLabs connector | ⚪ needs brief | — | C2, C3 |
 | WP-05 | Music and sfx sourcing: 8 PD pieces + 3 short original underscores + soft sfx, per TREATMENT §04 (no barks/meows/bangs) | WP-10 | ⚪ needs brief (owner OK on credits) | — | C5 |
 | WP-06 | Spanish script (`docs/SCRIPT.md`) + narration and **pet voices** (≈3 min of speech; TREATMENT §03–§04) | WP-10, owner go-ahead | ⏸️ deferred by owner | — | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
 | WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10 | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
-| WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | 🟡 in review (draft PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
+| WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-09 | On-wall calibration + rehearsal checklist | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
 
 Status keys: 🟢 ready to start · 🔵 in progress · 🟡 in review (PR open) · ✅ done · ⚪ waiting on a dependency · ⏸️ deferred
@@ -46,7 +46,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 - **2026-11-17 · WP-10** — `docs/TREATMENT.md`: owner decisions (adult audience, 10–15 min → ≈12, tradition + Santa + constellations
   spine, both cameos tiny, Papá taps Continue), arcs, beat sheet with music licence/zones/cues, live-moment plan, cut list (→ ≈10 min).
   PLAN §4–6, PRD §04/§07, DESIGN_SYSTEM v1.1 (LCD black → `dusk` base, louder music with no impulsive sounds), ARCHITECTURE §07, WP-03 brief updated.
-  Left: owner to approve the ⏳ items (arcs, beat details, design proposals TREATMENT §08 #3–8, pets don't speak). s09 moved to WP-03.
+  Owner approved everything. s09 moved to WP-03. Next: WP-03 (light-show scenes); write WP-04/WP-05 briefs.
   Owner PR notes: no photos (one photo → closing constellation), pets talk, full Santa and sleigh, no "MS Paint" look → TREATMENT §09.
   Style test: owner liked Gandalf #4; the clip works on black; keep props (star) in code. Creator plan for WP-04.
   Gotcha: WP-04 and WP-05 still need briefs (copy `_TEMPLATE.md`, source everything from TREATMENT §03–§04).
@@ -84,7 +84,6 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 ## Open decisions / waiting on owner
 
 - ✅ Animation approach A chosen; style test passed (Gandalf #4, kling-2.5-turbo ≈2.1k credits per 5 s clip). Owner will buy **Creator** (121k/mo) for the character work. **Check the ElevenLabs credit balance**: ≈30 clips ≈ 45–65k credits on the cheaper video models (TREATMENT §09).
-- **Approve the ⏳ items in [TREATMENT.md](TREATMENT.md)** (in the WP-10 PR review): arcs (§03), beat-sheet details (§04), design proposals §08 #3–8, "pets don't speak".
 - ✅ Projector decided: HAPPRUN H1 (throw ratio 1.4) on the tripod at 3.5 m, head 1.45 m; buy Nov 27. See [STAGE_SURVEY §03e](STAGE_SURVEY.md).
 - ✅ LCD-black design note: handled in DESIGN_SYSTEM §02 (`dusk` base, fade to starfield). Check the `dusk` value on the wall in WP-09.
 - Tape-measure the remaining items in [STAGE_SURVEY §05](STAGE_SURVEY.md) (star size, counter height).

@@ -5,7 +5,7 @@
 
 | | |
 |---|---|
-| **Status** | v1.1 — reviewed for the LCD projector and an adult audience (WP-10); more changes proposed in [TREATMENT §08](TREATMENT.md) ⏳ |
+| **Status** | v1.2 — reviewed for the LCD projector and an adult audience; all WP-10 changes approved by the owner ([TREATMENT §08–§09](TREATMENT.md)) |
 | **Last updated** | 2026-11-17 |
 
 ---
@@ -14,16 +14,13 @@
 
 **"A storybook Christmas, painted with light."**
 - **Feel:** classic hand-drawn Christmas animation from the 1940s–50s: warm, soft, bouncy, nostalgic.
-  Painted backgrounds, ink outlines, a gentle film grain.
+  Real cel-style character animation (AI-generated clips, TREATMENT §09) over **flat graphic scenery and glowing
+  light effects**. No painted backgrounds and no full-frame film grain: on a wall they read as muddy, noisy light.
 - **Personality:** cosy, funny, tender. The pets are the comedy; the light show is the wonder;
   the baby is the heart.
 - **Not:** neon or EDM-style, glossy 3D, modern Disney/Pixar look, fast cuts or strobe.
 - **Audience:** made for the **adults** (8–10 family members). `{BABY}` is the guest of honour, not the target
   audience, so big light changes and soft fireworks are welcome within the §06 limits.
-
-> ⏳ **Pending owner review** ([TREATMENT §08](TREATMENT.md)): drop painted backgrounds and full-frame grain in favour
-> of flat graphic shapes; lines ≥ 6 px; light rims instead of dark ink; lifted dark fur; titles ≥ 96 px. Until
-> approved, builders should already prefer these (they are safe either way).
 
 ## 02 · Projection fundamentals (read first)
 
@@ -42,8 +39,10 @@
    Full white is for short accents only (≤ 1 s).
 5. **Respect the edges.** Content should touch object edges exactly. Tracing outlines with light is the core
    "mapping" effect.
-6. **Projector limits:** ~300 lumens, 1080p over ~2.6 m (~0.7 px/mm). Lines thinner than 3 px and text
-   smaller than 40 px won't read.
+6. **Projector limits:** ~300 lumens, 1080p over ~2.6 m (≈1.35 mm per pixel). Character lines **≥ 6 px** at final
+   size, light traces 6–10 px with a glow, 4 px absolute minimum. Text smaller than 48 px won't read.
+7. **Colour check:** cheap LCDs mute deep blue and red and tint whites green. Check the palette on the wall in WP-09
+   and nudge `cranberry`/`plum` if they look dim.
 
 ## 03 · Colour palette
 
@@ -68,7 +67,7 @@
 
 | Role | Font | Notes |
 |---|---|---|
-| Title cards | **Mountains of Christmas** (Google Fonts, OFL), bold | vintage, festive; ≥ 120 px |
+| Title cards | **Mountains of Christmas** (Google Fonts, OFL), bold | vintage, festive; **≥ 96 px**, two lines allowed, 4–6 px light stroke/glow |
 | Secondary titles and names | **Playfair Display** (OFL), italic | elegant storybook; ≥ 72 px |
 | Small captions | Playfair Display, regular | ≥ 48 px; use rarely |
 
@@ -77,8 +76,11 @@ Spanish text uses proper accents and `¡ ¿`.
 
 ## 05 · Characters
 
-Style: classic hand-drawn. Clean ink outlines (dark brown `#2B1D14` instead of pure black, so the outline still
-emits a little light), 2–3 flat tones plus a soft highlight, big expressive eyes, rubber-hose bounce in motion.
+Style: classic 1940s hand-drawn cel look (reference: the approved Gandalf style test, TREATMENT §09). **Warm light
+cream rim** outlines instead of dark ink (dark ink vanishes on the dusk base), 2–3 flat tones plus a soft highlight,
+big expressive eyes, rubber-hose bounce in motion. **Lifted darks:** no fill below ≈35% lightness; Connor's black
+fur → blue-grey `#5A6478`, Orion's dark brown → caramel `#B07A4A`. Clips are rendered on pure black; props (the star,
+sparkles) are drawn in code, not in the clip.
 
 | Character | Look (model-sheet notes) | Personality → acting |
 |---|---|---|
@@ -143,7 +145,7 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 |---|---|---|
 | Character cut-outs | PNG with transparency, 2× the target size | one file per body part when puppeted |
 | Character clips | MP4/H.264 on **pure black** or HEVC with alpha | ≤ 10 s, 30 fps |
-| Backgrounds | PNG/JPG, zone resolution × 2 | painted look |
+| Backgrounds | PNG/JPG, zone resolution × 2 | flat graphic shapes and soft gradients |
 | Audio | WAV for masters, M4A/AAC for the app | 48 kHz |
 | Naming | `kebab-case`, `<scene>-<thing>-<variant>` | e.g. `s03-gandalf-pounce-a.png` |
 
@@ -155,6 +157,7 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 - The UI must be hideable (Hide ✕, top-left corner to restore), because whatever is on screen is projected.
 
 ## Changelog
+- **2026-11-17** — v1.2: owner approved TREATMENT §08 #3–8: no painted backgrounds or grain, lines ≥ 6 px, light rims, lifted darks, titles ≥ 96 px, colour check.
 - **2026-11-17** — v1.1 (WP-10): LCD black → `dusk` base and fade to starfield; adult audience; louder music with no
   impulsive sounds; banned pet-trigger sfx. Further style changes proposed in TREATMENT §08.
 - **2026-11-16** — v1: palette, typography, characters, motion safety limits, zone roles, audio and asset specs.

@@ -101,7 +101,7 @@ Development happens in Claude cloud sessions from an iPad, and the same iPad run
 **Style:** classic hand-drawn Disney-era animation (1930s–50s): warm, bouncy, soft ink lines, painted backgrounds,
 a light film-grain pass.
 **Projection review (WP-10):** for the LCD projector the look leans to flat graphic shapes, bold lines and light
-rims on a dim night-sky base, with no full-frame grain (⏳ owner to approve; see [TREATMENT §08](TREATMENT.md) and
+rims on a dim night-sky base, with no full-frame grain (approved; see [TREATMENT §08](TREATMENT.md) and
 [DESIGN_SYSTEM](DESIGN_SYSTEM.md)). The show is for the adults. The pets **talk** (character voices); characters and Santa get real animation, not code
 puppets (production approach: [TREATMENT §09](TREATMENT.md)).
 

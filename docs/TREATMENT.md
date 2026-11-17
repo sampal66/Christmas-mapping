@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Status** | v1 — spine, length, cameos and the live-moment operator approved by the owner; arcs, beat details and design proposals **pending owner review** (marked ⏳) |
+| **Status** | v1.2 — **approved by the owner** (2026-11-17) |
 | **Last updated** | 2026-11-17 |
 
 ---
@@ -41,7 +41,7 @@
 **Why it lands on the live moment:** the whole story delivers the star to "the youngest of the house". The
 projected star can only take the story to the top of the tree; the last step has to be real.
 
-## 03 · Character arcs ⏳
+## 03 · Character arcs
 
 Each story beat moves at least one arc (see the "Arcs moved" column in §04).
 
@@ -66,7 +66,7 @@ for WP-06: Connor, a deep, soft, shy gentle giant; Alaska, fast, bossy, a little
 Gandalf, a bright, giggly, hyperactive kid. Mickey only whistles; Pooh gets one gentle line. Speech, not animal
 sounds: still no realistic barks or meows (the real pets react).
 
-## 04 · Beat sheet ⏳
+## 04 · Beat sheet
 
 Times are placeholders for the scene builds (WP-03/08). Real music edits re-time them through `cues`.
 **Total ≈ 12:15** (s01–s10, with the live hold counted at ≈1:00). Speech ≈ 3 min: narrator ≈ 1:15 plus short pet
@@ -135,25 +135,25 @@ All cuts: ≈12:15 → ≈10:00, which is still inside the agreed 10–15 min.
 **Note:** characters can't stand on the black sideboard top (it doesn't reflect). They stand on a drawn ground line
 just above it on the backdrop, and peek from behind the boxes.
 
-## 08 · Design system review ⏳
+## 08 · Design system review
 
 Checked against the HAPPRUN H1 (LCD, throw ratio 1.4, ≈2.6 × 1.46 m image at 3.5 m, ≈1.35 mm per pixel) and the
 real room ([STAGE_SURVEY](STAGE_SURVEY.md) §02–§03e). **Applied** = already written into DESIGN_SYSTEM because it
-follows directly from an owner decision. **Proposed** = waiting for the owner's OK in the PR review.
+follows directly from an owner decision. All proposals were approved by the owner on 2026-11-17.
 
 | # | Area | Finding | Change | State |
 |---|---|---|---|---|
 | 1 | Black | LCD black glows: the whole image rectangle shows faintly on the wall and spill (survey §03e). "Black = no light" isn't true here. | Scenes sit on a dim **dusk** base with sparse stars; fade to the starfield, never to black. Pure `night` only outside the wall (doorway, ceiling spill). Use a dim warm lamp behind the audience. | **Applied** (new token `dusk` proposed) |
 | 2 | Audience and audio | The show is for adults; the dog is noise-sensitive. | Allow bigger light changes and firework blooms within the flash limits. Music full and fairly loud (master ≈ −16 LUFS); **no impulsive sounds**: no bangs, barks, meows, doorbells or squeaky toys. | **Applied** |
-| 3 | Backgrounds and grain | Painted backgrounds turn into muddy, low-contrast light on a wall; a full-frame film grain reads as dirt and shimmer, and makes the LCD glow worse. | Flat graphic shapes, soft gradients, silhouettes and light-line traces. The old-film look stays only inside Mickey's small frame, as a static vignette and scratches, **with no flicker**. | Proposed |
-| 4 | Line weight | At ≈1.35 mm/px a 3 px line is ≈4 mm: thin from 3–4 m away, and the warp softens it further. | Character lines ≥ 6 px at final size; light traces 6–10 px with a glow; 4 px absolute minimum. | Proposed |
-| 5 | Character outlines | Dark-brown ink (#2B1D14) emits almost nothing, so on a dark base the outline vanishes. | Characters get a warm light rim (`sepia`/`candle`) instead of dark ink when on the dusk base; dark ink only over lit scenery. | Proposed |
-| 6 | Dark fur | Connor's black and Orion's dark brown would project as holes. | Lift darks: Connor's black → blue-grey `#5A6478`; Orion's brown → caramel `#B07A4A`. No character fill below ≈35% lightness. | Proposed |
-| 7 | Typography | The backdrop is ≈730 px wide; "¡Feliz primera Navidad, `{BABY}`!" at 120 px doesn't fit on one line. Mountains of Christmas has thin strokes. | Titles ≥ 96 px, two lines allowed, with a 4–6 px light stroke/glow; fonts bundled with the app for offline use. | Proposed |
-| 8 | Colour | Cheap LCDs mute deep blue and red and tint whites green. | Keep the palette; check it on the wall with the test patterns in WP-09 and nudge `cranberry`/`plum` if they look dim. | Proposed (check in WP-09) |
+| 3 | Backgrounds and grain | Painted backgrounds turn into muddy, low-contrast light on a wall; a full-frame film grain reads as dirt and shimmer, and makes the LCD glow worse. | Flat graphic shapes, soft gradients, silhouettes and light-line traces. The old-film look stays only inside Mickey's small frame, as a static vignette and scratches, **with no flicker**. | **Approved** |
+| 4 | Line weight | At ≈1.35 mm/px a 3 px line is ≈4 mm: thin from 3–4 m away, and the warp softens it further. | Character lines ≥ 6 px at final size; light traces 6–10 px with a glow; 4 px absolute minimum. | **Approved** |
+| 5 | Character outlines | Dark-brown ink (#2B1D14) emits almost nothing, so on a dark base the outline vanishes. | Characters get a warm light rim (`sepia`/`candle`) instead of dark ink when on the dusk base; dark ink only over lit scenery. | **Approved** |
+| 6 | Dark fur | Connor's black and Orion's dark brown would project as holes. | Lift darks: Connor's black → blue-grey `#5A6478`; Orion's brown → caramel `#B07A4A`. No character fill below ≈35% lightness. | **Approved** |
+| 7 | Typography | The backdrop is ≈730 px wide; "¡Feliz primera Navidad, `{BABY}`!" at 120 px doesn't fit on one line. Mountains of Christmas has thin strokes. | Titles ≥ 96 px, two lines allowed, with a 4–6 px light stroke/glow; fonts bundled with the app for offline use. | **Approved** |
+| 8 | Colour | Cheap LCDs mute deep blue and red and tint whites green. | Keep the palette; check it on the wall with the test patterns in WP-09 and nudge `cranberry`/`plum` if they look dim. | **Approved** (check in WP-09) |
 | 9 | Zones | The `stage` zone is a 31 px strip. | Footlights only (already in §07); every zone has a role (§07 above). | Applied (docs) |
 
-## 09 · Animation production review ⏳ (owner's main worry)
+## 09 · Animation production review (owner's main worry)
 
 The owner doesn't want an "MS Paint" look. The honest split: what code does well, and what it doesn't.
 
@@ -190,5 +190,6 @@ effects, held to the quality bar above. **First, a style test before committing:
 sheet plus one 5 s clip on black, judged on the real projector or the TV.
 
 ## Changelog
+- **2026-11-17** — v1.2: owner approved everything (arcs, beat sheet, design review, animation approach A).
 - **2026-11-17** — v1.1 (owner PR notes): no family photos → one photo becomes the closing constellation; the pets talk; Santa's full sleigh in the finale; §09 animation production review.
 - **2026-11-17** — v1 (WP-10): owner decisions, logline, arcs, beat sheet, live-moment plan, cut list, zone roles, design review.
