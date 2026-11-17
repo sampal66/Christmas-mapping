@@ -18,9 +18,9 @@
 | WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | ✅ done (PR #6) | `claude/wp-03-effects-scenes` | C1 (s00, s01, s02, s04, s06, s09, s10) + owner notes (3D swarm, mega-tree, box tower, atlas art) |
 | WP-04 | Character pipeline: 4 pets + Mickey 1928 + Shepard Pooh + **Santa and sleigh**; approach pending (TREATMENT §09: AI video clips recommended, not code puppets) | WP-03, WP-10, ElevenLabs connector | ⚪ needs brief | — | C2, C3 |
 | WP-05 | [Music sourcing + beat maps](work-packages/WP-05-music-beats.md): PD military-band carols, Musopen Tchaikovsky, ElevenLabs music box + 3 underscores; beat maps (auto + tap tool) applied to the light-show scenes | WP-03, WP-10 | ✅ done (PR #7) | `claude/wp-05-music-beats` | C5, C1 beat sync |
-| WP-06 | [Spanish script + narration and pet voices](work-packages/WP-06-script-voices.md) (`docs/SCRIPT.md`, ≈3 min of speech; TREATMENT §03–§04) | WP-10 | 🟡 in review (PR #8): script ✅, voices ✅, all lines generated; owner picks takes | `claude/wp-06-script-voices` | C4 |
+| WP-06 | [Spanish script + narration and pet voices](work-packages/WP-06-script-voices.md) (`docs/SCRIPT.md`, ≈3 min of speech; TREATMENT §03–§04) | WP-10 | 🟡 in review (PR #8): script ✅, voices ✅, takes ✅ (all A) | `claude/wp-06-script-voices` | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
-| WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10 | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
+| WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10; generates and places the sound effects (SCRIPT §06) | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-09 | On-wall calibration + rehearsal checklist | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
 
@@ -48,7 +48,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 - **2026-11-17 · WP-06** — Brief + `docs/SCRIPT.md` (approved v1.0): 46 lines (3 🔒 name lines), cues `cue + offset`, ≈ 2:48 speech. Owner: male narrator, narrator says s08, name spoken in audio only.
   Voices: 6 custom ElevenLabs voices (ids in SCRIPT §02), accent rule = neutral Latin American / Mexican-dub, never Castilian (`[neutral Mexican Spanish accent]` tag, `eleven_v4`). All lines generated, 2 takes, flow `dn8qdkhzXGF04J2wbJVl`; ≈ 9.1k credits.
-  Left: owner picks takes (default A) on the private takes page; export picks as `<id>.m4a` into the media pack; WP-08 places them. Then WP-04 (character clips) uses the line lengths.
+  Owner picked take A for all lines (optional lines kept). Left: export the A takes as `<id>.m4a` into the media pack; WP-08 places them. Then WP-04 (character clips) uses the line lengths.
   Gotchas: audio is NOT in git (🔒 lines say the real name; never write it in any file). The connector's usage endpoint needs extra permissions (balance unreadable). A voice description with "kid" is blocked by ElevenLabs safety: describe an adult actor doing a cartoon voice.
 
 - **2026-11-17 · WP-05** — Music sourced (all USAF Band, PD): s01 O Christmas Tree, s02 **Carol of the Bells**, s06 Waltz of the Flowers, s08 Silent Nights, s10 Jingle Bells → `assets/CREDITS.md` + master-mix order in TREATMENT §04. Beat maps in `app/js/scenes/beatmaps.js` (s01, s02, s06, s09, s10); cues re-timed to musical moments; s02 → 1:24, s10 → 1:56. `tools/beats.js` (auto beats, `--subdivide` for waltzes, self-test in smoke) + `app/beats.html` tap tool.

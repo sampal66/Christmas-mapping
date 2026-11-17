@@ -55,7 +55,7 @@ plus an emotion tag where the line needs one. Re-take any line that sounds Casti
 (id `dn8qdkhzXGF04J2wbJVl`; it keeps all takes, so they can be downloaded again). `s10-todos-01` is four separate
 "¡Feliz Navidad!" clips (Gandalf, Alaska, Connor, Orion) that WP-08 layers. Cost ≈ 9,100 credits (accent test
 ≈ 1,400 + lines ≈ 7,700) plus 7 voice-design rounds. **Audio is not committed**; the 🔒 lines contain the real name
-and go in the on-device media pack only. Picked takes: default A unless listed below (owner review pending).
+and go in the on-device media pack only. **Picked takes (owner, 2026-11-17): take A for every line; the optional (opt) lines are kept.**
 
 ## 03 · Lines by scene
 
@@ -185,9 +185,35 @@ brave, Orion secretly helps, Alaska shares the lead.*
 | Script | **Approved** as v1.0. |
 | Generation | Custom voices designed and picked; all lines generated (2 takes). Owner picks takes. |
 
-Open: owner's take picks / re-takes; exporting picked takes as `<id>.m4a` for the media pack (WP-08).
+Open: exporting the A takes as `<id>.m4a` for the media pack (WP-08).
+
+## 06 · Sound effects (planned, not generated)
+
+Music is done (WP-05: USAF Band recordings + ElevenLabs underscores and Sugar Plum). The sound effects below are
+not generated yet: their exact timing depends on the character clips (WP-04), so they are made and placed in
+**WP-08**. All soft, with gentle attacks; never bangs, barks, meows, whines, doorbells or squeaky toys (DESIGN_SYSTEM §08).
+
+| Id | Scene · cue | Sound | ≈ s |
+|---|---|---|---|
+| s03-sfx-sparkle | s03 · pets-in | soft twinkle as the pets hang ornaments | 2 |
+| s03-sfx-boing | s03 · bat | soft cartoon "boing" as Gandalf bats the star | 1 |
+| s03-sfx-whoosh | s03 · escape | magic whoosh with a shimmer tail as the star flies away | 3 |
+| s04-sfx-boxopen | s04 · box1-open, box2-open | sparkle burst as a box lid opens (used twice) | 2 |
+| s04-sfx-spring | s04 · box2-open | gentle jack-in-the-box spring | 1 |
+| s05-sfx-jingle | s05 · jingle | soft, distant jingle bells, no sharp attack | 2 |
+| s05-sfx-whistle | s05 · mickey-in | whistled *Steamboat Bill* (1910, PD) phrase, old-film tone | 8 |
+| s05-sfx-projector | s05 · mickey-in → mickey-out | very quiet old film-projector purr under Mickey's clip | 15 |
+| s07-sfx-chime | s07 · found | warm discovery chime | 2 |
+| s07-sfx-sleighbells | s07 · carry | soft sleigh bells approaching and passing | 15 |
+| s07-sfx-whoosh | s07 · fly | rising magic whoosh as the star flies up | 3 |
+| s07-sfx-settle | s07 · settle | soft glowing chime as the star settles | 2 |
+| s10-sfx-sleigh | s10 · sleigh | sleigh bells crossing left → right under the music | 6 |
+
+Fireworks (s10) stay visual only, with at most a soft musical swell. Estimate ≈ 1.5–3k credits (1 take each,
+plus a music-model take for the whistle if the sound-effects model can't carry the tune).
 
 ## Changelog
+- **2026-11-17** — v1.3: owner picked take A for all lines, optional lines kept; §06 planned sound effects (WP-08).
 - **2026-11-17** — v1.2: all lines generated (eleven_v4, 2 takes); flow id, cost, take-pick rule.
 - **2026-11-17** — v1.1: saved voice ids, accent rule (neutral Latin American, Mexican-dub style; never Castilian).
 - **2026-11-17** — v1.0: owner approved the script.
