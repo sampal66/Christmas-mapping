@@ -8,7 +8,7 @@
 |---|---|
 | **Status** | v1 — requirements agreed, build in progress |
 | **Show date** | December 24, 2026 (evening) |
-| **Last updated** | 2026-11-16 |
+| **Last updated** | 2026-11-17 |
 
 ---
 
@@ -41,8 +41,8 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 | User | Need |
 |---|---|
 | **Operator** (Papá, on the iPad) | Calibrate quickly, press play, handle the live star moment, recover from mistakes without a laptop. |
-| **Audience** (8–10 adults + a 3-month-old baby) | Be charmed for 12 minutes; nothing too loud or flashy. |
-| **The baby** | Gentle light and sound; be the "guest of honour" in the story. |
+| **Audience** (8–10 adults) | The show is made for them: be charmed for ≈12 minutes; big light, full music, but no sudden loud sounds. |
+| **The baby** (≈3 months) | Guest of honour in the story and the live star moment; not the target audience. Never lit in the face. |
 | **Future self** | Reuse the app and pipeline for other walls and occasions. |
 
 > User need: *"I want to point a cheap projector at my wall, line it up from my iPad, tap play, and have my
@@ -69,12 +69,12 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 ### 5.2 Show content
 | ID | Feature | Priority | Status |
 |---|---|---|---|
-| C1 | 11 scenes (see §07), ~12 minutes, light show first | Must | ⏳ |
+| C1 | 11 scenes (see §07 and [TREATMENT](TREATMENT.md)), ≈12 minutes (10–15), light show first | Must | ⏳ (treatment done) |
 | C2 | 4 pet characters in classic hand-drawn style (Connor, Alaska, Orion, Gandalf) | Must | ⏳ |
 | C3 | Public-domain cameos: *Steamboat Willie* Mickey (1928) and E.H. Shepard-style Pooh | Should | ⏳ |
-| C4 | Spanish narration: bright, warm storyteller, neutral Latin American accent, ~2–3 min total | Must | ⏳ |
+| C4 | Spanish narration: bright, warm storyteller, neutral Latin American accent, plus pet character voices; ≈3 min of speech in total | Must | ⏳ |
 | C5 | Instrumental public-domain Christmas music, plus original stingers and effects | Must | ⏳ |
-| C6 | Tender scene with family photos and a first-Christmas message from Papá and Mamá | Must | ⏳ |
+| C6 | Tender first-Christmas message from Papá and Mamá; no photos on screen, but one family photo becomes the closing constellation (processed on device) | Must | ⏳ |
 | C7 | Live finale: real star placed with the baby, tree lights plugged in, big closing | Must | ⏳ |
 
 ### 5.3 Out of scope
@@ -98,21 +98,25 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 
 ## 07 · Show structure (summary)
 
+> *On `{BABY}`'s first Christmas Eve, Gandalf bats the star into the night sky. By tradition the youngest places it,
+> and its light guides Santa, so the four pets chase it through the constellations to bring it home in time.*
+
 | # | Scene | Type |
 |---|---|---|
-| 0 | Pre-show starfield | loop |
+| 0 | Pre-show dusk starfield | loop |
 | 1 | La pared despierta: the wall wakes up | light + narration |
 | 2 | El árbol cobra vida: the tree comes alive (*Carol of the Bells*) | light show |
-| 3 | Story beat 1: Gandalf loses the star | story |
-| 4 | Cajas mágicas: gift boxes (*Nutcracker*) | light show |
-| 5 | Story beat 2: the search; Mickey's clue | story |
-| 6 | Interlude: full-wall *Jingle Bells* / *Deck the Halls* | light show |
-| 7 | Story beat 3: Pooh's honey pot; Connor carries the star | story |
-| 8 | Para ti: photos and first-Christmas message | tender |
-| 9 | La estrella de verdad: **live** real star + tree lights | hold point |
-| 10 | Gran final | light show |
+| 3 | La estrella se escapa: Gandalf bats the star into the sky | story |
+| 4 | Cajas mágicas: the boxes open (*Nutcracker*), but no star | light show |
+| 5 | ¿Dónde está la estrella?: Connor's fright; Mickey's clue | story |
+| 6 | Constelaciones: the wall becomes the sky (*Waltz of the Flowers*) | light show |
+| 7 | El tarro de miel: Pooh's honey pot; Connor carries the star home | story |
+| 8 | Para ti: first-Christmas message (no photos) | tender |
+| 9 | La estrella de verdad: **live** real star + tree lights; Papá taps Continue | hold point |
+| 10 | Gran final: Santa's sleigh, soft fireworks, goodbye; one family photo as a constellation | light show |
 
-The detailed outline and timings are in [PLAN.md §6](PLAN.md). The full script will go in `docs/SCRIPT.md`.
+Target ≈12 min (agreed range 10–15). The beat sheet, live-moment plan and cut list are in
+[TREATMENT.md](TREATMENT.md); timings in [PLAN.md §6](PLAN.md). The full script will go in `docs/SCRIPT.md`.
 
 ## 08 · Success metrics
 
@@ -134,6 +138,8 @@ The detailed outline and timings are in [PLAN.md §6](PLAN.md). The full script 
 | Tree too bright or green | Tree lights off until the finale; the flocked tips take colour well. |
 
 ## Changelog
+- **2026-11-17** — WP-10 owner notes: C4 pet voices, C6 photo → constellation, no photos on screen.
+- **2026-11-17** — WP-10: §04 audience is the adults; §07 new scene titles and logline from TREATMENT; C1/C4 targets.
 - **2026-11-16** — M12 room model added and done (stage survey session).
 - **2026-11-16** — M8, M9 done (WP-02).
 - **2026-11-16** — M5, M6, M7, M11 done (WP-01).
