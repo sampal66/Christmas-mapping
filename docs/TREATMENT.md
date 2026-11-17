@@ -171,7 +171,13 @@ The owner doesn't want an "MS Paint" look. The honest split: what code does well
 | B | Motion comic: high-quality painted stills with parallax, blinks, camera moves; the voices carry the story | elegant storybook, but not "animated" | cheapest; reliable |
 | C | Pro skeletal/mesh puppet rig (Spine/Live2D-style) | smooth cut-out (better than code puppets, not Disney) | new tools needed (owner approval); rigging time |
 
-**Recommendation:** A for every character shot and Santa, with B as the fallback for any shot that fails; code only for the mapped light
+**Decision (owner, 2026-11-17): A.** The family constellation closes the finale (confirmed). Style-test spend approved.
+
+**Style test log:** 4 Gandalf stills (gpt-image-2.5, ≈760 credits) done in the ElevenLabs flow "Christmas mapping – style test".
+Video price per ≈5 s clip (estimates): kling-2.5-turbo ≈2,100 · ltx-v2-fast ≈1,450 · wan-2.6 ≈3,000 · seedance-v2-fast ≈7,300 ·
+seedance-v2.5 ≈14,000 credits. **At ≈30 clips even the cheap models need ≈45–65k credits**: check the plan's balance before WP-04.
+
+**Original recommendation:** A for every character shot and Santa, with B as the fallback for any shot that fails; code only for the mapped light
 effects, held to the quality bar above. **First, a style test before committing:** (1) a free code FX test page
 (glow, sparkles, star trace, constellation) with screenshots; (2) with the owner's OK on credits, one Gandalf model
 sheet plus one 5 s clip on black, judged on the real projector or the TV.

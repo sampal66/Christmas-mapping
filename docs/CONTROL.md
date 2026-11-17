@@ -82,7 +82,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 ## Open decisions / waiting on owner
 
-- **Decide the animation approach (TREATMENT §09)** and OK a small credit spend for the style test (1 model sheet + 1 short clip).
+- ✅ Animation approach A (AI video clips) chosen; style test running. **Check the ElevenLabs credit balance**: ≈30 clips ≈ 45–65k credits on the cheaper video models (TREATMENT §09).
 - **Approve the ⏳ items in [TREATMENT.md](TREATMENT.md)** (in the WP-10 PR review): arcs (§03), beat-sheet details (§04), design proposals §08 #3–8, "pets don't speak".
 - ✅ Projector decided: HAPPRUN H1 (throw ratio 1.4) on the tripod at 3.5 m, head 1.45 m; buy Nov 27. See [STAGE_SURVEY §03e](STAGE_SURVEY.md).
 - ✅ LCD-black design note: handled in DESIGN_SYSTEM §02 (`dusk` base, fade to starfield). Check the `dusk` value on the wall in WP-09.
