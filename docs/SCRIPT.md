@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Status** | v1.0 **approved by the owner** (2026-11-17); audio not generated yet |
+| **Status** | v1.0 **approved by the owner** (2026-11-17); all lines generated, takes in review |
 | **Last updated** | 2026-11-17 |
 
 ---
@@ -50,6 +50,12 @@
 **Accent rule (owner):** neutral Latin American Spanish with no regional accent, like Mexican film dubbing. Never a
 Castilian (Spain) accent. Generation uses `eleven_v4` with a `[neutral Mexican Spanish accent]` tag at the start of each line,
 plus an emotion tag where the line needs one. Re-take any line that sounds Castilian.
+
+**Generated (2026-11-17):** every line, 2 takes each (A/B), on the ElevenLabs flow "CMS WP-06 voices"
+(id `dn8qdkhzXGF04J2wbJVl`; it keeps all takes, so they can be downloaded again). `s10-todos-01` is four separate
+"¡Feliz Navidad!" clips (Gandalf, Alaska, Connor, Orion) that WP-08 layers. Cost ≈ 9,100 credits (accent test
+≈ 1,400 + lines ≈ 7,700) plus 7 voice-design rounds. **Audio is not committed**; the 🔒 lines contain the real name
+and go in the on-device media pack only. Picked takes: default A unless listed below (owner review pending).
 
 ## 03 · Lines by scene
 
@@ -177,11 +183,12 @@ brave, Orion secretly helps, Alaska shares the lead.*
 | Name lines (s01, s03, s08) | Spoken with the real name; the name is typed only at generation time, never written in the repo. |
 | s08 message | Said by the narrator (not recorded by Papá and Mamá). |
 | Script | **Approved** as v1.0. |
-| Generation | **On hold** until the owner OKs the credits and chooses designed vs library voices. |
+| Generation | Custom voices designed and picked; all lines generated (2 takes). Owner picks takes. |
 
-Open: credit go-ahead + voice approach; reconnecting the ElevenLabs connector with full permissions.
+Open: owner's take picks / re-takes; exporting picked takes as `<id>.m4a` for the media pack (WP-08).
 
 ## Changelog
+- **2026-11-17** — v1.2: all lines generated (eleven_v4, 2 takes); flow id, cost, take-pick rule.
 - **2026-11-17** — v1.1: saved voice ids, accent rule (neutral Latin American, Mexican-dub style; never Castilian).
 - **2026-11-17** — v1.0: owner approved the script.
 - **2026-11-17** — v0.2: owner decisions (male narrator, name lines spoken, narrator says the s08 message); alternatives dropped; totals re-counted.
