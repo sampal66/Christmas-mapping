@@ -7,14 +7,14 @@ import { BEATMAPS } from './beatmaps.js';
 import { from, beatClock, boxFace, BOX_ZONES } from './common.js';
 
 const cues = [
-  { t: 14, name: 'box1-open' },
-  { t: 27, name: 'box2-open' },     // the arrangement builds at 0:27
-  { t: 45.5, name: 'cut' },         // quiet restart before the last section
-  { t: 54, name: 'finale' },        // loudest passage (0:54–1:06)
-  { t: 69, name: 'out' },           // final note fades from 1:09
+  { t: 14.76, name: 'box1-open' },      // first burst: the full orchestra tumbles in
+  { t: 25.66, name: 'box2-open' },      // bigger and busier
+  { t: 43.82, name: 'cut' },            // sudden quiet restart (pizzicato + celesta)
+  { t: 56.57, name: 'finale' },         // grand finale, the fullest section
+  { t: 71.11, name: 'out' },            // the last chord rings out (music ends ≈ 1:12)
 ];
-// Real beat map (Sugar Plum Fairy, ElevenLabs celesta arrangement, ≈72 bpm 2/4): scenes/beatmaps.js.
-const beats = { bpm: 72, ...BEATMAPS['s04-magic-boxes'] };
+// Real beat map (box-chaos romp, original ElevenLabs cartoon-orchestra track, 132 bpm 4/4; owner 2026-11-17): scenes/beatmaps.js.
+const beats = { bpm: 132, ...BEATMAPS['s04-magic-boxes'] };
 const B = beatGrid(beats);
 const C = cueSheet(cues, B);
 const duration = 75;

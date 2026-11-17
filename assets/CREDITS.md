@@ -29,3 +29,17 @@ Alternatives checked: *Carol of the Bells, Ukrainian* (USAF Heritage of America 
 Waltz of the Flowers* (US Army Band c. 2019, PD, very quiet master −31 LUFS); *We Wish You a Merry Christmas* (2020,
 Starlifter, 136 bpm 3/4, PD); *Joy to the World* (USAF Concert Band, 0:31, PD); *U.S. Army Band - O Tannenbaum* is the
 **Army Chorus** (sung, rejected: it would clash with narration).
+
+## Voices and sound effects (WP-06)
+
+Generated 2026-11-17 for this show; original recordings, owned by the account holder under the ElevenLabs plan terms.
+**Not in the repo.** Lines that say the baby's name are personal and live only in the on-device media pack.
+
+| Asset | Source | Licence | Notes |
+|---|---|---|---|
+| Narration + pet dialogue: 46 lines, `<line-id>.mp3` (ids in `docs/SCRIPT.md` §03), take A | ElevenLabs `eleven_v4`, 6 custom designed voices (`eleven_ttv_v3`; ids in SCRIPT §02), flow "CMS WP-06 voices" | original | all takes stay in the flow; accent: neutral Latin American |
+| 12 sound effects, `<scene>-sfx-<name>.mp3` (SCRIPT §06) | ElevenLabs Sound Effects v2, flow "CMS WP-06 sound effects", 1 take each | original | soft attacks; projector is a seamless 10 s loop |
+| `s05-sfx-whistle.mp3`: jaunty 1920s-style whistled tune, 8 s | ElevenLabs Music v2.5, same flow, 1 take | original (not *Steamboat Bill*; an original melody in that style) | for Mickey's old-film moment |
+| `s04-box-chaos.mp3`: joyful chaotic cartoon-orchestra romp, 75 s, 132 bpm 4/4 (replaces `s04-sugar-plum.mp3` in the mix) | ElevenLabs Music v2.5, flow "CMS WP-06 sound effects", 1 take | original | sections: tiptoe → burst 0:15 → bigger 0:26 → quiet 0:44 → finale 0:57 → last chord 1:11; level −21…−13 dB RMS, max rise 6.8 dB/s (no hits) |
+| `s09-hold-bells.mp3`: warm bell "magic train" cue, 32 s, 120 bpm 4/4 (replaces the music box in s09; s00 keeps it) | ElevenLabs Music v2.5, same flow, 1 take | original (in that spirit; no film melody) | scene 0 = file 7.97 s; loop file 15.97–27.97 s (6 bars, 1 dB seam) |
+| `s04-sfx-rummage` (12 s loop), `s04-sfx-tumble`, `s04-sfx-wobble`, `s04-sfx-flurry` | ElevenLabs Sound Effects v2, same flow, 1 take each | original | soft box-search layers for s04 (SCRIPT §06) |
