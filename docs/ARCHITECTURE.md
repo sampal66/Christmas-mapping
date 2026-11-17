@@ -198,10 +198,13 @@ export default {
 | 2026-11-16 | Build in work packages, one per session | keeps context windows small (AGENTS §03a) |
 | 2026-11-16 | Cache-first service worker with a hand-kept, versioned shell list | show night must work with no Wi-Fi; a smoke-test check keeps the list complete |
 | 2026-11-16 | `master-mix` from the media pack drives the show clock | one source of truth for the final mix; no per-session file picking |
-
 | 2026-11-16 | Default zones are generated from a metric room model, not hand-placed | one set of measurements drives the zones, coverage checks and the projector choice; re-aiming is just new numbers |
+| 2026-11-17 | Every scene exports a `cut` cue (and `out`); the operator can jump to it on the night | lets the show shrink from ≈12 to ≈10 min without breaking the story (TREATMENT §06) |
+| 2026-11-17 | Scenes end on, and sit over, the dim `dusk` starfield, never pure black | the LCD projector's black glows; a night-sky base hides the rectangle (DESIGN_SYSTEM §02) |
+| 2026-11-17 | s09 (live star) is built with the effects scenes in WP-03, not WP-08 | it's effects only (halo, dim sky, loop); the story WP gets lighter |
 
 ## Changelog
+- **2026-11-17** — §07: `cut` cues, `dusk` base instead of black, s09 moves to WP-03 (WP-10 treatment).
 - **2026-11-16** — §4.7 room model (stage-model.js, model.html); default zones are generated from it.
 - **2026-11-16** — WP-02: media pack (IndexedDB) and offline service worker built; §4.5 updated.
 - **2026-11-16** — WP-01: clock/timeline/holds built; Show mode documented.

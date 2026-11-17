@@ -1,0 +1,150 @@
+# Show Treatment — Christmas Mapping Show
+
+> The story and running order everything else is built to: logline, character arcs, beat sheet, the live star
+> moment, the cut list and the design review. Written in WP-10. **No script text here**: the Spanish lines are WP-06.
+> Related: [PRD](PRD.md) · [PLAN §6](PLAN.md) · [DESIGN_SYSTEM](DESIGN_SYSTEM.md) · [STAGE_SURVEY](STAGE_SURVEY.md)
+
+| | |
+|---|---|
+| **Status** | v1 — spine, length, cameos and the live-moment operator approved by the owner; arcs, beat details and design proposals **pending owner review** (marked ⏳) |
+| **Last updated** | 2026-11-17 |
+
+---
+
+## 01 · Owner decisions (2026-11-17)
+
+| Topic | Decision |
+|---|---|
+| **Audience** | The show is made **for the adults** (8–10 family members). `{BABY}` (≈3 months) will see it and is the guest of honour, but she isn't the target audience. |
+| **Intensity** | Bigger light changes and soft "pyrotechnic" fireworks are welcome. The music can be **full and fairly loud**, but with **no loud bangs or sudden sounds** (Connor, the real dog, is noise-sensitive). Photosensitivity limits stay (DESIGN_SYSTEM §06). |
+| **Length** | **10–15 min.** Target **≈12 min** plus the pre-show loop and the open-ended live hold. |
+| **Spine** | A mix of two ideas: by family tradition **the youngest places the star**, and the star's light is **how Santa finds the house**. The search goes up into the night sky and **the constellations**, in a classic Disney-style light show. |
+| **Cameos** | **Both, tiny** (≤ 15 s each, cuttable): Steamboat Willie Mickey (1928) and E.H. Shepard-style Pooh. |
+| **Live moment** | **Papá taps Continue himself, afterwards.** The projection waits on a soft loop for as long as it takes. |
+
+## 02 · Logline and 3-act shape
+
+> **On `{BABY}`'s first Christmas Eve, Gandalf bats the star into the night sky. By family tradition the youngest
+> of the house must place it, and its light shows Santa the way. The four pets chase it through the
+> constellations to bring it home in time.**
+
+| Act | Scenes | Shape |
+|---|---|---|
+| **1 · Wonder and loss** | s01–s03 | The wall wakes up and the tree comes alive. The pets decorate. The narrator sets the stakes: the youngest places the star, and its light guides Santa. Gandalf plays with the star and it shoots up and out into the sky. |
+| **2 · The search** | s04–s07 | The boxes first (Alaska's plan): the star isn't there. Then the clues: Connor is spooked by jingle bells, and an old film flickers on where Mickey whistles "follow the stars". The whole wall becomes the sky and the constellations draw themselves, the pets' own among them. Pooh floats up on his balloon with the star stuck in his honey pot. Connor carries it home past Santa's jingling sleigh bells. The star settles above the tree. |
+| **3 · Heart, live star, finale** | s08–s10 | Family photos and a message for `{BABY}`. The projected star bows out and **Papá and `{BABY}` place the real one**. The tree lights come on, Santa's sleigh crosses the sky guided by the star, fireworks, the pets wave goodbye. |
+
+**Why it lands on the live moment:** the whole story delivers the star to "the youngest of the house". The
+projected star can only take the story to the top of the tree; the last step has to be real.
+
+## 03 · Character arcs ⏳
+
+Each story beat moves at least one arc (see the "Arcs moved" column in §04).
+
+| Character | Start | Change | End |
+|---|---|---|---|
+| **Gandalf** (Russian Blue, youngest pet) | careless mischief-maker: the star is a toy | owns the mistake and leads the sky search (fastest, best jumper) | gently hands the star over for the youngest of the house |
+| **Connor** (husky) | scared of noise: flinches and hides at jingle bells | finds he can carry the star home through Santa's sleigh bells | proud hero, tail high, in the finale |
+| **Alaska** (pomsky) | bossy, plans everything ("search the boxes!") | her plan fails, and she listens to the clue | shares the lead; organises the goodbye wave |
+| **Orion** (tabby) | grumpy: "Christmas is too much fuss" | finds his own constellation (Orion) in the sky | a rare smile; purrs next to the tree in the finale |
+| **Mickey** (1928 cameo) | *why he's there:* an old Christmas film reel flickers on in the backdrop (the "old film" look is his) | whistles the clue (the tune of *Steamboat Bill*, 1910, public domain) and points up | the film iris-closes |
+| **Pooh** (Shepard cameo) | *why he's there:* floating up to the sky on his balloon in search of honey, as in the 1926 book | finds the star stuck in his honey pot and hands it down | drifts away happy |
+
+**Constellations in s06** (line-art, drawn in code):
+- **Orion** (real constellation) for Orion the cat
+- **Canis Major** (with Sirius) for Connor, the big dog
+- **Canis Minor** for Alaska (she is not pleased about "minor")
+- **Felis**, the forgotten cat constellation of 1799, for Gandalf
+- the **North Star** in Ursa Minor: the lost star is hiding next to it
+
+The pets don't speak; the narrator tells the story and the pets act without words (⏳ owner to confirm). That also
+keeps recorded barks and meows away from the real pets.
+
+## 04 · Beat sheet ⏳
+
+Times are placeholders for the scene builds (WP-03/08). Real music edits re-time them through `cues`.
+**Total ≈ 12:15** (s01–s10, with the live hold counted at ≈1:00). Narration ≈ 1:45 in ≈ 12 short lines.
+
+| Id | Title | Purpose | What happens | Zones | Music (licence status) | Length | Narration | On screen | Cue points |
+|---|---|---|---|---|---|---|---|---|---|
+| **s00** | Pre-show: starfield | Settle the room; hide the LCD glow rectangle | Slow twinkling dusk starfield, light snow on the right-wall strip. "Press play" is operator-only (UI hidden). | wall, backdrop, rightStrip | *O Christmas Tree*, music-box arrangement (trad., PD composition; PD/CC0 recording or original ElevenLabs arrangement) | loop | no | — | `loop` |
+| **s01** | La pared despierta | The mapping "wow": the room itself comes alive | Light lines trace the wall edges, the sideboard top, both boxes and the tree outline; footlights warm up; snow begins on the wall and spills onto the right wall. | all | Soft magical intro, then *O Christmas Tree* (PD composition; PD recording) | 1:00 | yes, 1 line: welcome to `{BABY}`'s first Christmas Eve | — | `trace`, `snow`, `welcome`, `cut`, `out` |
+| **s02** | El árbol cobra vida | The tree as the light-show star | Colour waves climb the tree on the beat, spirals, ornament pops; the star zone glows gold at the climax. | tree, star, wall (soft echo) | *Carol of the Bells* instrumental (Leontovych 1914, PD composition; the 1936 English lyrics are not used; PD/CC0 recording, e.g. US military band) | 1:30 | no | — | `build`, `drop`, `spiral`, `cut`, `star-glow`, `out` |
+| **s03** | La estrella se escapa | Set up the stakes and the loss | The pets decorate (Alaska bossing, Orion grumbling). The narrator: the youngest places the star; its light guides Santa. Gandalf bats the star: it bounces off a box, up the tree and out across the wall into the sky. The star zone goes dark. | backdrop, box1, box2, tree, star, wall, stage (footlight) | Original underscore + soft sfx (ElevenLabs) | 1:15 | yes, 2 lines | all 4 pets | `pets-in`, `tradition`, `bat`, `escape`, `out` |
+| **s04** | Cajas mágicas | Light show that is also Alaska's (failed) plan | The gift boxes light face by face to the music. Each one "opens" with sparkles: Gandalf pops out of one, a jack-in-the-box spring of light from another, but no star. Footlights chase. | box1, box2, backdrop, stage | *Dance of the Sugar Plum Fairy* (Tchaikovsky 1892, PD; CC0 recording e.g. Musopen, verify) | 1:15 | no | Gandalf, Alaska (peeking) | `box1-open`, `box2-open`, `cut`, `finale`, `out` |
+| **s05** | ¿Dónde está la estrella? | Clues; Connor's fear; Mickey | Alaska regroups the team. A soft jingle spooks Connor behind a box (comic). Orion grumbles. An old film flickers on in the backdrop: Mickey whistles and points up, "follow the stars". | backdrop, box1, box2, stage | Original underscore; Mickey whistles *Steamboat Bill* (1910, PD; original whistle recording/ElevenLabs sfx) | 1:00 | yes, 1–2 lines | all 4 pets, Mickey | `regroup`, `jingle`, `mickey-in`, `mickey-out`, `out` |
+| **s06** | Constelaciones | Full-wall wonder; the sky search | The whole wall becomes a starry sky. Constellations draw themselves star by star: Orion (Orion the cat smiles), Canis Major and Minor, Felis. A gold glint by the North Star moves away; shooting stars; snow on the right wall. | wall, backdrop, tree (soft sparkle), star, rightStrip | *Waltz of the Flowers* (Tchaikovsky 1892, PD; CC0 recording, verify), edited | 1:30 | yes, 1 line (intro) | pets as constellations (line-art) | `sky`, `orion`, `canis`, `felis`, `cut`, `glint`, `out` |
+| **s07** | El tarro de miel | Find the star; Connor's brave moment | Pooh floats up on his balloon; the star glows inside his honey pot; he hands it down. Santa's sleigh bells jingle (softly) as Connor carries the star across the stage past the boxes. The star flies up and settles just above the tree tip. | backdrop, box1, box2, tree, star, wall | Original underscore + soft sleigh bells (ElevenLabs) | 1:15 | yes, 2 lines | Pooh, all 4 pets | `pooh-in`, `found`, `carry`, `fly`, `settle`, `out` |
+| **s08** | Para ti, `{BABY}` | The heart: family and first Christmas | Gentle snow; family photos in vintage frames on the backdrop, one at a time; "¡Feliz primera Navidad, `{BABY}`!" from Papá and Mamá. Ends: "only one thing is missing… the real star". | backdrop, wall (dim snow), star (soft) | *Silent Night* (Gruber 1818, PD; PD/CC0 instrumental recording) | 1:00 | yes, 2 lines (the message; possibly recorded by Papá and Mamá, on-device only) | photos (media pack) | `photo-1`…`photo-n`, `message`, `missing`, `out` |
+| **s09** | La estrella de verdad (**live**) | The real star goes on with `{BABY}` | See §05. The projected star bows and fades to a soft gold halo at the tip; dim starfield; the tree zone stays dark. **Hold** until Papá taps Continue. | star (halo), backdrop, rightStrip (dim) | *O Christmas Tree* music-box loop (same as s00) | hold (~1:00) | no | — | `bow`, `hold` |
+| **s10** | Gran final | Celebration | Tree lights are already on (plugged in during s09). A light ripple and footlights burst; Santa's sleigh silhouette crosses the sky following the star; soft fireworks bloom and fade across the wall; the pets wave goodbye from the stage; "¡Feliz Navidad!". Fade to the starfield (s00), never to black. | all | *Jingle Bells* (Pierpont 1857, PD) into *We Wish You a Merry Christmas* (trad., PD) or *Joy to the World* (PD); PD/CC0 recordings | 1:30 | yes, 1 line (goodbye) | all 4 pets, Santa silhouette | `ripple`, `sleigh`, `fireworks`, `wave`, `title`, `out` |
+
+**Licence note:** every composition above is public domain. Each **recording** still needs a verified licence
+(PD, CC0 or a US federal work) in `assets/CREDITS.md` (WP-05). Original/ElevenLabs items cost credits:
+three short underscores (s03, s05, s07), a handful of sfx, and possibly the music-box loop.
+
+## 05 · The live star moment (s09)
+
+| Step | Who | What the projection does |
+|---|---|---|
+| **Cue in** | — | s08 ends on the narrator: "only one thing is missing…". The projected star at the tip pulses gently twice (a bow, ≥ 1 s per pulse) and fades into a soft gold halo. |
+| **Hold** (open-ended) | Papá lifts `{BABY}` and, together, they place the real star (25 cm, on its spiral holder; top at 2.03 m). Mamá (or a guest) plugs in the tree lights once the star is on. | Dim dusk starfield on the backdrop and right-wall strip; the **tree zone stays dark** so Papá and `{BABY}` aren't lit in the face. The halo marks where the star goes (it helps in the dark). Music-box loop, quiet, seamless. |
+| **Continue** | Papá hands `{BABY}` back, walks to the iPad and taps **Continue**. | s10 starts with a warm ripple up the tree from the lit star. |
+
+**Fallbacks**
+- `{BABY}` is asleep or fussy: Papá (or Mamá) places the star alone ("for `{BABY}`"), then Continue as normal.
+- The star won't sit on the holder: leave it in Papá's hand, then Continue. In s10 the projected star returns
+  (a `projectedStar` option in s10, off by default).
+- The tree lights fail: Continue anyway; s10 still works with projection only.
+- Rehearse it twice in the dress rehearsal (PLAN §7, week 6), with the tripod legs taped and the path to the iPad clear.
+
+## 06 · Cut list (on the night)
+
+The operator jumps to a scene's `cut` cue (or the next scene) if attention drops. Story beats stay whole so the plot holds.
+
+| Priority | Scene | Cut | Saves |
+|---|---|---|---|
+| 1 | s04 Cajas mágicas | jump to `cut` (skip the second box sequence) | ≈0:30 |
+| 2 | s06 Constelaciones | jump to `cut` after Orion (skip Canis/Felis) | ≈0:40 |
+| 3 | s02 El árbol cobra vida | jump to `cut` (shorter build) | ≈0:30 |
+| 4 | s05 Mickey | skip `mickey-in`→`mickey-out` (cameo is optional) | ≈0:15 |
+| 5 | s01 La pared despierta | jump to `cut` after the welcome line | ≈0:20 |
+| never | s03, s07, s08, s09, s10 | — | — |
+
+All cuts: ≈12:15 → ≈10:00, which is still inside the agreed 10–15 min.
+
+## 07 · Zone roles (every zone has a job)
+
+| Zone | Used in | Role |
+|---|---|---|
+| `wall` | s01, s02, s03, s06, s07, s08, s10 | sky, snow, edge traces, the star's flight, fireworks |
+| `backdrop` | s00, s03–s10 | the characters' "set": the pets walk on a ground line at the sideboard/wall join; photos; Mickey's film |
+| `stage` | s01, s03, s04, s05, s07, s10 | thin footlight strip only (the sideboard front is out of the beam, survey §03) |
+| `box1`, `box2` | s01, s03, s04, s05, s07 | faces light up, "open"; pets hide and peek from behind them |
+| `tree` | s01, s02, s06, s07, s10 | colour waves and sparkles; **dark** during s09 |
+| `star` | s02, s03, s06, s07, s08, s09, s10 | glow, the escape, the return, the halo for the real star |
+| `rightStrip` | s00, s01, s06, s09, s10 | ambient snow and stars continuing round the corner |
+
+**Note:** characters can't stand on the black sideboard top (it doesn't reflect). They stand on a drawn ground line
+just above it on the backdrop, and peek from behind the boxes.
+
+## 08 · Design system review ⏳
+
+Checked against the HAPPRUN H1 (LCD, throw ratio 1.4, ≈2.6 × 1.46 m image at 3.5 m, ≈1.35 mm per pixel) and the
+real room ([STAGE_SURVEY](STAGE_SURVEY.md) §02–§03e). **Applied** = already written into DESIGN_SYSTEM because it
+follows directly from an owner decision. **Proposed** = waiting for the owner's OK in the PR review.
+
+| # | Area | Finding | Change | State |
+|---|---|---|---|---|
+| 1 | Black | LCD black glows: the whole image rectangle shows faintly on the wall and spill (survey §03e). "Black = no light" isn't true here. | Scenes sit on a dim **dusk** base with sparse stars; fade to the starfield, never to black. Pure `night` only outside the wall (doorway, ceiling spill). Use a dim warm lamp behind the audience. | **Applied** (new token `dusk` proposed) |
+| 2 | Audience and audio | The show is for adults; the dog is noise-sensitive. | Allow bigger light changes and firework blooms within the flash limits. Music full and fairly loud (master ≈ −16 LUFS); **no impulsive sounds**: no bangs, barks, meows, doorbells or squeaky toys. | **Applied** |
+| 3 | Backgrounds and grain | Painted backgrounds turn into muddy, low-contrast light on a wall; a full-frame film grain reads as dirt and shimmer, and makes the LCD glow worse. | Flat graphic shapes, soft gradients, silhouettes and light-line traces. The old-film look stays only inside Mickey's small frame, as a static vignette and scratches, **with no flicker**. | Proposed |
+| 4 | Line weight | At ≈1.35 mm/px a 3 px line is ≈4 mm: thin from 3–4 m away, and the warp softens it further. | Character lines ≥ 6 px at final size; light traces 6–10 px with a glow; 4 px absolute minimum. | Proposed |
+| 5 | Character outlines | Dark-brown ink (#2B1D14) emits almost nothing, so on a dark base the outline vanishes. | Characters get a warm light rim (`sepia`/`candle`) instead of dark ink when on the dusk base; dark ink only over lit scenery. | Proposed |
+| 6 | Dark fur | Connor's black and Orion's dark brown would project as holes. | Lift darks: Connor's black → blue-grey `#5A6478`; Orion's brown → caramel `#B07A4A`. No character fill below ≈35% lightness. | Proposed |
+| 7 | Typography | The backdrop is ≈730 px wide; "¡Feliz primera Navidad, `{BABY}`!" at 120 px doesn't fit on one line. Mountains of Christmas has thin strokes. | Titles ≥ 96 px, two lines allowed, with a 4–6 px light stroke/glow; fonts bundled with the app for offline use. | Proposed |
+| 8 | Colour | Cheap LCDs mute deep blue and red and tint whites green. | Keep the palette; check it on the wall with the test patterns in WP-09 and nudge `cranberry`/`plum` if they look dim. | Proposed (check in WP-09) |
+| 9 | Zones | The `stage` zone is a 31 px strip. | Footlights only (already in §07); every zone has a role (§07 above). | Applied (docs) |
+
+## Changelog
+- **2026-11-17** — v1 (WP-10): owner decisions, logline, arcs, beat sheet, live-moment plan, cut list, zone roles, design review.

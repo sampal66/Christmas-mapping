@@ -100,6 +100,9 @@ Development happens in Claude cloud sessions from an iPad, and the same iPad run
 
 **Style:** classic hand-drawn Disney-era animation (1930s–50s): warm, bouncy, soft ink lines, painted backgrounds,
 a light film-grain pass.
+**Projection review (WP-10):** for the LCD projector the look leans to flat graphic shapes, bold lines and light
+rims on a dim night-sky base, with no full-frame grain (⏳ owner to approve; see [TREATMENT §08](TREATMENT.md) and
+[DESIGN_SYSTEM](DESIGN_SYSTEM.md)). The show is for the adults; the pets act without words, only the narrator speaks.
 
 | Character | Who | Design notes | Personality |
 |---|---|---|---|
@@ -107,7 +110,7 @@ a light film-grain pass.
 | **Alaska** | pomsky | blonde/cream, looks like a giant Pomeranian, brown eyes, plume tail | overexcited, **rules the house**, bossy leader |
 | **Orion** | European common cat (tabby) | brown tabby, yellow-green eyes, lip lifted on one side (missing tooth) → permanent grumpy look | grumpy but lovable |
 | **Gandalf** | Russian Blue, the youngest | sleek grey, big ears, huge yellow-green eyes | the most playful, **mischief-maker** |
-| Cameos | public-domain versions only | *Steamboat Willie* Mickey (1928, B&W) and Pooh as drawn by E.H. Shepard | short helper moments |
+| Cameos | public-domain versions only | *Steamboat Willie* Mickey (1928, B&W) and Pooh as drawn by E.H. Shepard | ≤ 15 s each: Mickey whistles the clue from an old film (s05); Pooh's honey pot holds the star (s07) |
 
 **Making them:** pet photos → AI model sheets in the classic style → cut-out puppets animated in code, plus a few
 AI image-to-video actions on black. The star element (a gold star like the real one) is shared by story and finale.
@@ -115,7 +118,7 @@ AI image-to-video actions on black. The star element (a gold star like the real 
 ## 5. Audio
 
 - **Narrator:** bright, warm storyteller, classic Disney-Christmas feel, **neutral Latin American Spanish**
-  (dubbing accent). Short lines only; about 2–3 minutes of speech in total.
+  (dubbing accent). Short lines only; about 1:45 of speech in total (WP-10).
 - **Music:** instrumental public-domain classic American and European Christmas music, in English or instrumental:
   *Carol of the Bells* (instrumental), *Jingle Bells*, *Deck the Halls*, *We Wish You a Merry Christmas*,
   *O Christmas Tree*, *Joy to the World*, *God Rest Ye Merry Gentlemen*, *Silent Night*, plus **Tchaikovsky's
@@ -126,26 +129,32 @@ AI image-to-video actions on black. The star element (a gold star like the real 
        Nutcracker recordings. Free, and they spare ElevenLabs credits. Licence to be verified per track.
     2. ElevenLabs Music for original underscore, stingers and transitions.
 - **Sound effects:** ElevenLabs (sleigh bells, sparkles, paws, magic whoosh, a soft "boing").
-- **Baby-friendly and Connor-friendly:** moderate volume, **no loud bangs**, no fast strobe. Fireworks are soft and fading.
+- **Adult audience, Connor-friendly:** the music can be full and fairly loud, but with **no loud bangs or sudden sounds**,
+  no barks, meows or doorbells, and no fast strobe. Fireworks are visual, soft and fading.
+- **Narration:** ≈1:45 in ≈12 short lines (beat sheet in [TREATMENT](TREATMENT.md)).
 
-## 6. Show outline (≈ 12 min, light show first, story in short beats)
+## 6. Show outline (≈ 12 min, agreed range 10–15 min)
 
-| # | Scene | Type | Zones | ≈ Time |
-|---|---|---|---|---|
-| 0 | **Pre-show**: slow starfield, "press play" | loop | wall | — |
-| 1 | **La pared despierta**: lines trace the wall, sideboard and boxes; snow begins. Narrator welcomes everyone to `{BABY}`'s first Christmas | light + 1 line | all | 1:00 |
-| 2 | **El árbol cobra vida**: colour waves climb the tree to *Carol of the Bells* | light show | tree, star | 1:30 |
-| 3 | **Story beat 1**: the pets get the house ready; Gandalf plays with the star… and it's gone | story | stage, backdrop, boxes | 1:00 |
-| 4 | **Cajas mágicas**: the gift boxes light face by face to the *Nutcracker* (*Dance of the Sugar Plum Fairy*) | light show | boxes, backdrop | 1:30 |
-| 5 | **Story beat 2**: Alaska organises the search; Connor gets spooked by jingle bells (comic); Orion grumbles; Mickey whistles a clue | story | stage, backdrop | 1:15 |
-| 6 | **Interludio**: full-wall light show to *Jingle Bells* / *Deck the Halls*; snow spills onto the right wall | light show | all | 1:30 |
-| 7 | **Story beat 3**: Pooh finds the star in his honey pot; brave Connor carries it; the star flies to the top of the tree | story | stage, tree, star | 1:15 |
-| 8 | **Para ti, `{BABY}`**: gentle *Silent Night*, family photos in vintage frames, "¡Feliz primera Navidad, `{BABY}`!" from Papá and Mamá | tender | backdrop | 1:00 |
-| 9 | **La estrella de verdad** (live): projected star fades; **Papá lifts `{BABY}` to place the real star**; someone plugs in the tree lights | **hold point** | star spotlight only | ~1:00 |
-| 10 | **Gran final**: *Joy to the World* / *We Wish You a Merry Christmas*, soft fireworks, the pets wave goodbye, "¡Feliz Navidad!" | light show | all | 1:30 |
+The full beat sheet (purpose, zones, music licence, cues, cast) is in **[TREATMENT.md](TREATMENT.md)**, which wins if
+this summary disagrees. Logline: *on `{BABY}`'s first Christmas Eve, Gandalf bats the star into the night sky; by
+tradition the youngest places it, and its light guides Santa, so the pets chase it through the constellations.*
 
-During the live moment (9) the projector shows only a soft glow on the tree top. That avoids lighting Papá and the baby
-harshly or shining into their eyes.
+| # | Scene | Type | Zones | Music | ≈ Time |
+|---|---|---|---|---|---|
+| 0 | **Pre-show**: dusk starfield (never pure black: LCD glow) | loop | wall, backdrop, rightStrip | *O Christmas Tree* music box | — |
+| 1 | **La pared despierta**: lines trace the room, snow begins; welcome to `{BABY}`'s first Christmas Eve | light + 1 line | all | *O Christmas Tree* | 1:00 |
+| 2 | **El árbol cobra vida**: colour waves climb the tree | light show | tree, star | *Carol of the Bells* (instr.) | 1:30 |
+| 3 | **La estrella se escapa**: pets decorate; the tradition and Santa's guiding light; Gandalf bats the star into the sky | story | backdrop, boxes, tree, star, wall | original underscore | 1:15 |
+| 4 | **Cajas mágicas**: boxes open face by face (Alaska's plan), but no star | light show | boxes, backdrop, stage | *Sugar Plum Fairy* | 1:15 |
+| 5 | **¿Dónde está la estrella?**: Connor spooked by jingle bells; Mickey's old film whistles "follow the stars" | story | backdrop, boxes | original + *Steamboat Bill* whistle | 1:00 |
+| 6 | **Constelaciones**: the wall becomes the sky; Orion, Canis Major/Minor, Felis; a glint by the North Star | light show | wall, backdrop, star, rightStrip | *Waltz of the Flowers* | 1:30 |
+| 7 | **El tarro de miel**: Pooh's honey pot holds the star; Connor carries it past the sleigh bells; it settles above the tree | story | backdrop, boxes, tree, star | original + soft sleigh bells | 1:15 |
+| 8 | **Para ti, `{BABY}`**: family photos, "¡Feliz primera Navidad!" from Papá and Mamá | tender | backdrop | *Silent Night* | 1:00 |
+| 9 | **La estrella de verdad** (live): projected star bows to a halo; Papá and `{BABY}` place the real star; tree lights plugged in; **Papá taps Continue** | **hold point** | star halo, dim sky; tree dark | music-box loop | ~1:00 |
+| 10 | **Gran final**: Santa's sleigh follows the star, soft fireworks, pets wave, "¡Feliz Navidad!" | light show | all | *Jingle Bells* → *We Wish You…* / *Joy to the World* | 1:30 |
+
+During the live moment (9) the tree zone stays dark, so Papá and the baby aren't lit in the face; only a soft gold
+halo marks the tip. On-the-night cuts (to ≈10 min) are listed in [TREATMENT §06](TREATMENT.md).
 
 ## 7. Timeline to Christmas Eve
 
@@ -177,3 +186,6 @@ christmas-mapping/
 - More photos of each pet (full body, side view) when convenient.
 - A straight-on photo of the arranged wall (later).
 - Soundbar model (later). Reconnect the ElevenLabs connector from a PC with full permissions.
+
+## Changelog
+- **2026-11-17** — §4, §5, §6 updated to the WP-10 treatment (new scene titles, music per scene, adult audience, live-moment operator).
