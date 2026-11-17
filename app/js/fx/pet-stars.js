@@ -13,7 +13,8 @@
 // morph in from (and back into) the constellation. Colours follow DESIGN_SYSTEM §05 with lifted darks; markings (tabby
 // stripes, the husky's white face and belly) are painted through the swarm. Time-based only.
 import { TAU, rand, clamp, lerp, easeInOutSine, easeOutBack, glowSprite, dot, additive } from './util.js';
-import { renderCloud, morphClouds, projector } from './points3d.js';
+import { morphClouds, projector } from './points3d.js';
+import { rgb } from '../palette.js';
 
 // ---------- pose helpers ----------
 /** Blend two poses key by key (numbers and [x, y] pairs). */
@@ -58,6 +59,10 @@ function tubePts(n) {
 const quad = (a, c, b, f) => [(1 - f) ** 2 * a[0] + 2 * (1 - f) * f * c[0] + f * f * b[0], (1 - f) ** 2 * a[1] + 2 * (1 - f) * f * c[1] + f * f * b[1]];
 
 const CAP = 600;
+// Volumes are sampled at this share of their nominal point count (owner: the first swarms read as balls of light;
+// fewer drones with sky between them read as a drone show). Feature points (eyes, nose, mouth) are never thinned.
+const DENSITY = 0.58;
+const thin = (n) => Math.max(4, Math.round(n * DENSITY));
 /**
  * The pen writes a figure's points into its cloud, part by part. Every part has a fixed point count, so a figure
  * always has the same number of points in the same order; colours and the count are recorded on the first build.
@@ -77,6 +82,7 @@ function pen(st) {
   return Object.assign(api, {
     /** Ellipsoid centred at c [x, y, z], radii r [rx, ry, rz], turned by `rot` in the picture plane; fuzz roughens it (fur). */
     ell(n, c, r, col, s = 1, rot = 0, fuzz = 0) {
+      n = thin(n);
       sphereDirs(n).forEach(([x, y, z], i) => {
         const f = 1 + fuzz * (rand(i * 3.1 + n) - 0.5);
         const [ex, ey] = rot2(x * r[0] * f, y * r[1] * f, rot);
@@ -85,6 +91,7 @@ function pen(st) {
     },
     /** Tube along a quadratic curve a → ctrl → b (2D), z from z0 to z1, radius r tapering by `taper` towards b. */
     tube(n, a, ctrl, b, r, z0, z1, col, s = 1, taper = 0) {
+      n = thin(n);
       for (const [f, ang] of tubePts(n)) {
         const q = quad(a, ctrl, b, f), q2 = quad(a, ctrl, b, Math.min(1, f + 0.02));
         let nx = -(q2[1] - q[1]), ny = q2[0] - q[0]; const m = Math.hypot(nx, ny) || 1; nx /= m; ny /= m;
@@ -94,6 +101,7 @@ function pen(st) {
     },
     /** Cone (an ear): round base centred at `base` (radius r, depth thickness rz) narrowing to `tip`. */
     cone(n, base, tip, r, z, col, s = 1, rz = 0.35) {
+      n = thin(n);
       const ax = tip[0] - base[0], ay = tip[1] - base[1], L = Math.hypot(ax, ay) || 1, px = -ay / L, py = ax / L;
       for (const [f, ang] of tubePts(n)) {
         const g = Math.sqrt(f), rr = r * (1 - g);
@@ -272,6 +280,47 @@ function gandalf(pn, age) {
   return {};
 }
 
+// ---------- drawing: crisp individual drones ----------
+// A drone is a small core in its own colour with a faint halo (no white centre, unlike the sky's glow sprite), so
+// overlapping drones don't burn out into a white ball. Drones on the far side are smaller and dimmer: the shape reads
+// in depth.
+const droneCache = new Map();
+function droneSprite(tok) {
+  let c = droneCache.get(tok);
+  if (c) return c;
+  const R = 32;
+  c = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(R * 2, R * 2) : Object.assign(document.createElement('canvas'), { width: R * 2, height: R * 2 });
+  const g = c.getContext('2d'), [r, gg, b] = rgb(tok);
+  const lift = (v) => Math.round(v + (255 - v) * 0.35);  // a touch lighter in the core, still clearly coloured
+  const grad = g.createRadialGradient(R, R, 0, R, R, R);
+  grad.addColorStop(0, `rgba(${lift(r)},${lift(gg)},${lift(b)},1)`);
+  grad.addColorStop(0.22, `rgba(${r},${gg},${b},0.85)`);
+  grad.addColorStop(0.4, `rgba(${r},${gg},${b},0.12)`);
+  grad.addColorStop(1, `rgba(${r},${gg},${b},0)`);
+  g.fillStyle = grad; g.fillRect(0, 0, R * 2, R * 2);
+  droneCache.set(tok, c);
+  return c;
+}
+function renderDrones(ctx, w, h, t, cloud, view, { alpha = 1, color, twinkle = 0.12 } = {}) {
+  if (alpha <= 0.002) return;
+  const P = projector(w, h, view);
+  const base = Math.max(1.6, Math.min(w, h) / 400);       // core ≈ 2.7 px on the 1080-tall wall
+  const op = ctx.globalCompositeOperation, ga = ctx.globalAlpha;
+  ctx.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < cloud.n; i++) {
+    const [x, y, f] = P(cloud.p[i * 3], cloud.p[i * 3 + 1], cloud.p[i * 3 + 2]);
+    if (f <= 0) continue;
+    const depth = clamp((f - 0.88) / 0.24);              // 0 far side → 1 near side
+    const tw = 1 - twinkle + twinkle * (0.5 + 0.5 * Math.sin(t * (1.3 + rand(i) * 1.7) + i));
+    // feature drones (eyes, nose, mouth) are only a little bigger, or they swamp the face
+    const r = base * (1 + (cloud.s[i] - 1) * 0.35) * (0.75 + 0.35 * depth) * 3.2;
+    ctx.globalAlpha = ga * alpha * (0.3 + 0.6 * depth) * tw;
+    ctx.drawImage(droneSprite(color(i)), x - r, y - r, r * 2, r * 2);
+  }
+  ctx.globalCompositeOperation = op;
+  ctx.globalAlpha = ga;
+}
+
 const PETS = { orion, connor, alaska, gandalf };
 const state = {};
 function petState(id) {
@@ -321,9 +370,9 @@ export function petStars(ctx, w, h, t, age, opts = {}) {
   const A = alpha * (source?.cloud ? clamp(k * 3) : k) * (0.4 + 0.6 * kout);
   const C = st.colors;
   const color = k >= 1 ? (i) => C[i] : (i) => (rand(i * 1.7) < k * 1.15 ? C[i] : 'snow');
-  renderCloud(ctx, w, h, t, cloud, { ...view, size: 0.8, alpha: A, color, twinkle: 0.12 });
+  renderDrones(ctx, w, h, t, cloud, view, { alpha: A, color });
   if (extra.glint && extra.glint[3] > 0.01 && k >= 1) {
     const [gx, gy, f] = projector(w, h, view)(extra.glint[0], extra.glint[1], extra.glint[2]);
-    additive(ctx, A * extra.glint[3], () => dot(ctx, glowSprite('gold', 0.25), gx, gy, Math.min(w, h) * size * 0.12 * f));
+    additive(ctx, A * extra.glint[3], () => dot(ctx, glowSprite('gold', 0.25), gx, gy, Math.min(w, h) * size * 0.09 * f));
   }
 }

@@ -24,6 +24,7 @@
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
 | WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | 🟡 in review (PR #10) | `claude/wp-11b-pet-constellations` | C1, C2 |
+| WP-11c | [s06 atlas art from *Urania's Mirror*](work-packages/WP-11c-urania-art.md) (owner: current plates distorted, grid unwanted) | WP-11b | 🟢 ready | — | C1 |
 | WP-09 | On-wall calibration + rehearsal checklist | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
 
 Status keys: 🟢 ready to start · 🔵 in progress · 🟡 in review (PR open) · ✅ done · ⚪ waiting on a dependency · ⏸️ deferred
@@ -48,10 +49,10 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
-- **2026-11-17 · WP-11b** — `fx/pet-stars.js` `petStars(ctx,w,h,t,age,{pet,x,y,size,end,source})`: the four pets as small **3D drone swarms**, after owner review rejected the first dotted-outline version. Volumes are ellipsoids, tubes and cones, with tabby stripes and the husky's white face painted per point. Orion: grumpy → looks up → lopsided smile + glint. Connor: lifts his head, plume sways. Alaska: eye-roll + "hmph". Gandalf: pounces.
-  s06 `PETS` table: each pet forms from its constellation's cloud at cue + 7.5–9 s, right of the figures, and flies back by next cue − 1 s. Timing, cues and beat map unchanged. **Owner: the atlas plates' grid lines are removed** (PNG cleanup, CREDITS note).
-  Flash check passes. Each pet costs ≈2 ms/frame headless (the Canis pause has two). `sw.js` v15. Not the cartoon pets: those are WP-04 (ElevenLabs clips, approved Gandalf style).
-  Next: WP-04 (character clips), then WP-08.
+- **2026-11-17 · WP-11b** — `fx/pet-stars.js` `petStars(...)`: the four pets as small **3D drone swarms** (owner review x2). Volumes are ellipsoids, tubes and cones with markings painted per point. Drawn by its own `renderDrones`: small crisp drones (coloured core, no white centre), about 220–250 per pet, far side dimmer. Orion: smile. Connor: looks up. Alaska: "hmph". Gandalf: pounce.
+  s06 `PETS` table: each pet forms from its constellation's cloud at cue + 7.5–9 s, right of the figures, and flies back by next cue − 1 s. Timing, cues and beat map unchanged. Flash check passes; ≈1–2 ms per pet headless. `sw.js` v16.
+  **Atlas art:** owner finds it distorted and dislikes the grid. My grid-erasing attempt was reverted (plates are as on main). The fix is new art: **WP-11c**, the grid-free *Urania's Mirror* cards. Gotcha: Wikimedia's API and upload server rate-limit/refuse this cloud container, so the scans must be fetched another way (see the brief).
+  Not the cartoon pets: those are WP-04 (ElevenLabs clips).
 
 - **2026-11-17 · WP-11** — Audit table in the brief (all beats built except s04 chaos, s05 star Mickey → done here; s06 pets-as-constellations → **WP-11b** brief).
   s04: `fx/toys.js` (20 code-drawn sprites: Christmas/pet/cameo, cream rim + baked glow; analytic toss → bounce → rest; lid pops, ear/tail placeholders) on the **wall** zone; waves on cues/bars + a toy every beat in busy sections, floor clears at `cut`/`out`.
