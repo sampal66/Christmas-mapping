@@ -21,7 +21,7 @@
 | WP-06 | Spanish script (`docs/SCRIPT.md`) + narration: ≈12 lines, ≈1:45, narrator only (TREATMENT §04) | WP-10, owner go-ahead | ⏸️ deferred by owner | — | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
 | WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10 | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
-| WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | 🟡 in review (draft PR) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
+| WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | 🟡 in review (draft PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-09 | On-wall calibration + rehearsal checklist | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
 
 Status keys: 🟢 ready to start · 🔵 in progress · 🟡 in review (PR open) · ✅ done · ⚪ waiting on a dependency · ⏸️ deferred
