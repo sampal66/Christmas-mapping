@@ -237,10 +237,12 @@ export default {
 | 2026-11-17 | Hold-loop visuals use periods that divide the loop length | the s09 loop seam is invisible (flash-check verifies it) |
 | 2026-11-17 | Beat maps live in one data file, `scenes/beatmaps.js` (scene-local times, first beat = downbeat); scenes spread them into `beats` | the tap tool exports one entry, so fixing a map never touches scene code |
 | 2026-11-17 | Fast or rubato pieces are tracked at the bar pulse and split evenly (`tools/beats.js --subdivide`) | tracking 170–200 bpm waltz beats directly drifts; bars are steady and land on the "one" |
+| 2026-11-17 | s04 and s09 music replaced by new originals (owner); their cues and beat maps were re-derived with `tools/beats.js` and snapped to downbeats at the real section changes | the visuals stay locked to the music, and WP-11 builds on final timing |
 | 2026-11-17 | Speech is one file per script line, named by its `SCRIPT.md` id (`s03-alaska-01`) and placed by WP-08 at `cue + offset`; lines that say `{BABY}` are 🔒 personal (real name typed only at generation time; audio in the media pack only) | re-takes swap one file without re-timing a scene; the real name never reaches git |
 | 2026-11-17 | Recordings stay off the repo; `tools/beats.js` decodes WAV itself and other formats via the system ffmpeg | repo size and "no new dependencies"; ffmpeg is only an optional convenience for the offline tool |
 
 ## Changelog
+- **2026-11-17** — WP-06: new s04/s09 music re-timed (§07).
 - **2026-11-17** — WP-06: speech files per script line, personal lines off-repo (§07); SCRIPT.md exists.
 - **2026-11-17** — WP-05: beat maps in `scenes/beatmaps.js`, `tools/beats.js`, `beats.html` tap tool (§07).
 - **2026-11-17** — WP-03 owner notes 3: stacked box tower with side faces, mega-tree, constellation figures (§07).

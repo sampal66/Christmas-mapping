@@ -89,6 +89,9 @@ dialogue in s03, s05, s07 and s10 (the "Narration" column lists the narrator onl
 **Owner notes (2026-11-17, WP-06 session) → [WP-11](work-packages/WP-11-box-chaos-mickey-stars.md):**
 - **s04 must be chaotic, not just lights:** the pets have dived into the boxes searching for the star, and a mess of
   Christmas, pet and cameo objects bursts out on the music. Impressive, still no star.
+- **Music (same day, made in WP-06):** s04 gets a new original chaotic-but-delightful cartoon-orchestra romp (busy, not
+  loud) plus soft box-search sounds (rummage bed, tumbles, wobbles, toy flurries); the s09 live hold gets a warm,
+  bell-driven "magic train journey" loop (original, in that spirit; no film melody). The s00 pre-show keeps the music box.
 - **s05: Mickey also appears drawn in stars**, a moving constellation of the 1928 Mickey that whistles and points up as
   he gives the clue.
 
@@ -108,12 +111,12 @@ last 4 s (`out` → end); the story scenes' underscores fill s03, s05, s07.
 | s01 | 1:00 | O Christmas Tree 0:00–1:00, fade from 0:56 |
 | s02 | 1:24 | Carol of the Bells 0:00–1:24 (section ends 1:22) |
 | s03 | 1:15 | s03 underscore (ElevenLabs), whole |
-| s04 | 1:15 | Sugar Plum (ElevenLabs celesta arrangement), whole |
+| s04 | 1:15 | **Box-chaos romp** (original ElevenLabs cartoon orchestra, 132 bpm; owner 2026-11-17, replaces Sugar Plum), whole |
 | s05 | 1:00 | s05 underscore (ElevenLabs), whole |
 | s06 | 1:30 | Waltz of the Flowers 1:28.94–2:58.94, fade from 2:54.9 |
 | s07 | 1:15 | s07 underscore (ElevenLabs), whole |
 | s08 | 1:00 | Silent Nights, 1:00 chosen by ear under the narration |
-| s09 | 0:22 + hold | music-box loop from file 1.64 s (its first downbeat); the hold loops scene 0:08–0:20 = file 9.64–21.64 |
+| s09 | 0:22 + hold | **bell "magic train" loop** (original ElevenLabs, 120 bpm 4/4; owner 2026-11-17) from file 7.97 s; the hold loops scene 0:08–0:20 = file 15.97–27.97 (6 bars) |
 | s10 | 1:56 | Jingle Bells, whole track |
 
 **Licence note:** every composition above is public domain. Each **recording** still needs a verified licence
@@ -220,6 +223,7 @@ effects, held to the quality bar above. **First, a style test before committing:
 sheet plus one 5 s clip on black, judged on the real projector or the TV.
 
 ## Changelog
+- **2026-11-17** — Owner: new s04 box-chaos music and s09 bell loop (master-mix rows updated); music box stays on s00.
 - **2026-11-17** — Owner notes: s04 box chaos, s05 Mickey constellation (→ WP-11).
 - **2026-11-17** — WP-05: music as sourced + master-mix running order in §04; s02 is 1:24, s10 1:56 (whole Jingle Bells).
 - **2026-11-17** — Owner: the star's journey is visible throughout. It turns into a night-sky star when batted off (s03), crosses each constellation in s06, is found in Pooh's pot, carried by Connor (s07), and becomes the five-point star again on the tree (WP-03 draws the motion; WP-08 adds the characters around it).

@@ -6,10 +6,11 @@ import { BEATMAPS } from './beatmaps.js';
 import { cueSheet, beatGrid, projectedStar, starHalo, twinkleStars, easeInOutSine, prog } from '../fx/index.js';
 import { skyBase } from './common.js';
 
-const LOOP = 12;                            // seconds per loop pass = 6 bars of the 3/4 music-box loop at 90 bpm
-// The music-box loop is made to this exact grid (90 bpm 3/4); LOOP must stay a whole number of bars so the seam is
-// invisible. scenes/beatmaps.js holds the same grid as explicit times; re-check it once the loop is generated.
-const beats = { bpm: 90, ...BEATMAPS['s09-real-star'] };
+const LOOP = 12;                            // seconds per loop pass = 6 bars of the 4/4 bell loop at 120 bpm
+// Music: the original "magic train" bell loop (owner, 2026-11-17), 120 bpm 4/4; scene 0 = file 7.97 s and the hold loops
+// file 15.97–27.97 s (6 bars). LOOP must stay a whole number of bars so the seam is invisible; the tracked beat times
+// are in scenes/beatmaps.js.
+const beats = { bpm: 120, ...BEATMAPS['s09-real-star'] };
 const B = beatGrid(beats);
 const cues = [
   { t: 0, name: 'bow' },
