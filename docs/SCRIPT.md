@@ -187,11 +187,11 @@ brave, Orion secretly helps, Alaska shares the lead.*
 
 Open: exporting the A takes as `<id>.m4a` for the media pack (WP-08).
 
-## 06 · Sound effects (planned, not generated)
+## 06 · Sound effects (generated)
 
-Music is done (WP-05: USAF Band recordings + ElevenLabs underscores and Sugar Plum). The sound effects below are
-not generated yet: their exact timing depends on the character clips (WP-04), so they are made and placed in
-**WP-08**. All soft, with gentle attacks; never bangs, barks, meows, whines, doorbells or squeaky toys (DESIGN_SYSTEM §08).
+Music is done (WP-05: USAF Band recordings + ElevenLabs underscores and Sugar Plum). The sound effects below were
+generated in WP-06 (owner, 2026-11-17: make the full package here; **WP-08 only places and mixes them**, and generates
+specific extras only if something sounds off or is missing). Flow "CMS WP-06 sound effects" (`EjbTjhTyetiUrycdsSk5`). All soft, with gentle attacks; never bangs, barks, meows, whines, doorbells or squeaky toys (DESIGN_SYSTEM §08).
 
 | Id | Scene · cue | Sound | ≈ s |
 |---|---|---|---|
@@ -201,18 +201,20 @@ not generated yet: their exact timing depends on the character clips (WP-04), so
 | s04-sfx-boxopen | s04 · box1-open, box2-open | sparkle burst as a box lid opens (used twice) | 2 |
 | s04-sfx-spring | s04 · box2-open | gentle jack-in-the-box spring | 1 |
 | s05-sfx-jingle | s05 · jingle | soft, distant jingle bells, no sharp attack | 2 |
-| s05-sfx-whistle | s05 · mickey-in | whistled *Steamboat Bill* (1910, PD) phrase, old-film tone | 8 |
-| s05-sfx-projector | s05 · mickey-in → mickey-out | very quiet old film-projector purr under Mickey's clip | 15 |
+| s05-sfx-whistle | s05 · mickey-in | jaunty whistled 1920s-style tune (original melody, music model), old-film tone | 8 |
+| s05-sfx-projector | s05 · mickey-in → mickey-out | very quiet old film-projector purr under Mickey's clip (seamless loop) | 10 (loop) |
 | s07-sfx-chime | s07 · found | warm discovery chime | 2 |
 | s07-sfx-sleighbells | s07 · carry | soft sleigh bells approaching and passing | 15 |
 | s07-sfx-whoosh | s07 · fly | rising magic whoosh as the star flies up | 3 |
 | s07-sfx-settle | s07 · settle | soft glowing chime as the star settles | 2 |
 | s10-sfx-sleigh | s10 · sleigh | sleigh bells crossing left → right under the music | 6 |
 
-Fireworks (s10) stay visual only, with at most a soft musical swell. Estimate ≈ 1.5–3k credits (1 take each,
-plus a music-model take for the whistle if the sound-effects model can't carry the tune).
+Fireworks (s10) stay visual only, with at most a soft musical swell. Cost ≈ 1.3k credits (12 effects ≈ 17 each,
+5 re-run with an explicit length setting because the model ignored lengths in the prompt; whistle 900).
+Gotcha for re-takes: set `duration_seconds` on the node; a length written in the prompt is ignored.
 
 ## Changelog
+- **2026-11-17** — v1.4: all 13 sound effects generated (owner moved them from WP-08 into WP-06).
 - **2026-11-17** — v1.3: owner picked take A for all lines, optional lines kept; §06 planned sound effects (WP-08).
 - **2026-11-17** — v1.2: all lines generated (eleven_v4, 2 takes); flow id, cost, take-pick rule.
 - **2026-11-17** — v1.1: saved voice ids, accent rule (neutral Latin American, Mexican-dub style; never Castilian).

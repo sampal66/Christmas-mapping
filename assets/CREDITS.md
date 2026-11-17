@@ -29,3 +29,14 @@ Alternatives checked: *Carol of the Bells, Ukrainian* (USAF Heritage of America 
 Waltz of the Flowers* (US Army Band c. 2019, PD, very quiet master −31 LUFS); *We Wish You a Merry Christmas* (2020,
 Starlifter, 136 bpm 3/4, PD); *Joy to the World* (USAF Concert Band, 0:31, PD); *U.S. Army Band - O Tannenbaum* is the
 **Army Chorus** (sung, rejected: it would clash with narration).
+
+## Voices and sound effects (WP-06)
+
+Generated 2026-11-17 for this show; original recordings, owned by the account holder under the ElevenLabs plan terms.
+**Not in the repo.** Lines that say the baby's name are personal and live only in the on-device media pack.
+
+| Asset | Source | Licence | Notes |
+|---|---|---|---|
+| Narration + pet dialogue: 46 lines, `<line-id>.mp3` (ids in `docs/SCRIPT.md` §03), take A | ElevenLabs `eleven_v4`, 6 custom designed voices (`eleven_ttv_v3`; ids in SCRIPT §02), flow "CMS WP-06 voices" | original | all takes stay in the flow; accent: neutral Latin American |
+| 12 sound effects, `<scene>-sfx-<name>.mp3` (SCRIPT §06) | ElevenLabs Sound Effects v2, flow "CMS WP-06 sound effects", 1 take each | original | soft attacks; projector is a seamless 10 s loop |
+| `s05-sfx-whistle.mp3`: jaunty 1920s-style whistled tune, 8 s | ElevenLabs Music v2.5, same flow, 1 take | original (not *Steamboat Bill*; an original melody in that style) | for Mickey's old-film moment |
