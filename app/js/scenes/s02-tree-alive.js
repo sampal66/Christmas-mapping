@@ -3,21 +3,23 @@
 // pops, and the star glowing gold at the climax. Soft colour echo on the wall (TREATMENT §04).
 import { cueSheet, beatGrid, megaTree, ornamentPops, starHalo, projectedStar, additive, easeInOutSine } from '../fx/index.js';
 import { SHOW_HUES, mix } from '../palette.js';
+import { BEATMAPS } from './beatmaps.js';
 import { skyBase, from, beatClock } from './common.js';
 
 const cues = [
   { t: 0, name: 'build' },
-  { t: 20, name: 'drop' },
-  { t: 40, name: 'spiral' },
-  { t: 62, name: 'cut' },
-  { t: 70, name: 'star-glow' },
-  { t: 86, name: 'out' },
+  { t: 17.9, name: 'drop' },        // first full-band peak (0:18)
+  { t: 35.9, name: 'spiral' },      // second build after the quiet verse
+  { t: 51.3, name: 'cut' },         // just before the climax (cut list: skips ≈0:35)
+  { t: 55.7, name: 'star-glow' },   // loudest bar of the excerpt (0:56)
+  { t: 79.6, name: 'out' },         // section ends at 1:22; the mix fades here
+
 ];
-// Placeholder tempo (Carol of the Bells, 3/4) until WP-05 supplies the real beat times.
-const beats = { bpm: 132, perBar: 3 };
+// Real beat map (Carol of the Bells, USAF Band of the Rockies, ≈130 bpm 3/4): scenes/beatmaps.js.
+const beats = { bpm: 130, ...BEATMAPS['s02-tree-alive'] };
 const B = beatGrid(beats);
 const C = cueSheet(cues, B);
-const duration = 90;
+const duration = 84;
 
 export default {
   id: 's02-tree-alive',

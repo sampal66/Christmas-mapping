@@ -2,12 +2,14 @@
 // marks where the real star goes; dim starfield; the tree zone stays dark so Papá and {BABY} aren't lit in the
 // face. The timeline loops [hold-start, hold-end] until the operator taps Continue (TREATMENT §05).
 // Everything inside the loop repeats with a period that divides LOOP exactly, so the seam is invisible.
+import { BEATMAPS } from './beatmaps.js';
 import { cueSheet, beatGrid, projectedStar, starHalo, twinkleStars, easeInOutSine, prog } from '../fx/index.js';
 import { skyBase } from './common.js';
 
 const LOOP = 12;                            // seconds per loop pass = 6 bars of the 3/4 music-box loop at 90 bpm
-// Placeholder tempo for the music-box loop; LOOP must stay a whole number of bars so the seam is invisible.
-const beats = { bpm: 90, perBar: 3 };
+// The music-box loop is made to this exact grid (90 bpm 3/4); LOOP must stay a whole number of bars so the seam is
+// invisible. scenes/beatmaps.js holds the same grid as explicit times; re-check it once the loop is generated.
+const beats = { bpm: 90, ...BEATMAPS['s09-real-star'] };
 const B = beatGrid(beats);
 const cues = [
   { t: 0, name: 'bow' },

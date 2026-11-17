@@ -235,8 +235,12 @@ export default {
 | 2026-11-17 | Constellations get dim star-atlas figure art (`fx/figures.js`) set back in depth, plus a nebula glow | owner: constellations looked flat and too simple |
 | 2026-11-17 | Constellation art = real public-domain atlas engravings (Jamieson 1822), cut out and tinted, drawn as cards in the swarm's 3D view; star positions come from the same plates | owner wanted authentic star-atlas art; one image draw per figure is cheap |
 | 2026-11-17 | Hold-loop visuals use periods that divide the loop length | the s09 loop seam is invisible (flash-check verifies it) |
+| 2026-11-17 | Beat maps live in one data file, `scenes/beatmaps.js` (scene-local times, first beat = downbeat); scenes spread them into `beats` | the tap tool exports one entry, so fixing a map never touches scene code |
+| 2026-11-17 | Fast or rubato pieces are tracked at the bar pulse and split evenly (`tools/beats.js --subdivide`) | tracking 170–200 bpm waltz beats directly drifts; bars are steady and land on the "one" |
+| 2026-11-17 | Recordings stay off the repo; `tools/beats.js` decodes WAV itself and other formats via the system ffmpeg | repo size and "no new dependencies"; ffmpeg is only an optional convenience for the offline tool |
 
 ## Changelog
+- **2026-11-17** — WP-05: beat maps in `scenes/beatmaps.js`, `tools/beats.js`, `beats.html` tap tool (§07).
 - **2026-11-17** — WP-03 owner notes 3: stacked box tower with side faces, mega-tree, constellation figures (§07).
 - **2026-11-17** — WP-03 owner notes: smooth beat feel; 3D point-cloud swarm and fireworks (§03, §07).
 - **2026-11-17** — WP-03 (owner note): §4.4 beat grid for all light-show scenes; §07 decision.

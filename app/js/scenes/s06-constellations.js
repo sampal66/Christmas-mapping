@@ -8,19 +8,20 @@ import { cueSheet, beatGrid, twinkleStars, shootingStars, starHalo, glowSprite, 
   drawCard, shapeRect, loadAtlasArt, atlasLabel, warpField, aurora, galaxy, megaTree, prog, smooth,
   formationState, projector, drawStar, lostStar,
   ORION, CANIS_MAJOR, CANIS_MINOR, FELIS, easeInOutSine, clamp } from '../fx/index.js';
+import { BEATMAPS } from './beatmaps.js';
 import { skyBase, stripSnow, beatClock } from './common.js';
 
 const cues = [
   { t: 0, name: 'sky' },
   { t: 8, name: 'orion' },
-  { t: 28, name: 'canis' },
-  { t: 46, name: 'felis' },
-  { t: 64, name: 'cut' },
-  { t: 70, name: 'glint' },
+  { t: 30.3, name: 'canis' },       // full-band tutti enters (file 2:00)
+  { t: 47, name: 'felis' },
+  { t: 64, name: 'cut' },           // tutti peak (file 2:33)
+  { t: 70.5, name: 'glint' },       // the quiet middle section
   { t: 86, name: 'out' },
 ];
-// Placeholder tempo (Waltz of the Flowers, 3/4) until WP-05 supplies the real beat times.
-const beats = { bpm: 168, perBar: 3 };
+// Real beat map (Waltz of the Flowers, USAF Band, excerpt from 1:28.94, ≈176 bpm 3/4): scenes/beatmaps.js.
+const beats = { bpm: 176, ...BEATMAPS['s06-constellations'] };
 const B = beatGrid(beats);
 const C = cueSheet(cues, B);
 const duration = 90;
@@ -44,7 +45,7 @@ const ART = [
 
 // The rollercoaster: each constellation is a calm pause; between them a "ride" (warp-speed stars, comets, aurora, a
 // galaxy sweeping past, meteors down the tree) builds for 3.5 s, peaks while the swarm flies to the next figure and
-// settles by +6 s. The engraving and its name appear once the stars have formed (cue + 7.5 s) and hold.
+// settles by +6 s. The engraving grows out from the stars as they settle (cue + 5.5 s → +10.5 s), then its name, and holds.
 const RIDES = [['orion', 0.7], ['canis', 1], ['felis', 1], ['cut', 1]];
 function ride(local) {
   let e = 0, which = -1;
@@ -149,16 +150,21 @@ export default {
         }
         // The pause: the atlas engraving and its dimmed name, a couple of seconds after the stars have formed.
         for (const g of ART) {
-          const k = Math.min(clamp((local - C.at(g.from) - 7.5) / 2.5), 1 - clamp((local - C.at(g.to) + 3.5) / 2));
+          // The engraving grows out from the stars as they settle (a soft radial reveal over ≈5 s, slightly
+          // oversized and settling in), instead of a flat fade that seemed to come from nowhere (owner, WP-05).
+          const kin = clamp((local - C.at(g.from) - 5.5) / 5);
+          const k = Math.min(kin, 1 - clamp((local - C.at(g.to) + 3.5) / 2.5));
           if (k <= 0) continue;
-          const ka = easeInOutSine(k);
+          const ka = easeInOutSine(k) ** 1.5;
+          const reveal = easeInOutSine(kin);
           for (const p of g.parts) {
+            const r0 = shapeRect(p.shape, p.size * (1 + 0.06 * (1 - reveal)), p.x, p.y);
             const rect = shapeRect(p.shape, p.size, p.x, p.y);
-            drawCard(ctx, w, h, art.get(p.shape.src), view, rect, { z: -0.12, alpha: A * 0.6 * ka * (0.9 + 0.1 * bar) });
+            drawCard(ctx, w, h, art.get(p.shape.src), view, r0, { z: -0.12, alpha: A * 0.6 * ka * (0.9 + 0.1 * bar), reveal });
             const lab = atlasLabel(p.label, 'ice');
             const lh = 0.16 * Math.max(0.8, p.size), lw = lh * lab.width / lab.height, mx = (rect[0] + rect[2]) / 2;
             const ly = p.labelAbove ? rect[1] - lh * 1.05 : rect[3] - lh * 0.4;
-            drawCard(ctx, w, h, lab, view, [mx - lw / 2, ly, mx + lw / 2, ly + lh], { z: -0.1, alpha: A * 0.38 * ka });
+            drawCard(ctx, w, h, lab, view, [mx - lw / 2, ly, mx + lw / 2, ly + lh], { z: -0.1, alpha: A * 0.38 * ka * clamp((reveal - 0.6) / 0.4), soft: false });
           }
         }
         renderCloud(ctx, w, h, bt, cloud, {

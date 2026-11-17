@@ -158,6 +158,19 @@ const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Num
     check(zones.length === 10 && zones.every((z) => z.quad.flat().every(Number.isFinite)), 'model zones saved to the Mapper');
     await page.waitForTimeout(300);
     check(await page.locator('canvas.zone').count() >= 8, 'Mapper renders the model zones');
+
+    // Beat tap tool: lists the light-show scenes, shows the current map, and edits it (insert + undo).
+    await page.goto(url + 'beats.html');
+    await page.waitForTimeout(500);
+    check(await page.locator('#scene option').count() === 6, 'beat tool lists the 6 light-show scenes');
+    const beatCount = async () => (await page.locator('#out').inputValue()).split(',').length;
+    const before = await beatCount();
+    check(/times: \[\d/.test(await page.locator('#out').inputValue()), 'beat tool exports the scene beat map');
+    await page.click('#insert');
+    check(await beatCount() === before + 1, 'beat tool inserts a beat');
+    await page.click('#undo');
+    check(await beatCount() === before, 'beat tool undo');
+    if (shots) await page.screenshot({ path: path.join(shots, 'beats.png') });
   } catch (e) {
     errors.push(e.message);
   } finally {
@@ -170,6 +183,10 @@ const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Num
     try { console.log(execFileSync('node', [path.join(__dirname, 'flash-check.js')], { encoding: 'utf8' }).split('\n').filter((l) => !l.startsWith('  ✓')).join('\n')); }
     catch (e) { errors.push(`flash-check failed:\n${e.stdout || ''}${e.stderr || ''}`); }
   }
+
+  // Beat detector on a synthetic drifting 3/4 click track (tools/beats.js).
+  try { console.log(execFileSync('node', [path.join(__dirname, 'beats.js'), '--self-test'], { encoding: 'utf8' }).trim()); }
+  catch (e) { errors.push(`beats self-test failed:\n${e.stdout || ''}${e.stderr || ''}`); }
 
   if (errors.length) { console.error('SMOKE TEST FAILED\n' + errors.join('\n')); process.exit(1); }
   console.log('smoke test passed');

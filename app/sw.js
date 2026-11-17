@@ -2,18 +2,21 @@
 // Bump VERSION whenever any shell file changes, or the iPad keeps serving the old copy.
 // The smoke test fails if a .html/.css/.js file in app/ is missing from SHELL.
 // Media-pack files live in IndexedDB, not here, and never go over the network.
-const VERSION = 'v8';
+const VERSION = 'v11';
 const CACHE = `christmas-mapper-${VERSION}`;
 const SHELL = [
   './',
   'index.html',
   'model.html',
+  'beats.html',
   'style.css',
   'manifest.webmanifest',
   'icon.svg',
   'icon-180.png',
   'icon-512.png',
   'js/main.js',
+  'js/beats-tool.js',
+  'js/scenes/beatmaps.js',
   'js/audio.js',
   'js/effects.js',
   'js/homography.js',

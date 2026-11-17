@@ -3,17 +3,18 @@
 // tower with each box's front and side mapped. Gandalf popping out of a
 // box is character animation (WP-08), laid over this later.
 import { cueSheet, beatGrid, boxFaces, boxOpen, wrapSweep, footlights, sparkleBurst, twinkleStars, snowfall, glowStroke, additive, clamp, easeInOutSine } from '../fx/index.js';
+import { BEATMAPS } from './beatmaps.js';
 import { from, beatClock, boxFace, BOX_ZONES } from './common.js';
 
 const cues = [
   { t: 14, name: 'box1-open' },
-  { t: 30, name: 'box2-open' },
-  { t: 46, name: 'cut' },
-  { t: 54, name: 'finale' },
-  { t: 71, name: 'out' },
+  { t: 27, name: 'box2-open' },     // the arrangement builds at 0:27
+  { t: 45.5, name: 'cut' },         // quiet restart before the last section
+  { t: 54, name: 'finale' },        // loudest passage (0:54–1:06)
+  { t: 69, name: 'out' },           // final note fades from 1:09
 ];
-// Placeholder tempo (Sugar Plum Fairy, 2/4 feel) until WP-05 supplies the real beat times.
-const beats = { bpm: 76, perBar: 2 };
+// Real beat map (Sugar Plum Fairy, ElevenLabs celesta arrangement, ≈72 bpm 2/4): scenes/beatmaps.js.
+const beats = { bpm: 72, ...BEATMAPS['s04-magic-boxes'] };
 const B = beatGrid(beats);
 const C = cueSheet(cues, B);
 const duration = 75;
