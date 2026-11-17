@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Status** | v0.2 draft, for owner review (WP-06) |
+| **Status** | v1.0 **approved by the owner** (2026-11-17); audio not generated yet |
 | **Last updated** | 2026-11-17 |
 
 ---
@@ -161,10 +161,12 @@ brave, Orion secretly helps, Alaska shares the lead.*
 | Narrator | Male. |
 | Name lines (s01, s03, s08) | Spoken with the real name; the name is typed only at generation time, never written in the repo. |
 | s08 message | Said by the narrator (not recorded by Papá and Mamá). |
-| Generation | **On hold**: the owner reviews the script first, then OKs the credits and chooses designed vs library voices. |
+| Script | **Approved** as v1.0. |
+| Generation | **On hold** until the owner OKs the credits and chooses designed vs library voices. |
 
-Open: the owner's script edits; reconnecting the ElevenLabs connector with full permissions.
+Open: credit go-ahead + voice approach; reconnecting the ElevenLabs connector with full permissions.
 
 ## Changelog
+- **2026-11-17** — v1.0: owner approved the script.
 - **2026-11-17** — v0.2: owner decisions (male narrator, name lines spoken, narrator says the s08 message); alternatives dropped; totals re-counted.
 - **2026-11-17** — v0.1: first draft (WP-06): cast, all lines with cues, totals and credit estimate.
