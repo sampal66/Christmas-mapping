@@ -233,13 +233,14 @@ Every take A and sound effect laid on its cue (real lengths), checked against th
   - s03 43–50 s: the star bounces off a box and up the tree (action on screen, underscore). OK.
   - s07 53–60 s: the star flies up to the tree tip on the underscore swell. OK.
   - **s08 26–45 s (19 s)**: after the message, only *Silent Nights*, snow and the gathered pets. Intended as the
-    emotional breath, but long. WP-08 must give it a visual beat (e.g. the pets' constellations twinkle above as a
-    callback, the star warms on the music swell), or move `missing` earlier (≈ 37 s).
+    emotional breath, but long. **Owner decision (2026-11-17): keep the pause and give it a visual beat** in WP-08: the pets'
+    constellations (Orion, Canis Major/Minor, Felis) twinkle above as a callback and the star warms on the music swell.
 - **App gap (WP-08):** when the show is not playing (pre-show s00, and after the finale fades to the starfield), the app
   plays no audio. TREATMENT §04 gives s00 the music-box loop: WP-08 must loop it while idle and after the end
   (soft fade in), so the finale never drops into silence.
 
 ## Changelog
+- **2026-11-17** — v1.7: owner approved all audio (voices, sfx, new music); s08 pause gets a visual beat.
 - **2026-11-17** — v1.6: 4 s04 box-search effects (owner); s04 music and s09 hold loop replaced (TREATMENT §04).
 - **2026-11-17** — v1.5: §07 silence check; 4 cue offsets nudged to remove overlaps; ≈ s column = real take lengths.
 - **2026-11-17** — v1.4: all 13 sound effects generated (owner moved them from WP-08 into WP-06).
