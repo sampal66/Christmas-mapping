@@ -8,19 +8,20 @@ import { cueSheet, beatGrid, twinkleStars, shootingStars, starHalo, glowSprite, 
   drawCard, shapeRect, loadAtlasArt, atlasLabel, warpField, aurora, galaxy, megaTree, prog, smooth,
   formationState, projector, drawStar, lostStar,
   ORION, CANIS_MAJOR, CANIS_MINOR, FELIS, easeInOutSine, clamp } from '../fx/index.js';
+import { BEATMAPS } from './beatmaps.js';
 import { skyBase, stripSnow, beatClock } from './common.js';
 
 const cues = [
   { t: 0, name: 'sky' },
   { t: 8, name: 'orion' },
-  { t: 28, name: 'canis' },
-  { t: 46, name: 'felis' },
-  { t: 64, name: 'cut' },
-  { t: 70, name: 'glint' },
+  { t: 30.3, name: 'canis' },       // full-band tutti enters (file 2:00)
+  { t: 47, name: 'felis' },
+  { t: 64, name: 'cut' },           // tutti peak (file 2:33)
+  { t: 70.5, name: 'glint' },       // the quiet middle section
   { t: 86, name: 'out' },
 ];
-// Placeholder tempo (Waltz of the Flowers, 3/4) until WP-05 supplies the real beat times.
-const beats = { bpm: 168, perBar: 3 };
+// Real beat map (Waltz of the Flowers, USAF Band, excerpt from 1:28.94, ≈176 bpm 3/4): scenes/beatmaps.js.
+const beats = { bpm: 176, ...BEATMAPS['s06-constellations'] };
 const B = beatGrid(beats);
 const C = cueSheet(cues, B);
 const duration = 90;

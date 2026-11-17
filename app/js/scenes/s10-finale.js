@@ -8,23 +8,25 @@ import { cueSheet, beatGrid, megaTree, firework3d, sparkleBurst, footlights, box
   glowSprite, dot, additive, glowStroke, easeInOutSine, clamp, rand } from '../fx/index.js';
 import { SHOW_HUES } from '../palette.js';
 import * as media from '../media.js';
+import { BEATMAPS } from './beatmaps.js';
 import { skyBase, stripSnow, from, beatClock, boxFace, BOX_ZONES } from './common.js';
 
 const cues = [
+  // Stretched (×1.3) to the whole Jingle Bells track (ends ≈1:51) so the music is never cut mid-phrase.
   { t: 0, name: 'ripple' },
-  { t: 10, name: 'sleigh' },
-  { t: 22, name: 'fireworks' },
-  { t: 50, name: 'wave' },
-  { t: 56, name: 'cut' },
-  { t: 60, name: 'family-constellation' },
-  { t: 72, name: 'title' },
-  { t: 84, name: 'out' },
+  { t: 13, name: 'sleigh' },
+  { t: 28.5, name: 'fireworks' },
+  { t: 65, name: 'wave' },
+  { t: 72.5, name: 'cut' },
+  { t: 78, name: 'family-constellation' },
+  { t: 93.5, name: 'title' },
+  { t: 109, name: 'out' },
 ];
-// Placeholder tempo (Jingle Bells, 4/4) until WP-05 supplies the real beat times.
-const beats = { bpm: 120, perBar: 4 };
+// Real beat map (Jingle Bells, USAF Band of Mid-America, 159 bpm 4/4): scenes/beatmaps.js.
+const beats = { bpm: 159, ...BEATMAPS['s10-finale'] };
 const B = beatGrid(beats);
 const C = cueSheet(cues, B);
-const duration = 90;
+const duration = 116;
 
 // Fireworks: 3D point shells (sphere, tilted ring, double, willow), launched so each bloom lands on a beat (every
 // second beat, bigger ones on the downbeat), across open sky (left edge and right half; the tree is in between).

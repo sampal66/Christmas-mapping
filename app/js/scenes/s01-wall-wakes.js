@@ -1,17 +1,18 @@
 // s01 · La pared despierta (1:00). The mapping "wow": light lines trace the wall, the sideboard top, both boxes
 // and the tree; footlights warm up; snow begins and spills round the corner (TREATMENT §04).
 import { cueSheet, beatGrid, edgeTrace, snowfall, footlights, sparkleBurst, projectedStar, twinkleStars, boxOpen, easeInOutSine } from '../fx/index.js';
+import { BEATMAPS } from './beatmaps.js';
 import { skyBase, outlineOf, from, beatClock, boxFace, BOX_ZONES } from './common.js';
 
 const cues = [
   { t: 2, name: 'trace' },
-  { t: 18, name: 'snow' },
-  { t: 30, name: 'welcome' },
-  { t: 40, name: 'cut' },
+  { t: 25, name: 'snow' },          // the band swells at 0:25
+  { t: 32, name: 'welcome' },
+  { t: 42.5, name: 'cut' },         // second swell at 0:43
   { t: 56, name: 'out' },
 ];
-// Placeholder tempo (soft intro into O Christmas Tree) until WP-05 supplies the real beat times.
-const beats = { bpm: 96, perBar: 3 };
+// Real beat map (O Christmas Tree, Airmen of Note, 152 bpm 4/4): scenes/beatmaps.js. `bpm` is only the fallback.
+const beats = { bpm: 152, ...BEATMAPS['s01-wall-wakes'] };
 const B = beatGrid(beats);
 const C = cueSheet(cues, B);
 const duration = 60;
