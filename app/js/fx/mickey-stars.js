@@ -1,19 +1,17 @@
-// s05 (WP-11): Mickey drawn in stars. As Mickey whistles the clue, his old-film frame dissolves into a swarm of star
-// points that forms the **1928 Steamboat Willie Mickey** (public domain design only: round black ears, pie-cut eyes,
-// long snout, bare hands with no gloves, shorts with two buttons, rubber-hose limbs, a thin tail) as a moving
-// constellation, drone-show style like s06. He bobs to the whistle, then raises his arm and points up; the
-// pointing hand's star trails a line up into the sky (the lead-in to s06). Built as a reusable piece WP-08 places.
+// s05 (WP-11): Mickey as a drone-show swarm. As Mickey whistles the clue, his old-film frame (a flat screen of
+// drones) flies apart and re-forms as a **3D figure of the 1928 Steamboat Willie Mickey** (public domain design only:
+// round ears, pie-cut eyes, long snout, bare hands with no gloves, shorts with two buttons, rubber-hose limbs, thin
+// tail), drone-show style like s06/s10 (owner, 2026-11-17: "a swarm of drones gives depth"). Every body part is a
+// volume filled with identical light points (sphere head, thick ear discs, ellipsoid snout/body/shoes, tube limbs),
+// and the camera sways so the depth reads. He bobs to the whistle, then raises his arm and points up; a stream of
+// drones flows from his fingertip up into the sky (the lead-in to s06). A reusable piece WP-08 places.
 //
-// The figure is a few keyframed poses of named joints, blended over time; every part (circles, ellipses, hose
-// curves) is re-sampled into a fixed number of points each frame, so the point swarm can morph in and keep its
-// identity while the pose changes. Time-based only (`age` = seconds since the piece starts).
-import { rgba } from '../palette.js';
-import { TAU, rand, clamp, lerp, easeInOutSine, easeOutBack, glowSprite, dot, additive, glowStroke } from './util.js';
+// Keyframed joint poses are blended over time; each part keeps a fixed set of surface parameters (precomputed), so
+// the swarm keeps its identity as the pose changes and can morph in from the film screen. Time-based only.
+import { TAU, rand, clamp, lerp, easeInOutSine, easeOutBack, glowSprite, dot, additive } from './util.js';
 import { renderCloud, morphClouds, projector } from './points3d.js';
-import { drawStar } from './stars.js';
 
-// ---------- poses (figure units, y down; ≈ 2.2 units from ear tops to shoe soles; he faces right, ¾ view) ----------
-// Joints: head centre + tilt, both elbows and hands, both feet, and the finger (only shown when pointing).
+// ---------- poses (figure units, y down, z away from the viewer; ≈ 2.2 units tall; he faces right, ¾ view) ----------
 const WHISTLE = {
   head: [0.04, -0.56], tilt: 0.12,
   elbowL: [-0.4, 0.02], handL: [-0.19, 0.2],             // hands on hips
@@ -41,7 +39,6 @@ function blend(a, b, k) {
   return o;
 }
 
-/** The pose at `age` (seconds into the piece), with the whistle bob layered on top. */
 function poseAt(age, T) {
   let p;
   if (age < T.anticipate) p = WHISTLE;
@@ -57,205 +54,214 @@ function poseAt(age, T) {
   return p;
 }
 
-// ---------- parts: each samples a fixed number of points ----------
-const rot = ([x, y], a) => [x * Math.cos(a) - y * Math.sin(a), x * Math.sin(a) + y * Math.cos(a)];
-const add = (a, b) => [a[0] + b[0], a[1] + b[1]];
-/** A point on the head, from an offset in head space (rotates with the head tilt). */
-const onHead = (p, off) => add(p.head, rot(off, p.tilt));
-const quad = (a, c, b, f) => [(1 - f) ** 2 * a[0] + 2 * (1 - f) * f * c[0] + f * f * b[0], (1 - f) ** 2 * a[1] + 2 * (1 - f) * f * c[1] + f * f * b[1]];
-function ellipse(out, n, c, rx, ry, a = 0, from = 0, to = TAU) {
-  for (let i = 0; i < n; i++) {
-    const t = from + ((to - from) * (i + 0.5)) / n;
-    out.push(add(c, rot([Math.cos(t) * rx, Math.sin(t) * ry], a)));
-  }
-}
-function line(out, n, a, b) { for (let i = 0; i < n; i++) { const f = (i + 0.5) / n; out.push([lerp(a[0], b[0], f), lerp(a[1], b[1], f)]); } }
-function hose(out, n, a, c, b) { for (let i = 0; i < n; i++) out.push(quad(a, c, b, (i + 0.5) / n)); }
-/** A pie-cut eye: a tall oval with a wedge cut out of it (the 1928 look), the wedge's two edges drawn in. */
-function pieEye(out, n, c, rx, ry, a, cut) {
-  const gap = 0.9;
-  ellipse(out, n - 4, c, rx, ry, a, cut + gap / 2, cut + TAU - gap / 2);
-  const e1 = add(c, rot([Math.cos(cut - gap / 2) * rx, Math.sin(cut - gap / 2) * ry], a));
-  const e2 = add(c, rot([Math.cos(cut + gap / 2) * rx, Math.sin(cut + gap / 2) * ry], a));
-  const m = add(c, rot([rx * 0.1, ry * 0.15], a));
-  line(out, 2, e1, m); line(out, 2, m, e2);
-}
+// ---------- surface samplers: fixed parameters per part, placed each frame ----------
+const GA = Math.PI * (3 - Math.sqrt(5));
+/** Unit directions evenly over a sphere (Fibonacci lattice). */
+const sphereDirs = (n) => Array.from({ length: n }, (_, i) => {
+  const y = 1 - (2 * (i + 0.5)) / n, r = Math.sqrt(1 - y * y), a = i * GA;
+  return [Math.cos(a) * r, y, Math.sin(a) * r];
+});
+/** Points filling a unit disc (sunflower), two layers for thickness. */
+const discPts = (n) => Array.from({ length: n }, (_, i) => {
+  const r = Math.sqrt((i + 0.5) / n), a = i * GA;
+  return [Math.cos(a) * r, Math.sin(a) * r, i % 2 ? 1 : -1];
+});
+/** Tube parameters: [f along the curve, angle round it]. */
+const tubePts = (n, turns) => Array.from({ length: n }, (_, i) => [(i + 0.5) / n, i * GA * turns]);
 
-/** Every part of the figure for a pose: { pts: [[x, y]...], z: [...], anchors: [[x, y, mag, cls]...], hand, mouth }. */
-function figure(p) {
-  const pts = [], z = [];
-  const part = (fn, depth) => { const s = pts.length; fn(pts); for (let i = s; i < pts.length; i++) z.push(depth); };
-  const earL = onHead(p, [-0.24, -0.3]), earR = onHead(p, [0.2, -0.33]);
-  part((o) => ellipse(o, 26, earL, 0.155, 0.155), 0.06);
-  part((o) => ellipse(o, 26, earR, 0.155, 0.155), -0.04);
-  // head: a circle, open where the snout joins on the right
-  part((o) => ellipse(o, 40, p.head, 0.29, 0.28, p.tilt, 0.55, TAU - 0.35), 0);
-  // snout: a long rounded muzzle to the right, the nose at its tip
-  const snoutC = onHead(p, [0.3, 0.1]);
-  part((o) => ellipse(o, 24, snoutC, 0.2, 0.11, p.tilt + 0.12, -2.5, 2.3), -0.08);
-  const nose = onHead(p, [0.5, 0.04]);
-  part((o) => ellipse(o, 8, nose, 0.055, 0.045, p.tilt), -0.12);
-  // whistling mouth: a small puckered ring under the nose (fades into a smile line when he points)
-  const mouth = onHead(p, [0.38, 0.17]);
-  part((o) => (p.finger < 0.5 ? ellipse(o, 6, mouth, 0.03, 0.03) : hose(o, 6, onHead(p, [0.22, 0.14]), onHead(p, [0.32, 0.22]), onHead(p, [0.42, 0.13]))), -0.1);
-  part((o) => pieEye(o, 14, onHead(p, [0.04, -0.06]), 0.045, 0.085, p.tilt, 0.6), -0.06);
-  part((o) => pieEye(o, 14, onHead(p, [0.17, -0.07]), 0.042, 0.082, p.tilt, 0.6), -0.07);
-  // body: a pear-shaped torso, shorts with two buttons
-  const neck = add(p.head, [-0.02, 0.27]);
-  part((o) => { hose(o, 12, neck, [-0.26, -0.05], [-0.18, 0.3]); hose(o, 12, neck, [0.26, -0.05], [0.18, 0.3]); }, 0);
-  part((o) => { line(o, 10, [-0.2, 0.14], [0.2, 0.14]); hose(o, 10, [-0.2, 0.14], [-0.26, 0.3], [-0.16, 0.38]); hose(o, 10, [0.2, 0.14], [0.26, 0.3], [0.16, 0.38]); line(o, 8, [-0.16, 0.38], [0.16, 0.38]); }, -0.02);
-  // rubber-hose arms with bare round hands (no gloves in 1928)
-  const shL = [-0.15, -0.06], shR = [0.15, -0.06];
-  part((o) => hose(o, 18, shL, p.elbowL, p.handL), 0.12);
-  part((o) => ellipse(o, 9, p.handL, 0.06, 0.06), 0.12);
-  part((o) => hose(o, 18, shR, p.elbowR, p.handR), -0.12);
-  part((o) => ellipse(o, 9, p.handR, 0.06, 0.06), -0.12);
-  const fingerTip = add(p.handR, [0.03 * p.finger, -0.16 * p.finger]);
-  part((o) => line(o, 5, p.handR, fingerTip), -0.13);
-  // hose legs and big oval shoes
-  const hipL = [-0.09, 0.38], hipR = [0.09, 0.38];
-  part((o) => hose(o, 16, hipL, [-0.2, 0.6], p.footL), 0.05);
-  part((o) => hose(o, 16, hipR, [0.2, 0.6], p.footR), -0.05);
-  const shoeL = add(p.footL, [-0.06, 0.06]), shoeR = add(p.footR, [0.09, 0.06]);
-  part((o) => ellipse(o, 16, shoeL, 0.16, 0.075, -0.08), 0.05);
-  part((o) => ellipse(o, 16, shoeR, 0.17, 0.075, 0.06), -0.05);
-  // a thin tail, curling up behind
-  const tailTip = [-0.62, 0.12];
-  part((o) => hose(o, 14, [-0.18, 0.32], [-0.6, 0.56], tailTip), 0.1);
-  const anchors = [
-    [...earL, 0.75, 'A'], [...earR, 0.75, 'A'], [...nose, 0.85, 'F'], [...p.handL, 0.6, 'B'], [...fingerTip, 0.6 + 0.4 * p.finger, 'G'],
-    [...shoeL, 0.6, 'B'], [...shoeR, 0.6, 'B'], [-0.06, 0.24, 0.5, 'A'], [0.08, 0.24, 0.5, 'A'], [...tailTip, 0.45, 'K'],
-  ];
-  return { pts, z, anchors, hand: fingerTip, mouth };
+const rot2 = (x, y, a) => [x * Math.cos(a) - y * Math.sin(a), x * Math.sin(a) + y * Math.cos(a)];
+const quad = (a, c, b, f) => [(1 - f) ** 2 * a[0] + 2 * (1 - f) * f * c[0] + f * f * b[0], (1 - f) ** 2 * a[1] + 2 * (1 - f) * f * c[1] + f * f * b[1]];
+
+// Colours (palette tokens). The 1928 film is black and white; in light, his "black" (head, ears, body, limbs, hands)
+// is cool ice, the face/muzzle warm cream (sepia), shorts plum with two gold buttons, shoes snow. Lifted, never dark.
+const BLACK = 'ice', FACE = 'sepia';
+const FACE_DIR = (() => { const v = [0.72, 0.12, -0.68]; const m = Math.hypot(...v); return v.map((x) => x / m); })();
+
+// Part table: name, kind, point count, colour (or per-point colour fn), extra.
+const PARTS = [
+  { id: 'head', kind: 'sphere', n: 300 },
+  { id: 'earL', kind: 'disc', n: 90, color: BLACK },
+  { id: 'earR', kind: 'disc', n: 90, color: BLACK },
+  { id: 'snout', kind: 'sphere', n: 100, color: FACE },
+  { id: 'nose', kind: 'sphere', n: 22, color: BLACK },
+  { id: 'eyeL', kind: 'eye', n: 40, color: BLACK },
+  { id: 'eyeR', kind: 'eye', n: 40, color: BLACK },
+  { id: 'mouth', kind: 'sphere', n: 14, color: 'rose' },
+  { id: 'torso', kind: 'sphere', n: 150, color: BLACK },
+  { id: 'shorts', kind: 'sphere', n: 130, color: 'plum' },
+  { id: 'btnL', kind: 'sphere', n: 10, color: 'gold' },
+  { id: 'btnR', kind: 'sphere', n: 10, color: 'gold' },
+  { id: 'armL', kind: 'tube', n: 60, color: BLACK },
+  { id: 'armR', kind: 'tube', n: 60, color: BLACK },
+  { id: 'handL', kind: 'sphere', n: 24, color: BLACK },
+  { id: 'handR', kind: 'sphere', n: 24, color: BLACK },
+  { id: 'finger', kind: 'tube', n: 12, color: BLACK },
+  { id: 'legL', kind: 'tube', n: 54, color: BLACK },
+  { id: 'legR', kind: 'tube', n: 54, color: BLACK },
+  { id: 'shoeL', kind: 'sphere', n: 60, color: 'snow' },
+  { id: 'shoeR', kind: 'sphere', n: 60, color: 'snow' },
+  { id: 'tail', kind: 'tube', n: 32, color: BLACK },
+];
+for (const p of PARTS) {
+  p.par = p.kind === 'sphere' ? sphereDirs(p.n) : p.kind === 'disc' || p.kind === 'eye' ? discPts(p.n) : tubePts(p.n, p.id === 'tail' ? 0.3 : 1);
+}
+// The head's face patch (points turned towards the muzzle side) is cream, the rest "black".
+PARTS[0].colors = PARTS[0].par.map(([x, y, z]) => (x * FACE_DIR[0] + y * FACE_DIR[1] + z * FACE_DIR[2] > 0.22 && y > -0.5 ? FACE : BLACK));
+const N = PARTS.reduce((s, p) => s + p.n, 0);
+const COLOR = new Array(N);
+{ let k = 0; for (const p of PARTS) for (let i = 0; i < p.n; i++) COLOR[k++] = p.colors ? p.colors[i] : p.color; }
+
+/** Place every point for a pose into `out` (Float32Array, x y z per point). Returns { hand, mouth } anchors. */
+function place(p, out) {
+  let k = 0;
+  const put = (x, y, z) => { out[k * 3] = x; out[k * 3 + 1] = y; out[k * 3 + 2] = z; k++; };
+  const H = p.head, tl = p.tilt;
+  const onHead = (x, y) => { const [rx, ry] = rot2(x, y, tl); return [H[0] + rx, H[1] + ry]; };
+  const ellipsoid = (part, c, rx, ry, rz, a = 0) => {
+    for (const [x, y, z] of part.par) { const [ex, ey] = rot2(x * rx, y * ry, a); put(c[0] + ex, c[1] + ey, c[2] + z * rz); }
+  };
+  const tube = (part, a, ctrl, b, r, z0, z1, taper = 0) => {
+    for (const [f, ang] of part.par) {
+      const q = quad(a, ctrl, b, f), q2 = quad(a, ctrl, b, Math.min(1, f + 0.02));
+      let nx = -(q2[1] - q[1]), ny = q2[0] - q[0]; const m = Math.hypot(nx, ny) || 1; nx /= m; ny /= m;
+      const rr = r * (1 - taper * f);
+      put(q[0] + nx * Math.cos(ang) * rr, q[1] + ny * Math.cos(ang) * rr, lerp(z0, z1, f) + Math.sin(ang) * rr);
+    }
+  };
+  const P = Object.fromEntries(PARTS.map((q) => [q.id, q]));
+  // head: a sphere of drones
+  for (const [x, y, z] of P.head.par) { const [hx, hy] = onHead(x * 0.29, y * 0.28); put(hx, hy, z * 0.27); }
+  // ears: thick discs, round, standing up from the top of the head
+  for (const [id, ox, oy, oz] of [['earL', -0.25, -0.31, 0.08], ['earR', 0.19, -0.34, -0.02]]) {
+    const [cx, cy] = onHead(ox, oy);
+    for (const [x, y, s] of P[id].par) put(cx + x * 0.155, cy + y * 0.155, oz + s * 0.025 + x * 0.05);
+  }
+  // muzzle: a long rounded snout towards the viewer's right, nose ball at its tip
+  { const [cx, cy] = onHead(0.3, 0.1); ellipsoid(P.snout, [cx, cy, -0.12], 0.21, 0.11, 0.12, tl + 0.12); }
+  { const [cx, cy] = onHead(0.51, 0.04); ellipsoid(P.nose, [cx, cy, -0.15], 0.055, 0.045, 0.045); }
+  // pie-cut eyes: tall ovals on the face with a wedge of drones missing (the wedge points sit in the centre)
+  for (const [id, ox] of [['eyeL', 0.05], ['eyeR', 0.19]]) {
+    const [cx, cy] = onHead(ox, -0.07);
+    for (const [x, y] of P[id].par) {
+      const a = Math.atan2(y, x), cut = Math.abs(((a - 0.6 + Math.PI) % TAU + TAU) % TAU - Math.PI) < 0.45;
+      const s = cut ? 0.15 : 1;
+      put(cx + x * 0.055 * s, cy + y * 0.1 * s, -0.27 + ox * 0.25);
+    }
+  }
+  // mouth: a small puckered ball while whistling, a smile curve once he points
+  {
+    const [cx, cy] = onHead(0.38, 0.17);
+    P.mouth.par.forEach(([x, y, z], i) => {
+      if (p.finger < 0.5) put(cx + x * 0.035, cy + y * 0.035, -0.17 + z * 0.03);
+      else { const f = i / (P.mouth.n - 1); const [sx, sy] = onHead(0.22 + 0.2 * f, 0.15 + 0.07 * Math.sin(f * Math.PI)); put(sx, sy, -0.17); }
+    });
+  }
+  // body: a pear-shaped torso, round shorts, two buttons on the front
+  ellipsoid(P.torso, [0, 0.04, 0], 0.18, 0.25, 0.14);
+  ellipsoid(P.shorts, [0, 0.29, 0], 0.22, 0.13, 0.17);
+  ellipsoid(P.btnL, [-0.07, 0.28, -0.17], 0.03, 0.03, 0.02);
+  ellipsoid(P.btnR, [0.08, 0.28, -0.17], 0.03, 0.03, 0.02);
+  // rubber-hose arms and legs (tubes), bare round hands (no gloves in 1928), a pointing finger
+  tube(P.armL, [-0.15, -0.08], p.elbowL, p.handL, 0.04, 0.08, 0.12);
+  tube(P.armR, [0.15, -0.08], p.elbowR, p.handR, 0.04, -0.06, -0.12);
+  ellipsoid(P.handL, [p.handL[0], p.handL[1], 0.12], 0.065, 0.065, 0.06);
+  ellipsoid(P.handR, [p.handR[0], p.handR[1], -0.12], 0.065, 0.065, 0.06);
+  const tip = [p.handR[0] + 0.03 * p.finger, p.handR[1] - 0.17 * p.finger];
+  tube(P.finger, p.handR, [(p.handR[0] + tip[0]) / 2, (p.handR[1] + tip[1]) / 2], tip, 0.02 * (0.3 + 0.7 * p.finger), -0.12, -0.13);
+  tube(P.legL, [-0.09, 0.38], [-0.2, 0.62], p.footL, 0.045, 0.05, 0.05);
+  tube(P.legR, [0.09, 0.38], [0.2, 0.62], p.footR, 0.045, -0.05, -0.05);
+  ellipsoid(P.shoeL, [p.footL[0] - 0.06, p.footL[1] + 0.06, 0.05], 0.17, 0.08, 0.1, -0.08);
+  ellipsoid(P.shoeR, [p.footR[0] + 0.09, p.footR[1] + 0.06, -0.05], 0.18, 0.08, 0.1, 0.06);
+  // a thin tail curling up behind him
+  tube(P.tail, [-0.18, 0.32], [-0.62, 0.58], [-0.64, 0.12], 0.016, 0.12, 0.2);
+  return { hand: tip, mouth: onHead(0.38, 0.17) };
 }
 
 // ---------- the piece ----------
-const N = figure(WHISTLE).pts.length;
-const live = { n: N, p: new Float32Array(N * 3), s: new Float32Array(N).fill(0.55) };
-let frameCloud = null;
-function frameCloudOf(aspect) {
-  if (frameCloud?.aspect === aspect) return frameCloud.c;
-  // the old-film frame's border as points (the shape the swarm starts from)
-  const c = { n: N, p: new Float32Array(N * 3), s: new Float32Array(N).fill(0.6) };
+const live = { n: N, p: new Float32Array(N * 3), s: new Float32Array(N).fill(1) };
+const screenCache = new Map();
+/** The film frame as a flat screen of drones (or, with film = false, a loose cloud where the frame was). */
+function screenCloud(aspect, film) {
+  const key = `${aspect}|${film}`;
+  if (screenCache.has(key)) return screenCache.get(key);
+  const c = { n: N, p: new Float32Array(N * 3), s: new Float32Array(N).fill(1) };
   const hw = 0.95 * aspect, hh = 0.95;
+  const cols = Math.ceil(Math.sqrt((N * hw) / hh)), rows = Math.ceil(N / cols);
   for (let i = 0; i < N; i++) {
-    const f = (i + rand(i) * 0.5) / N, per = 4 * (hw + hh), d = f * per * 2;
-    const L = d % per;
-    let x, y;
-    if (L < 2 * hw) [x, y] = [-hw + L, -hh];
-    else if (L < 2 * hw + 2 * hh) [x, y] = [hw, -hh + (L - 2 * hw)];
-    else if (L < 4 * hw + 2 * hh) [x, y] = [hw - (L - 2 * hw - 2 * hh), hh];
-    else [x, y] = [-hw, hh - (L - 4 * hw - 2 * hh)];
-    c.p.set([x, y, (rand(i + 0.3) - 0.5) * 0.2], i * 3);
+    const gx = (i % cols) / (cols - 1), gy = Math.floor(i / cols) / (rows - 1);
+    const jit = film ? 0.004 : 0.25;
+    c.p.set([(gx - 0.5) * 2 * hw + (rand(i) - 0.5) * jit, (gy - 0.5) * 2 * hh + (rand(i + 0.3) - 0.5) * jit, (rand(i + 0.6) - 0.5) * (film ? 0.02 : 0.8)], i * 3);
   }
-  frameCloud = { aspect, c };
+  screenCache.set(key, c);
   return c;
 }
 
 /** Default timing (seconds from `mickey-in`); the s05 whistle sfx is ≈ 8 s long from the cue. */
-export const MICKEY_TIMING = { frame: 0, dissolve: 1.6, form: 4.2, anticipate: 7.6, point: 8.4, trail: 9.0, fade: 12.5, end: 15 };
+export const MICKEY_TIMING = { frame: 0, dissolve: 1.6, form: 4.4, anticipate: 7.6, point: 8.4, trail: 9.0, fade: 12.5, end: 15 };
 
 /**
- * Draw the star Mickey. age: seconds since `mickey-in`. opts: x, y (centre on the zone, 0..1), size (figure
- * half-height as a share of h), alpha, timing (override MICKEY_TIMING), film (draw the old-film frame stand-in:
- * WP-08 sets false once Mickey's clip plays in the frame).
+ * Draw the drone-swarm Mickey. age: seconds since `mickey-in`. opts: x, y (centre on the zone, 0..1), size (cloud
+ * units → share of min(w, h)), alpha, timing (override MICKEY_TIMING), film (start from a drone "film screen";
+ * WP-08 sets false once Mickey's clip plays in the frame, and the swarm gathers from a loose cloud instead).
  */
 export function mickeyStars(ctx, w, h, t, age, opts = {}) {
   const T = { ...MICKEY_TIMING, ...(opts.timing || {}) };
   const { x = 0.5, y = 0.6, size = 0.2, alpha = 1, film = true } = opts;
   if (age < 0 || age > T.end || alpha <= 0.01) return;
-  const out = 1 - easeInOutSine(clamp((age - T.fade) / (T.end - T.fade)));
-  const A = alpha * out;
-  const scale = size;                                      // renderCloud scale: share of min(w, h) per unit
-  const S = Math.min(w, h) * scale;
-  const view = { cx: x, cy: y, scale, rotY: 0.22 * Math.sin(age * 0.45), rotX: 0.05, dist: 4 };
-  const aspect = 0.8;
-
-  // 1. the old-film frame (sepia, static vignette, no flicker: DESIGN_SYSTEM §05), dissolving as he whistles
-  const frameA = film ? clamp(age / 0.6) * (1 - easeInOutSine(clamp((age - T.dissolve) / 1.2))) : 0;
-  if (frameA > 0.01) {
-    const fw = S * 0.95 * aspect * 2, fh = S * 0.95 * 2;
-    const fx = x * w - fw / 2, fy = y * h - fh / 2;
-    ctx.save();
-    ctx.globalAlpha *= A * frameA;
-    const g = ctx.createRadialGradient(x * w, y * h, fh * 0.1, x * w, y * h, fh * 0.7);
-    g.addColorStop(0, rgba('sepia', 0.32)); g.addColorStop(1, rgba('sepia', 0.04));
-    ctx.fillStyle = g; ctx.fillRect(fx, fy, fw, fh);
-    ctx.strokeStyle = rgba('sepia', 0.18); ctx.lineWidth = 2;   // static scratches
-    for (let i = 0; i < 5; i++) { const sx = fx + fw * rand(i + 4.2); ctx.beginPath(); ctx.moveTo(sx, fy + fh * 0.05); ctx.lineTo(sx + fw * 0.02, fy + fh * (0.4 + rand(i) * 0.5)); ctx.stroke(); }
-    ctx.beginPath(); ctx.rect(fx, fy, fw, fh);
-    glowStroke(ctx, 'sepia', Math.max(4, S * 0.025));
-    ctx.restore();
-  }
-
-  // 2. the swarm: frame border → figure, then the live pose
-  const pose = poseAt(age, T);
-  const fig = figure(pose);
-  for (let i = 0; i < N; i++) live.p.set([fig.pts[i][0], fig.pts[i][1], fig.z[i]], i * 3);
+  const A = alpha * (1 - easeInOutSine(clamp((age - T.fade) / (T.end - T.fade))));
+  const S = Math.min(w, h) * size;
   const k = clamp((age - T.dissolve) / (T.form - T.dissolve));
-  if (k <= 0) return;
-  const cloud = k >= 1 ? live : morphClouds(frameCloudOf(aspect), live, k, { stagger: 0.45, lift: 0.4, seed: 23 });
-  const colorOf = (i) => (i % 7 === 0 ? 'gold' : i % 3 === 0 ? 'ice' : 'snow');
-  renderCloud(ctx, w, h, t, cloud, { ...view, size: 1.3, alpha: A * clamp(k * 3), color: colorOf, twinkle: 0.18 });
+  // The camera swings round while the swarm forms (drone shows reveal depth this way), then sways gently.
+  const swing = 1 - easeInOutSine(k);
+  const view = { cx: x, cy: y, scale: size, rotY: 0.42 * Math.sin(age * 0.5) - 0.9 * swing, rotX: 0.08 + 0.25 * swing, dist: 3.4 };
 
-  // 3. the named stars on the joints (realistic stars, s06 style), once the figure has formed
+  const pose = poseAt(age, T);
+  const anchors = place(pose, live.p);
+  const screen = screenCloud(0.8, film);
+  const cloud = k <= 0 ? screen : k >= 1 ? live : morphClouds(screen, live, k, { stagger: 0.5, lift: 0.7, seed: 23 });
+  // On the film screen the drones are warm sepia; as they fly they take their figure colours.
+  const color = k <= 0 ? 'sepia' : (i) => (rand(i * 1.7) < k * 1.15 ? COLOR[i] : 'sepia');
+  const fadeIn = film ? clamp(age / 0.8) : clamp((age - T.dissolve) / 0.8);
+  renderCloud(ctx, w, h, t, cloud, { ...view, size: 0.95, alpha: A * fadeIn, color, twinkle: 0.12 });
+
   const P = projector(w, h, view);
-  const starA = A * clamp((age - T.form + 0.6) / 1.2);
-  if (starA > 0.01) {
-    const unit = Math.min(w, h) / 1080;
-    const ga = ctx.globalAlpha, op = ctx.globalCompositeOperation;
-    ctx.globalCompositeOperation = 'lighter';
-    fig.anchors.forEach(([ax, ay, mag, cls], i) => {
-      const [px, py] = P(ax, ay, 0);
-      drawStar(ctx, px, py, t, { mag, cls, seed: 40 + i, twinkle: 0.2, unit: unit * scale / 0.2, alpha: starA });
-    });
-    ctx.globalAlpha = ga; ctx.globalCompositeOperation = op;
-  }
-
-  // 4. whistled notes floating up from his mouth while he whistles
-  const noteA = A * clamp((age - T.form + 0.8) / 0.8) * (1 - clamp((age - T.anticipate) / 0.6));
+  // whistled notes: little clusters of gold drones floating up from his mouth
+  const noteA = A * clamp((age - T.form + 0.6) / 0.8) * (1 - clamp((age - T.anticipate) / 0.6));
   if (noteA > 0.01) {
-    const [mx, my] = P(fig.mouth[0], fig.mouth[1], -0.1);
+    const [mx, my] = P(anchors.mouth[0], anchors.mouth[1], -0.17);
     additive(ctx, noteA, () => {
       for (let j = 0; j < 4; j++) {
-        const a = (age * 0.9 + j * 0.25) % 1;                // each note rises and fades over ≈ 1.1 s
+        const a = (age * 0.9 + j * 0.25) % 1;
         const nx = mx + S * (0.15 + 0.5 * a) + Math.sin(a * 6 + j) * S * 0.05, ny = my - S * 0.7 * a;
-        noteGlyph(ctx, nx, ny, S * 0.16, Math.sin(a * Math.PI) * noteA, j % 2);
+        noteGlyph(ctx, nx, ny, S * 0.16, Math.sin(a * Math.PI) * noteA, j % 2, Math.max(2.5, Math.min(w, h) / 260));
       }
     });
   }
-
-  // 5. pointing: the fingertip star trails a line of light up into the sky (the lead-in to s06)
+  // pointing: a stream of drones flows from the fingertip up into the sky (the lead-in to s06)
   const tr = clamp((age - T.trail) / 2.2);
   if (tr > 0) {
-    const [hx, hy] = P(fig.hand[0], fig.hand[1], -0.13);
-    const top = -0.02 * h;
-    const ey = hy + (top - hy) * easeInOutSine(tr);
-    const ex = hx + (w * 0.04) * easeInOutSine(tr);
+    const [hx, hy] = P(anchors.hand[0], anchors.hand[1], -0.13);
+    const ey = hy + (-0.02 * h - hy) * easeInOutSine(tr), ex = hx + w * 0.04 * easeInOutSine(tr);
+    const len = Math.hypot(ex - hx, ey - hy), gap = Math.max(10, S * 0.06);
+    const r = Math.max(2.5, Math.min(w, h) / 260) * 2.4;
     additive(ctx, A, () => {
-      const g = ctx.createLinearGradient(hx, hy, ex, ey);
-      g.addColorStop(0, rgba('gold', 0.9)); g.addColorStop(1, rgba('snow', 0.5));
-      ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(ex, ey);
-      ctx.lineCap = 'round'; ctx.strokeStyle = g;
-      ctx.lineWidth = Math.max(6, S * 0.03) * 2.6; ctx.globalAlpha *= 0.25; ctx.stroke();
-      ctx.lineWidth = Math.max(4, S * 0.016); ctx.globalAlpha *= 3.2; ctx.stroke();
-      dot(ctx, glowSprite('gold', 0.3), ex, ey, S * 0.12 * (1 - 0.5 * tr));
-      const sp = glowSprite('snow', 0.3);
-      for (let j = 0; j < 8; j++) {
-        const f = clamp(tr - j * 0.04);
-        dot(ctx, sp, hx + (ex - hx) * f + Math.sin(j * 2.3 + age * 3) * S * 0.04, hy + (ey - hy) * f, S * 0.025);
+      const gold = glowSprite('gold', 0.3), snow = glowSprite('snow', 0.3);
+      for (let d = (age * gap * 3) % gap; d < len; d += gap) {
+        const f = d / Math.max(1, len);
+        ctx.globalAlpha = A * (0.5 + 0.5 * f);
+        dot(ctx, f > 0.9 ? snow : gold, hx + (ex - hx) * f, hy + (ey - hy) * f, r);
       }
     });
   }
 }
 
-/** A musical note drawn in light: an oval head, a stem and (for `flag`) a little flag. */
-function noteGlyph(ctx, x, y, s, a, flag) {
+/** A musical note made of drones: an oval head, a stem and (for `flag`) a little flag. */
+function noteGlyph(ctx, x, y, s, a, flag, r) {
   if (a <= 0.01) return;
   const sp = glowSprite('gold', 0.3);
   ctx.globalAlpha *= a;
-  for (let i = 0; i < 5; i++) { const ang = (i / 5) * TAU; dot(ctx, sp, x + Math.cos(ang) * s * 0.35, y + Math.sin(ang) * s * 0.25, s * 0.16); }
-  for (let i = 1; i <= 5; i++) dot(ctx, sp, x + s * 0.32, y - (i / 5) * s * 1.3, s * 0.11);
-  if (flag) for (let i = 1; i <= 3; i++) dot(ctx, sp, x + s * (0.32 + i * 0.13), y - s * 1.3 + i * s * 0.15, s * 0.1);
+  for (let i = 0; i < 6; i++) { const ang = (i / 6) * TAU; dot(ctx, sp, x + Math.cos(ang) * s * 0.35, y + Math.sin(ang) * s * 0.25, r * 2.2); }
+  for (let i = 1; i <= 5; i++) dot(ctx, sp, x + s * 0.32, y - (i / 5) * s * 1.3, r * 2);
+  if (flag) for (let i = 1; i <= 3; i++) dot(ctx, sp, x + s * (0.32 + i * 0.13), y - s * 1.3 + i * s * 0.15, r * 2);
   ctx.globalAlpha /= a;
 }

@@ -50,8 +50,9 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 - **2026-11-17 · WP-11** — Audit table in the brief (all beats built except s04 chaos, s05 star Mickey → done here; s06 pets-as-constellations → **WP-11b** brief).
   s04: `fx/toys.js` (20 code-drawn sprites: Christmas/pet/cameo, cream rim + baked glow; analytic toss → bounce → rest; lid pops, ear/tail placeholders) on the **wall** zone; waves on cues/bars + a toy every beat in busy sections, floor clears at `cut`/`out`.
-  s05: `fx/mickey-stars.js` `mickeyStars(ctx,w,h,t,age,{x,y,size,film})`: sepia frame → swarm → 1928 Mickey (whistle bob, notes) → points up, fingertip trail to the sky; placed at `mickey-in` via the placeholder's new `drawBackdrop`. **Owner: please confirm the Mickey proposal + look in the PR screenshots.**
+  s05: `fx/mickey-stars.js` `mickeyStars(ctx,w,h,t,age,{x,y,size,film})`: drone film screen → 3D drone-swarm 1928 Mickey (whistle bob, notes) → points up, fingertip trail to the sky; placed at `mickey-in` via the placeholder's new `drawBackdrop`. **Owner: please confirm the Mickey proposal + look in the PR screenshots.**
   Flash check passes (s05 now included); s04 render ≈13 ms avg / 25 ms worst headless (wall zone now drawn by s04): if the iPad drops frames, lower the per-beat tosses in `WAVES`.
+  Owner PR note: Mickey must be a **drone swarm with depth**, not a dotted outline → rebuilt as ≈1.4k drones in 3D volumes (face mask, pie-cut eyes, shorts, shoes), camera swings in while he forms.
   Gotchas: toys land left of the tower on the wall bottom; the tree (occluding) hides those passing behind it, on purpose. `sw.js` v13.
 
 - **2026-11-17 · WP-06** — Brief + `docs/SCRIPT.md` (approved v1.0): 46 lines (3 🔒 name lines), cues `cue + offset`, ≈ 2:48 speech. Owner: male narrator, narrator says s08, name spoken in audio only.
