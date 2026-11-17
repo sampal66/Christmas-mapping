@@ -128,7 +128,10 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 - **Sound effects:** soft and cartoony (sleigh bells, sparkles, paw pats, whoosh, "boing"). Nothing sharp or loud.
 - **Never use** (the real pets react): bangs or explosions, dog barks or whines, meows, doorbells or knocks, squeaky
   toys. Fireworks are visual, with at most a soft musical swell.
-- **The pets don't speak** (⏳ owner to confirm): only the narrator talks; the pets act without words.
+- **The pets talk** (owner): character voices in neutral Latin American Spanish, animated-feature style; the narrator
+  frames the story. Speech only, never realistic barks or meows.
+- **Animation quality** (owner): no "MS Paint" look. Characters and Santa use real animation (TREATMENT §09); code is
+  for mapped light effects only, built with additive glow, soft particles and motion trails, never flat fills.
 - **Mix:**
   - The music can be **full and fairly loud** (owner): master target about **−16 LUFS** integrated, peaks ≤ −1 dBTP,
     and **no sudden loud transients** (keep the dynamic range gentle; set the soundbar level in rehearsal).

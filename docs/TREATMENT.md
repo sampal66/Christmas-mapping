@@ -21,6 +21,10 @@
 | **Spine** | A mix of two ideas: by family tradition **the youngest places the star**, and the star's light is **how Santa finds the house**. The search goes up into the night sky and **the constellations**, in a classic Disney-style light show. |
 | **Cameos** | **Both, tiny** (≤ 15 s each, cuttable): Steamboat Willie Mickey (1928) and E.H. Shepard-style Pooh. |
 | **Live moment** | **Papá taps Continue himself, afterwards.** The projection waits on a soft loop for as long as it takes. |
+| **Photos** (owner, PR review) | **No family photos on screen.** Instead, **one family photo becomes a constellation** at the end: its outline is drawn in stars. The photo stays in the on-device media pack and is turned into star points on the device, never in git. |
+| **Pet voices** (owner, PR review) | **The pets talk**, in animated-feature style (references for tone only: *The Lion King*, *The Secret Life of Pets*). Each pet has its own Spanish character voice; the narrator frames the story. |
+| **Santa** (owner, PR review) | Santa appears **in his sleigh with reindeer, crossing the sky** in the finale: a full animated character, not a silhouette. |
+| **Animation quality** (owner, PR review) | **No "MS Paint" look.** Code animation is fine for stars and light effects, but characters, Santa and hand-drawn effects need real animation. Production approach: §09 (decision pending). |
 
 ## 02 · Logline and 3-act shape
 
@@ -57,13 +61,16 @@ Each story beat moves at least one arc (see the "Arcs moved" column in §04).
 - **Felis**, the forgotten cat constellation of 1799, for Gandalf
 - the **North Star** in Ursa Minor: the lost star is hiding next to it
 
-The pets don't speak; the narrator tells the story and the pets act without words (⏳ owner to confirm). That also
-keeps recorded barks and meows away from the real pets.
+**Voices (owner):** the pets talk, with short lines in neutral Latin American Spanish, "Disney dub" style. Casting notes
+for WP-06: Connor, a deep, soft, shy gentle giant; Alaska, fast, bossy, a little diva; Orion, a dry, grumbly drawl;
+Gandalf, a bright, giggly, hyperactive kid. Mickey only whistles; Pooh gets one gentle line. Speech, not animal
+sounds: still no realistic barks or meows (the real pets react).
 
 ## 04 · Beat sheet ⏳
 
 Times are placeholders for the scene builds (WP-03/08). Real music edits re-time them through `cues`.
-**Total ≈ 12:15** (s01–s10, with the live hold counted at ≈1:00). Narration ≈ 1:45 in ≈ 12 short lines.
+**Total ≈ 12:15** (s01–s10, with the live hold counted at ≈1:00). Speech ≈ 3 min: narrator ≈ 1:15 plus short pet
+dialogue in s03, s05, s07 and s10 (the "Narration" column lists the narrator only).
 
 | Id | Title | Purpose | What happens | Zones | Music (licence status) | Length | Narration | On screen | Cue points |
 |---|---|---|---|---|---|---|---|---|---|
@@ -75,9 +82,9 @@ Times are placeholders for the scene builds (WP-03/08). Real music edits re-time
 | **s05** | ¿Dónde está la estrella? | Clues; Connor's fear; Mickey | Alaska regroups the team. A soft jingle spooks Connor behind a box (comic). Orion grumbles. An old film flickers on in the backdrop: Mickey whistles and points up, "follow the stars". | backdrop, box1, box2, stage | Original underscore; Mickey whistles *Steamboat Bill* (1910, PD; original whistle recording/ElevenLabs sfx) | 1:00 | yes, 1–2 lines | all 4 pets, Mickey | `regroup`, `jingle`, `mickey-in`, `mickey-out`, `out` |
 | **s06** | Constelaciones | Full-wall wonder; the sky search | The whole wall becomes a starry sky. Constellations draw themselves star by star: Orion (Orion the cat smiles), Canis Major and Minor, Felis. A gold glint by the North Star moves away; shooting stars; snow on the right wall. | wall, backdrop, tree (soft sparkle), star, rightStrip | *Waltz of the Flowers* (Tchaikovsky 1892, PD; CC0 recording, verify), edited | 1:30 | yes, 1 line (intro) | pets as constellations (line-art) | `sky`, `orion`, `canis`, `felis`, `cut`, `glint`, `out` |
 | **s07** | El tarro de miel | Find the star; Connor's brave moment | Pooh floats up on his balloon; the star glows inside his honey pot; he hands it down. Santa's sleigh bells jingle (softly) as Connor carries the star across the stage past the boxes. The star flies up and settles just above the tree tip. | backdrop, box1, box2, tree, star, wall | Original underscore + soft sleigh bells (ElevenLabs) | 1:15 | yes, 2 lines | Pooh, all 4 pets | `pooh-in`, `found`, `carry`, `fly`, `settle`, `out` |
-| **s08** | Para ti, `{BABY}` | The heart: family and first Christmas | Gentle snow; family photos in vintage frames on the backdrop, one at a time; "¡Feliz primera Navidad, `{BABY}`!" from Papá and Mamá. Ends: "only one thing is missing… the real star". | backdrop, wall (dim snow), star (soft) | *Silent Night* (Gruber 1818, PD; PD/CC0 instrumental recording) | 1:00 | yes, 2 lines (the message; possibly recorded by Papá and Mamá, on-device only) | photos (media pack) | `photo-1`…`photo-n`, `message`, `missing`, `out` |
+| **s08** | Para ti, `{BABY}` | The heart: first Christmas | No photos. Gentle snow; the pets gather on the stage and look up; the star above the tree glows warmer as "¡Feliz primera Navidad, `{BABY}`!" is said by Papá and Mamá. Ends: "only one thing is missing… the real star". | backdrop, wall (dim snow), star (soft) | *Silent Night* (Gruber 1818, PD; PD/CC0 instrumental recording) | 1:00 | yes, 2 lines (the message; possibly recorded by Papá and Mamá, on-device only) | all 4 pets (quiet) | `gather`, `message`, `missing`, `out` |
 | **s09** | La estrella de verdad (**live**) | The real star goes on with `{BABY}` | See §05. The projected star bows and fades to a soft gold halo at the tip; dim starfield; the tree zone stays dark. **Hold** until Papá taps Continue. | star (halo), backdrop, rightStrip (dim) | *O Christmas Tree* music-box loop (same as s00) | hold (~1:00) | no | — | `bow`, `hold` |
-| **s10** | Gran final | Celebration | Tree lights are already on (plugged in during s09). A light ripple and footlights burst; Santa's sleigh silhouette crosses the sky following the star; soft fireworks bloom and fade across the wall; the pets wave goodbye from the stage; "¡Feliz Navidad!". Fade to the starfield (s00), never to black. | all | *Jingle Bells* (Pierpont 1857, PD) into *We Wish You a Merry Christmas* (trad., PD) or *Joy to the World* (PD); PD/CC0 recordings | 1:30 | yes, 1 line (goodbye) | all 4 pets, Santa silhouette | `ripple`, `sleigh`, `fireworks`, `wave`, `title`, `out` |
+| **s10** | Gran final | Celebration | Tree lights are already on (plugged in during s09). A light ripple and footlights burst; **Santa in his sleigh with reindeer** flies across the sky, following the star; soft fireworks bloom and fade across the wall; the pets wave goodbye from the stage. **Closing image: the stars gather into the family constellation** (drawn from one family photo) with "¡Feliz Navidad!". Fade to the starfield (s00), never to black. | all | *Jingle Bells* (Pierpont 1857, PD) into *We Wish You a Merry Christmas* (trad., PD) or *Joy to the World* (PD); PD/CC0 recordings | 1:30 | yes, goodbye lines (pets + narrator) | all 4 pets, Santa + sleigh | `ripple`, `sleigh`, `fireworks`, `wave`, `family-constellation`, `title`, `out` |
 
 **Licence note:** every composition above is public domain. Each **recording** still needs a verified licence
 (PD, CC0 or a US federal work) in `assets/CREDITS.md` (WP-05). Original/ElevenLabs items cost credits:
@@ -146,5 +153,29 @@ follows directly from an owner decision. **Proposed** = waiting for the owner's 
 | 8 | Colour | Cheap LCDs mute deep blue and red and tint whites green. | Keep the palette; check it on the wall with the test patterns in WP-09 and nudge `cranberry`/`plum` if they look dim. | Proposed (check in WP-09) |
 | 9 | Zones | The `stage` zone is a 31 px strip. | Footlights only (already in §07); every zone has a role (§07 above). | Applied (docs) |
 
+## 09 · Animation production review ⏳ (owner's main worry)
+
+The owner doesn't want an "MS Paint" look. The honest split: what code does well, and what it doesn't.
+
+| Element | Code (canvas) | Verdict |
+|---|---|---|
+| Mapped light: edge traces, tree waves, box faces, footlights, snow, stars, constellations, fireworks, halo | Can look professional *if* it's built with additive glow, soft particles, bloom and motion trails, never flat fills. Video can't do these: they must land exactly on the real tree, boxes and edges. | ✅ keep in code, with a quality bar |
+| Characters acting and talking (4 pets, Pooh, Mickey), Santa's sleigh | Cut-out puppets moved in code look stiff and cheap: exactly the worry. | ❌ not code |
+| Hand-drawn effects (magic poofs, honey splash, the star's escape trail with character) | Possible in code, but they read as "generated". | ⚠️ video clips or sprite sheets |
+
+**Options for characters**
+
+| | Approach | Look | Cost and risk |
+|---|---|---|---|
+| **A (recommended)** | **Painted model sheets → AI image-to-video clips** (ElevenLabs), 5–10 s each, on pure black; lip-sync for talking shots; the app composites them into the backdrop and box zones | real animated-feature motion | **Video credits** (≈25–40 clips for s03, s05, s07, s10; the biggest spend in the project); keeping characters consistent from shot to shot; little fine control |
+| B | Motion comic: high-quality painted stills with parallax, blinks, camera moves; the voices carry the story | elegant storybook, but not "animated" | cheapest; reliable |
+| C | Pro skeletal/mesh puppet rig (Spine/Live2D-style) | smooth cut-out (better than code puppets, not Disney) | new tools needed (owner approval); rigging time |
+
+**Recommendation:** A for every character shot and Santa, with B as the fallback for any shot that fails; code only for the mapped light
+effects, held to the quality bar above. **First, a style test before committing:** (1) a free code FX test page
+(glow, sparkles, star trace, constellation) with screenshots; (2) with the owner's OK on credits, one Gandalf model
+sheet plus one 5 s clip on black, judged on the real projector or the TV.
+
 ## Changelog
+- **2026-11-17** — v1.1 (owner PR notes): no family photos → one photo becomes the closing constellation; the pets talk; Santa's full sleigh in the finale; §09 animation production review.
 - **2026-11-17** — v1 (WP-10): owner decisions, logline, arcs, beat sheet, live-moment plan, cut list, zone roles, design review.

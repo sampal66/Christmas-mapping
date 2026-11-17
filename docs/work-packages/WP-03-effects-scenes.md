@@ -21,13 +21,15 @@ Build a reusable library of projection effects and the light-show scenes, timed 
      box face sequencer, footlights chase, soft firework (bloom + fade, no strobe), iris and fade transitions,
      title card (Mountains of Christmas / Playfair Display, **bundled in `app/` for offline use**, system fallback),
      **dusk starfield base** (every scene sits on it and fades to it, never to black), **constellation line-art**
-     (stars drawn on one by one, then joined), **star halo**, simple **sleigh silhouette** (original design).
+     (stars drawn on one by one, then joined), **star halo**, **photo → constellation** (turns one media-pack photo into star points on the device; the photo never
+     leaves the iPad). Quality bar: additive glow, soft particles, motion trails, never flat fills (TREATMENT §09).
+     Santa's sleigh is character animation (WP-04/08), not code.
 2. **Scenes** in `app/js/scenes/`, with the placeholder lengths from TREATMENT §04:
    - `s00-preshow` (loop), `s01-wall-wakes` 1:00, `s02-tree-alive` 1:30, `s04-magic-boxes` 1:15,
      `s06-constellations` 1:30 (Orion, Canis Major/Minor, Felis, the North Star glint),
      `s09-real-star` (hold; star halo, dim sky, tree zone dark; Continue to leave), `s10-finale` 1:30.
    - The finale is visuals only (the pets' wave comes in WP-08). Give it a `projectedStar` option (off by default)
-     for the live-moment fallback (TREATMENT §05).
+     for the live-moment fallback (TREATMENT §05), and end on the family-constellation cue.
 3. **Cue support:** each scene exports `cues: [{ t, name }]`, and the effects key off cue names, so re-timing
    to real music only edits numbers. Use the cue names in TREATMENT §04, and always include `cut` and `out`
    (the on-the-night cut list jumps to `cut`).

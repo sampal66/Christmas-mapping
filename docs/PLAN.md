@@ -102,7 +102,8 @@ Development happens in Claude cloud sessions from an iPad, and the same iPad run
 a light film-grain pass.
 **Projection review (WP-10):** for the LCD projector the look leans to flat graphic shapes, bold lines and light
 rims on a dim night-sky base, with no full-frame grain (⏳ owner to approve; see [TREATMENT §08](TREATMENT.md) and
-[DESIGN_SYSTEM](DESIGN_SYSTEM.md)). The show is for the adults; the pets act without words, only the narrator speaks.
+[DESIGN_SYSTEM](DESIGN_SYSTEM.md)). The show is for the adults. The pets **talk** (character voices); characters and Santa get real animation, not code
+puppets (production approach: [TREATMENT §09](TREATMENT.md)).
 
 | Character | Who | Design notes | Personality |
 |---|---|---|---|
@@ -131,7 +132,7 @@ AI image-to-video actions on black. The star element (a gold star like the real 
 - **Sound effects:** ElevenLabs (sleigh bells, sparkles, paws, magic whoosh, a soft "boing").
 - **Adult audience, Connor-friendly:** the music can be full and fairly loud, but with **no loud bangs or sudden sounds**,
   no barks, meows or doorbells, and no fast strobe. Fireworks are visual, soft and fading.
-- **Narration:** ≈1:45 in ≈12 short lines (beat sheet in [TREATMENT](TREATMENT.md)).
+- **Speech:** ≈3 min: narrator ≈1:15 plus short pet dialogue (beat sheet in [TREATMENT](TREATMENT.md)).
 
 ## 6. Show outline (≈ 12 min, agreed range 10–15 min)
 
@@ -149,9 +150,9 @@ tradition the youngest places it, and its light guides Santa, so the pets chase 
 | 5 | **¿Dónde está la estrella?**: Connor spooked by jingle bells; Mickey's old film whistles "follow the stars" | story | backdrop, boxes | original + *Steamboat Bill* whistle | 1:00 |
 | 6 | **Constelaciones**: the wall becomes the sky; Orion, Canis Major/Minor, Felis; a glint by the North Star | light show | wall, backdrop, star, rightStrip | *Waltz of the Flowers* | 1:30 |
 | 7 | **El tarro de miel**: Pooh's honey pot holds the star; Connor carries it past the sleigh bells; it settles above the tree | story | backdrop, boxes, tree, star | original + soft sleigh bells | 1:15 |
-| 8 | **Para ti, `{BABY}`**: family photos, "¡Feliz primera Navidad!" from Papá and Mamá | tender | backdrop | *Silent Night* | 1:00 |
+| 8 | **Para ti, `{BABY}`**: no photos; the pets look up at the star, "¡Feliz primera Navidad!" from Papá and Mamá | tender | backdrop | *Silent Night* | 1:00 |
 | 9 | **La estrella de verdad** (live): projected star bows to a halo; Papá and `{BABY}` place the real star; tree lights plugged in; **Papá taps Continue** | **hold point** | star halo, dim sky; tree dark | music-box loop | ~1:00 |
-| 10 | **Gran final**: Santa's sleigh follows the star, soft fireworks, pets wave, "¡Feliz Navidad!" | light show | all | *Jingle Bells* → *We Wish You…* / *Joy to the World* | 1:30 |
+| 10 | **Gran final**: Santa in his sleigh crosses the sky, soft fireworks, pets wave; one family photo becomes a constellation, "¡Feliz Navidad!" | light show | all | *Jingle Bells* → *We Wish You…* / *Joy to the World* | 1:30 |
 
 During the live moment (9) the tree zone stays dark, so Papá and the baby aren't lit in the face; only a soft gold
 halo marks the tip. On-the-night cuts (to ≈10 min) are listed in [TREATMENT §06](TREATMENT.md).
