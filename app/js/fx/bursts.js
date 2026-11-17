@@ -133,3 +133,35 @@ export function projectedStar(ctx, w, h, t, opts = {}) {
     ctx.fill();
   });
 }
+
+/**
+ * A spark fountain (gerb) rising from a point on the floor line: a steady spray of short-lived sparks that arc up
+ * and fall back, emitted on a fixed time grid so any frame is reproducible. opts: x, y (base, 0..1), t0, t1 (on
+ * window, seconds; it ramps in and out over 0.8 s), height (share of h), spread (radians), rate (sparks/s),
+ * color, color2, alpha, seed, surge (0..1 extra height on the beat).
+ */
+export function sparkFountain(ctx, w, h, t, opts = {}) {
+  const { x = 0.5, y = 0.95, t0 = 0, t1 = 10, height = 0.35, spread = 0.28, rate = 90, color = 'gold', color2 = 'snow',
+    alpha = 1, seed = 5, surge = 0 } = opts;
+  if (t < t0 || t > t1 + 1.6 || alpha <= 0.01) return;
+  const life = 1.5, dt = 1 / rate;
+  const g = 2 * height * h / (0.6 * life) ** 2;            // apex at ≈ 0.6 of a spark's life
+  const v0 = g * 0.6 * life;
+  const first = Math.max(Math.ceil(t0 / dt), Math.ceil((t - life) / dt)), last = Math.floor(Math.min(t, t1) / dt);
+  const sA = glowSprite(color, 0.3), sB = glowSprite(color2, 0.3);
+  const m = Math.min(w, h);
+  additive(ctx, alpha, () => {
+    for (let k = first; k <= last; k++) {
+      const te = k * dt, age = t - te;
+      const ramp = Math.min(clamp((te - t0) / 0.8), clamp((t1 - te) / 0.8));
+      if (ramp <= 0) continue;
+      const ang = -Math.PI / 2 + (rand(seed + k * 0.37) - 0.5) * spread * 2;
+      const sp = v0 * (0.75 + rand(seed + k * 0.53) * 0.35) * (1 + 0.25 * surge);
+      const px = x * w + Math.cos(ang) * sp * age;
+      const py = y * h + Math.sin(ang) * sp * age + 0.5 * g * age * age;
+      const fade = 1 - age / life;
+      ctx.globalAlpha = alpha * ramp * fade * (0.6 + 0.4 * rand(seed + k));
+      dot(ctx, k % 5 ? sA : sB, px, py, m * (0.006 + 0.004 * fade));
+    }
+  });
+}

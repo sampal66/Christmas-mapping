@@ -171,3 +171,39 @@ export function fallbackConstellation() {
   const lines = stars.map((_, i) => [i, (i + 1) % stars.length]);
   return { stars, lines, aspect: 1 };
 }
+
+/**
+ * Light runners: comets of light chasing along a traced path (the outline "comes alive" after it is drawn).
+ * opts: path ([u, v] 0..1), closed, count (runners, evenly spaced), speed (laps per second of `t`; feed beat time so
+ * they surge on the beat), tail (share of the path length), color, size (px, head radius), alpha.
+ */
+export function edgeRunners(ctx, w, h, t, opts = {}) {
+  const { path = rectPath(), closed = true, count = 3, speed = 0.1, tail = 0.08, color = 'snow', alpha = 1 } = opts;
+  if (alpha <= 0.01 || path.length < 2) return;
+  const size = opts.size ?? lineW(w, h) * 1.6;
+  const pts = path.map(([u, v]) => [u * w, v * h]);
+  if (closed) pts.push(pts[0]);
+  const cum = [0];
+  for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+  const total = cum[cum.length - 1] || 1;
+  const at = (f) => {
+    let d = (((f % 1) + 1) % 1) * total, i = 1;
+    if (!closed) d = clamp(f) * total;
+    while (i < cum.length - 1 && cum[i] < d) i++;
+    const k = (d - cum[i - 1]) / Math.max(1e-6, cum[i] - cum[i - 1]);
+    return [lerp(pts[i - 1][0], pts[i][0], k), lerp(pts[i - 1][1], pts[i][1], k)];
+  };
+  const head = glowSprite('snow', 0.25), body = glowSprite(color, 0.3);
+  additive(ctx, alpha, () => {
+    for (let r = 0; r < count; r++) {
+      const f0 = t * speed + r / count;
+      for (let j = 11; j >= 0; j--) {
+        const f = f0 - (j / 11) * tail;
+        if (!closed && (f < 0 || f > 1)) continue;
+        const [x, y] = at(closed ? f : f % 1);
+        ctx.globalAlpha = alpha * (1 - j / 12) ** 1.5;
+        dot(ctx, j ? body : head, x, y, size * (j ? 1 - j / 16 : 1.4));
+      }
+    }
+  });
+}

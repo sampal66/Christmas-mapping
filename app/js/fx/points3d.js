@@ -104,6 +104,39 @@ export function cloudStar(n, { size = 1, depth = 0.22, seed = 9 } = {}) {
   return c;
 }
 
+/**
+ * A 3D snowflake: six arms with two pairs of side branches and a hexagon heart, each arm tilted a little in depth
+ * (alternately towards and away), so it reads as an object when it turns.
+ */
+export function cloudSnowflake(n, { size = 1, seed = 15 } = {}) {
+  const c = makeCloud(n);
+  const segs = [];
+  for (let a = 0; a < 6; a++) {
+    const ang = -Math.PI / 2 + (a * Math.PI) / 3, dz = (a % 2 ? 1 : -1) * 0.12;
+    const P = (r, off = 0) => [Math.cos(ang + off) * r, Math.sin(ang + off) * r];
+    const along = (r) => [Math.cos(ang) * r, Math.sin(ang) * r];
+    segs.push([[0, 0, 0], [...along(1), dz]]);
+    for (const [r, len] of [[0.42, 0.3], [0.7, 0.22]]) {
+      const [bx, by] = along(r);
+      for (const s2 of [-1, 1]) { const b2 = Math.PI / 3 * s2; segs.push([[bx, by, dz * r], [bx + Math.cos(ang + b2) * len, by + Math.sin(ang + b2) * len, dz * r]]); }
+    }
+    const [h1x, h1y] = P(0.22), [h2x, h2y] = P(0.22, Math.PI / 3);
+    segs.push([[h1x, h1y, 0], [h2x, h2y, 0]]);
+  }
+  const lens = segs.map(([a, b]) => Math.hypot(b[0] - a[0], b[1] - a[1]));
+  const total = lens.reduce((x, y) => x + y, 0);
+  let k = 0;
+  segs.forEach(([a, b], si) => {
+    const m = si === segs.length - 1 ? n - k : Math.round((n * lens[si]) / total);
+    for (let j = 0; j < m && k < n; j++, k++) {
+      const f = (j + rand(seed + k) * 0.5) / m, th = (rand(seed + k + 0.4) - 0.5) * 0.035;
+      c.p.set([(a[0] + (b[0] - a[0]) * f) * size + th, (a[1] + (b[1] - a[1]) * f) * size + th, (a[2] + (b[2] - a[2]) * f) * size], k * 3);
+      c.s[k] = 1;
+    }
+  });
+  return c;
+}
+
 /** A 3D heart (used when no family photo is loaded). */
 export function cloudHeart(n, { size = 1, seed = 11 } = {}) {
   const c = makeCloud(n);

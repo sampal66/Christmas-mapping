@@ -69,7 +69,7 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 ### 5.2 Show content
 | ID | Feature | Priority | Status |
 |---|---|---|---|
-| C1 | 11 scenes (see §07 and [TREATMENT](TREATMENT.md)), ≈12 minutes (10–15), light show first | Must | ⏳ light-show scenes built (s00, s01, s02, s04, s06, s09, s10 visuals; WP-03); story scenes s03/s05/s07/s08 are timed placeholders (WP-08); s04 box chaos + s05 star Mickey built (WP-11); s06 pet star figures → WP-11b |
+| C1 | 11 scenes (see §07 and [TREATMENT](TREATMENT.md)), ≈12 minutes (10–15), light show first | Must | ⏳ light-show scenes built (s00, s01, s02, s04, s06, s09, s10 visuals; WP-03); story scenes s03/s05/s07/s08 are timed placeholders (WP-08); s04 box chaos + s05 drone Mickey built, s01/s10 polished (WP-11); s06 pet star figures → WP-11b |
 | C2 | 4 pet characters in classic hand-drawn style (Connor, Alaska, Orion, Gandalf) | Must | ⏳ |
 | C3 | Public-domain cameos: *Steamboat Willie* Mickey (1928) and E.H. Shepard-style Pooh | Should | ⏳ star-figure Mickey (1928 design) built for s05 (WP-11); clips WP-04 |
 | C4 | Spanish narration: bright, warm storyteller, neutral Latin American accent, plus pet character voices; ≈3 min of speech in total | Must | 🔵 WP-06: script approved ([SCRIPT.md](SCRIPT.md)); 6 voices cast, all lines generated; take picks pending |

@@ -246,6 +246,7 @@ export default {
 | 2026-11-17 | Recordings stay off the repo; `tools/beats.js` decodes WAV itself and other formats via the system ffmpeg | repo size and "no new dependencies"; ffmpeg is only an optional convenience for the offline tool |
 
 ## Changelog
+- **2026-11-17** — WP-11 quality pass: `edgeRunners`, `cloudSnowflake`, `sparkFountain` (s01, s10).
 - **2026-11-17** — WP-11: toys sprites + toss model, star Mickey, placeholder `drawBackdrop` (§07).
 - **2026-11-17** — WP-06: master-mix carries voices + sfx on the iPad (storage) (§07).
 - **2026-11-17** — WP-06: new s04/s09 music re-timed (§07).

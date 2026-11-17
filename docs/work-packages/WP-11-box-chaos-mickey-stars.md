@@ -67,6 +67,14 @@ animation (pets, Santa, Mickey's clip) is WP-04/08 everywhere and is not counted
 | s09 | Star bows twice, fades to a gold halo; dim starfield; tree dark; seamless hold | yes | none |
 | s10 | Warm ripple from the lit star, footlights burst, sleigh path, soft fireworks, family constellation, "¡Feliz Navidad!", fade to the starfield | yes | Santa + sleigh and the pets' wave are clips (WP-04/08) on the drawn sleigh trail |
 
+**Quality pass (owner, same session: "is the review only for the gifts?"):** the table above checks that each beat
+exists; a screenshot review then judged how full each scene looks. s02, s06 rich; s09 quiet on purpose. Upgraded here:
+- **s10 finale:** fireworks now build like a real display (singles → downbeat volleys → barrage with gold willow
+  canopies → a crown of five willows), bigger shells, plus gold spark fountains on the floor line (`sparkFountain`).
+- **s01 opening:** gold comets chase round the traced outlines on the beat (`edgeRunners`); a drone swarm rises from
+  the floor into a turning 3D snowflake on the snow swell (`cloudSnowflake`), becomes a star on the second swell,
+  then falls away as snow.
+
 Small fix made here: `tools/flash-check.js` now also renders story placeholders that carry finished pieces (s05 Mickey).
 
 ## Out of scope
