@@ -50,6 +50,8 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
   Next: WP-04/WP-05 briefs; WP-08 replaces `storyPlaceholder(...)` entries in `scenes/index.js` and uses `env.from()` to place clips.
   Owner note (same session): **all light-show animation moves to the beat**. Each scene has `beats` + `beatGrid()`; tempos are placeholders.
   → The **WP-05 brief must deliver a beat map** per light-show scene (beat times → `beats.times`, plus re-timed `cues`); WP-08 underscores start cues on beats.
+  Owner notes 2: motion felt forced → beat motion now flows (speed 1±0.35, soft accents). Stars + fireworks are now a **3D drone-show point swarm**
+  (`fx/points3d.js`: s06 sky → Orion → Canis → Felis → lost star; s10 sparks → family/heart → "¡Feliz Navidad!"; `fx/fireworks3d.js`). Demo reels in `demo/` (not committed).
 
 - **2026-11-17 · WP-10** — `docs/TREATMENT.md`: owner decisions (adult audience, 10–15 min → ≈12, tradition + Santa + constellations
   spine, both cameos tiny, Papá taps Continue), arcs, beat sheet with music licence/zones/cues, live-moment plan, cut list (→ ≈10 min).

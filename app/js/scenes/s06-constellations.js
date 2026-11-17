@@ -1,7 +1,8 @@
-// s06 · Constelaciones (1:30). The whole wall becomes a starry sky; constellations draw themselves star by star
-// (Orion, Canis Major and Minor, Felis); a gold glint by the North Star slips away; slow shooting stars; snow on
-// the right wall (TREATMENT §04). The pets-as-constellation smiles are WP-08.
-import { cueSheet, beatGrid, constellation, twinkleStars, shootingStars, starHalo, glowSprite, dot, additive, sparkleBurst,
+// s06 · Constelaciones (1:30). The whole wall becomes a starry sky; a swarm of star points forms the constellations
+// as turning 3D figures (Orion, Canis Major and Minor, Felis), then the lost star, which slips away; slow shooting
+// stars; snow on the right wall (TREATMENT §04). The pets-as-constellation smiles are WP-08.
+import { cueSheet, beatGrid, twinkleStars, shootingStars, starHalo, glowSprite, dot, additive, sparkleBurst,
+  cloudScatter, cloudConstellation, cloudGroup, cloudStar, formation, renderCloud, sweepColors,
   ORION, CANIS_MAJOR, CANIS_MINOR, FELIS, easeInOutSine, clamp } from '../fx/index.js';
 import { skyBase, stripSnow, beatClock } from './common.js';
 
@@ -18,19 +19,32 @@ const cues = [
 const beats = { bpm: 168, perBar: 3 };
 const B = beatGrid(beats);
 const C = cueSheet(cues, B);
-// Constellations draw on the beat: a star (or a line) every second beat.
-const drawOn = (local, cue, shape) => B.steps(local, cue, 2 * (shape.stars.length + shape.lines.length));
 const duration = 90;
 
-// Placement on the wall (0..1 of the wall zone). The tree covers roughly u 0.17–0.5 below v 0.27 and the
-// star sits near u 0.26–0.41 at the top, so the shapes live on the open left edge and the right half.
-const BOXES = {
-  orion: [0.56, 0.06, 0.78, 0.62],
-  cma: [0.80, 0.34, 0.99, 0.74],
-  cmi: [0.80, 0.04, 0.97, 0.24],
-  felis: [0.005, 0.03, 0.19, 0.33],
-};
+// The constellations are a drone swarm: one set of light points that gathers out of the sky into Orion, re-forms
+// as Canis Major + Minor, then Felis, then the lost star, which slips away at the glint. Each shape is a real 3D
+// figure turning slowly. Placed on the open right half of the wall (the tree covers u 0.17–0.5 lower down).
+const N = 700;
+const SWARM = { cx: 0.765, cy: 0.38, scale: 0.3 };
 const NORTH_STAR = [0.5, 0.06];
+let seq = null;
+function sequence() {
+  if (seq) return seq;
+  // starts spread across the whole sky, so the stars visibly gather into the first figure
+  const sky = cloudScatter(N, { w: 6.5, h: 3.4, d: 2, seed: 31 });
+  const orion = cloudConstellation(ORION, N, { size: 1.05, seed: 41 });
+  const canis = cloudGroup([{ shape: CANIS_MAJOR, x: -0.2, y: 0.22, size: 0.78 }, { shape: CANIS_MINOR, x: 0.62, y: -0.62, size: 0.32 }], N, 51);
+  const felis = cloudConstellation(FELIS, N, { size: 1.05, seed: 61 });
+  const star = cloudStar(N, { size: 0.8, seed: 71 });
+  seq = [
+    { at: 0, cloud: sky },
+    { at: C.at('orion'), cloud: orion, dur: 7 },
+    { at: C.at('canis'), cloud: canis, dur: 7 },
+    { at: C.at('felis'), cloud: felis, dur: 7 },
+    { at: C.at('cut'), cloud: star, dur: 5.5 },
+  ];
+  return seq;
+}
 
 export default {
   id: 's06-constellations',
@@ -39,6 +53,7 @@ export default {
   cues,
   beats,
   zones: ['wall', 'backdrop', 'tree', 'star', 'rightStrip'],
+  enter() { sequence(); },
   draw(zoneId, ctx, w, h, t, local) {
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
     const sky = B.steps(local, C.at('sky'), 15);
@@ -48,28 +63,21 @@ export default {
         skyBase(zoneId, ctx, w, h, soft);
         // the sky breathes once per bar (the waltz's ONE-two-three)
         twinkleStars(ctx, w, h, bt, { seed: 81, density: 1.1 * sky, alpha: A * (0.8 + 0.2 * bar), size: 0.9 });
-        // Orion stays (dimmed) after the cut; Canis and Felis fade out just before it, so jumping to `cut`
-        // never pops them on.
-        const dim = 1 - 0.55 * C.prog(local, 'cut', { after: 3 });
-        const leave = 1 - C.prog(local, C.at('cut') - 3, 'cut');
-        constellation(ctx, w, h, bt, { ...ORION, box: BOXES.orion, progress: drawOn(local, C.at('orion'), ORION), alpha: A * dim, lineColor: 'ice', seed: 1 });
-        constellation(ctx, w, h, bt, { ...CANIS_MAJOR, box: BOXES.cma, progress: drawOn(local, C.at('canis'), CANIS_MAJOR), alpha: A * leave, lineColor: 'ice', seed: 2 });
-        constellation(ctx, w, h, bt, { ...CANIS_MINOR, box: BOXES.cmi, progress: drawOn(local, C.at('canis') + 6, CANIS_MINOR), alpha: A * leave, lineColor: 'ice', seed: 3 });
-        constellation(ctx, w, h, bt, { ...FELIS, box: BOXES.felis, progress: drawOn(local, C.at('felis'), FELIS), alpha: A * leave, lineColor: 'plum', seed: 4 });
-        // The North Star, steady, and the gold glint that slips away from it (the lost star, off to the right).
-        additive(ctx, A * sky * (0.8 + 0.2 * bar), () => dot(ctx, glowSprite('snow', 0.2), NORTH_STAR[0] * w, NORTH_STAR[1] * h, Math.min(w, h) * 0.035));
+        // The swarm. Constellations turn gently (they're 3D figures); the star spins as it leaves.
+        const cloud = formation(local, sequence());
         const g = C.since(local, 'glint');
-        if (g >= 0) {
-          const p = easeInOutSine(B.steps(local, C.at('glint') + 2, 24));   // glides away in beat-steps
-          const gx = (NORTH_STAR[0] + 0.04 + p * 0.6) * w, gy = (NORTH_STAR[1] + 0.03 + Math.sin(p * Math.PI) * 0.08) * h;
-          const a = A * clamp(g / 1.5) * (1 - clamp((g - 10) / 3));
-          additive(ctx, a, () => dot(ctx, glowSprite('gold', 0.25), gx, gy, Math.min(w, h) * (0.03 + 0.012 * bar)));
-          for (let j = 1; j <= 6; j++) {
-            const pj = easeInOutSine(B.steps(local - j * 0.12, C.at('glint') + 2, 24));
-            additive(ctx, a * (1 - j / 7) * 0.6, () => dot(ctx, glowSprite('gold', 0.3),
-              (NORTH_STAR[0] + 0.04 + pj * 0.6) * w, (NORTH_STAR[1] + 0.03 + Math.sin(pj * Math.PI) * 0.08) * h, Math.min(w, h) * 0.012));
-          }
-        }
+        const away = g > 0 ? easeInOutSine(B.steps(local, C.at('glint') + 1.5, 26)) : 0;
+        const isStar = local >= C.at('cut');
+        renderCloud(ctx, w, h, bt, cloud, {
+          cx: SWARM.cx + away * 0.42, cy: SWARM.cy - away * 0.3, scale: SWARM.scale * (1 - 0.82 * away),
+          rotY: isStar ? 0.5 * Math.sin(bt * 0.25) + away * 4 : 0.45 * Math.sin(bt * 0.16),
+          rotX: 0.14 * Math.sin(bt * 0.12),
+          color: isStar ? sweepColors(['gold', 'candle', 'gold', 'snow'], bt, 0.12) : sweepColors(['snow', 'ice', 'snow', 'plum'], bt, 0.08),
+          alpha: A * (local < C.at('orion') ? 0.55 * sky : 1) * (0.88 + 0.12 * bar) * (1 - clamp((g - 10) / 3)),
+          size: isStar ? 1.15 : 1,
+        });
+        // The North Star, steady.
+        additive(ctx, A * sky * (0.8 + 0.2 * bar), () => dot(ctx, glowSprite('snow', 0.2), NORTH_STAR[0] * w, NORTH_STAR[1] * h, Math.min(w, h) * 0.035));
         // a shooting star every 6 bars, launched on the downbeat
         if (local > C.at('orion')) shootingStars(ctx, w, h, local - B.time(0), { every: 6 * B.perBar * B.beatLen, dur: B.perBar * B.beatLen * 1.5, seed: 5, alpha: 0.8 * A, area: [0.5, 0, 1, 0.5] });
         break;

@@ -63,7 +63,8 @@ christmas-mapping/
 │     ├─ layout.js           default zones, stage size
 │     ├─ effects.js          calibration pattern and demo effects
 │     ├─ palette.js          DESIGN_SYSTEM §03 colour tokens (rgb/rgba/mix helpers)
-│     ├─ fx/                 effect library: pure (ctx, w, h, t, opts) functions + cue sheets
+│     ├─ fx/                 effect library: pure (ctx, w, h, t, opts) functions, cue sheets, beat grid,
+│     │                      3D point clouds (points3d.js) and 3D fireworks (fireworks3d.js)
 │     ├─ timeline.js         scene scheduler, hold points
 │     ├─ audio.js            master clock (audio or silent), latency, sync beep
 │     ├─ media.js            media pack (IndexedDB)
@@ -227,9 +228,12 @@ export default {
 | 2026-11-17 | Glows are cached sprites/gradients with additive blending; titles are cached bitmaps | keeps hundreds of soft particles and blurred text inside the iPad frame budget |
 | 2026-11-17 | Safety is tested, not eyeballed: `tools/flash-check.js` measures per-zone luminance at 20 fps | DESIGN_SYSTEM §06 limits are non-negotiable (baby and dog in the audience) |
 | 2026-11-17 | Every light-show animation is driven by a per-scene beat grid (warp clock, accents, beat-stepped progress, beat-snapped cues) | owner: the show should move to the music; one `beats` entry per scene swaps placeholder tempo for the real beat map |
+| 2026-11-17 | Beat motion uses a smooth speed modulation (1 ± 0.35 per beat) and soft-attack accents, not eased surges | owner: the stepped surges looked forced |
+| 2026-11-17 | Stars and fireworks are 3D point clouds (`fx/points3d.js`, `fx/fireworks3d.js`): perspective projection, slow rotation, staggered curved morphs | owner wants the drone-show look; one swarm re-forming keeps transitions continuous |
 | 2026-11-17 | Hold-loop visuals use periods that divide the loop length | the s09 loop seam is invisible (flash-check verifies it) |
 
 ## Changelog
+- **2026-11-17** — WP-03 owner notes: smooth beat feel; 3D point-cloud swarm and fireworks (§03, §07).
 - **2026-11-17** — WP-03 (owner note): §4.4 beat grid for all light-show scenes; §07 decision.
 - **2026-11-17** — WP-03: §03 fx/, palette, fonts, flash-check; §4.4 scene interface as built (cues, env, holds, placeholders); §07 decisions.
 - **2026-11-17** — §07: `cut` cues, `dusk` base instead of black, s09 moves to WP-03 (WP-10 treatment).

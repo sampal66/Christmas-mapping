@@ -2,8 +2,9 @@
 // A warm ripple from the lit star, footlights burst, a sparkle trail where the sleigh will fly, soft fireworks,
 // then the stars gather into the family constellation (from one media-pack photo, processed on the iPad) and
 // "¡Feliz Navidad!". Fades to the starfield (TREATMENT §04).
-import { cueSheet, beatGrid, treeWaves, treeWash, twinkleStars, softFirework, sparkleBurst, footlights, boxFaces, snowfall,
-  starHalo, projectedStar, constellation, photoToConstellation, fallbackConstellation, titleCard, loadFonts,
+import { cueSheet, beatGrid, treeWaves, treeWash, twinkleStars, firework3d, sparkleBurst, footlights, boxFaces, snowfall,
+  starHalo, projectedStar, photoToConstellation, fallbackConstellation, loadFonts,
+  cloudScatter, cloudConstellation, cloudHeart, cloudText, formation, renderCloud, sweepColors,
   glowSprite, dot, additive, glowStroke, easeInOutSine, clamp, rand } from '../fx/index.js';
 import { SHOW_HUES } from '../palette.js';
 import * as media from '../media.js';
@@ -25,8 +26,8 @@ const B = beatGrid(beats);
 const C = cueSheet(cues, B);
 const duration = 90;
 
-// Fireworks: launched so each bloom lands on a beat (every second beat, bigger ones on the downbeat), across
-// open sky (left edge and right half of the wall; the tree is in between).
+// Fireworks: 3D point shells (sphere, tilted ring, double, willow), launched so each bloom lands on a beat (every
+// second beat, bigger ones on the downbeat), across open sky (left edge and right half; the tree is in between).
 const RISE = 1.0;
 const FIREWORKS = [];
 for (let i = 0, n = B.at(C.at('fireworks')).n + 2; B.time(n) < C.at('wave') - 2; i++, n += 2) {
@@ -38,12 +39,17 @@ for (let i = 0, n = B.at(C.at('fireworks')).n + 2; B.time(n) < C.at('wave') - 2;
     y: 0.14 + rand(i + 0.4) * 0.3,
     color: SHOW_HUES[i % SHOW_HUES.length],
     radius: (down ? 0.18 : 0.12) + rand(i + 0.5) * 0.07,
+    type: ['peony', 'ring', 'double', 'willow'][i % 4],
+    tilt: 1.0 + rand(i + 0.6) * 0.45,                 // ring seen as a tilted ellipse, never edge-on
+    color2: i % 4 === 3 ? 'candle' : 'snow',
+    ...(i % 4 === 3 ? { color: 'gold' } : {}),
   });
 }
 
 // Family constellation: computed once from a media-pack photo named "family…" (never leaves the device).
 let family = fallbackConstellation();
 let familyLoading = false;
+let familyIsPhoto = false;
 async function loadFamily() {
   if (familyLoading) return;
   familyLoading = true;
@@ -56,12 +62,32 @@ async function loadFamily() {
     img.src = url;
     await img.decode();
     family = photoToConstellation(img, { points: 72 }) || family;
+    familyIsPhoto = true;
+    seq = null;                                   // rebuild the swarm with the photo's shape
   } catch (e) {
     console.warn('family constellation: using the fallback shape', e);
   }
 }
 
-const FAMILY_BOX = [0.56, 0.24, 0.97, 0.74];
+// The closing swarm (drone-show style): sparks rise and gather into the family constellation as a turning 3D
+// figure, then re-form as "¡Feliz Navidad!" written in points.
+const N = 1000;
+const SWARM = { cx: 0.765, cy: 0.42, scale: 0.24 };
+let seq = null, seqFonts = false;
+const fontsReady = () => typeof document === 'undefined' || !document.fonts || document.fonts.status === 'loaded';
+function sequence() {
+  if (seq && (seqFonts || !fontsReady())) return seq;
+  seqFonts = fontsReady();
+  const sparks = cloudScatter(N, { w: 3.2, h: 0.6, d: 1.4, seed: 91 });
+  for (let i = 0; i < N; i++) sparks.p[i * 3 + 1] += 1.9;      // start below the formation, rising into it
+  const fam = familyIsPhoto ? cloudConstellation(family, N, { size: 0.95, seed: 93 }) : cloudHeart(N, { size: 0.9, seed: 93 });
+  seq = [
+    { at: 0, cloud: sparks },
+    { at: C.at('family-constellation'), cloud: fam, dur: 6.5 },
+    { at: C.at('title'), cloud: cloudText('¡Feliz Navidad!', N, { size: 1.6 }), dur: 4.5 },
+  ];
+  return seq;
+}
 
 export default {
   id: 's10-finale',
@@ -72,7 +98,7 @@ export default {
   // Live-moment fallback (TREATMENT §05): show the projected star if the real one isn't on the tree.
   options: { projectedStar: false },
   zones: ['wall', 'rightStrip', 'backdrop', 'stage', 'box1', 'box2', 'tree', 'star'],
-  enter() { loadFonts(); loadFamily(); },
+  enter() { loadFonts(); loadFamily(); sequence(); },
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
     const fw = C.env(local, 'fireworks', 'wave', 2, 3);
@@ -100,16 +126,22 @@ export default {
             additive(ctx, A * (1 - j / 26), () => dot(ctx, glowSprite(j % 3 ? 'gold' : 'snow', 0.3), x, y + Math.sin(j * 1.7 + bt * 3) * 6, (j ? 12 : 26 + 10 * pulse) * (1 - j / 40)));
           }
         }
-        for (const f of FIREWORKS) softFirework(ctx, w, h, local, { ...f, alpha: A });
+        for (const f of FIREWORKS) firework3d(ctx, w, h, local, { ...f, alpha: A });
         snowfall(ctx, w, h, soft, { density: 0.5 * B.steps(local, C.at('wave'), 8), alpha: A });
-        // The stars gather into the family constellation, then the title.
+        // The swarm: sparks gather into the family constellation, then spell the greeting.
         if (fam > 0) {
-          // stars gather in beat-steps, then pop on and join over four bars
-          constellation(ctx, w, h, bt, { ...family, box: FAMILY_BOX, gather: B.steps(local, C.at('family-constellation'), 10),
-            progress: B.steps(local, C.at('family-constellation') + 3, 16), color: 'gold', lineColor: 'candle', alpha: A, seed: 9, starSize: 0.8 });
+          const text = local >= C.at('title');
+          const settle = text ? C.prog(local, 'title', { after: 4.5 }) : 0;
+          renderCloud(ctx, w, h, bt, formation(local, sequence()), {
+            ...SWARM,
+            // the figure turns gently; the words face the audience once formed
+            rotY: (0.42 * Math.sin(bt * 0.2)) * (1 - settle) + 0.08 * Math.sin(bt * 0.3) * settle,
+            rotX: 0.1 * Math.sin(bt * 0.14) * (1 - settle),
+            color: text ? sweepColors(['gold', 'gold', 'snow', 'candle'], bt, 0.1, 0.35) : sweepColors(['gold', 'candle', 'rose', 'gold'], bt, 0.08),
+            alpha: A * Math.min(1, fam * 4) * (0.9 + 0.1 * bar),
+            size: text ? 0.85 : 1,
+          });
         }
-        titleCard(ctx, w, h, t, { lines: ['¡Feliz Navidad!'], x: 0.765, y: 0.12, size: 120, maxWidth: 0.4,
-          alpha: A * (0.9 + 0.1 * bar), reveal: B.steps(local, C.at('title'), 4) });
         break;
       }
       case 'rightStrip':

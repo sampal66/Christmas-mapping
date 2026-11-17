@@ -10,3 +10,5 @@ export * from './stage.js';
 export * from './transitions.js';
 export * from './title.js';
 export * from './constellations.js';
+export * from './points3d.js';
+export * from './fireworks3d.js';

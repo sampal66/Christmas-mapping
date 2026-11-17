@@ -27,9 +27,9 @@ export function cueSheet(cues, grid = null) {
  * from the recording (WP-05); until then the placeholder tempo is used. Only the scene's `beats` changes when
  * the music arrives; the effects stay as they are.
  *   at(local)    → { n, phase, bar, beatInBar, barPhase, downbeat }
- *   warp(local)  → "beat time" in seconds: advances in eased surges that land on each beat; feed it to any
- *                  continuous effect (waves, spirals, chases, twinkle) instead of t to make it move on the beat
- *   pulse(local) → 0..1 accent that peaks on the beat and decays; capped to ≤ 2.5 accents/s (flash limit)
+ *   warp(local)  → "beat time" in seconds: flows continuously, a little faster on each beat and slower between;
+ *                  feed it to any continuous effect (waves, spirals, chases, twinkle) instead of t
+ *   pulse(local) → 0..1 accent that swells on the beat and decays smoothly; capped to ≤ 2.5 accents/s
  *   barPulse(local) → the same, once per bar (for big areas)
  *   time(n)      → scene time of beat n;  quantize(t) → nearest beat time;  nextBeat(t) → first beat ≥ t
  */
@@ -48,8 +48,19 @@ export function beatGrid({ bpm = 120, offset = 0, perBar = 4, times = null } = {
     return [lo, (local - list[lo]) / (list[lo + 1] - list[lo])];
   };
   const time = (n) => (list ? (n < list.length ? list[Math.max(0, n)] : list.at(-1) + (n - list.length + 1) * avg) : offset + n * len);
-  const ease = (p) => 1 - (1 - p) ** 3;                  // surge right after the beat, settle before the next
-  const accent = (p) => Math.exp(-p * 4);
+  // Motion breathes with the music instead of lurching: speed is 1 ± SWAY, fastest on the beat and slowest
+  // between beats, never stopping. Smooth everywhere (no kinks), so it reads as flow, not a tick.
+  const SWAY = 0.35;
+  const flow = (p) => p + (SWAY * Math.sin(p * Math.PI * 2)) / (Math.PI * 2);
+  // Accent envelope over `span` beats: a soft swell (8% of a beat) then a decay that reaches exactly 0 at the
+  // next accent, so the curve is continuous (no pop when the next beat starts).
+  const accent = (k, span, rate = 3) => {
+    const A = 0.08;
+    if (k < A) { const x = k / A; return x * x * (3 - 2 * x); }
+    const floor = Math.exp(-rate * (span - A));
+    return Math.max(0, (Math.exp(-rate * (k - A)) - floor) / (1 - floor));
+  };
+  const beatsAt = (local) => { const [n, p] = beatAt(local); return n + flow(p); };
   return {
     perBar,
     beatLen: avg,
@@ -58,20 +69,24 @@ export function beatGrid({ bpm = 120, offset = 0, perBar = 4, times = null } = {
       const beatInBar = n % perBar;
       return { n, phase, bar: Math.floor(n / perBar), beatInBar, barPhase: (beatInBar + phase) / perBar, downbeat: beatInBar === 0 };
     },
-    warp(local) { const [n, p] = beatAt(local); return (n + ease(p)) * avg; },
+    warp(local) { return beatsAt(local) * avg; },
     // Accent on every `every`-th beat, decaying through the beats in between.
-    pulse(local) { const [n, p] = beatAt(local); return accent((n % every) + p); },
-    barPulse(local) { const [n, p] = beatAt(local); return accent(((n % perBar) + p) * 1.5); },
+    pulse(local) { const [n, p] = beatAt(local); return accent((n % every) + p, every); },
+    barPulse(local) { const [n, p] = beatAt(local); return accent((n % perBar) + p, perBar, 1.5); },
     time,
     quantize(t) { const [n, p] = beatAt(t); return time(p < 0.5 ? n : n + 1); },
     nextBeat(t) { const [n, p] = beatAt(t); return time(p === 0 ? n : n + 1); },
-    /** 0..1 progress over `count` beats from the first beat at/after `from`, advancing in eased steps on each beat. */
+    /**
+     * 0..1 progress over `count` beats, starting on the first beat at/after `from` and ending on a beat. It glides
+     * (eased in and out overall) and breathes with the beat on the way, instead of stepping.
+     */
     steps(local, from, count) {
       const [f, fp] = beatAt(from);
       const first = fp > 1e-6 ? f + 1 : f;
-      const [n, p] = beatAt(local);
-      if (n < first) return 0;
-      return Math.min(1, (n - first + ease(p)) / count);
+      const k = (beatsAt(local) - first) / count;
+      if (k <= 0) return 0;
+      if (k >= 1) return 1;
+      return k * k * (3 - 2 * k);
     },
   };
 }
