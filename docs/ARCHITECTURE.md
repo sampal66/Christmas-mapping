@@ -244,8 +244,10 @@ export default {
 | 2026-11-17 | The s05 Mickey (`fx/mickey-stars.js`) is a **drone-show volume**: keyframed joint poses place a fixed set of surface points per part (Fibonacci spheres/ellipsoids, thick discs, spiral tubes) each frame; no outline art (owner: drone swarm with depth) | the swarm can morph in from the film frame and keep point identity while he moves; the same pattern serves WP-11b's pet figures |
 | 2026-11-17 | Story placeholders take `drawBackdrop` for finished pieces; `effects: true` makes the flash check render them | WP-08 can lift the piece into the real scene unchanged, and the safety check covers it now |
 | 2026-11-17 | Recordings stay off the repo; `tools/beats.js` decodes WAV itself and other formats via the system ffmpeg | repo size and "no new dependencies"; ffmpeg is only an optional convenience for the offline tool |
+| 2026-11-17 | The s06 pet star figures (`fx/pet-stars.js`) are **line-art drone figures**. A tiny pen writes fixed-count strokes (polylines resampled by arc length, plus single "star" points) from keyframed poses. The drones morph in from the constellation's own cloud and back again. | Constellation line-art fits s06. The fixed counts keep each swarm's identity, the same as the Mickey tech. ≈170–220 points per pet keeps s06's cost flat. |
 
 ## Changelog
+- **2026-11-17** — WP-11b: pet star figures (`fx/pet-stars.js`) (§07).
 - **2026-11-17** — WP-11 quality pass: `edgeRunners`, `cloudSnowflake`, `sparkFountain` (s01, s10).
 - **2026-11-17** — WP-11: toys sprites + toss model, star Mickey, placeholder `drawBackdrop` (§07).
 - **2026-11-17** — WP-06: master-mix carries voices + sfx on the iPad (storage) (§07).

@@ -23,12 +23,12 @@
 | WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10; places and mixes voices + sound effects (made in WP-06; generate only missing/odd ones); **must fix the silence-check items in SCRIPT §07** (s08 26–45 s: constellations twinkle as a callback + star warms on the swell, owner's choice; loop the s00 music box while idle/after the finale) | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
-| WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | 🟢 ready (**next**) | — | C1, C2 |
+| WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | 🟡 in review | `claude/wp-11b-pet-constellations` | C1, C2 |
 | WP-09 | On-wall calibration + rehearsal checklist | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
 
 Status keys: 🟢 ready to start · 🔵 in progress · 🟡 in review (PR open) · ✅ done · ⚪ waiting on a dependency · ⏸️ deferred
 
-**Order agreed with the owner (2026-11-17): WP-06 ✅ → WP-11 → WP-04 → WP-08** (WP-11b can slot in any time before WP-08) (script and voices fix shot content and timings, so the
+**Order agreed with the owner (2026-11-17): WP-06 ✅ → WP-11 → WP-04 → WP-08** (WP-11b in review) (script and voices fix shot content and timings, so the
 character clips are made once at the right length; WP-08 needs both). **Owner notes (2026-11-17):** s04 box chaos and the s05 Mickey star figure → WP-11 (also audits every built scene against TREATMENT §04). WP-09 runs when the projector arrives (~Nov 27); WP-07 fills any gap.
 
 WP-01 and WP-02 can run **in parallel** (they touch different files). **WP-10 comes before WP-03/04/05/06/08**: it fixes
@@ -47,6 +47,11 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-17 · WP-11b** — `fx/pet-stars.js` `petStars(ctx,w,h,t,age,{pet,x,y,size,end,source})`: Orion (grumpy → looks up → lopsided smile + glint), Connor (lying, head lifts, plume sways), Alaska (proud, eye-roll + "hmph", wagging), Gandalf (stalk → wiggle → pounce → land). Line-art drone figures: a small pen writes fixed-count strokes from keyframed poses.
+  s06 `PETS` table: each forms from its constellation's cloud at cue + 7.5–9 s, right of the figures (u ≈ 0.84–0.88, above the gift tower), and flies back by next cue − 1 s. Timing, cues, beat map and atlas art unchanged.
+  Flash check passes; s06 render cost unchanged within noise (≈22–27 ms avg headless). `sw.js` v14. **Owner: please check the four figures in the PR screenshots.**
+  Next: WP-04 (character clips), then WP-08.
 
 - **2026-11-17 · WP-11** — Audit table in the brief (all beats built except s04 chaos, s05 star Mickey → done here; s06 pets-as-constellations → **WP-11b** brief).
   s04: `fx/toys.js` (20 code-drawn sprites: Christmas/pet/cameo, cream rim + baked glow; analytic toss → bounce → rest; lid pops, ear/tail placeholders) on the **wall** zone; waves on cues/bars + a toy every beat in busy sections, floor clears at `cut`/`out`.
