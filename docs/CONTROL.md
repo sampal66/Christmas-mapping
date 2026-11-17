@@ -15,7 +15,7 @@
 | WP-00 | Project structure, docs, Mapper v0 | — | ✅ done (PR #1) | this setup session | M1–M4 |
 | WP-01 | [Show timeline, audio sync, hold points](work-packages/WP-01-timeline.md) | WP-00 | ✅ done (PR #1) | setup session | M5, M6, M7, M11 |
 | WP-02 | [Media pack + offline mode](work-packages/WP-02-media-offline.md) | WP-00 | ✅ done (PR #2) | `claude/wp-02-media-offline` | M8, M9 |
-| WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | 🟢 ready (**next**) | — | C1 (s00, s01, s02, s04, s06 constellations, s09 live hold, s10 visuals) |
+| WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | 🟡 in review | `claude/wp-03-effects-scenes` | C1 (s00, s01, s02, s04, s06 constellations, s09 live hold, s10 visuals) |
 | WP-04 | Character pipeline: 4 pets + Mickey 1928 + Shepard Pooh + **Santa and sleigh**; approach pending (TREATMENT §09: AI video clips recommended, not code puppets) | WP-03, WP-10, ElevenLabs connector | ⚪ needs brief | — | C2, C3 |
 | WP-05 | Music and sfx sourcing: 8 PD pieces + 3 short original underscores + soft sfx, per TREATMENT §04 (no barks/meows/bangs) | WP-10 | ⚪ needs brief (owner OK on credits) | — | C5 |
 | WP-06 | Spanish script (`docs/SCRIPT.md`) + narration and **pet voices** (≈3 min of speech; TREATMENT §03–§04) | WP-10, owner go-ahead | ⏸️ deferred by owner | — | C4 |
@@ -42,6 +42,12 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-17 · WP-03** — `app/js/fx/` (pure `(ctx,w,h,t,opts)` effects), `palette.js`, fonts bundled in `app/fonts/`; scenes s00 (pre-show), s01, s02, s04, s06,
+  s09 (hold, seamless 12 s loop), s10 (+ `projectedStar` checkbox, family constellation from media file `family…`); s03/s05/s07/s08 are timed placeholders.
+  Show panel: **Cut ⏭**, fps readout. `tools/flash-check.js` (in the smoke test) passes: worst 2 flashes/s (box faces), max jump 0.37.
+  Gotcha: headless here caps at ~43 fps even on `main` (software compositor); render cost is 3–15 ms/frame avg (s10 worst 27 ms). **Check real fps on the iPad (WP-09).**
+  Next: WP-04/WP-05 briefs; WP-08 replaces `storyPlaceholder(...)` entries in `scenes/index.js` and uses `env.from()` to place clips.
 
 - **2026-11-17 · WP-10** — `docs/TREATMENT.md`: owner decisions (adult audience, 10–15 min → ≈12, tradition + Santa + constellations
   spine, both cameos tiny, Papá taps Continue), arcs, beat sheet with music licence/zones/cues, live-moment plan, cut list (→ ≈10 min).

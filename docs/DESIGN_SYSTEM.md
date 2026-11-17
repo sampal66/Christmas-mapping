@@ -67,7 +67,7 @@
 
 | Role | Font | Notes |
 |---|---|---|
-| Title cards | **Mountains of Christmas** (Google Fonts, OFL), bold | vintage, festive; **≥ 96 px**, two lines allowed, 4–6 px light stroke/glow |
+| Title cards | **Mountains of Christmas** (Google Fonts, Apache 2.0), bold | vintage, festive; **≥ 96 px**, two lines allowed, 4–6 px light stroke/glow |
 | Secondary titles and names | **Playfair Display** (OFL), italic | elegant storybook; ≥ 72 px |
 | Small captions | Playfair Display, regular | ≥ 48 px; use rarely |
 
@@ -157,6 +157,7 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 - The UI must be hideable (Hide ✕, top-left corner to restore), because whatever is on screen is projected.
 
 ## Changelog
+- **2026-11-17** — §04: Mountains of Christmas is Apache 2.0 (not OFL); both fonts are bundled in `app/fonts/` (WP-03).
 - **2026-11-17** — v1.2: owner approved TREATMENT §08 #3–8: no painted backgrounds or grain, lines ≥ 6 px, light rims, lifted darks, titles ≥ 96 px, colour check.
 - **2026-11-17** — v1.1 (WP-10): LCD black → `dusk` base and fade to starfield; adult audience; louder music with no
   impulsive sounds; banned pet-trigger sfx. Further style changes proposed in TREATMENT §08.
