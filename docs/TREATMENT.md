@@ -98,7 +98,7 @@ dialogue in s03, s05, s07 and s10 (the "Narration" column lists the narrator onl
   left of the tower, sparkle away at `cut` and `out`; lids pop, ears/tails peek (placeholders for WP-04's clips).
   s05: at `mickey-in` the film frame, a flat screen of drones, flies apart into a **3D drone-swarm Mickey** (solid
   volumes: sphere head, thick ears, tube limbs; owner: drone-show depth), who whistles with notes, then points up
-  while a stream of drones flows from his fingertip into the sky, gone by `mickey-out`. s06 pets as star figures → WP-11b.
+  while a few drones drift up from his fingertip into the sky (owner: subtle), gone by `mickey-out`. s06 pets as star figures → WP-11b.
 
 **Music as sourced (WP-05, details and licence evidence in `assets/CREDITS.md`).** All chosen recordings are US Air Force
 Band works (public domain as US federal works), from music.af.mil via Wikimedia Commons:

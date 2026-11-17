@@ -237,19 +237,21 @@ export function mickeyStars(ctx, w, h, t, age, opts = {}) {
       }
     });
   }
-  // pointing: a stream of drones flows from the fingertip up into the sky (the lead-in to s06)
-  const tr = clamp((age - T.trail) / 2.2);
+  // pointing (owner: subtle): a few drones lift off his fingertip one by one and drift up into the sky, fading as
+  // they rise, a quiet hint towards s06 rather than a beam.
+  const tr = age - T.trail;
   if (tr > 0) {
     const [hx, hy] = P(anchors.hand[0], anchors.hand[1], -0.13);
-    const ey = hy + (-0.02 * h - hy) * easeInOutSine(tr), ex = hx + w * 0.04 * easeInOutSine(tr);
-    const len = Math.hypot(ex - hx, ey - hy), gap = Math.max(10, S * 0.06);
-    const r = Math.max(2.5, Math.min(w, h) / 260) * 2.4;
+    const r = Math.max(2.5, Math.min(w, h) / 260) * 2;
+    const rise = Math.min(hy, h * 0.45);
     additive(ctx, A, () => {
-      const gold = glowSprite('gold', 0.3), snow = glowSprite('snow', 0.3);
-      for (let d = (age * gap * 3) % gap; d < len; d += gap) {
-        const f = d / Math.max(1, len);
-        ctx.globalAlpha = A * (0.5 + 0.5 * f);
-        dot(ctx, f > 0.9 ? snow : gold, hx + (ex - hx) * f, hy + (ey - hy) * f, r);
+      const sp = glowSprite('snow', 0.3);
+      for (let j = 0; j < 7; j++) {
+        const a = (tr - j * 0.45) / 3;                   // one leaves every ≈ 0.45 s, each rises for 3 s
+        if (a <= 0 || a >= 1) continue;
+        const e = easeInOutSine(a);
+        ctx.globalAlpha = A * 0.9 * Math.sin(a * Math.PI) ** 0.8;
+        dot(ctx, sp, hx + Math.sin(a * 5 + j * 1.9) * S * 0.04 + e * S * 0.08, hy - e * rise, r * (1 - 0.4 * a));
       }
     });
   }
