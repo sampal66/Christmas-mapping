@@ -16,18 +16,19 @@
 | WP-01 | [Show timeline, audio sync, hold points](work-packages/WP-01-timeline.md) | WP-00 | ✅ done (PR #1) | setup session | M5, M6, M7, M11 |
 | WP-02 | [Media pack + offline mode](work-packages/WP-02-media-offline.md) | WP-00 | ✅ done (PR #2) | `claude/wp-02-media-offline` | M8, M9 |
 | WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | ✅ done (PR #6) | `claude/wp-03-effects-scenes` | C1 (s00, s01, s02, s04, s06, s09, s10) + owner notes (3D swarm, mega-tree, box tower, atlas art) |
-| WP-04 | Character pipeline: 4 pets + Mickey 1928 + Shepard Pooh + **Santa and sleigh**; approach pending (TREATMENT §09: AI video clips recommended, not code puppets); **add shots: pets rummaging inside the boxes for s04 (WP-11)**; clip lengths from SCRIPT §03 (real take lengths) | WP-03, WP-10, ElevenLabs connector | ⚪ needs brief | — | C2, C3 |
+| WP-04 | Character pipeline: 4 pets + Mickey 1928 + Shepard Pooh + **Santa and sleigh**; approach pending (TREATMENT §09: AI video clips recommended, not code puppets); **add shots: pets rummaging inside the boxes for s04 (WP-11): Gandalf's ears over box 1, Connor's and Alaska's tails waving out of box 2 / box 1, Orion's ears at box 2's left shoulder, Gandalf popping out at `box1-open`; replace the placeholders in `PEEKS` (s04) and drop `film` stand-in in `mickeyStars` once Mickey's clip exists**; clip lengths from SCRIPT §03 (real take lengths) | WP-03, WP-10, ElevenLabs connector | ⚪ needs brief | — | C2, C3 |
 | WP-05 | [Music sourcing + beat maps](work-packages/WP-05-music-beats.md): PD military-band carols, Musopen Tchaikovsky, ElevenLabs music box + 3 underscores; beat maps (auto + tap tool) applied to the light-show scenes | WP-03, WP-10 | ✅ done (PR #7) | `claude/wp-05-music-beats` | C5, C1 beat sync |
 | WP-06 | [Spanish script + narration and pet voices](work-packages/WP-06-script-voices.md) (`docs/SCRIPT.md`, ≈3 min of speech; TREATMENT §03–§04) | WP-10 | ✅ done (PR #8) | `claude/wp-06-script-voices` | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
 | WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10; places and mixes voices + sound effects (made in WP-06; generate only missing/odd ones); **must fix the silence-check items in SCRIPT §07** (s08 26–45 s: constellations twinkle as a callback + star warms on the swell, owner's choice; loop the s00 music box while idle/after the finale) | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
-| WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | 🟢 ready (**next**) | — | C1, C2, C3 |
+| WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | 🟡 in review | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
+| WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | 🟢 ready | — | C1, C2 |
 | WP-09 | On-wall calibration + rehearsal checklist | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
 
 Status keys: 🟢 ready to start · 🔵 in progress · 🟡 in review (PR open) · ✅ done · ⚪ waiting on a dependency · ⏸️ deferred
 
-**Order agreed with the owner (2026-11-17): WP-06 ✅ → WP-11 → WP-04 → WP-08** (script and voices fix shot content and timings, so the
+**Order agreed with the owner (2026-11-17): WP-06 ✅ → WP-11 → WP-04 → WP-08** (WP-11b can slot in any time before WP-08) (script and voices fix shot content and timings, so the
 character clips are made once at the right length; WP-08 needs both). **Owner notes (2026-11-17):** s04 box chaos and the s05 Mickey star figure → WP-11 (also audits every built scene against TREATMENT §04). WP-09 runs when the projector arrives (~Nov 27); WP-07 fills any gap.
 
 WP-01 and WP-02 can run **in parallel** (they touch different files). **WP-10 comes before WP-03/04/05/06/08**: it fixes
@@ -46,6 +47,12 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-17 · WP-11** — Audit table in the brief (all beats built except s04 chaos, s05 star Mickey → done here; s06 pets-as-constellations → **WP-11b** brief).
+  s04: `fx/toys.js` (20 code-drawn sprites: Christmas/pet/cameo, cream rim + baked glow; analytic toss → bounce → rest; lid pops, ear/tail placeholders) on the **wall** zone; waves on cues/bars + a toy every beat in busy sections, floor clears at `cut`/`out`.
+  s05: `fx/mickey-stars.js` `mickeyStars(ctx,w,h,t,age,{x,y,size,film})`: sepia frame → swarm → 1928 Mickey (whistle bob, notes) → points up, fingertip trail to the sky; placed at `mickey-in` via the placeholder's new `drawBackdrop`. **Owner: please confirm the Mickey proposal + look in the PR screenshots.**
+  Flash check passes (s05 now included); s04 render ≈13 ms avg / 25 ms worst headless (wall zone now drawn by s04): if the iPad drops frames, lower the per-beat tosses in `WAVES`.
+  Gotchas: toys land left of the tower on the wall bottom; the tree (occluding) hides those passing behind it, on purpose. `sw.js` v13.
 
 - **2026-11-17 · WP-06** — Brief + `docs/SCRIPT.md` (approved v1.0): 46 lines (3 🔒 name lines), cues `cue + offset`, ≈ 2:48 speech. Owner: male narrator, narrator says s08, name spoken in audio only.
   Voices: 6 custom ElevenLabs voices (ids in SCRIPT §02), accent rule = neutral Latin American / Mexican-dub, never Castilian (`[neutral Mexican Spanish accent]` tag, `eleven_v4`). All lines generated, 2 takes, flow `dn8qdkhzXGF04J2wbJVl`; ≈ 9.1k credits.

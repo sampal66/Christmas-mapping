@@ -240,9 +240,13 @@ export default {
 | 2026-11-17 | s04 and s09 music replaced by new originals (owner); their cues and beat maps were re-derived with `tools/beats.js` and snapped to downbeats at the real section changes | the visuals stay locked to the music, and WP-11 builds on final timing |
 | 2026-11-17 | On the iPad, voices and sfx are **baked into the single `master-mix`** (rendered in the cloud by WP-08 from the per-line files); per-line files exist only in the cloud/ElevenLabs | the iPad has very little storage (owner); one ≈ 12 MB file instead of ~70 clips, and one clock source |
 | 2026-11-17 | Speech is one file per script line, named by its `SCRIPT.md` id (`s03-alaska-01`) and placed by WP-08 at `cue + offset`; lines that say `{BABY}` are 🔒 personal (real name typed only at generation time; audio in the media pack only) | re-takes swap one file without re-timing a scene; the real name never reaches git |
+| 2026-11-17 | s04's flying objects are **code-drawn sprites baked once** into cached canvases (`fx/toys.js`) and moved by an analytic toss/bounce model (`tossSpec`/`tossAt`); they fly on the **wall** zone | no generated-art credits; one blit per object keeps ≈100 on screen cheap; any frame is reproducible (MP4 export); the wall spans the whole stage, so arcs aren't clipped at the backdrop edge |
+| 2026-11-17 | The s05 star Mickey (`fx/mickey-stars.js`) is keyframed joint poses re-sampled into a **fixed number of points per part** each frame | the swarm can morph in from the film frame and keep point identity while he moves; the same pattern serves WP-11b's pet figures |
+| 2026-11-17 | Story placeholders take `drawBackdrop` for finished pieces; `effects: true` makes the flash check render them | WP-08 can lift the piece into the real scene unchanged, and the safety check covers it now |
 | 2026-11-17 | Recordings stay off the repo; `tools/beats.js` decodes WAV itself and other formats via the system ffmpeg | repo size and "no new dependencies"; ffmpeg is only an optional convenience for the offline tool |
 
 ## Changelog
+- **2026-11-17** — WP-11: toys sprites + toss model, star Mickey, placeholder `drawBackdrop` (§07).
 - **2026-11-17** — WP-06: master-mix carries voices + sfx on the iPad (storage) (§07).
 - **2026-11-17** — WP-06: new s04/s09 music re-timed (§07).
 - **2026-11-17** — WP-06: speech files per script line, personal lines off-repo (§07); SCRIPT.md exists.

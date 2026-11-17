@@ -49,13 +49,33 @@ Owner notes (2026-11-17), to be built exactly:
    - Only the 1928 Steamboat Willie design (public domain). Never a modern Mickey shape (gloves, colour, modern face).
 4. Smoke test, flash check, screenshots of s04 (three moments) and the Mickey figure (whistle pose + point pose).
 
+## Audit result (2026-11-17)
+Built scenes compared with TREATMENT §04 "What happens" and the owner notes in the CONTROL handoff log. Character
+animation (pets, Santa, Mickey's clip) is WP-04/08 everywhere and is not counted as a miss.
+
+| Scene | Beat (TREATMENT §04 / owner notes) | Built | Fix |
+|---|---|---|---|
+| s01 | Light lines trace the wall edges, sideboard top, both boxes, tree outline; footlights warm up; snow on the wall spills onto the right wall | yes | none (the sideboard top is the `stage` strip trace; its front is out of the beam) |
+| s01 | Welcome line to `{BABY}` | n/a | voice placed in the master-mix (WP-08) |
+| s02 | Colour waves climb the tree on the beat, spirals, ornament pops, star gold at the climax, soft wall echo | yes | none (mega-tree layers, shockwaves, helix, ornament pops, plasma + halo at `star-glow`) |
+| s04 | Boxes light face by face, open with sparkles, jack-in-the-box spring, footlights chase | yes | — |
+| s04 | **Owner: chaos**, objects burst out, pets inside, still no star | **no → built here** | `fx/toys.js` + s04 rewrite (this WP) |
+| s04 | Gandalf pops out of a box; Alaska peeking | partly | ear/tail placeholders at the box tops; real "rummaging" clips → WP-04 shot list |
+| s05 | **Owner: Mickey drawn in stars**, whistles and points up | **no → built here** | `fx/mickey-stars.js`, placed in the s05 placeholder at `mickey-in` |
+| s06 | Whole wall becomes a starry sky; constellations draw star by star (Orion, Canis Major + Minor, Felis); glint by the North Star slips away; shooting stars; snow on the right wall; tree sparkle | yes | none |
+| s06 | **"Pets as constellations (line-art)"**: Orion the cat smiles when Orion forms, each pet "is" its constellation | **no** | larger: → **WP-11b** (pet star figures with the Mickey pose tech) |
+| s09 | Star bows twice, fades to a gold halo; dim starfield; tree dark; seamless hold | yes | none |
+| s10 | Warm ripple from the lit star, footlights burst, sleigh path, soft fireworks, family constellation, "¡Feliz Navidad!", fade to the starfield | yes | Santa + sleigh and the pets' wave are clips (WP-04/08) on the drawn sleigh trail |
+
+Small fix made here: `tools/flash-check.js` now also renders story placeholders that carry finished pieces (s05 Mickey).
+
 ## Out of scope
 - The pets' animated clips (WP-04), placing voices and the mix (WP-08), new music.
 - Changing scene lengths, beat maps or cue times.
 
 ## Acceptance
-- [ ] Audit table written; small misses fixed; any large ones in a WP-11b brief on the board.
-- [ ] s04 reads as a joyful mess of Christmas, pet and cameo objects bursting from the boxes, building to the finale.
-- [ ] Mickey star figure whistles and points up in s05, 1928 design only, ready for WP-08 to place.
-- [ ] Flash check and smoke test pass; screenshots checked.
-- [ ] TREATMENT/PRD/ARCHITECTURE notes, CONTROL board + handoff updated; draft PR.
+- [x] Audit table written; small misses fixed; any large ones in a WP-11b brief on the board.
+- [x] s04 reads as a joyful mess of Christmas, pet and cameo objects bursting from the boxes, building to the finale.
+- [x] Mickey star figure whistles and points up in s05, 1928 design only, ready for WP-08 to place.
+- [x] Flash check and smoke test pass; screenshots checked.
+- [x] TREATMENT/PRD/ARCHITECTURE notes, CONTROL board + handoff updated; draft PR.

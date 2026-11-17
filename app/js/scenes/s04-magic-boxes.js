@@ -1,10 +1,14 @@
-// s04 · Cajas mágicas (1:15). The gift boxes light face by face to the music; each one "opens" with sparkles
-// (box 2 releases a jack-in-the-box spring of light); footlights chase (TREATMENT §04). The boxes stand as a stacked
-// tower with each box's front and side mapped. Gandalf popping out of a
-// box is character animation (WP-08), laid over this later.
-import { cueSheet, beatGrid, boxFaces, boxOpen, wrapSweep, footlights, sparkleBurst, twinkleStars, snowfall, glowStroke, additive, clamp, easeInOutSine } from '../fx/index.js';
+// s04 · Cajas mágicas (1:15). Box chaos (owner, 2026-11-17): the pets have dived into the gift boxes to search for
+// the star, and a joyful mess of Christmas, pet and cameo objects bursts out on the music, in waves that build to
+// the finale: arcs, spins, bounces on the floor line, a pile-up, sparkles. Still no star. The boxes wobble, the lids
+// pop, ears and tails flick out (placeholders shaped for WP-04's "pets rummaging" clips); the faces still light to
+// the music, box 2 releases a jack-in-the-box spring of light; footlights chase (TREATMENT §04). The objects fly on
+// the wall zone (it spans the whole stage), so they can arc over the tree and land anywhere left of the tower.
+import { cueSheet, beatGrid, boxFaces, boxOpen, wrapSweep, footlights, sparkleBurst, twinkleStars, snowfall, glowStroke, additive, clamp, easeInOutSine, easeOutBack, rand,
+  glowSprite, dot } from '../fx/index.js';
+import { TOYS, TOY_NAMES, drawToy, tossSpec, tossAt, petPeek, boxLid, poof } from '../fx/toys.js';
 import { BEATMAPS } from './beatmaps.js';
-import { from, beatClock, boxFace, BOX_ZONES } from './common.js';
+import { from, beatClock, boxFace, BOX_ZONES, skyBase } from './common.js';
 
 const cues = [
   { t: 14.76, name: 'box1-open' },      // first burst: the full orchestra tumbles in
@@ -19,6 +23,145 @@ const B = beatGrid(beats);
 const C = cueSheet(cues, B);
 const duration = 75;
 const COLORS = { box1: ['plum', 'rose'], box2: ['cranberry', 'gold'] };
+
+// ---------- the chaos schedule ----------
+// Where objects come out: the top of the small box, and the big box's two shoulders either side of it.
+const SOURCES = { b1: ['box1', 0.45, 'box1'], b2L: ['box2Side', 0.45, 'box2'], b2R: ['box2', 0.88, 'box2'] };
+const bar = (n) => B.time(n * B.perBar);
+const barAt = (t) => B.at(t).bar;
+/** Waves of objects: { t, src, n, power }. Bursts land on the cues; flurries on bars (≈ every 3–4 s, like the sfx). */
+const WAVES = (() => {
+  const W = [];
+  const push = (t, src, n, power = 1) => W.push({ t: B.quantize(t), src, n, power });
+  push(8, 'b1', 1, 0.45); push(11.5, 'b2R', 2, 0.55);                    // the wobbles: a first toy escapes
+  const o1 = C.at('box1-open'), o2 = C.at('box2-open'), cut = C.at('cut'), fin = C.at('finale');
+  push(o1, 'b1', 14, 1);                                                   // box 1 bursts
+  for (let n = barAt(o1) + 2; bar(n) < o2 - 0.5; n += 2) push(bar(n), 'b1', 5, 0.8);
+  push(o2, 'b2R', 10, 1); push(o2, 'b2L', 8, 1); push(o2, 'b1', 4, 0.8);   // box 2 bursts: bigger and busier
+  const src3 = ['b1', 'b2L', 'b2R'];
+  for (let n = barAt(o2) + 1, i = 0; bar(n) < cut - 0.5; n++, i++) push(bar(n), src3[i % 3], 4 + Math.round(5 * (bar(n) - o2) / (cut - o2)), 0.85 + 0.15 * (i % 2));
+  for (let n = barAt(cut) + 2, i = 0; bar(n) < fin - 0.5; n += 2, i++) push(bar(n), src3[(i + 1) % 3], 1 + (i % 2), 0.5);   // the quiet restart
+  push(fin, 'b1', 16, 1.1); push(fin, 'b2L', 12, 1.1); push(fin, 'b2R', 12, 1.1);                                           // finale
+  const fountain = B.quantize(68.4);
+  for (let k = B.at(fin).n + B.perBar, i = 0; B.time(k) < fountain - 0.3; k += 2, i++) push(B.time(k), src3[i % 3], 5, 1);
+  push(fountain, 'b1', 10, 1.2); push(fountain, 'b2L', 10, 1.2); push(fountain, 'b2R', 10, 1.2);
+  // Between the waves, one toy on every off-beat in the busy sections, so the air is never empty.
+  const busy = [[o1, cut - 0.5], [fin, fountain - 0.3]];
+  for (const [a, b] of busy) for (let k = B.at(a).n + 1, i = 0; B.time(k) < b; k++, i++) push(B.time(k), src3[(i * 2 + 1) % 3], 1, 0.75);
+  return W.sort((p, q) => p.t - q.t);
+})();
+// Everything on the floor sparkles away at the quiet restart (cut) and at the end (out).
+const CLEARS = [C.at('cut'), C.at('out')];
+// Box wobbles (the s04-sfx-wobble hits at 3 / 8 / 11.5 s and after the cut) and big lid pops (on the bursts).
+const WOBBLES = [[3, 'box2'], [8, 'box1'], [11.5, 'box2'], [C.at('cut') + 1.2, 'box1'], [C.at('cut') + 4.8, 'box2'], [C.at('cut') + 8.4, 'box1'],
+  ...WAVES.filter((w) => w.n >= 4).map((w) => [w.t, SOURCES[w.src][2]])].map(([t, b]) => [B.quantize(t), b]);
+const POPS = { box1: [C.at('box1-open'), C.at('finale'), B.quantize(68.4)], box2: [C.at('box2-open'), C.at('finale') + B.beatLen, B.quantize(68.4)] };
+// Pets peeking out (placeholders for WP-04's clips): [kind, box zone, u, from, to].
+const PEEKS = [
+  ['catEars', 'box1', 0.6, 5, 7.8], ['huskyTail', 'box2', 0.86, 9.2, 11.3], ['catEars', 'box1', 0.55, C.at('box1-open') - 0.1, C.at('box1-open') + 1.2],
+  ['pomTail', 'box1', 0.22, 18.5, 24.5], ['tabbyEars', 'box2Side', 0.5, 29, 35.5], ['huskyTail', 'box2', 0.86, 37, 42.5],
+  ['catEars', 'box1', 0.5, C.at('cut') + 2.2, C.at('cut') + 4.6], ['tabbyEars', 'box2Side', 0.5, C.at('cut') + 5.8, C.at('cut') + 8.2],
+  ['pomTail', 'box1', 0.25, C.at('cut') + 9.2, C.at('finale') - 0.3], ['huskyTail', 'box2', 0.86, 59, 67.5], ['pomTail', 'box1', 0.22, 60, 67.8],
+];
+
+function wobbleOf(local, box) {
+  let v = 0;
+  for (const [t, b] of WOBBLES) {
+    const a = local - t;
+    if (b !== box || a < 0 || a > 1.2) continue;
+    v += Math.sin(a * Math.PI * 2 * 5) * Math.exp(-a * 4);
+  }
+  return v;
+}
+function lidLift(local, box) {
+  let v = 0;
+  for (const t of POPS[box]) {
+    const a = local - t;
+    if (a < 0 || a > 1.6) continue;
+    v = Math.max(v, a < 0.35 ? easeOutBack(a / 0.35) : 1 - easeInOutSine((a - 0.35) / 1.25));
+  }
+  return v;
+}
+
+/** The objects, laid out once per wall size and box position (pure function of those, so frames are reproducible). */
+let toyCache = null;
+function toysFor(env, w, h) {
+  const pts = {};
+  for (const [k, [zone, u]] of Object.entries(SOURCES)) pts[k] = from(env, zone, u, 0, { b1: [0.84, 0.52], b2L: [0.76, 0.68], b2R: [0.95, 0.67] }[k]);
+  const left = from(env, 'box2Side', 0, 1, [0.72, 0.97]);
+  const key = `${w}x${h}|${JSON.stringify(pts)}|${left}`;
+  if (toyCache?.key === key) return toyCache.list;
+  const floorY = Math.min(left[1], 0.97) * h;
+  const xMax = left[0] * w;
+  const g = 1.9 * h;                                       // a little floaty: cartoon gravity
+  const list = [];
+  WAVES.forEach((wv, wi) => {
+    const [ox, oy] = [pts[wv.src][0] * w, pts[wv.src][1] * h];
+    for (let i = 0; i < wv.n; i++) {
+      const sd = wi * 97 + i * 7.3;
+      const name = TOY_NAMES[Math.floor(rand(sd) * TOY_NAMES.length)];
+      const size = h * (0.07 + rand(sd + 0.1) * 0.045) * (TOYS[name].long ? 1.15 : 1);
+      const into = wv.n > 1 && rand(sd + 0.2) < 0.12;
+      const xT = into ? ox + (rand(sd + 0.3) - 0.5) * size * 2 : xMax - size * 0.6 - (xMax - 0.05 * w) * rand(sd + 0.3) ** 1.25;
+      const t0 = wv.t + i * 0.05;
+      const spec = tossSpec({ t0, x0: ox, y0: oy, xT, floor: floorY - size * 0.38 - rand(sd + 0.4) * h * 0.05, rise: h * (0.18 + rand(sd + 0.5) * 0.36 * wv.power),
+        g, e: 0.38 + rand(sd + 0.6) * 0.12, spin: (rand(sd + 0.7) - 0.5) * 11, into });
+      const clear = CLEARS.find((c) => c > t0) ?? duration;
+      const end = Math.min(t0 + spec.rest + 4 + rand(sd + 0.8) * 3.5, clear + rand(sd + 0.9) * (clear === CLEARS[1] ? 2.5 : 1.2));
+      list.push({ name, size, spec, end, glow: TOYS[name].glow });
+    }
+  });
+  toyCache = { key, list };
+  return list;
+}
+
+/** All the flying, bouncing and resting objects (drawn on the wall zone). */
+function drawToys(ctx, w, h, local, env, pulse, alpha) {
+  const list = toysFor(env, w, h);
+  const glints = [];
+  for (const o of list) {
+    const age = local - o.spec.t0;
+    if (age < 0 || local > o.end + 0.6) continue;
+    const p = tossAt(o.spec, age);
+    if (!p) continue;
+    if (local > o.end) { poof(ctx, p.x, p.y, o.size, (local - o.end) / 0.6, o.glow); continue; }
+    const pop = 0.35 + 0.65 * easeOutBack(clamp(age / 0.25));             // squeezes out of the box
+    const beat = p.resting ? 1 + 0.05 * pulse : 1;                          // the pile bobs to the beat
+    drawToy(ctx, o.name, p.x, p.y, o.size * pop * beat, p.rot, alpha);
+    if (!p.resting && age > 0.08) glints.push(o, age);
+  }
+  // faint glitter trails behind the flying ones
+  additive(ctx, 0.55 * alpha, () => {
+    for (let j = 0; j < glints.length; j += 2) {
+      const o = glints[j], age = glints[j + 1], sp = glowSprite(o.glow, 0.3);
+      for (let k = 1; k <= 3; k++) {
+        const q = tossAt(o.spec, age - k * 0.045);
+        if (q) dot(ctx, sp, q.x, q.y, o.size * (0.16 - k * 0.03));
+      }
+    }
+  });
+}
+
+/** Lids popping, ears and tails peeking: the pets are inside (wall zone, just above the box tops). */
+function drawPets(ctx, w, h, local, env, t, alpha) {
+  const P = (zone, u, v, fb) => { const [x, y] = from(env, zone, u, v, fb); return [x * w, y * h]; };
+  for (const box of ['box2', 'box1']) {
+    const A = P(`${box}Side`, 0, 0, box === 'box1' ? [0.78, 0.5] : [0.7, 0.66]);
+    const Bc = P(box, 0, 0, box === 'box1' ? [0.8, 0.52] : [0.74, 0.68]);
+    const Cc = P(box, 1, 0, box === 'box1' ? [0.92, 0.5] : [1, 0.66]);
+    const wob = wobbleOf(local, box), pop = lidLift(local, box);
+    const lift = h * (0.16 * pop + 0.012 * Math.abs(wob));
+    boxLid(ctx, A, Bc, Cc, lift, 0.28 * pop * (box === 'box1' ? -1 : 1) + 0.05 * wob, COLORS[box][0], alpha);
+  }
+  for (const [kind, zone, u, a, b] of PEEKS) {
+    if (local < a - 0.2 || local > b + 0.4) continue;
+    const box = zone.slice(0, 4);
+    const duck = Math.min(1, Math.abs(wobbleOf(local, box)) * 1.5);       // they duck when the box jolts
+    const up = clamp(Math.min((local - a) / 0.35, (b - local) / 0.3)) * (1 - 0.6 * duck);
+    const [x, y] = P(zone, u, 0, [0.85, 0.52]);
+    petPeek(ctx, kind, x, y, h * 0.11, up, t + u * 10, alpha);
+  }
+}
 
 /**
  * A coiled spring of light bouncing up out of a point (damped, so it settles instead of jittering). It bobs once
@@ -46,16 +189,25 @@ export default {
   duration,
   cues,
   beats,
-  zones: [...BOX_ZONES, 'backdrop', 'stage'],
+  zones: ['wall', ...BOX_ZONES, 'backdrop', 'stage'],
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = easeInOutSine(clamp(local / 2)) * (1 - easeInOutSine(C.prog(local, 'out', duration)));
     const fin = B.steps(local, C.at('finale'), 2);
     const { bt, pulse } = beatClock(B, t - local, local);
     switch (zoneId) {
+      case 'wall':
+        skyBase(zoneId, ctx, w, h, beatClock(B, t - local, local).soft);
+        drawToys(ctx, w, h, local, env, pulse, A);
+        drawPets(ctx, w, h, local, env, t, A);
+        break;
       case 'box1': case 'box1Side': case 'box2': case 'box2Side': {
         // The tower: big box (box2) at the bottom, small box (box1) on top. Each box's front and side are
         // separate surfaces; effects line up across the corner so the tower reads as a solid object.
         const f = boxFace(zoneId);
+        // Something busy inside: the box's light jolts and shivers with each wobble.
+        const wob = wobbleOf(local, f.box);
+        ctx.save();
+        ctx.translate(wob * w * 0.05, -Math.abs(wob) * h * 0.05);
         const openCue = f.top ? 'box1-open' : 'box2-open';
         const opened = local >= C.at(openCue);
         const build = f.top ? B.steps(local, 5, 8) : 1;          // the top box joins after the bottom one
@@ -78,6 +230,7 @@ export default {
           wrapSweep(ctx, w, h, local, { p, face: f.face, color: f.top ? 'rose' : 'gold', alpha: A * build * (fin > 0 ? 0.4 : 0.7) });
         }
         boxOpen(ctx, w, h, bt, { open: (C.env(local, openCue, C.at(openCue) + 8, 0.6, 3) + 0.6 * fin) * (f.face === 'side' ? 0.7 : 1), color: COLORS[f.box][1], alpha: A * build });
+        ctx.restore();
         break;
       }
       case 'backdrop': {
