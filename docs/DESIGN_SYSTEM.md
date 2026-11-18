@@ -171,6 +171,7 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 | Character clips | generated on **pure black**, shipped as **stacked-alpha** MP4/H.264 (colour on top, matte below: no box behind the character) | generated 5/10 s, 30 fps; prepped by `tools/clip-prep.sh` (black crush, crop to the character, ≤ 540 px colour + matte, CRF 26, no audio); committed as `app/assets/clips/<id>.mp4`, a media-pack file with the same id overrides it |
 | Backgrounds | PNG/JPG, zone resolution × 2 | flat graphic shapes and soft gradients |
 | Audio | WAV for masters, M4A/AAC for the app | 48 kHz |
+| Media-pack audio (never committed) | `master-mix.m4a`: whole show, AAC 128 kbps, 48 kHz, −16 LUFS, ≤ −1.5 dBTP, 11:57 (≈ 11.7 MB), rendered by `tools/master-mix.js`. `music-box-loop.m4a`: idle loop, 20 s on the bar grid (seamless), AAC 128 kbps, −20 LUFS (≈ 0.33 MB) | both hold 🔒 personal content or belong with it: add to the on-device media pack only (WP-02); the file name without extension is the media-pack id |
 | Naming | `kebab-case`, `<scene>-<thing>-<variant>` | e.g. `s03-gandalf-pounce-a.png` |
 
 ## 10 · Mapper app UI
@@ -181,6 +182,7 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 - The UI must be hideable (Hide ✕, top-left corner to restore), because whatever is on screen is projected.
 
 ## Changelog
+- **2026-11-18** — WP-08b: §09 media-pack audio files (`master-mix`, `music-box-loop`).
 - **2026-11-18** — §09: clips are stacked alpha (owner: no black boxes).
 - **2026-11-18** — WP-04: §09 clip specs and storage; model sheets in `assets/characters/<name>/`.
 - **2026-11-18** — WP-11b/11c: constellation art is now *Urania's Mirror* (1824), grid-free (owner).
