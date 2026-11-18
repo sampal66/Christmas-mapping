@@ -24,7 +24,7 @@
 | WP-08 | [Story scenes s03, s05, s07, s08 + the pets' wave in s10](work-packages/WP-08-story-scenes.md): places the WP-04b clips on SCRIPT §03 cues around the star motion; s08 26–45 s visual beat (silence check) | WP-04b, WP-06 | ✅ done (PR #15) | `claude/hopeful-knuth-uibswc` | C1, C2, C3, C6, C7 |
 | WP-08b | [Master mix + idle music box](work-packages/WP-08b-master-mix.md): one cloud-rendered `master-mix.m4a` (music + voices + sfx, never committed) + the s00 music-box loop while idle/after the finale | WP-05, WP-06 | ✅ done (PR #15 code, PR #18 render) | `claude/wp-08b-master-mix` | C4, C5, M8 |
 | WP-08c | [Story polish: owner notes](work-packages/WP-08c-story-polish.md): soft ear tips (clips cut at the top), star-dust arrivals/exits, softly lit gift tower under the cats, a short natural Connor carry | WP-08 | ✅ done (PR #17) | `claude/jolly-newton-qtuh8g` | C1, C2 |
-| WP-12 | [Automatic show pre-check](work-packages/WP-12-precheck.md): one command, whole show headless → report + contact sheets, before the owner's manual scene review | WP-08b, WP-08c | ⚪ ready to start (deps met) | — | success metrics |
+| WP-12 | [Automatic show pre-check](work-packages/WP-12-precheck.md): one command, whole show headless → report + contact sheets, before the owner's manual scene review | WP-08b, WP-08c | 🟡 in review | `claude/wp-12-precheck` | success metrics |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
 | WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | ✅ done (PR #10) | `claude/wp-11b-pet-constellations` | C1, C2 |
@@ -52,6 +52,11 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-18 · WP-12** — `node tools/precheck.js [--mix file]` (≈ 3 min, `--no-flash --no-sheets` ≈ 1 min) → `precheck/report.md` + `sheet-sNN.png` (git-ignored). First run PASS; sheets + report sent to the owner. `fx/clips.js` test hook `setClipProbe`/`clipsBusy`; `tools/show-table.js` now shared with master-mix; `sw.js` v27.
+  Flagged (fix in a code WP or with the proposal): s08 pets frozen ≈ 49 s on held look-ups (also 9–17 s in s03/s05/s07), Pooh a still 22.5 s, **s10-orion-01 spoken after the pets leave** (free fix: `outAt`), s04/s06/s10 > 33 ms worst headless.
+  Owner asked for [proposed ElevenLabs generations ≤ 40k](work-packages/WP-12-proposal.md): 11 items ≈ 34.7k + 5.3k contingency, **awaiting owner approval; nothing generated**.
+  Gotchas: an ffmpeg 1-row `crop` on yuv420 rounds to 0 rows (convert to `gray` first). Pre-check renders the default layout: re-run after WP-09 with the calibrated one if needed.
 
 - **2026-11-18 · WP-08b render** — Pulled every source (music flow `ppF1…`, sfx flow `EjbT…`, 46 voice lines from `dn8q…`; Commons music as **.ogg transcodes**, originals 429) → `master-mix.m4a` 11:57.0, −16 LUFS, −1.5 dBTP, no missing sources/overlaps; + `music-box-loop.m4a` (20 s, bar-grid loop) + 10 scene previews → owner (media pack only). Nothing new generated.
   Fix: `master-mix.js` now limits after loudnorm (first render −0.8 dBTP failed the check). **Take A = the earlier-created generation** of each voice node's pair (newest-first listings put it 2nd). `s10-todos-01` = 4 clips layered 0/40/60/120 ms.
@@ -175,6 +180,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 ## Open decisions / waiting on owner
 
+- **ElevenLabs budget (owner, 2026-11-18):** 59,890 credits left. Up to **40,000** may go to new generations; keep **≈ 20,000 in reserve** for fixes once the projector arrives (~Nov 27, WP-09). The wider dog re-takes (≈ 14k) come out of the reserve, not the 40k. Owner to approve items from [WP-12-proposal](work-packages/WP-12-proposal.md) before anything is generated.
 - ✅ Animation approach A chosen; style test passed (Gandalf #4, kling-2.5-turbo ≈2.1k credits per 5 s clip). Owner will buy **Creator** (121k/mo) for the character work. **Check the ElevenLabs credit balance**: ≈30 clips ≈ 45–65k credits on the cheaper video models (TREATMENT §09).
 - ✅ Projector decided: HAPPRUN H1 (throw ratio 1.4) on the tripod at 3.5 m, head 1.45 m; buy Nov 27. See [STAGE_SURVEY §03e](STAGE_SURVEY.md).
 - ✅ LCD-black design note: handled in DESIGN_SYSTEM §02 (`dusk` base, fade to starfield). Check the `dusk` value on the wall in WP-09.

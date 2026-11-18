@@ -9,4 +9,4 @@ Work is organised in **work packages**: see `docs/CONTROL.md` (board + handoff l
 
 Quick map: what/why → `docs/PRD.md` · look/sound/safety → `docs/DESIGN_SYSTEM.md` · real boxes → `docs/BOX_SPECS.md` ·
 how it's built → `docs/ARCHITECTURE.md` · schedule → `docs/PLAN.md`.
-Test with `node tools/smoke-test.js`. The repo is public: never commit personal data (use `{BABY}`).
+Test with `node tools/smoke-test.js`; before the owner reviews scenes, run `node tools/precheck.js [--mix file]` (report + contact sheets in `precheck/`). The repo is public: never commit personal data (use `{BABY}`).

@@ -124,6 +124,8 @@ Target ≈12 min (agreed range 10–15). The beat sheet, live-moment plan and cu
 - ✅ Full run-through with **zero crashes** on 3 consecutive rehearsals.
 - ✅ Audio and visuals in sync within **±50 ms** after the delay calibration.
 - ✅ ElevenLabs spend stays inside the plan plus at most one small top-up.
+- Before each owner scene review, `tools/precheck.js` passes (no console errors, missing clips, flash failures or
+  timing mismatches; WP-12).
 - ❤️ The family watches to the end, the baby isn't startled, and someone asks to see it again.
 
 ## 09 · Risks
@@ -138,6 +140,7 @@ Target ≈12 min (agreed range 10–15). The beat sheet, live-moment plan and cu
 | Tree too bright or green | Tree lights off until the finale; the flocked tips take colour well. |
 
 ## Changelog
+- **2026-11-18** — WP-12: show pre-check added to the success metrics (§08).
 - **2026-11-18** — WP-08b: master mix rendered (C5).
 - **2026-11-18** — WP-08c: C1/C2 status (story polish: ear fade, star dust, lit tower, short carry).
 - **2026-11-18** — WP-08/08b session: C6 family portrait; pets as star-swarm portraits (s06).
