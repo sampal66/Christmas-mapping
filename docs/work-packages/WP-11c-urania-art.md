@@ -33,7 +33,11 @@ does not want the grid. The art should read as clean, smooth engraved line art b
 - s06 timing, the pets (WP-11b), the swarm itself.
 
 ## Acceptance
-- [ ] No grid lines; the figures look smooth and undistorted on the wall at 1920×1080.
-- [ ] Stars sit on the new drawings; names unchanged.
-- [ ] CREDITS row updated (source, licence, what was changed); smoke test and flash check pass.
-- [ ] PRD status, TREATMENT note, CONTROL board + handoff updated.
+- [x] No grid lines; the figures look smooth and undistorted on the wall at 1920×1080.
+- [x] Stars sit on the new drawings; names unchanged.
+- [x] CREDITS row updated (source, licence, what was changed); smoke test and flash check pass.
+- [x] PRD status, TREATMENT note, CONTROL board + handoff updated.
+
+**Done in the WP-11b session (owner: no extra sessions, 2026-11-18).** Steps 1–3 and 5 done; the downloads worked once
+the owner allowed them (Commons standard thumbnails). Step 4 (drone-point outline) was not built: a prototype from the
+old plates was illegible, and the new soft-line art reads well on its own.

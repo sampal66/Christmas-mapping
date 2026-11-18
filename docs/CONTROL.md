@@ -24,7 +24,7 @@
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
 | WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | 🟡 in review (PR #10) | `claude/wp-11b-pet-constellations` | C1, C2 |
-| WP-11c | [s06 atlas art from *Urania's Mirror*](work-packages/WP-11c-urania-art.md) (owner: current plates distorted, grid unwanted) | WP-11b | 🟢 ready | — | C1 |
+| WP-11c | [s06 atlas art from *Urania's Mirror*](work-packages/WP-11c-urania-art.md) (owner: current plates distorted, grid unwanted) | WP-11b | 🟡 in review (in PR #10, owner: same session) | `claude/wp-11b-pet-constellations` | C1 |
 | WP-09 | On-wall calibration + rehearsal checklist | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
 
 Status keys: 🟢 ready to start · 🔵 in progress · 🟡 in review (PR open) · ✅ done · ⚪ waiting on a dependency · ⏸️ deferred
@@ -51,7 +51,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 - **2026-11-17 · WP-11b** — `fx/pet-stars.js` `petStars(...)`: the four pets as small **3D drone swarms** (owner review x2). Volumes are ellipsoids, tubes and cones with markings painted per point. Drawn by its own `renderDrones`: small crisp drones (coloured core, no white centre), about 220–250 per pet, far side dimmer. **Silhouettes only, no faces** (owner). Orion: hunched → tail up + heart glow. Connor: looks up. Alaska: "hmph" toss. Gandalf: pounce.
   s06 `PETS` table: each pet forms from its constellation's cloud at cue + 7.5–9 s, right of the figures, and flies back by next cue − 1 s. Timing, cues and beat map unchanged. Flash check passes; ≈1–2 ms per pet headless. `sw.js` v16.
-  **Atlas art:** owner finds it distorted and dislikes the grid. My grid-erasing attempt was reverted (plates are as on main). The fix is new art: **WP-11c**, the grid-free *Urania's Mirror* cards. Gotcha: Wikimedia's API and upload server rate-limit/refuse this cloud container, so the scans must be fetched another way (see the brief).
+  **WP-11c (same session, owner):** the atlas art is now *Urania's Mirror* (1824), grid-free, soft lines, 800 px grey+alpha PNGs. Star `u,v`/`aspect` re-read in `fx/constellations.js`; Felis is fitted to the cat (the card marks no stars on it). Gotcha: Commons serves only **standard thumbnail sizes** (960/1280/1920/3840) to cloud machines; originals return 429.
   Not the cartoon pets: those are WP-04 (ElevenLabs clips).
 
 - **2026-11-17 · WP-11** — Audit table in the brief (all beats built except s04 chaos, s05 star Mickey → done here; s06 pets-as-constellations → **WP-11b** brief).

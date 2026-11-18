@@ -245,8 +245,10 @@ export default {
 | 2026-11-17 | Story placeholders take `drawBackdrop` for finished pieces; `effects: true` makes the flash check render them | WP-08 can lift the piece into the real scene unchanged, and the safety check covers it now |
 | 2026-11-17 | Recordings stay off the repo; `tools/beats.js` decodes WAV itself and other formats via the system ffmpeg | repo size and "no new dependencies"; ffmpeg is only an optional convenience for the offline tool |
 | 2026-11-17 | The s06 pet star figures (`fx/pet-stars.js`) are **3D drone-swarm volumes**. A small pen writes fixed-count parts (Fibonacci ellipsoids, spiral tubes, cones, a few feature points) from keyframed poses, with markings painted per point. The drones morph in from the constellation's own cloud and back again. | Owner: every constellation figure is drone-show style with depth, not a dotted outline. Fixed counts keep each swarm's identity (as in the Mickey). Pets draw with their own crisp drone sprite (coloured core, faint halo, no white centre) at about 220–250 points, and far-side drones are dimmer. Silhouettes only, no face features. That costs about 1–2 ms each headless. | Owner: big bright dots merged into a ball of light, and faces can't read at this size. |
+| 2026-11-18 | s06 constellation art is *Urania's Mirror* (1824). Each figure is cut out along a hand-traced outline. Engraved lines become soft alpha (local darkening, no threshold) plus a faint body tone, saved as 800 px grey+alpha PNGs. Star positions are read off the cards. | Owner: the Jamieson crops looked distorted (hard threshold on low-res thumbnails) and the grid was unwanted. Erasing the grid smeared the art; these cards have no grid. |
 
 ## Changelog
+- **2026-11-18** — WP-11c: atlas art from *Urania's Mirror* (§07).
 - **2026-11-17** — WP-11b: pet star figures (`fx/pet-stars.js`) as 3D drone swarms with crisp drone sprites (§07).
 - **2026-11-17** — WP-11 quality pass: `edgeRunners`, `cloudSnowflake`, `sparkFountain` (s01, s10).
 - **2026-11-17** — WP-11: toys sprites + toss model, star Mickey, placeholder `drawBackdrop` (§07).
