@@ -21,7 +21,8 @@
 | WP-05 | [Music sourcing + beat maps](work-packages/WP-05-music-beats.md): PD military-band carols, Musopen Tchaikovsky, ElevenLabs music box + 3 underscores; beat maps (auto + tap tool) applied to the light-show scenes | WP-03, WP-10 | ✅ done (PR #7) | `claude/wp-05-music-beats` | C5, C1 beat sync |
 | WP-06 | [Spanish script + narration and pet voices](work-packages/WP-06-script-voices.md) (`docs/SCRIPT.md`, ≈3 min of speech; TREATMENT §03–§04) | WP-10 | ✅ done (PR #8) | `claude/wp-06-script-voices` | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
-| WP-08 | Story and tender scenes (s03, s05, s07, s08) + the pets' wave in s10; places and mixes voices + sound effects (made in WP-06; generate only missing/odd ones); **must fix the silence-check items in SCRIPT §07** (s08 26–45 s: constellations twinkle as a callback + star warms on the swell, owner's choice; loop the s00 music box while idle/after the finale) | WP-04, WP-06 | ⚪ waiting | — | C1, C6, C7 |
+| WP-08 | [Story scenes s03, s05, s07, s08 + the pets' wave in s10](work-packages/WP-08-story-scenes.md): places the WP-04b clips on SCRIPT §03 cues around the star motion; s08 26–45 s visual beat (silence check) | WP-04b, WP-06 | 🟢 next | — | C1, C2, C3, C6, C7 |
+| WP-08b | [Master mix + idle music box](work-packages/WP-08b-master-mix.md): one cloud-rendered `master-mix.m4a` (music + voices + sfx, never committed) + the s00 music-box loop while idle/after the finale | WP-05, WP-06 | 🟢 ready (any order with WP-08) | — | C4, C5, M8 |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
 | WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | ✅ done (PR #10) | `claude/wp-11b-pet-constellations` | C1, C2 |
@@ -49,6 +50,8 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-18 · WP-04b follow-up** — PR #13 merged (owner). Mickey re-tested with a prompt stating *Steamboat Willie* is public domain since 2024: blocked on gpt-image **and** FLUX 2 Pro → stop trying; s05 keeps the drone Mickey. Credits ≈ 58.8k left after the tests (owner saw 59,890 before them). Wrote the **WP-08** (story scenes, visuals) and **WP-08b** (master mix + idle loop) briefs; WP-08 split in two to keep sessions lean.
 
 - **2026-11-18 · WP-04b** — Owner picked start frames (Connor 3, Alaska 2, Orion 3, Gandalf 1, Santa 1, Pooh 2) → 28 new clips in `app/assets/clips/` (12 pet idle/talk/look-up, 10 actions incl. Pooh 10 s, 4 waves, Alaska tail, Santa sleigh); kinds (loop / once-and-hold) in the WP-04b brief Status table. Wired: s04 Alaska tail, s10 sleigh rides the sparkle trail. **Mickey: no clip** (provider blocked 3 prompts, incl. one stating *Steamboat Willie* is public domain since 2024) → s05 keeps the drone film screen. `sw.js` v21.
   Credits: ≈ 68.4k spent (worst case; ≈ 2.3k of it is blocked image runs that may be refunded) → owner confirmed **59,890 credits left** (2026-11-18). Owner: leave the small flaws as they are. Spares #30–32 unused.
