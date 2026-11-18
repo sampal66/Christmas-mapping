@@ -6,6 +6,7 @@ import { Timeline, fmtTime } from './timeline.js';
 import { scenes, holds, preshow, cutTime } from './scenes/index.js';
 import { skyBase, SKY_ZONES } from './scenes/common.js';
 import * as media from './media.js';
+import { clipsFrame } from './fx/clips.js';
 
 const STORAGE_KEY = 'christmas-mapping.layout.v1';
 
@@ -265,6 +266,7 @@ function frame(now) {
       maskPath(ctx, z); ctx.strokeStyle = z.color; ctx.lineWidth = 4; ctx.stroke();
     }
   }
+  clipsFrame(mode === 'show' && started && clock.playing);   // character clips follow the show clock
   if (perf.last) {
     const k = 0.05;                                        // exponential moving average
     perf.frameMs += ((now - perf.last) - perf.frameMs) * k;

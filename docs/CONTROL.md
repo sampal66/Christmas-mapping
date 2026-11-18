@@ -16,7 +16,8 @@
 | WP-01 | [Show timeline, audio sync, hold points](work-packages/WP-01-timeline.md) | WP-00 | ✅ done (PR #1) | setup session | M5, M6, M7, M11 |
 | WP-02 | [Media pack + offline mode](work-packages/WP-02-media-offline.md) | WP-00 | ✅ done (PR #2) | `claude/wp-02-media-offline` | M8, M9 |
 | WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | ✅ done (PR #6) | `claude/wp-03-effects-scenes` | C1 (s00, s01, s02, s04, s06, s09, s10) + owner notes (3D swarm, mega-tree, box tower, atlas art) |
-| WP-04 | Character pipeline: 4 pets + Mickey 1928 + Shepard Pooh + **Santa and sleigh**; approach pending (TREATMENT §09: AI video clips recommended, not code puppets); **add shots: pets rummaging inside the boxes for s04 (WP-11): Gandalf's ears over box 1, Connor's and Alaska's tails waving out of box 2 / box 1, Orion's ears at box 2's left shoulder, Gandalf popping out at `box1-open`; replace the placeholders in `PEEKS` (s04) and drop `film` stand-in in `mickeyStars` once Mickey's clip exists**; clip lengths from SCRIPT §03 (real take lengths) | WP-03, WP-10, ElevenLabs connector | 🟢 next (brief written in its own session first) | — | C2, C3 |
+| WP-04 | [Character pipeline](work-packages/WP-04-characters.md): model sheets, clip layer (`fx/clips.js`), s04 rummaging clips; Mickey film + Santa sleigh after the credit upgrade | WP-03, WP-10, ElevenLabs connector | 🟡 in review | `claude/wp-04-characters` | C2, C3 |
+| WP-04b | Story acting library (≈29 clips for s03/s05/s07/s08/s10, shot list in the WP-04 brief) + Alaska tail re-prompt + Mickey film + Santa sleigh; needs the ElevenLabs upgrade (≈84k+) | WP-04 merged, owner judged s04 clips on TV/projector | ⚪ needs brief (copy the WP-04 shot list) | — | C2, C3 |
 | WP-05 | [Music sourcing + beat maps](work-packages/WP-05-music-beats.md): PD military-band carols, Musopen Tchaikovsky, ElevenLabs music box + 3 underscores; beat maps (auto + tap tool) applied to the light-show scenes | WP-03, WP-10 | ✅ done (PR #7) | `claude/wp-05-music-beats` | C5, C1 beat sync |
 | WP-06 | [Spanish script + narration and pet voices](work-packages/WP-06-script-voices.md) (`docs/SCRIPT.md`, ≈3 min of speech; TREATMENT §03–§04) | WP-10 | ✅ done (PR #8) | `claude/wp-06-script-voices` | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
@@ -48,6 +49,11 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-18 · WP-04** — Brief written + approved; owner capped spend at the 18.8k credits left (upgrade later). Model sheets picked (Connor 2, Alaska 1, Orion 1; Gandalf = style test #4) → `assets/characters/`. `fx/clips.js`: blob-loaded `<video>` per clip, `'screen'` blend, re-seeked to scene time; media pack overrides `app/assets/clips/<id>.mp4`. `tools/clip-prep.sh` (black crush, crop, 540 px, CRF 28, `--loop` crossfade).
+  s04: Gandalf ears + pop (peaks on `box1-open`), Connor tail (loop), Orion ears in; placeholders stay as fallback. ≈15.9k credits spent.
+  Left (WP-04b, after upgrade): Alaska tail (Kling **blocked** "rump wiggles": prompt tail only), Mickey film (then `film: false`), Santa sleigh, ≈29 story clips.
+  Gotchas: Safari won't play `<video>` from SW cache hits → load as blob. Box 2's right shoulder is off the wall zone in the default layout. A wired reference image more than doubles gpt-image cost.
 
 - **2026-11-17 · WP-11b** — `fx/pet-stars.js` `petStars(...)`: the four pets as small **3D drone swarms** (owner review x2). Volumes are ellipsoids, tubes and cones with markings painted per point. Drawn by its own `renderDrones`: small crisp drones (coloured core, no white centre), about 220–250 per pet, far side dimmer. **Silhouettes only, no faces** (owner). Orion: hunched → tail up + heart glow. Connor: looks up. Alaska: "hmph" toss. Gandalf: pounce.
   s06 `PETS` table: each pet forms from its constellation's cloud at cue + 7.5–9 s, right of the figures, and flies back by next cue − 1 s. Timing, cues and beat map unchanged. Flash check passes; ≈1–2 ms per pet headless. `sw.js` v16.

@@ -7,6 +7,7 @@
 import { cueSheet, beatGrid, boxFaces, boxOpen, wrapSweep, footlights, sparkleBurst, twinkleStars, snowfall, glowStroke, additive, clamp, easeInOutSine, easeOutBack, rand,
   glowSprite, dot } from '../fx/index.js';
 import { TOYS, TOY_NAMES, drawToy, tossSpec, tossAt, petPeek, boxLid, poof } from '../fx/toys.js';
+import { drawClip, preloadClips } from '../fx/clips.js';
 import { BEATMAPS } from './beatmaps.js';
 import { from, beatClock, boxFace, BOX_ZONES, skyBase } from './common.js';
 
@@ -56,13 +57,20 @@ const CLEARS = [C.at('cut'), C.at('out')];
 const WOBBLES = [[3, 'box2'], [8, 'box1'], [11.5, 'box2'], [C.at('cut') + 1.2, 'box1'], [C.at('cut') + 4.8, 'box2'], [C.at('cut') + 8.4, 'box1'],
   ...WAVES.filter((w) => w.n >= 4).map((w) => [w.t, SOURCES[w.src][2]])].map(([t, b]) => [B.quantize(t), b]);
 const POPS = { box1: [C.at('box1-open'), C.at('finale'), B.quantize(68.4)], box2: [C.at('box2-open'), C.at('finale') + B.beatLen, B.quantize(68.4)] };
-// Pets peeking out (placeholders for WP-04's clips): [kind, box zone, u, from, to].
+// Pets rummaging inside the boxes (WP-04): [kind, box zone, u, from, to, clip?]. Each peek plays its character clip
+// (cel animation on black, rising out of the box top); the code sprite `kind` is the fallback while a clip is missing.
+// Connor and Orion use the big box's left shoulder: its right shoulder runs off the wall zone (the right-wall corner).
+// Gandalf's pop clip starts 1.7 s early so his jump peaks on box1-open.
+const CLIP_OF = { catEars: 's04-gandalf-ears', huskyTail: 's04-connor-tail', pomTail: 's04-alaska-tail', tabbyEars: 's04-orion-ears' };
+// Drawn height of each clip as a share of the wall height (the clips are cropped to the character).
+const CLIP_H = { 's04-gandalf-ears': 0.15, 's04-gandalf-pop': 0.159, 's04-connor-tail': 0.2, 's04-alaska-tail': 0.16, 's04-orion-ears': 0.14 };
 const PEEKS = [
-  ['catEars', 'box1', 0.6, 5, 7.8], ['huskyTail', 'box2', 0.86, 9.2, 11.3], ['catEars', 'box1', 0.55, C.at('box1-open') - 0.1, C.at('box1-open') + 1.2],
-  ['pomTail', 'box1', 0.22, 18.5, 24.5], ['tabbyEars', 'box2Side', 0.5, 29, 35.5], ['huskyTail', 'box2', 0.86, 37, 42.5],
-  ['catEars', 'box1', 0.5, C.at('cut') + 2.2, C.at('cut') + 4.6], ['tabbyEars', 'box2Side', 0.5, C.at('cut') + 5.8, C.at('cut') + 8.2],
-  ['pomTail', 'box1', 0.25, C.at('cut') + 9.2, C.at('finale') - 0.3], ['huskyTail', 'box2', 0.86, 59, 67.5], ['pomTail', 'box1', 0.22, 60, 67.8],
+  ['catEars', 'box1', 0.6, 5, 7.8], ['huskyTail', 'box2Side', 0.2, 9.2, 11.3], ['catEars', 'box1', 0.55, C.at('box1-open') - 1.7, C.at('box1-open') + 2.6, 's04-gandalf-pop'],
+  ['pomTail', 'box1', 0.22, 18.5, 24.5], ['tabbyEars', 'box2Side', 0.22, 29, 35.5], ['huskyTail', 'box2Side', 0.2, 37, 42.5],
+  ['catEars', 'box1', 0.5, C.at('cut') + 2.2, C.at('cut') + 4.6], ['tabbyEars', 'box2Side', 0.22, C.at('cut') + 5.8, C.at('cut') + 8.2],
+  ['pomTail', 'box1', 0.25, C.at('cut') + 9.2, C.at('finale') - 0.3], ['huskyTail', 'box2Side', 0.2, 59, 67.5], ['pomTail', 'box1', 0.22, 60, 67.8],
 ];
+const LOOPS = new Set(['s04-connor-tail', 's04-alaska-tail']);
 
 function wobbleOf(local, box) {
   let v = 0;
@@ -153,14 +161,28 @@ function drawPets(ctx, w, h, local, env, t, alpha) {
     const lift = h * (0.16 * pop + 0.012 * Math.abs(wob));
     boxLid(ctx, A, Bc, Cc, lift, 0.28 * pop * (box === 'box1' ? -1 : 1) + 0.05 * wob, COLORS[box][0], alpha);
   }
-  for (const [kind, zone, u, a, b] of PEEKS) {
+  for (const [kind, zone, u, a, b, clipId = CLIP_OF[kind]] of PEEKS) {
     if (local < a - 0.2 || local > b + 0.4) continue;
     const box = zone.slice(0, 4);
     const duck = Math.min(1, Math.abs(wobbleOf(local, box)) * 1.5);       // they duck when the box jolts
     const up = clamp(Math.min((local - a) / 0.35, (b - local) / 0.3)) * (1 - 0.6 * duck);
     const [x, y] = P(zone, u, 0, [0.85, 0.52]);
+    if (peekClip(ctx, clipId, x, y, h * CLIP_H[clipId], up, local - a, alpha)) continue;
     petPeek(ctx, kind, x, y, h * 0.11, up, t + u * 10, alpha);
   }
+}
+
+/**
+ * A character clip rising out of a box top at (x, y): its bottom edge sits on the box top and everything below it
+ * is clipped away, so the pet seems to be inside the box. `up` (0..1) slides it in and out. False when no clip.
+ */
+function peekClip(ctx, id, x, y, ch, up, time, alpha) {
+  if (up <= 0.01) return drawClip(ctx, id, time, { alpha: 0 });
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x - ch * 3, y - ch * 2, ch * 6, ch * 2); ctx.clip();
+  const ok = drawClip(ctx, id, time, { x, y: y + ch * (1 - easeOutBack(clamp(up))) * 0.9, h: ch, alpha, loop: LOOPS.has(id) });
+  ctx.restore();
+  return ok;
 }
 
 /**
@@ -190,6 +212,7 @@ export default {
   cues,
   beats,
   zones: ['wall', ...BOX_ZONES, 'backdrop', 'stage'],
+  enter() { preloadClips([...Object.values(CLIP_OF), 's04-gandalf-pop']); },
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = easeInOutSine(clamp(local / 2)) * (1 - easeInOutSine(C.prog(local, 'out', duration)));
     const fin = B.steps(local, C.at('finale'), 2);
