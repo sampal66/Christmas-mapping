@@ -106,22 +106,39 @@ characters on model). Short lines without a special action play on the pet's **t
 | s10 waves | each pet waves goodbye + "¡Feliz Navidad!" (1.5; Alaska counts in 4.0, Orion's 4.5 line) | 4 × 5 s | s10 `wave` |
 
 ## Credit estimate (owner to approve; AGENTS §07)
-Prices: still ≈380 per image node (default takes, style test); kling-2.5-turbo 1080p ≈2.1k per 5 s, ≈4.2k per 10 s.
+Prices: still 190, so ≈ 761 per image node of 4 default takes (measured); kling-2.5-turbo 1080p ≈2.1k per 5 s, ≈4.2k per 10 s.
 The plan balance can't be read through the connector (permissions), so the owner checks it in ElevenLabs first.
 
 | Item | Count | Credits |
 |---|---|---|
-| Model sheets (7 characters) | 7 nodes | ≈ 2.7k |
-| Start frames (this WP) | ≈ 5 nodes | ≈ 1.9k |
+| Model sheets (7 characters) | 7 nodes × 761 | ≈ 5.3k |
+| Start frames (this WP) | ≈ 6 nodes | ≈ 4.6k |
 | Clips (this WP): 5 × 5 s + 2 × 10 s | 7 | ≈ 18.9k |
-| **This WP total** | | **≈ 23.5k** |
-| WP-04b start frames | ≈ 20 nodes | ≈ 7.6k |
+| **This WP total** | | **≈ 28.8k** (actual so far ≈ 15.9k, see Status) |
+| WP-04b start frames | ≈ 20 nodes | ≈ 15k |
 | WP-04b clips: 25 × 5 s + 4 × 10 s | 29 | ≈ 69k |
-| **WP-04b total** | | **≈ 77k** |
-| **Both, + ≈ 10 % reserve for a few failed shots** | | **≈ 110k** |
+| **WP-04b total** | | **≈ 84k** |
+| **Both, + ≈ 10 % reserve for a few failed shots** | | **≈ 125k** |
 
 Ways to spend less (owner's choice in WP-04b): drop the optional-line actions and look-up loops (−4 to −8 clips,
 ≈ −10–17k); approach B (painted still + code motion) for idle loops (−8 clips, ≈ −17k).
+
+## Status (2026-11-18, end of session)
+Owner approved the plan but capped this session at the **18,763 credits** left on the plan ("agree on the style and the
+basis first; upgrade when really needed"). Spent ≈ 15.9k: 3 model sheets (2.3k, text-only: a wired reference image costs
+≈ 430 per still instead of 190), 4 start-frame nodes (3.0k), 5 kling clips (10.6k, one **blocked** by Kling moderation).
+
+| # | Clip | Result |
+|---|---|---|
+| 1 | `s04-gandalf-ears` | ✅ in app |
+| 2 | `s04-gandalf-pop` | ✅ in app (starts 1.7 s before `box1-open` so the jump peaks on the cue) |
+| 3 | `s04-connor-tail` | ✅ in app, loop; moved to box 2's left shoulder (its right shoulder runs off the wall zone) |
+| 4 | `s04-alaska-tail` | ❌ blocked by the provider ("rump wiggles" wording); code sprite stays. Re-prompt: tail only, no rump/hips |
+| 5 | `s04-orion-ears` | ✅ in app |
+| 6 | `s05-mickey-film` | ⏸ after the credit upgrade (`mickeyStars` keeps `film: true` until then) |
+| 7 | `s10-santa-sleigh` | ⏸ after the credit upgrade |
+
+Prices measured: gpt-image still 190 (4 takes = 761), kling-2.5-turbo 5 s 1080p 2,121. Prepped clips ≈ 230–290 KB each.
 
 ## Out of scope
 - Placing characters in s03, s05 (except Mickey), s07, s08 and the s10 wave, and voices/sfx/mix: **WP-08**.

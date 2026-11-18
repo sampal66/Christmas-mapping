@@ -232,12 +232,19 @@ clips carry only the character. Budget: Starter has ≈37k credits left, not eno
 **Creator (121k/mo)** for this project if needed. Plan: ~30 clips × ≈2.1k ≈ 64k + voices/sfx ≈ 15k, plus a few re-takes.
 Gotcha: the session network needs `elevenlabsusercontent.com` allowed to download results (added to the environment).
 
+**WP-04 (2026-11-18):** model sheets for Connor (take 2), Alaska (1) and Orion (1) picked by the owner, text-only prompts in
+the Gandalf #4 wording (gpt-image 190 credits per still; wiring a reference image raises it to ≈430). Start frames per shot,
+then kling-2.5-turbo 5 s clips (2,121 each). Kling's moderation **blocked** the Alaska tail clip ("rump wiggles" wording):
+keep prompts to tails/ears/paws, no "rump", "hips" or "behind". Budget: the owner had 18.8k credits and upgrades only when
+WP-04b needs it; Mickey, Pooh and Santa wait for that.
+
 **Original recommendation:** A for every character shot and Santa, with B as the fallback for any shot that fails; code only for the mapped light
 effects, held to the quality bar above. **First, a style test before committing:** (1) a free code FX test page
 (glow, sparkles, star trace, constellation) with screenshots; (2) with the owner's OK on credits, one Gandalf model
 sheet plus one 5 s clip on black, judged on the real projector or the TV.
 
 ## Changelog
+- **2026-11-18** — WP-04: model sheets + s04 clips log under §09.
 - **2026-11-17** — WP-11b: s06 pet star figures built as 3D drone swarms (owner review); atlas art now *Urania's Mirror* (WP-11c) (note under §04).
 - **2026-11-17** — WP-11: s04 box chaos and the s05 star Mickey built; audit → WP-11b (s06 pet star figures).
 - **2026-11-17** — Owner: new s04 box-chaos music and s09 bell loop (master-mix rows updated); music box stays on s00.

@@ -8,6 +8,18 @@ Every third-party or downloaded asset must be listed here before it is committed
 | `app/fonts/playfair-display-latin-400-italic.woff2`, `…-400-normal.woff2` | Google Fonts via npm `@fontsource/playfair-display` 5.3.0 | Claus Eggers Sørensen | SIL Open Font License 1.1 (`app/fonts/LICENSE-PlayfairDisplay-OFL.txt`) | names and captions |
 | `app/assets/atlas/orion.png`, `canisMajor.png`, `canisMinor.png`, `felis.png` | Sidney Hall, *Urania's Mirror; or, a View of the Heavens* (1824): plates *Orion*, *Canis Major, Lepus, Columba Noachi & Cela Sculptoris*, *Monoceros, Canis Minor, and Atelier Typographique*, and *Noctua, Corvus, Crater, Sextans Uraniæ, Hydra, Felis, …*. Wikimedia Commons, `File:Sidney Hall - Urania's Mirror - <plate>.jpg`, standard thumbnails (960–3840 px) | Sidney Hall (engraver), after Jamieson | Public domain (published 1824; Commons tag "Public domain") | Derived (WP-11b): each figure cut out along a hand-traced outline. The engraved lines became soft white-on-transparent alpha (local darkening, no hard threshold) plus a faint body tone; the hand colouring was dropped. 800 px long side. Replaces the earlier Jamieson (1822) plate crops (owner: distorted, coordinate grid). Star positions in `app/js/fx/constellations.js` were read off the cards; the cards mark no stars on Felis, so its figure is fitted to the cat. |
 
+## Characters (WP-04) — original, generated for this show
+
+All characters are original designs (the four pets) made with ElevenLabs Flows (flow "Christmas mapping – WP-04
+characters"; style anchor: Gandalf #4 from flow "Christmas mapping – style test (Gandalf)"). Generated 2026-11-18 for
+this show, owned by the account holder under the ElevenLabs plan terms. No third-party character designs.
+
+| File | Model | What | Notes |
+|---|---|---|---|
+| `assets/characters/connor/model-sheet.jpg`, `alaska/…`, `orion/…` | gpt-image-2.5-sunburst | model sheets (owner picks: Connor take 2, Alaska 1, Orion 1) | 4 takes each, ≈ 760 credits each |
+| `assets/characters/gandalf/style-ref.jpg` | gpt-image-2.5-sunburst | style test still #4 (TREATMENT §09) | style anchor |
+| `app/assets/clips/s04-*.mp4` | start frame gpt-image-2.5-sunburst → kling-2.5-turbo image-to-video, 5 s | s04 rummaging shots (WP-04 brief) | prepped with `tools/clip-prep.sh` |
+
 ## Music (WP-05) — kept on the device, not committed
 
 Recordings are **not in the repo** (size); the ElevenLabs originals were sent to the owner in the WP-05 session; the owner downloads the others from the links below (original file, from a home
