@@ -7,6 +7,8 @@ node_modules/
 
 # Rendered demo reels / exports (large; shared outside the repo)
 *.mp4
+# …except the app's character clips (original/PD characters, no personal data; WP-04, owner OK)
+!app/assets/clips/*.mp4
 
 # Music files (kept on the device; see assets/CREDITS.md)
 *.mp3
