@@ -102,10 +102,10 @@ dialogue in s03, s05, s07 and s10 (the "Narration" column lists the narrator onl
 - **s06 pets as star figures (WP-11b):** in each calm pause, after the stars have formed, a few drones peel off the
   constellation and re-form beside it, in the open sky right of the figures, as that pet: a small **3D drone swarm** with depth
   (owner: no dotted outlines; smaller than the constellations). Drones are small and crisp in the pet's own colour, with sky
-  between them; the far side is dimmer. **Atlas art (owner: distorted, dislikes the grid):** to be replaced by the grid-free
+  between them; the far side is dimmer. **Silhouettes only** (owner): no faces, the pets act with their whole bodies. **Atlas art (owner: distorted, dislikes the grid):** to be replaced by the grid-free
   *Urania's Mirror* (1824) cards → follow-up WP-11c. Orion is grumpy,
-  looks up at his constellation, then gives a slow lopsided smile (one lip lifted). Connor lies down, lifts his head and his plume tail sways.
-  Alaska sits proud and unimpressed beside Canis Minor (nose up, eye-roll, "hmph", wagging tail). Gandalf
+  looks up at his constellation, then softens: his chest lifts and his tail rises, with a warm glow at his heart (his "smile", told by posture). Connor lies down, lifts his head and his plume tail sways.
+  Alaska sits proud and unimpressed beside Canis Minor (nose up, a "hmph" head toss, wagging tail). Gandalf
   stalks, wiggles and pounces towards Felis and the lost star. Each flies back into the swarm before the next ride.
   Quality pass: s01 gets edge comets and a drone snowflake → star on its swells; s10 fireworks build to a barrage and
   a willow crown, with spark fountains on the floor line.

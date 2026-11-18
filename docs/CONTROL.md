@@ -49,7 +49,7 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
-- **2026-11-17 · WP-11b** — `fx/pet-stars.js` `petStars(...)`: the four pets as small **3D drone swarms** (owner review x2). Volumes are ellipsoids, tubes and cones with markings painted per point. Drawn by its own `renderDrones`: small crisp drones (coloured core, no white centre), about 220–250 per pet, far side dimmer. Orion: smile. Connor: looks up. Alaska: "hmph". Gandalf: pounce.
+- **2026-11-17 · WP-11b** — `fx/pet-stars.js` `petStars(...)`: the four pets as small **3D drone swarms** (owner review x2). Volumes are ellipsoids, tubes and cones with markings painted per point. Drawn by its own `renderDrones`: small crisp drones (coloured core, no white centre), about 220–250 per pet, far side dimmer. **Silhouettes only, no faces** (owner). Orion: hunched → tail up + heart glow. Connor: looks up. Alaska: "hmph" toss. Gandalf: pounce.
   s06 `PETS` table: each pet forms from its constellation's cloud at cue + 7.5–9 s, right of the figures, and flies back by next cue − 1 s. Timing, cues and beat map unchanged. Flash check passes; ≈1–2 ms per pet headless. `sw.js` v16.
   **Atlas art:** owner finds it distorted and dislikes the grid. My grid-erasing attempt was reverted (plates are as on main). The fix is new art: **WP-11c**, the grid-free *Urania's Mirror* cards. Gotcha: Wikimedia's API and upload server rate-limit/refuse this cloud container, so the scans must be fetched another way (see the brief).
   Not the cartoon pets: those are WP-04 (ElevenLabs clips).

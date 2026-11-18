@@ -3,15 +3,17 @@
 // constellation and re-forms beside it as that pet: a **3D figure of light points in real depth**, drone-show style
 // like the s05 Mickey (fx/mickey-stars.js) and the constellations (owner: depth, not dotted outlines; smaller than the
 // constellations). It makes one small move, then flies back into the swarm before the next ride.
-//   Orion (tabby)   sitting, grumpy → looks up at his constellation → slow lopsided smile (one lip lifted)
+//   Orion (tabby)   sitting hunched and grumpy → looks up at his constellation → softens: chest up, tail rises (his
+//                   "smile", told by posture), with a warm glow at his heart
 //   Connor (husky)  lying down, lifts his head to look up, big plume tail sways
-//   Alaska (pomsky) sitting proud, nose up, unimpressed: an eye-roll and a "hmph", tail always wagging
+//   Alaska (pomsky) sitting proud, nose up, unimpressed: a "hmph" head toss, tail always wagging
 //   Gandalf (Russian Blue) crouches, wiggles, pounces towards the constellation, lands
 //
 // Same tech as Mickey: keyframed poses are blended over time; every body part is a volume (Fibonacci-sphere
 // ellipsoids, spiral tubes, cones) with a fixed point count, so the swarm keeps its identity as the pose changes and can
 // morph in from (and back into) the constellation. Colours follow DESIGN_SYSTEM §05 with lifted darks; markings (tabby
-// stripes, the husky's white face and belly) are painted through the swarm. Time-based only.
+// stripes, the husky's white face and belly) are painted through the swarm. **Silhouettes only** (owner): no eyes,
+// mouths or whiskers, which can't read at this size; each pet acts with its whole body. Time-based only.
 import { TAU, rand, clamp, lerp, easeInOutSine, easeOutBack, glowSprite, dot, additive } from './util.js';
 import { morphClouds, projector } from './points3d.js';
 import { rgb } from '../palette.js';
@@ -126,16 +128,15 @@ function pen(st) {
 
 // ---------- Orion: sitting tabby, ¾ view facing left (towards his constellation) ----------
 // Cream fur with caramel tabby stripes painted through the swarm, yellow-green eyes → gold, warm nose and lip.
-const ORION_GRUMPY = { head: [-0.1, -0.27], tilt: 0, lid: 1, smile: 0 };
-const ORION_LOOK = { head: [-0.11, -0.28], tilt: 0.22, lid: 0.7, smile: 0 };
-const ORION_SMILE = { head: [-0.11, -0.28], tilt: 0.16, lid: 0.15, smile: 1 };
+const ORION_GRUMPY = { head: [-0.09, -0.24], tilt: -0.12, smile: 0 };   // hunched, head low
+const ORION_LOOK = { head: [-0.11, -0.29], tilt: 0.28, smile: 0 };
+const ORION_SMILE = { head: [-0.12, -0.3], tilt: 0.18, smile: 1 };
 const ORION_KEYS = [[2.2, ORION_GRUMPY], [3.8, ORION_LOOK], [7, ORION_SMILE]];
 const tabby = (x, y) => (Math.sin(y * 9 + x * 2.5) > 0.55 ? 'candle' : 'sepia');
 
 function orion(pn, age) {
   const q = keyed(ORION_KEYS, age);
   const H = q.head, hp = (x, y) => add(H, rot2(x, y, q.tilt));
-  const blink = 1 - 0.9 * (pulse(age, 3, 3.45) + pulse(age, 8.2, 8.65));
   const er = pulse(age, 5.2, 5.5) + pulse(age, 5.6, 5.9);
   const fl = Math.sin(age * 1.9) * 0.5 + 0.5 * Math.sin(age * 4.3) * pulse(age % 4.2, 0, 1.2);
   // body: a pear of drones, haunch on the near side, two front legs, tail curling round the front
@@ -145,27 +146,17 @@ function orion(pn, age) {
   pn.tube(20, [-0.01, 0.15], [-0.02, 0.3], [-0.02, 0.45], 0.034, 0.07, 0.07, 'sepia');
   pn.ell(8, [-0.14, 0.46, -0.08], [0.045, 0.02, 0.035], 'sepia');
   pn.ell(8, [-0.04, 0.46, 0.06], [0.045, 0.02, 0.035], 'sepia');
-  const tip = [0.44 + 0.07 * fl, 0.02 - 0.03 * fl];
-  pn.tube(36, [0.2, 0.42], [0.58, 0.5], tip, 0.032, 0.02, 0.1, (f) => (Math.sin(f * 22) > 0.3 ? 'candle' : 'sepia'), 1, 0.35);
+  // the tail goes from wrapped round his paws (grumpy) to raised behind him (content)
+  const sm = q.smile;
+  const tip = [lerp(0.44, 0.4, sm) + 0.07 * fl, lerp(0.02, -0.3, sm) - 0.03 * fl];
+  pn.tube(36, [0.2, 0.42], [lerp(0.58, 0.52, sm), lerp(0.5, 0.3, sm)], tip, 0.032, 0.02, 0.1, (f) => (Math.sin(f * 22) > 0.3 ? 'candle' : 'sepia'), 1, 0.35);
   // neck, head, ears, muzzle (head points a little finer so the face reads on top)
   pn.ell(30, [H[0] + 0.07, H[1] + 0.15, 0.01], [0.11, 0.09, 0.1], tabby, 0.9);
   pn.ell(76, [H[0], H[1], 0], [0.16, 0.14, 0.15], (x, y) => tabby(x * 0.16, y * 0.14 + 0.3), 0.8, q.tilt);
   pn.cone(16, hp(-0.09, -0.1), hp(-0.12, -0.23), 0.075, 0.02, 'sepia', 0.85);
   pn.cone(16, hp(0.06, -0.11), hp(0.1 + 0.03 * er, -0.24 + 0.04 * er), 0.075, 0.06, 'sepia', 0.85);
   pn.ell(22, [...hp(-0.09, 0.06), -0.09], [0.065, 0.045, 0.05], 'sepia', 0.8, q.tilt);
-  // face (in front of the head): grumpy lids slanting down to the nose, softening as he smiles
-  for (const [ex, inner, ez] of [[-0.09, 1, -0.13], [0.03, -1, -0.12]]) {
-    const open = (0.35 + 0.65 * (1 - 0.6 * q.lid)) * blink;
-    pn.line(3, hp(ex, -0.015 - 0.022 * open), hp(ex, -0.015 + 0.022 * open), ez - 0.03, 'gold', 2.3);
-    const slant = 0.025 * q.lid, lift = 0.012 * (1 - q.lid);
-    pn.line(4, hp(ex - 0.04, -0.05 - slant * inner - lift), hp(ex + 0.04, -0.05 + slant * inner - lift), ez - 0.03, 'snow', 1.1);
-  }
-  const s = q.smile;
-  pn.star(hp(-0.1, 0.035), -0.17, 'rose', 2.2);
-  // the mouth: flat and turned down while grumpy; one lip lifts on his right (the missing-tooth smile)
-  pn.path(9, [hp(-0.15, 0.1 + 0.012 * (1 - s)), hp(-0.1, 0.085), hp(-0.06, 0.1 - 0.03 * s), hp(-0.03 + 0.01 * s, 0.11 - 0.07 * s)], -0.17, 'rose', 1.7);
-  for (const [a, b] of [[[-0.13, 0.06], [-0.32, 0.02 - 0.03 * s]], [[-0.13, 0.075], [-0.31, 0.1 - 0.02 * s]]]) pn.line(4, hp(...a), hp(...b), -0.14, 'snow', 0.6);
-  return { glint: [...hp(-0.02, 0.04), -0.15, pulse(age, 5.6, 7.6)] };
+  return { glint: [0.0, 0.0, -0.1, 0.4 * sm * (0.85 + 0.15 * Math.sin(age * 5))] };   // a warm glow at his heart (purring)
 }
 
 // ---------- Connor: husky lying down, facing left, head up; black-and-white → ice coat, snow face and belly ----------
@@ -177,7 +168,6 @@ function connor(pn, age) {
   const q = keyed(CONNOR_KEYS, age);
   const H = q.head, hp = (x, y) => add(H, rot2(x, y, q.tilt));
   const e = pulse(age, 4.6, 4.9) + pulse(age, 5.1, 5.4);
-  const blink = 1 - 0.9 * pulse(age, 5.8, 6.25);
   const wag = 0.14 * Math.sin(age * 2.2);
   // long body lying flat (white belly), haunch, front legs stretched forward, hind paw
   pn.ell(118, [0.07, 0.02, 0], [0.33, 0.14, 0.16], (x, y) => (y > 0.35 ? 'snow' : 'ice'));
@@ -194,15 +184,12 @@ function connor(pn, age) {
   pn.ell(30, [...hp(-0.16, 0.05), -0.05], [0.1, 0.05, 0.055], 'snow', 1, q.tilt + 0.08);
   pn.cone(16, hp(-0.05, -0.08), hp(-0.07 - 0.03 * e, -0.22 + 0.03 * e), 0.065, 0.01, 'ice');
   pn.cone(16, hp(0.06, -0.08), hp(0.08, -0.22), 0.065, 0.08, 'ice');
-  pn.line(3, hp(-0.07, -0.025 - 0.016 * blink), hp(-0.07, -0.025 + 0.016 * blink), -0.12, 'ice', 2.2);
-  pn.line(3, hp(0.02, -0.03 - 0.014 * blink), hp(0.02, -0.03 + 0.014 * blink), -0.1, 'ice', 1.8);
-  pn.star(hp(-0.26, 0.035), -0.07, 'plum', 1.8);
   return {};
 }
 
 // ---------- Alaska: pomsky sitting proud, nose up, unimpressed; blonde → gold coat, cream ruff and tail ----------
-const ALASKA_PROUD = { head: [-0.06, -0.3], tilt: 0.25, roll: 0 };
-const ALASKA_HMPH = { head: [-0.04, -0.31], tilt: 0.45, roll: 1 };
+const ALASKA_PROUD = { head: [-0.06, -0.3], tilt: 0.25 };
+const ALASKA_HMPH = { head: [-0.03, -0.31], tilt: 0.5 };
 const ALASKA_KEYS = [[2.6, ALASKA_PROUD], [3.2, ALASKA_HMPH, easeOutBack], [4.6, ALASKA_HMPH], [5.6, ALASKA_PROUD]];
 
 function alaska(pn, age) {
@@ -224,12 +211,6 @@ function alaska(pn, age) {
   pn.ell(22, [...hp(-0.14, 0.04), -0.05], [0.07, 0.045, 0.05], 'sepia', 1, q.tilt);
   pn.cone(14, hp(-0.05, -0.09), hp(-0.06 - 0.03 * ef, -0.2), 0.058, 0.01, 'gold');
   pn.cone(14, hp(0.05, -0.09), hp(0.07, -0.2), 0.058, 0.07, 'gold');
-  // half-lidded eyes under flat lids (unimpressed); during the "hmph" the eyes roll up
-  for (const [ex, ez, s] of [[-0.07, -0.12, 2], [0.02, -0.11, 1.6]]) {
-    pn.star(hp(ex - 0.008 * q.roll, -0.012 - 0.022 * q.roll), ez, 'candle', s);
-    pn.line(4, hp(ex - 0.035, -0.03), hp(ex + 0.035, -0.03), ez, 'gold', 0.9);
-  }
-  pn.star(hp(-0.21, 0.025), -0.07, 'candle', 1.8);
   return {};
 }
 
@@ -250,7 +231,6 @@ function gandalf(pn, age) {
   const wig = clamp((age - 1.2) / 0.8) * (1 - clamp((age - 2.6) / 0.3)) * Math.sin(age * TAU * 2.5) * 0.03;
   const P = [q.P[0] + wig, q.P[1]], S = q.S;
   const H = q.head, hp = (x, y) => add(H, rot2(x, y, q.tilt));
-  const blink = 1 - 0.9 * pulse(age, 6, 6.4);
   const fl = 0.06 * Math.sin(age * 3.1) * (age > 4.5 ? 1 : 0.4);
   pn.oy = q.dy;
   // sleek body: a thick tube from shoulders to hips, arched; four legs; tail streaming behind
@@ -267,16 +247,6 @@ function gandalf(pn, age) {
   pn.ell(80, [H[0], H[1], 0], [0.12, 0.11, 0.11], 'ice', 1, q.tilt);
   pn.cone(20, hp(-0.06, -0.08), hp(-0.11, -0.25), 0.085, 0.01, 'ice');
   pn.cone(20, hp(0.06, -0.08), hp(0.1, -0.25), 0.085, 0.07, 'ice');
-  for (const [ex, ez] of [[-0.06, -0.11], [0.03, -0.1]]) {
-    for (let i = 0; i < 6; i++) {
-      const a = (i / 6) * TAU;
-      pn.star(hp(ex + Math.cos(a) * 0.028, -0.005 + Math.sin(a) * 0.034 * blink), ez, 'pine', 1.1);
-    }
-    pn.star(hp(ex - 0.006, -0.005), ez - 0.01, 'pine', 2);
-  }
-  pn.star(hp(-0.12, 0.045), -0.08, 'rose', 1.5);
-  pn.line(3, hp(-0.12, 0.06), hp(-0.28, 0.03), -0.09, 'snow', 0.6);
-  pn.line(3, hp(-0.12, 0.07), hp(-0.27, 0.1), -0.09, 'snow', 0.6);
   return {};
 }
 
@@ -373,6 +343,6 @@ export function petStars(ctx, w, h, t, age, opts = {}) {
   renderDrones(ctx, w, h, t, cloud, view, { alpha: A, color });
   if (extra.glint && extra.glint[3] > 0.01 && k >= 1) {
     const [gx, gy, f] = projector(w, h, view)(extra.glint[0], extra.glint[1], extra.glint[2]);
-    additive(ctx, A * extra.glint[3], () => dot(ctx, glowSprite('gold', 0.25), gx, gy, Math.min(w, h) * size * 0.09 * f));
+    additive(ctx, A * extra.glint[3], () => dot(ctx, glowSprite('candle', 0.25), gx, gy, Math.min(w, h) * size * 0.15 * f));
   }
 }
