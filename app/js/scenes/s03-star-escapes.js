@@ -3,6 +3,7 @@
 // The star's motion is star-story.js's drawEscape; the pets (stage.js) act on the SCRIPT §03 cues around it.
 import { cueSheet, loadFonts } from '../fx/index.js';
 import { drawEscape } from './star-story.js';
+import { BOX_ZONES, storyTower } from './common.js';
 import { stageLayout, drawPets, preloadTracks, talk, look, act } from './stage.js';
 
 const cues = [{ t: 0, name: 'pets-in' }, { t: 15, name: 'tradition' }, { t: 40, name: 'bat' }, { t: 50, name: 'escape' }, { t: 71, name: 'out' }];
@@ -49,11 +50,12 @@ export default {
   duration,
   cues,
   story: true,                 // storytelling pace: no beat grid (DESIGN_SYSTEM §06)
-  zones: ['wall', 'star'],
+  zones: ['wall', 'star', ...BOX_ZONES],
   enter() { loadFonts(); preloadTracks(tracks); },
   draw(zoneId, ctx, w, h, t, local, env) {
+    if (storyTower(zoneId, ctx, w, h, t, local, c('out'), duration)) return;
     drawEscape(zoneId, ctx, w, h, t, local, env, C, () => {
-      drawPets(ctx, stageLayout(env, w, h), tracks, local, { inAt: c('pets-in'), outAt: c('out'), outEnd: duration - 0.5 });
+      drawPets(ctx, stageLayout(env, w, h), tracks, local, { inAt: c('pets-in'), outAt: c('out') });
     });
   },
 };

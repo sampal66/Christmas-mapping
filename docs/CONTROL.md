@@ -23,7 +23,7 @@
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
 | WP-08 | [Story scenes s03, s05, s07, s08 + the pets' wave in s10](work-packages/WP-08-story-scenes.md): places the WP-04b clips on SCRIPT §03 cues around the star motion; s08 26–45 s visual beat (silence check) | WP-04b, WP-06 | ✅ done (PR #15) | `claude/hopeful-knuth-uibswc` | C1, C2, C3, C6, C7 |
 | WP-08b | [Master mix + idle music box](work-packages/WP-08b-master-mix.md): one cloud-rendered `master-mix.m4a` (music + voices + sfx, never committed) + the s00 music-box loop while idle/after the finale | WP-05, WP-06 | ⚪ waiting: ElevenLabs outage (code merged in PR #15; render the mix in a new session) | — | C4, C5, M8 |
-| WP-08c | [Story polish: owner notes](work-packages/WP-08c-story-polish.md): soft ear tips (clips cut at the top), star-dust arrivals/exits, softly lit gift tower under the cats, a short natural Connor carry | WP-08 | 🟢 ready (any order with WP-08b) | — | C1, C2 |
+| WP-08c | [Story polish: owner notes](work-packages/WP-08c-story-polish.md): soft ear tips (clips cut at the top), star-dust arrivals/exits, softly lit gift tower under the cats, a short natural Connor carry | WP-08 | 🟡 in review (draft PR) | `claude/jolly-newton-qtuh8g` | C1, C2 |
 | WP-12 | [Automatic show pre-check](work-packages/WP-12-precheck.md): one command, whole show headless → report + contact sheets, before the owner's manual scene review | WP-08b, WP-08c | ⚪ waiting | — | success metrics |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
@@ -52,6 +52,9 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-18 · WP-08c** — Ear tips: `EAR_FADE` (top 4 % fades) on every pet clip (s04 peeks too); all but 3 s04 clips touch row 0. Star-dust arrivals/exits in `drawPets` (s03/s05/s07/s08/s10 wave); `towerGlow` lights the tower in the story scenes and the s10 wave. s07: Connor says his line (talk loop), walks 1.5 stride-matched cycles (clip time ← distance, `carryWalk`), looks up at `fly`; the star rises in a sparkle arc to the tip by `settle`. `sw.js` v26. Smoke + flash check pass.
+  **Left:** owner chose the fade for now; only if it looks wrong on the wall: wider dog re-takes (Connor + Alaska idle/talk/lookup = 6 clips ≈ 2.3k credits each ≈ 14k; s07/s10 dog action clips also touch the top); then re-measure `FRAME` and drop `EAR_FADE` for those clips. Check Connor's walk end vs the tree on the real wall (WP-09): `WALK.cycles`.
 
 - **2026-11-18 · WP-08 close-out** — PR #15 merged (owner). Owner review of the live show → **WP-08c** brief (ears cut in the clips themselves: tips past the video's top edge, start frames are fine; pop-in entrances; dark boxes make the cats float; Connor's 20 s floor slide skates). Owner asked for an **automatic pre-check** once everything is assembled → **WP-12** brief. **`docs/BOX_SPECS.md`**: 40 cm + 30 cm white cubes for the owner's cardboard build.
   Order: WP-08b (when ElevenLabs is back) and WP-08c in any order → WP-12 → owner's manual scene check → WP-09 on the wall.
@@ -172,6 +175,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 - ✅ LCD-black design note: handled in DESIGN_SYSTEM §02 (`dusk` base, fade to starfield). Check the `dusk` value on the wall in WP-09.
 - Tape-measure the remaining items in [STAGE_SURVEY §05](STAGE_SURVEY.md) (star size, counter height).
 - ✅ PR #1 merged and GitHub Pages enabled: https://sampal66.github.io/Christmas-mapping/
+- WP-08c ear tips: owner (2026-11-18) keeps the soft fade for now; wider-framed dog re-takes (Connor + Alaska idle/talk/lookup, 6 clips ≈ 14k credits) only if the fade doesn't read well on the real wall (WP-09).
 - Reconnect the ElevenLabs connector with full permissions (from a PC). This blocks WP-04 and WP-05.
 - More pet photos (full body, side view) for WP-04.
 - Soundbar model (for WP-01 delay defaults; optional).

@@ -21,6 +21,12 @@ export const CLIP_FILES = [
   's10-alaska-wave', 's10-connor-wave', 's10-gandalf-wave', 's10-orion-wave', 's10-santa-sleigh'
 ];
 
+/**
+ * topFade for pet clips: nearly every pet clip has ear tips in its top row (measured 2026-11-18, WP-08c), so all of
+ * them fade the top 4 % of the frame. Re-takes framed wider can drop it.
+ */
+export const EAR_FADE = 0.04;
+
 const BASE = new URL('../../assets/clips/', import.meta.url).href;
 const clips = new Map();            // id → { video, ready, failed, keyed canvas }
 let playing = false;
@@ -71,7 +77,7 @@ export function clipsFrame(isPlaying) {
  * The clip's current frame as a transparent canvas: colour (top half of the video) with the matte (bottom half) as
  * alpha. Rebuilt only when the video's time has moved, so a paused clip costs nothing.
  */
-function keyed(c) {
+function keyed(c, fade = 0) {
   const v = c.video;
   const w = v.videoWidth, h2 = v.videoHeight, h = h2 >> 1;
   if (!c.out || c.out.width !== w || c.out.height !== h) {
@@ -79,6 +85,7 @@ function keyed(c) {
     c.out = document.createElement('canvas'); c.out.width = w; c.out.height = h;
     c.keyedAt = -1;
   }
+  if (c.fade !== fade) { c.fade = fade; c.keyedAt = -1; }
   if (c.keyedAt === v.currentTime || v.seeking) return c.keyedAt >= 0 || v.seeking ? c.out : null;
   try {
     const sctx = c.src.getContext('2d', { willReadFrequently: true });
@@ -86,6 +93,13 @@ function keyed(c) {
     const img = sctx.getImageData(0, 0, w, h2);
     const d = img.data, n = w * h * 4;
     for (let i = 3; i < n; i += 4) d[i] = d[i + n - 3];       // alpha ← matte's red channel, same pixel one half below
+    // Soft top edge: the generated clips cut some ear tips at the frame's top row, so the top rows ramp to
+    // transparent and the cut reads as a soft tip instead of a flat line.
+    const rows = Math.min(h, Math.round(fade * h));
+    for (let y = 0; y < rows; y++) {
+      const k = ((y + 0.5) / rows) ** 1.5;
+      for (let i = y * w * 4 + 3, e = i + w * 4; i < e; i += 4) d[i] *= k;
+    }
     c.out.getContext('2d').putImageData(new ImageData(d.subarray(0, n), w, h), 0, 0);
     c.keyedAt = v.currentTime;
   } catch { return c.keyedAt >= 0 ? c.out : null; }
@@ -96,7 +110,8 @@ function keyed(c) {
  * Draws a clip's frame at `time` seconds into the clip.
  * opts: x, y (anchor point, px), h (drawn height, px), anchor [ax, ay] (0..1 of the drawn box, default bottom
  * centre), alpha, loop (wrap time instead of holding the last frame), flip (mirror left-right),
- * crop [u0, v0, u1, v1] (part of the video to draw, 0..1), rotate (radians about the anchor).
+ * crop [u0, v0, u1, v1] (part of the video to draw, 0..1), rotate (radians about the anchor), topFade (share of the
+ * frame height faded to transparent at the top, for clips whose ears touch the frame's top edge; 0 = none).
  * Returns false (draws nothing) when the clip isn't available, so the caller can draw its fallback.
  */
 export function drawClip(ctx, id, time, opts = {}) {
@@ -105,7 +120,7 @@ export function drawClip(ctx, id, time, opts = {}) {
   const v = c.video;
   const dur = v.duration || 0;
   if (!(dur > 0) || !v.videoWidth) return false;
-  const { x = 0, y = 0, h = 100, anchor = [0.5, 1], alpha = 1, loop = false, flip = false, crop = [0, 0, 1, 1], rotate = 0 } = opts;
+  const { x = 0, y = 0, h = 100, anchor = [0.5, 1], alpha = 1, loop = false, flip = false, crop = [0, 0, 1, 1], rotate = 0, topFade = 0 } = opts;
   if (alpha <= 0.01) return true;
   const ct = loop ? ((time % dur) + dur) % dur : Math.min(Math.max(time, 0), dur - 0.04);
   c.drawn = frameNo;
@@ -117,7 +132,7 @@ export function drawClip(ctx, id, time, opts = {}) {
   if (moving && v.paused) v.play().catch(() => {});
   else if (!moving && !v.paused) v.pause();
 
-  const frame = keyed(c);
+  const frame = keyed(c, topFade);
   if (!frame) return false;
   const [u0, v0, u1, v1] = crop;
   const fw = frame.width, fh = frame.height;

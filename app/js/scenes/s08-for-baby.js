@@ -5,7 +5,7 @@
 import { cueSheet, loadFonts, snowfall, starHalo, constellation, ORION, CANIS_MAJOR, CANIS_MINOR, FELIS,
   easeInOutSine, clamp } from '../fx/index.js';
 import { drawWarmStar } from './star-story.js';
-import { skyBase } from './common.js';
+import { skyBase, BOX_ZONES, storyTower } from './common.js';
 import { stageLayout, drawPets, preloadTracks, look, act } from './stage.js';
 
 const cues = [{ t: 0, name: 'gather' }, { t: 20, name: 'message' }, { t: 45, name: 'missing' }, { t: 56, name: 'out' }];
@@ -40,9 +40,10 @@ export default {
   duration,
   cues,
   story: true,
-  zones: ['wall', 'star'],
+  zones: ['wall', 'star', ...BOX_ZONES],
   enter() { loadFonts(); preloadTracks(tracks); },
   draw(zoneId, ctx, w, h, t, local, env) {
+    if (storyTower(zoneId, ctx, w, h, t, local, c('out'), duration)) return;
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
     if (zoneId === 'star') {
       drawWarmStar(zoneId, ctx, w, h, t, local);
@@ -59,6 +60,6 @@ export default {
           progress: clamp((local - f.at) / 5), color: f.color, lineColor: 'ice', alpha: 0.55 * cb, starSize: 0.7, seed: f.at });
       }
     }
-    drawPets(ctx, stageLayout(env, w, h), tracks, local, { inAt: c('gather'), outAt: c('out'), outEnd: duration - 0.5 });
+    drawPets(ctx, stageLayout(env, w, h), tracks, local, { inAt: c('gather'), outAt: c('out') });
   },
 };

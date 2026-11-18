@@ -165,3 +165,58 @@ export function sparkFountain(ctx, w, h, t, opts = {}) {
     }
   });
 }
+
+/**
+ * Star-dust arrival (WP-08c): a swirl of gold sparkles drifts down from above and spirals in onto (x, y) over `dur`
+ * seconds from t0, ending in one soft glow swell where the character appears. Pixels: x, y (landing centre), size
+ * (the character's height). opts: t0, dur, alpha, seed, dir (+1 / −1 spin), count, spark (sparkle radius, px).
+ */
+export function starDustArrive(ctx, t, opts = {}) {
+  const { x = 0, y = 0, size = 100, t0 = 0, dur = 1.2, alpha = 1, seed = 1, dir = 1, count = 20, spark = size * 0.03 } = opts;
+  const p = (t - t0) / dur;
+  if (p <= 0 || p >= 1.5 || alpha <= 0.01) return;
+  const gold = glowSprite('gold', 0.3), snow = glowSprite('snow', 0.35);
+  additive(ctx, alpha, () => {
+    for (let j = 0; j < count; j++) {
+      const delay = rand(seed * 31 + j) * 0.25;
+      const q = clamp((p - delay) / 0.75);
+      if (q <= 0 || q >= 1) continue;
+      const a0 = rand(seed * 17 + j * 3.1) * TAU;
+      const fade = clamp(q * 5) * (1 - clamp((q - 0.8) / 0.2));
+      const r = spark * (0.7 + 0.6 * rand(seed * 5 + j)) * (0.8 + 0.2 * Math.sin(t * 5 + j));
+      // spiralling in (the swirl's centre comes down from the sky), with a short tail
+      for (let k = 2; k >= 0; k--) {
+        const ek = easeInOutSine(clamp(q - k * 0.035));
+        const rk = size * (0.25 + 0.5 * rand(seed + j * 7.7)) * (1 - ek), ak = a0 + dir * (1 - ek) * 2.2 * Math.PI;
+        ctx.globalAlpha = alpha * fade * (k ? 0.3 / k : 1);
+        dot(ctx, j % 4 ? gold : snow, x + Math.cos(ak) * rk * 0.8, y - (1 - ek) * size * 1.1 + Math.sin(ak) * rk * 0.5, r * (1 - 0.25 * k));
+      }
+    }
+    // One soft swell (≈0.6 s) as it lands: an accent, never a flash.
+    const g = Math.sin(Math.PI * clamp((p - 0.7) / 0.55));
+    if (g > 0) { ctx.globalAlpha = alpha * 0.32 * g; dot(ctx, gold, x, y, size * 0.6); }
+  });
+}
+
+/**
+ * Star-dust exit: the character dissolves into gold sparkles that rise toward the sky. Pixels: x, y (centre),
+ * size (height), width. opts: t0, dur, alpha, seed, count, spark (sparkle radius, px).
+ */
+export function starDustLeave(ctx, t, opts = {}) {
+  const { x = 0, y = 0, size = 100, width = size, t0 = 0, dur = 1.8, alpha = 1, seed = 1, count = 22, spark = size * 0.03 } = opts;
+  const p = (t - t0) / dur;
+  if (p <= 0 || p >= 1 || alpha <= 0.01) return;
+  const gold = glowSprite('gold', 0.3), snow = glowSprite('snow', 0.35);
+  additive(ctx, alpha, () => {
+    for (let j = 0; j < count; j++) {
+      const q = clamp((p - rand(seed * 13 + j) * 0.3) / 0.7);
+      if (q <= 0 || q >= 1) continue;
+      const sx = x + (rand(seed * 3 + j * 1.3) - 0.5) * width * 0.75;
+      const sy = y + (rand(seed * 7 + j * 2.9) - 0.5) * size * 0.75;
+      const px = sx + Math.sin(q * 3 + j) * size * 0.1;
+      const py = sy - size * 1.6 * q ** 1.6;               // speeds up as it rises
+      ctx.globalAlpha = alpha * clamp(q * 8) * (1 - q) ** 1.2;
+      dot(ctx, j % 4 ? gold : snow, px, py, spark * (0.7 + 0.6 * rand(seed + j)));
+    }
+  });
+}

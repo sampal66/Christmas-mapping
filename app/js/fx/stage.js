@@ -103,3 +103,34 @@ export function wrapSweep(ctx, w, h, t, opts = {}) {
   g.addColorStop(1, rgba(color, 0));
   additive(ctx, alpha, () => { ctx.fillStyle = g; ctx.fillRect(Math.max(0, x - bw), 0, bw * 2, h); });
 }
+
+/**
+ * The gift tower in the dark (WP-08c, story scenes): a dim, steady warm wash on a box face, a faint ribbon cross and,
+ * on the top box, a slightly brighter rim along the top edge where the cats stand. It only breathes very slowly
+ * (one 9 s swell, ±8 %), so it never pulls focus from the pets or the star. opts: level (≈0.12–0.18), face
+ * ('front' | 'side'), top (the top box: draw the rim), alpha.
+ */
+export function towerGlow(ctx, w, h, t, opts = {}) {
+  const { face = 'front', top = false, alpha = 1 } = opts;
+  const level = (opts.level ?? 0.15) * (face === 'side' ? 0.7 : 1) * alpha * (1 + 0.08 * Math.sin(t * 0.7));
+  if (level <= 0.002) return;
+  additive(ctx, 1, () => {
+    const m = Math.min(w, h);
+    const g = ctx.createRadialGradient(w / 2, h * 0.45, m * 0.1, w / 2, h * 0.45, m * 0.85);
+    g.addColorStop(0, rgba('candle', level));
+    g.addColorStop(1, rgba('candle', level * 0.45));
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+    const rw = Math.max(8, w * 0.09);
+    ctx.fillStyle = rgba('gold', level * 0.9);
+    ctx.fillRect(w / 2 - rw / 2, 0, rw, h);
+    ctx.fillRect(0, h / 2 - rw / 2, w, rw);
+    if (top) {
+      const rim = ctx.createLinearGradient(0, 0, 0, h * 0.12);
+      rim.addColorStop(0, rgba('candle', Math.min(1, level * 3)));
+      rim.addColorStop(1, rgba('candle', 0));
+      ctx.fillStyle = rim;
+      ctx.fillRect(0, 0, w, h * 0.12);
+    }
+  });
+}
