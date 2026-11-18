@@ -168,7 +168,7 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 | Asset | Format | Notes |
 |---|---|---|
 | Character cut-outs | PNG with transparency, 2× the target size | one file per body part when puppeted |
-| Character clips | MP4/H.264 on **pure black** (screen-blended in the app) | generated 5/10 s, 30 fps; prepped by `tools/clip-prep.sh` (black crush, crop to the character, ≤ 540 px tall, CRF 28, no audio); committed as `app/assets/clips/<id>.mp4`, a media-pack file with the same id overrides it |
+| Character clips | generated on **pure black**, shipped as **stacked-alpha** MP4/H.264 (colour on top, matte below: no box behind the character) | generated 5/10 s, 30 fps; prepped by `tools/clip-prep.sh` (black crush, crop to the character, ≤ 540 px colour + matte, CRF 26, no audio); committed as `app/assets/clips/<id>.mp4`, a media-pack file with the same id overrides it |
 | Backgrounds | PNG/JPG, zone resolution × 2 | flat graphic shapes and soft gradients |
 | Audio | WAV for masters, M4A/AAC for the app | 48 kHz |
 | Naming | `kebab-case`, `<scene>-<thing>-<variant>` | e.g. `s03-gandalf-pounce-a.png` |
@@ -181,6 +181,7 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 - The UI must be hideable (Hide ✕, top-left corner to restore), because whatever is on screen is projected.
 
 ## Changelog
+- **2026-11-18** — §09: clips are stacked alpha (owner: no black boxes).
 - **2026-11-18** — WP-04: §09 clip specs and storage; model sheets in `assets/characters/<name>/`.
 - **2026-11-18** — WP-11b/11c: constellation art is now *Urania's Mirror* (1824), grid-free (owner).
 - **2026-11-17** — §06 mega-tree patterns; §07 stacked gift tower with front + side faces (owner notes, WP-03).

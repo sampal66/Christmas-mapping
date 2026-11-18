@@ -1,5 +1,7 @@
-// Character clips (WP-04): painted cel-animation clips rendered on pure black, screen-blended into a zone so the
-// black vanishes and only the character shows (DESIGN_SYSTEM §05, §09). Each clip is a muted, inline <video> that is
+// Character clips (WP-04): painted cel-animation clips stored as "stacked alpha" MP4s: colour in the top half, a grey
+// matte in the bottom half (tools/clip-alpha.js). Each drawn frame is rebuilt into a transparent canvas (matte → alpha)
+// and composited normally, so no box ever shows behind a character, whatever the background or browser (Safari has
+// no VP9 alpha; the old 'screen' blend left visible black boxes on the wall). Each clip is a muted, inline <video> that is
 // kept in step with show time: it plays while the show plays and is re-seeked whenever it drifts, so pausing,
 // scrubbing, Cut and frame-by-frame export all show the right frame.
 //
@@ -13,12 +15,12 @@ import * as media from '../media.js';
 export const CLIP_FILES = ['s04-gandalf-ears', 's04-gandalf-pop', 's04-connor-tail', 's04-orion-ears'];
 
 const BASE = new URL('../../assets/clips/', import.meta.url).href;
-const clips = new Map();            // id → { video, ready, failed }
+const clips = new Map();            // id → { video, ready, failed, keyed canvas }
 let playing = false;
 let frameNo = 0;
 
 function load(id) {
-  const c = { video: null, ready: false, failed: false, drawn: -1 };
+  const c = { video: null, ready: false, failed: false, drawn: -1, src: null, out: null, keyedAt: -1 };
   clips.set(id, c);
   (async () => {
     let url = null;
@@ -35,6 +37,8 @@ function load(id) {
     v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
     v.addEventListener('loadeddata', () => { c.ready = true; }, { once: true });
     v.addEventListener('error', () => { c.failed = true; }, { once: true });
+    // currentTime jumps to the target before the new frame is decoded: re-key once the seek has landed.
+    v.addEventListener('seeked', () => { c.keyedAt = -1; });
     v.src = url;
     c.video = v;
   })();
@@ -54,6 +58,31 @@ export function clipsFrame(isPlaying) {
     if (c.ready && !c.video.paused && c.drawn < frameNo) c.video.pause();
   }
   frameNo++;
+}
+
+/**
+ * The clip's current frame as a transparent canvas: colour (top half of the video) with the matte (bottom half) as
+ * alpha. Rebuilt only when the video's time has moved, so a paused clip costs nothing.
+ */
+function keyed(c) {
+  const v = c.video;
+  const w = v.videoWidth, h2 = v.videoHeight, h = h2 >> 1;
+  if (!c.out || c.out.width !== w || c.out.height !== h) {
+    c.src = document.createElement('canvas'); c.src.width = w; c.src.height = h2;
+    c.out = document.createElement('canvas'); c.out.width = w; c.out.height = h;
+    c.keyedAt = -1;
+  }
+  if (c.keyedAt === v.currentTime || v.seeking) return c.keyedAt >= 0 || v.seeking ? c.out : null;
+  try {
+    const sctx = c.src.getContext('2d', { willReadFrequently: true });
+    sctx.drawImage(v, 0, 0);
+    const img = sctx.getImageData(0, 0, w, h2);
+    const d = img.data, n = w * h * 4;
+    for (let i = 3; i < n; i += 4) d[i] = d[i + n - 3];       // alpha ← matte's red channel, same pixel one half below
+    c.out.getContext('2d').putImageData(new ImageData(d.subarray(0, n), w, h), 0, 0);
+    c.keyedAt = v.currentTime;
+  } catch { return c.keyedAt >= 0 ? c.out : null; }
+  return c.out;
 }
 
 /**
@@ -81,17 +110,18 @@ export function drawClip(ctx, id, time, opts = {}) {
   if (moving && v.paused) v.play().catch(() => {});
   else if (!moving && !v.paused) v.pause();
 
+  const frame = keyed(c);
+  if (!frame) return false;
   const [u0, v0, u1, v1] = crop;
-  const sw = (u1 - u0) * v.videoWidth, sh = (v1 - v0) * v.videoHeight;
+  const fw = frame.width, fh = frame.height;
+  const sw = (u1 - u0) * fw, sh = (v1 - v0) * fh;
   const dh = h, dw = h * sw / sh;
   ctx.save();
-  ctx.globalCompositeOperation = 'screen';
   ctx.globalAlpha *= alpha;
   ctx.translate(x, y);
   if (rotate) ctx.rotate(rotate);
   if (flip) ctx.scale(-1, 1);
-  try { ctx.drawImage(v, u0 * v.videoWidth, v0 * v.videoHeight, sw, sh, -anchor[0] * dw, -anchor[1] * dh, dw, dh); }
-  catch { /* frame not decodable yet */ }
+  ctx.drawImage(frame, u0 * fw, v0 * fh, sw, sh, -anchor[0] * dw, -anchor[1] * dh, dw, dh);
   ctx.restore();
   return true;
 }

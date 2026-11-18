@@ -59,7 +59,7 @@ writes the full shot list (below) that WP-04b generates for WP-08.
 ## Build (this session)
 1. **Brief approval:** show this brief and the credit estimate to the owner; generate nothing until they say OK.
 2. **Clip layer** `app/js/fx/clips.js`: `loadClip(id)` (media pack first, then `assets/clips/`), `drawClip(ctx, id,
-   local, { x, y, h, anchor, alpha, loop, rate, flip, clip: path })`. Composites with `'screen'` so the black vanishes;
+   local, { x, y, h, anchor, alpha, loop, rate, flip, clip: path })`. Composites with `'screen'` so the black vanishes (**replaced 2026-11-18 by stacked alpha**: the owner saw black boxes on the wall; see ARCHITECTURE §07);
    keeps one muted `playsinline` `<video>` per clip; plays while the show plays and **seeks to the scene time** when the
    drift is > 0.1 s or when paused/scrubbed (time-based, so MP4 export stays possible). Missing clip → returns `false`,
    and the caller draws its code placeholder. Wrap media access in try/catch; no DOM work inside draw beyond reusing the
@@ -137,6 +137,8 @@ basis first; upgrade when really needed"). Spent ≈ 15.9k: 3 model sheets (2.3k
 | 5 | `s04-orion-ears` | ✅ in app |
 | 6 | `s05-mickey-film` | ⏸ after the credit upgrade (`mickeyStars` keeps `film: true` until then) |
 | 7 | `s10-santa-sleigh` | ⏸ after the credit upgrade |
+
+**Owner TV review (2026-11-18):** animations good, but black boxes behind them → fixed with stacked-alpha clips (`tools/clip-alpha.js`). Owner now has **125,959 credits for the whole project**: WP-04b brief plans ≈ 75k with reserves.
 
 Prices measured: gpt-image still 190 (4 takes = 761), kling-2.5-turbo 5 s 1080p 2,121. Prepped clips ≈ 230–290 KB each.
 
