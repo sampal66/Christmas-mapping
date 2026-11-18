@@ -1,5 +1,5 @@
 // Shared scene helpers.
-import { duskBase, snowfall } from '../fx/index.js';
+import { duskBase, snowfall, towerGlow, clamp, easeInOutSine } from '../fx/index.js';
 
 /** Zones that are sky (they show the dusk starfield whenever no scene draws them, never black). */
 export const SKY_ZONES = ['wall', 'rightStrip'];
@@ -33,6 +33,18 @@ export function boxFace(zoneId) {
   return { box: m[1], face: m[2] ? 'side' : 'front', top: m[1] === 'box1' };
 }
 export const BOX_ZONES = ['box1', 'box1Side', 'box2', 'box2Side'];
+
+/**
+ * Story scenes (WP-08c): the gift tower softly lit, so the cats on top stand on something. Fades in over the first
+ * 3 s and out from `outAt` to `end`. Returns false for zones that aren't box faces.
+ */
+export function storyTower(zoneId, ctx, w, h, t, local, outAt, end) {
+  const f = boxFace(zoneId);
+  if (!f) return false;
+  const alpha = easeInOutSine(clamp(local / 3)) * (1 - easeInOutSine(clamp((local - outAt) / Math.max(0.1, end - outAt))));
+  towerGlow(ctx, w, h, t, { face: f.face, top: f.top, level: f.top ? 0.16 : 0.13, alpha });
+  return true;
+}
 
 /** A point of another zone expressed in this zone's 0..1 coordinates (fallback when unknown). */
 export function from(env, zoneId, u, v, fallback = [0.5, 0.5]) {

@@ -7,11 +7,12 @@
 // Orion, Gandalf and nobody is ever over the tree. Sizes are relative to Connor, whose size is fixed by s07: the star
 // rides at his mouth along star-story's carry path, so his mouth height above the floor sets his height.
 //
-// Clip choice: a pet's track is a list of events { at, end, id, loop } (later events win while they overlap). Between
+// Clip choice: a pet's track is a list of events { at, end, id, loop, time? } (later events win while they overlap;
+// `time(local)`, when given, sets the clip time, e.g. a walk cycle driven by the distance walked). Between
 // events the pet plays its idle loop. Every change of clip cross-fades over XFADE seconds. A missing or still-loading
 // clip simply isn't drawn.
-import { drawClip, preloadClips } from '../fx/clips.js';
-import { easeInOutSine, clamp } from '../fx/index.js';
+import { drawClip, preloadClips, EAR_FADE } from '../fx/clips.js';
+import { easeInOutSine, clamp, starDustArrive, starDustLeave } from '../fx/index.js';
 import { RETURN_PATH } from './star-story.js';
 
 export const PETS = ['alaska', 'connor', 'orion', 'gandalf'];
@@ -65,10 +66,11 @@ export const preloadTracks = (tracks) => preloadClips(trackClips(tracks));
 function stateAt(pet, events, local) {
   for (let i = events.length - 1; i >= 0; i--) {
     const e = events[i];
-    if (local >= e.at && local < e.end) return { id: e.id, at: e.at, loop: e.loop };
+    if (local >= e.at && local < e.end) return { id: e.id, at: e.at, loop: e.loop, time: e.time };
   }
   return { id: idleOf(pet), at: -1.7 * PETS.indexOf(pet), loop: true };
 }
+const clipTime = (st, local) => (st.time ? st.time(local) : local - st.at);
 
 /** Start of the clip segment `local` is in (the latest event start or end at or before it). */
 function segmentStart(events, local) {
@@ -141,7 +143,7 @@ export function drawPetClip(ctx, L, pet, id, time, { x, y, flip = false, alpha =
   ctx.save();
   ctx.translate(x, y);
   ctx.scale(L.k, 1);
-  const ok = drawClip(ctx, id, time, { x: 0, y: 0, h: hh, alpha, loop, flip, anchor });
+  const ok = drawClip(ctx, id, time, { x: 0, y: 0, h: hh, alpha, loop, flip, anchor, topFade: EAR_FADE });
   ctx.restore();
   return ok;
 }
@@ -159,30 +161,49 @@ export function drawPet(ctx, L, pet, events, local, opts) {
     const prev = stateAt(pet, events, s0 - 1e-3);
     if (prev.id !== cur.id) {
       const e = easeInOutSine(clamp(k));
-      drawPetClip(ctx, L, pet, prev.id, local - prev.at, { ...opts, loop: prev.loop, alpha: (opts.alpha ?? 1) * (1 - e) });
-      drawPetClip(ctx, L, pet, cur.id, local - cur.at, { ...opts, loop: cur.loop, alpha: (opts.alpha ?? 1) * e });
+      drawPetClip(ctx, L, pet, prev.id, clipTime(prev, local), { ...opts, loop: prev.loop, alpha: (opts.alpha ?? 1) * (1 - e) });
+      drawPetClip(ctx, L, pet, cur.id, clipTime(cur, local), { ...opts, loop: cur.loop, alpha: (opts.alpha ?? 1) * e });
       return;
     }
   }
-  drawPetClip(ctx, L, pet, cur.id, local - cur.at, { ...opts, loop: cur.loop });
+  drawPetClip(ctx, L, pet, cur.id, clipTime(cur, local), { ...opts, loop: cur.loop });
+}
+
+// Star-dust entrances and exits (WP-08c, owner: no popping in from nowhere). Arrivals are staggered ARRIVE_GAP s apart
+// so the landing glows stay under 2.5 accents/s (DESIGN_SYSTEM §06); exits LEAVE_GAP s apart.
+const SWIRL = 1.2, ARRIVE_GAP = 0.45, LEAVE_GAP = 0.3, DISSOLVE = 0.9, RISE = 1.8;
+
+/**
+ * Pet i's presence at `local`: the star-dust swirl starts at inAt + i·ARRIVE_GAP and the pet fades in (growing from
+ * 85 %) from the swirl's centre as it lands; from outAt + i·LEAVE_GAP it dissolves into rising sparkles.
+ * Returns { alpha, scale, arrive, leave } (arrive / leave: the effects' start times).
+ */
+export function presence(local, i, inAt, outAt) {
+  const arrive = inAt + ARRIVE_GAP * i, leave = outAt + LEAVE_GAP * i;
+  const a = easeInOutSine(clamp((local - arrive - 0.75 * SWIRL) / 0.6));
+  const b = 1 - easeInOutSine(clamp((local - leave) / DISSOLVE));
+  return { alpha: a * b, scale: 0.85 + 0.15 * a, arrive, leave };
 }
 
 /**
- * Soft entrance and exit: each pet fades in and rises a little (staggered 0.25 s) from `inAt`, and fades out
- * from `outAt` to `outEnd`. Returns { alpha, dy } for pet index i.
+ * All four pets in their slots (back to front: tower cats, then Alaska, then Connor in front), each arriving and
+ * leaving in star dust. override[p]: slot fields (x, y, flip, alpha, hidden, inAt).
  */
-export function presence(local, i, h, inAt, outAt, outEnd) {
-  const a = easeInOutSine(clamp((local - inAt - 0.25 * i) / 1.4));
-  const b = 1 - easeInOutSine(clamp((local - outAt) / Math.max(0.1, outEnd - outAt)));
-  return { alpha: a * b, dy: (1 - a) * 0.02 * h };
-}
-
-/** All four pets in their slots (back to front: tower cats, then Alaska, then Connor in front). */
-export function drawPets(ctx, L, tracks, local, { inAt = 0, outAt = Infinity, outEnd = Infinity, override = {} } = {}) {
+export function drawPets(ctx, L, tracks, local, { inAt = 0, outAt = Infinity, override = {} } = {}) {
   for (const p of ['orion', 'gandalf', 'alaska', 'connor']) {
     const s = { ...L.slot[p], ...(override[p] || {}) };
     if (s.hidden) continue;
-    const { alpha, dy } = presence(local, PETS.indexOf(p), L.H, s.inAt ?? inAt, outAt, outEnd);
-    drawPet(ctx, L, p, tracks[p] || [], local, { x: s.x, y: s.y + dy, flip: s.flip, alpha: alpha * (s.alpha ?? 1) });
+    const i = PETS.indexOf(p);
+    const { alpha, scale, arrive, leave } = presence(local, i, s.inAt ?? inAt, outAt);
+    // sparkles the same size for every pet (a cat's would be specks), swirls at least Alaska-sized
+    const ph = L.H * PET_SIZE[p], cy = s.y - 0.5 * ph, a0 = s.alpha ?? 1, spark = 0.03 * L.H, sw = Math.max(ph, 0.75 * L.H);
+    if (alpha > 0.01) {
+      ctx.save();
+      ctx.translate(s.x, cy); ctx.scale(scale, scale); ctx.translate(-s.x, -cy);
+      drawPet(ctx, L, p, tracks[p] || [], local, { x: s.x, y: s.y, flip: s.flip, alpha: alpha * a0 });
+      ctx.restore();
+    }
+    starDustArrive(ctx, local, { x: s.x, y: cy, size: sw, spark, t0: arrive, dur: SWIRL, alpha: a0, seed: i + 1, dir: i % 2 ? -1 : 1 });
+    starDustLeave(ctx, local, { x: s.x, y: cy, size: ph, spark, width: ph * BODY[p] * L.k, t0: leave, dur: RISE, alpha: a0, seed: i + 5 });
   }
 }

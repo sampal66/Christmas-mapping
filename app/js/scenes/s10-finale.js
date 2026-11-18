@@ -3,7 +3,7 @@
 // A warm ripple from the lit star, footlights burst, a sparkle trail where the sleigh will fly, soft fireworks,
 // then the stars gather into the family portrait (a star-swarm portrait from one family photo: family-portrait.js) and
 // "¡Feliz Navidad!". Fades to the starfield (TREATMENT §04).
-import { cueSheet, beatGrid, megaTree, firework3d, sparkleBurst, footlights, boxFaces, snowfall,
+import { cueSheet, beatGrid, megaTree, firework3d, sparkleBurst, footlights, boxFaces, towerGlow, snowfall,
   starHalo, projectedStar, loadFonts, portraitSwarm,
   cloudScatter, cloudSphere, cloudText, formation, renderCloud, sweepColors,
   glowSprite, dot, additive, glowStroke, easeInOutSine, clamp, rand, sparkFountain } from '../fx/index.js';
@@ -106,7 +106,7 @@ function sequence() {
 }
 
 const SLEIGH = 's10-santa-sleigh';
-// The pets' wave: each fades in just before `wave`, waves (staggered 0.3 s, left → right), and fades out before `cut`.
+// The pets' wave: each arrives in star dust just before `wave`, waves (staggered 0.3 s, left → right), and rises away in star dust before `cut`.
 const WAVES = Object.fromEntries(PETS.map((p, i) => [p, [act(`s10-${p}-wave`, C.at('wave') + 0.3 * i, C.at('cut'))]]));
 
 /**
@@ -163,8 +163,8 @@ export default {
         for (const f of FOUNTAINS) sparkFountain(ctx, w, h, local, { ...f, y: 0.97, height: 0.3, alpha: 0.85 * A, surge: pulse });
         for (const f of FIREWORKS) firework3d(ctx, w, h, local, { ...f, alpha: A });
         snowfall(ctx, w, h, soft, { density: 0.5 * B.steps(local, C.at('wave'), 8), alpha: A });
-        if (local > C.at('wave') - 2 && local < C.at('cut')) {
-          drawPets(ctx, stageLayout(env, w, h), WAVES, local, { inAt: C.at('wave') - 1.6, outAt: C.at('cut') - 1.8, outEnd: C.at('cut') - 0.2 });
+        if (local > C.at('wave') - 2.5 && local < C.at('cut')) {
+          drawPets(ctx, stageLayout(env, w, h), WAVES, local, { inAt: C.at('wave') - 2.2, outAt: C.at('cut') - 3 });
         }
         // The family portrait: forms out of the swarm, holds still facing the room, flies back for the greeting.
         const famAt = C.at('family-constellation'), pEnd = C.at('title') + PORTRAIT_OUT - famAt;
@@ -206,8 +206,12 @@ export default {
         break;
       case 'box1': case 'box1Side': case 'box2': case 'box2Side': {
         const f = boxFace(zoneId);
+        // During the pets' wave the beat faces dim to the story scenes' soft tower glow (WP-08c), so the cats stand
+        // on a lit gift tower without it pulling focus.
+        const wv = C.env(local, C.at('wave') - 2.5, 'cut', 2, 2);
         boxFaces(ctx, w, h, local, { beats: B, shift: f.top ? 0 : B.beatLen / 2, mode: fw > 0.5 ? 'all' : 'cells', face: f.face,
-          colors: f.top ? ['plum', 'rose'] : ['cranberry', 'gold'], level: A * (0.4 + 0.4 * fw) * (1 - 0.5 * fam), seed: f.top ? 5 : 6 });
+          colors: f.top ? ['plum', 'rose'] : ['cranberry', 'gold'], level: A * (0.4 + 0.4 * fw) * (1 - 0.5 * fam) * (1 - 0.75 * wv), seed: f.top ? 5 : 6 });
+        towerGlow(ctx, w, h, t, { face: f.face, top: f.top, level: f.top ? 0.16 : 0.13, alpha: A * wv });
         break;
       }
       case 'tree': {

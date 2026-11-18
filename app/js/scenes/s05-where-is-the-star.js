@@ -2,7 +2,7 @@
 // over his eyes), Gandalf hears Santa's bells, then the old film flickers on and the drone-swarm Mickey (WP-11,
 // fx/mickey-stars.js; no Mickey clip exists) whistles and points up: everyone looks up (TREATMENT §04, SCRIPT §03).
 import { cueSheet, loadFonts, mickeyStars, MICKEY_TIMING } from '../fx/index.js';
-import { skyBase } from './common.js';
+import { skyBase, BOX_ZONES, storyTower } from './common.js';
 import { stageLayout, drawPets, preloadTracks, talk, look, act } from './stage.js';
 
 const cues = [{ t: 0, name: 'regroup' }, { t: 15, name: 'jingle' }, { t: 30, name: 'mickey-in' }, { t: 45, name: 'mickey-out' }, { t: 45, name: 'cut' }, { t: 56, name: 'out' }];
@@ -41,15 +41,16 @@ export default {
   duration,
   cues,
   story: true,
-  zones: ['backdrop', 'wall'],
+  zones: ['backdrop', 'wall', ...BOX_ZONES],
   enter() { loadFonts(); preloadTracks(tracks); },
   draw(zoneId, ctx, w, h, t, local, env) {
+    if (storyTower(zoneId, ctx, w, h, t, local, c('out'), duration)) return;
     if (zoneId === 'backdrop') {
       mickeyStars(ctx, w, h, t, local - c('mickey-in'), { x: 0.26, y: 0.5, size: 0.25 });
       return;
     }
     if (zoneId !== 'wall') return;
     skyBase(zoneId, ctx, w, h, t);
-    drawPets(ctx, stageLayout(env, w, h), tracks, local, { inAt: c('regroup'), outAt: c('out'), outEnd: duration - 0.5 });
+    drawPets(ctx, stageLayout(env, w, h), tracks, local, { inAt: c('regroup'), outAt: c('out') });
   },
 };

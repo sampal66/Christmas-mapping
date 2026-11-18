@@ -1,10 +1,12 @@
 // s07 · El tarro de miel (1:15). Pooh floats down on his balloon; the star glows in his honey pot; he hands it down
-// and Connor carries it home along the floor; it flies up and settles above the tree tip (TREATMENT §04, SCRIPT §03).
+// and Connor carries it a few steps toward the tree, looks up, and it rises from his mouth to settle above the tree
+// tip (TREATMENT §04, SCRIPT §03; short carry: WP-08c).
 // The star's motion is star-story.js's drawReturn: Pooh's pot and Connor's mouth are placed on its path.
 import { cueSheet, loadFonts, easeInOutSine, clamp } from '../fx/index.js';
-import { drawReturn, RETURN_PATH, carryProgress } from './star-story.js';
+import { drawReturn, RETURN_PATH, carryWalk, walkSpan } from './star-story.js';
 import { stageLayout, drawPets, drawPetClip, preloadTracks, talk, look, act, CONNOR_MOUTH, PET_SIZE } from './stage.js';
 import { preloadClips } from '../fx/clips.js';
+import { BOX_ZONES, storyTower } from './common.js';
 
 const cues = [{ t: 0, name: 'pooh-in' }, { t: 15, name: 'found' }, { t: 30, name: 'carry' }, { t: 50, name: 'fly' }, { t: 60, name: 'settle' }, { t: 71, name: 'out' }];
 const C = cueSheet(cues);
@@ -19,14 +21,18 @@ const POOH_POT = [0.75, 0.8];
 const POOH_H = 0.36;                     // share of the wall height, balloon included
 
 const settleLook = (p, i) => look(p, c('fly') + 1 + 0.3 * i, duration);   // follow the star up to the tree tip
+// Connor's walk: the carry clip's time follows the distance walked (star-story.js WALK), so the paws never skate.
+const [WALK_AT] = walkSpan(C);
+const WALK_EV = { ...act('s07-connor-carry', WALK_AT, c('fly'), true), time: (local) => carryWalk(local, C).clip };
 const tracks = {
   gandalf: [talk('gandalf', c('found') + 7, 2.9), settleLook('gandalf', 3), talk('gandalf', c('settle') + 6, 2.8)],
   alaska: [talk('alaska', c('found') + 10, 3.5), settleLook('alaska', 0)],
   orion: [talk('orion', c('carry') + 5, 4.5), settleLook('orion', 2)],
   connor: [
     act('s07-connor-brave', c('carry') + 1, c('carry') + 6),                            // s07-connor-01
-    act('s07-connor-carry', c('carry') + 6, c('fly'), true),                             // s07-connor-02 on the walk
-    settleLook('connor', 1),
+    talk('connor', c('carry') + 10, 3.3),                                                // s07-connor-02
+    WALK_EV,                                                                             // a few steps toward the tree
+    look('connor', c('fly'), duration),                                                  // lifts his head: the star rises
   ],
 };
 
@@ -49,20 +55,21 @@ export default {
   duration,
   cues,
   story: true,
-  zones: ['wall', 'star'],
+  zones: ['wall', 'star', ...BOX_ZONES],
   enter() { loadFonts(); preloadTracks(tracks); preloadClips([POOH]); },
   draw(zoneId, ctx, w, h, t, local, env) {
+    if (storyTower(zoneId, ctx, w, h, t, local, c('out'), duration)) return;
+    const L = zoneId === 'wall' ? stageLayout(env, w, h) : null;
+    const unit = L ? L.H * L.k * PET_SIZE.connor : undefined;
     drawReturn(zoneId, ctx, w, h, t, local, env, C, () => {
-      const L = stageLayout(env, w, h);
       drawPooh(ctx, L, w, h, local, env);
-      // Connor faces left (toward the tree) all scene, his mouth on the star's carry path: at PAW until the walk,
-      // then following the star to END. Alaska joins the cats on the tower, out of his way.
+      // Connor faces left (toward the tree) all scene, his mouth on the star's path: at PAW, then a few steps
+      // toward the tree. Alaska joins the cats on the tower, out of his way.
       const P = (v) => { const q = env?.from?.('backdrop', ...v) || [0.53 + v[0] * 0.47, v[1]]; return [q[0] * w, q[1] * h]; };
-      const paw = P(RETURN_PATH.paw), end = P(RETURN_PATH.end);
-      const mouthX = paw[0] + (end[0] - paw[0]) * carryProgress(local, C);
+      const mouthX = P(RETURN_PATH.paw)[0] - carryWalk(local, C).d * unit;
       const top = (s) => { const [x, y] = L.towerAt(s); return { x, y, flip: true }; };
       drawPets(ctx, L, tracks, local, {
-        inAt: c('found') - 4, outAt: c('out'), outEnd: duration - 0.5,
+        inAt: c('found') - 4, outAt: c('out'),
         override: {
           connor: { x: mouthX + CONNOR_MOUTH * L.H * L.k * PET_SIZE.connor, flip: true },
           alaska: { ...top(0.1), flip: false },
@@ -70,6 +77,6 @@ export default {
           gandalf: top(0.9),
         },
       });
-    });
+    }, { unit });
   },
 };

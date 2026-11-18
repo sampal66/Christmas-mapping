@@ -7,7 +7,7 @@
 import { cueSheet, beatGrid, boxFaces, boxOpen, wrapSweep, footlights, sparkleBurst, twinkleStars, snowfall, glowStroke, additive, clamp, easeInOutSine, easeOutBack, rand,
   glowSprite, dot } from '../fx/index.js';
 import { TOYS, TOY_NAMES, drawToy, tossSpec, tossAt, petPeek, boxLid, poof } from '../fx/toys.js';
-import { drawClip, preloadClips } from '../fx/clips.js';
+import { drawClip, EAR_FADE, preloadClips } from '../fx/clips.js';
 import { BEATMAPS } from './beatmaps.js';
 import { from, beatClock, boxFace, BOX_ZONES, skyBase } from './common.js';
 
@@ -180,7 +180,7 @@ function peekClip(ctx, id, x, y, ch, up, time, alpha) {
   if (up <= 0.01) return drawClip(ctx, id, time, { alpha: 0 });
   ctx.save();
   ctx.beginPath(); ctx.rect(x - ch * 3, y - ch * 2, ch * 6, ch * 2); ctx.clip();
-  const ok = drawClip(ctx, id, time, { x, y: y + ch * (1 - easeOutBack(clamp(up))) * 0.9, h: ch, alpha, loop: LOOPS.has(id) });
+  const ok = drawClip(ctx, id, time, { x, y: y + ch * (1 - easeOutBack(clamp(up))) * 0.9, h: ch, alpha, loop: LOOPS.has(id), topFade: EAR_FADE });
   ctx.restore();
   return ok;
 }
