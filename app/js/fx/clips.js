@@ -12,7 +12,14 @@
 import * as media from '../media.js';
 
 /** Clips committed under app/assets/clips/ (others can still come from the media pack). */
-export const CLIP_FILES = ['s04-gandalf-ears', 's04-gandalf-pop', 's04-connor-tail', 's04-orion-ears'];
+export const CLIP_FILES = [
+  's04-gandalf-ears', 's04-gandalf-pop', 's04-connor-tail', 's04-orion-ears', 'pet-alaska-idle', 'pet-alaska-lookup',
+  'pet-alaska-talk', 'pet-connor-idle', 'pet-connor-lookup', 'pet-connor-talk', 'pet-gandalf-idle',
+  'pet-gandalf-lookup', 'pet-gandalf-talk', 'pet-orion-idle', 'pet-orion-lookup', 'pet-orion-talk',
+  's03-alaska-boss', 's03-alaska-nooo', 's03-gandalf-bat', 's03-gandalf-oops', 's04-alaska-tail', 's05-connor-hide',
+  's05-gandalf-bells', 's07-connor-brave', 's07-connor-carry', 's07-pooh-float', 's08-gandalf-soft',
+  's10-alaska-wave', 's10-connor-wave', 's10-gandalf-wave', 's10-orion-wave', 's10-santa-sleigh'
+];
 
 const BASE = new URL('../../assets/clips/', import.meta.url).href;
 const clips = new Map();            // id → { video, ready, failed, keyed canvas }

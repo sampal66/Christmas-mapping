@@ -1,4 +1,5 @@
-// s10 · Gran final (1:30), visuals only (the pets' wave and Santa's sleigh are WP-04/08 clips laid on top).
+// s10 · Gran final (1:30), visuals only (the pets' wave is a WP-08 clip laid on top; Santa's sleigh clip, WP-04b, rides
+// the sparkle trail here).
 // A warm ripple from the lit star, footlights burst, a sparkle trail where the sleigh will fly, soft fireworks,
 // then the stars gather into the family constellation (from one media-pack photo, processed on the iPad) and
 // "¡Feliz Navidad!". Fades to the starfield (TREATMENT §04).
@@ -9,6 +10,7 @@ import { cueSheet, beatGrid, megaTree, firework3d, sparkleBurst, footlights, box
 import { SHOW_HUES } from '../palette.js';
 import * as media from '../media.js';
 import { BEATMAPS } from './beatmaps.js';
+import { drawClip, preloadClips } from '../fx/clips.js';
 import { skyBase, stripSnow, from, beatClock, boxFace, BOX_ZONES } from './common.js';
 
 const cues = [
@@ -118,6 +120,20 @@ function sequence() {
   return seq;
 }
 
+const SLEIGH = 's10-santa-sleigh';
+/**
+ * Draws the sleigh clip with the back of the sleigh on the trail's head (path(k), k = 0..1 across the sky), tilted
+ * a little along the arc. Fades in and out at the sky's edges. Nothing is drawn while the clip is missing: the
+ * sparkle trail alone carries the moment then.
+ */
+function sleigh(ctx, w, h, path, k, age, alpha) {
+  const [x0, y0] = path(Math.max(0, k - 0.01)), [x1, y1] = path(Math.min(1, k + 0.01));
+  const [x, y] = path(k);
+  const fade = clamp(Math.min(k / 0.06, (1 - k) / 0.06));
+  const tilt = clamp(Math.atan2(y1 - y0, x1 - x0), -0.3, 0.3) * 0.6;
+  drawClip(ctx, SLEIGH, age, { x, y, h: h * 0.15, anchor: [0.08, 0.62], alpha: alpha * fade, loop: true, rotate: tilt });
+}
+
 export default {
   id: 's10-finale',
   title: 's10 · Gran final',
@@ -127,7 +143,7 @@ export default {
   // Live-moment fallback (TREATMENT §05): show the projected star if the real one isn't on the tree.
   options: { projectedStar: false },
   zones: ['wall', 'rightStrip', 'backdrop', 'stage', ...BOX_ZONES, 'tree', 'star'],
-  enter() { loadFonts(); loadFamily(); sequence(); },
+  enter() { loadFonts(); loadFamily(); sequence(); preloadClips([SLEIGH]); },
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
     const fw = C.env(local, 'fireworks', 'wave', 2, 3);
@@ -144,10 +160,11 @@ export default {
           ctx.beginPath(); ctx.arc(sx * w, sy * h, easeInOutSine(p) * w * 0.7, 0, Math.PI * 2);
           additive(ctx, A * (1 - p) * 0.7, () => glowStroke(ctx, 'candle', 10));
         }
-        // Sparkle trail along the path the sleigh will fly (WP-08 lays Santa on top of it).
+        // Santa's sleigh (WP-04b clip, an in-place flying loop) arcs across the sky, a sparkle trail behind it.
         const sp = C.prog(local, 'sleigh', { after: 9 });
         if (sp > 0 && sp < 1) {
           const path = (k) => [(-0.05 + k * 1.1) * w, (0.42 - Math.sin(k * Math.PI) * 0.3) * h];
+          sleigh(ctx, w, h, path, sp, local - C.at('sleigh'), A);
           for (let j = 0; j < 26; j++) {
             const k = sp - j * 0.012;
             if (k < 0) break;

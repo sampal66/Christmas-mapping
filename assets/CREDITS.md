@@ -19,6 +19,9 @@ this show, owned by the account holder under the ElevenLabs plan terms. No third
 | `assets/characters/connor/model-sheet.jpg`, `alaska/…`, `orion/…` | gpt-image-2.5-sunburst | model sheets (owner picks: Connor take 2, Alaska 1, Orion 1) | 4 takes each, ≈ 760 credits each |
 | `assets/characters/gandalf/style-ref.jpg` | gpt-image-2.5-sunburst | style test still #4 (TREATMENT §09) | style anchor |
 | `app/assets/clips/s04-*.mp4` | start frame gpt-image-2.5-sunburst → kling-2.5-turbo image-to-video, 5 s | s04 rummaging shots (WP-04 brief) | prepped with `tools/clip-prep.sh` |
+| `assets/characters/<pet>/start-standing.jpg`, `santa/start-sleigh.jpg` | gpt-image-2.5-sunburst, text-only | WP-04b start frames (owner picks: Connor 3, Alaska 2, Orion 3, Gandalf 1, Santa 1) | 4 takes each, 190 credits per take |
+| `app/assets/clips/pet-*.mp4`, `s03-*`, `s05-*`, `s07-*`, `s08-*`, `s10-*`, `s04-alaska-tail.mp4` | start frame → kling-2.5-turbo image-to-video, 5 s (2,121 credits each); `s07-pooh-float` 10 s (4,242) | WP-04b story acting clips + Alaska tail + Santa sleigh | prepped with `tools/clip-prep.sh`. Santa, sleigh and reindeer are an original design |
+| `app/assets/clips/s07-pooh-float.mp4` | same chain; start frame (Pooh take 2) prompted as a generic 1920s storybook teddy bear (pencil and watercolour, no clothes) | Pooh cameo, after E.H. Shepard's public-domain 1926 book style (allowed cameo, AGENTS §06) | the provider blocked prompts that named the artist or the 1928 mouse film: no Mickey clip exists |
 
 ## Music (WP-05) — kept on the device, not committed
 

@@ -78,3 +78,26 @@ Placing the story clips, voices, mix (WP-08). New dependencies. Changing timings
 - [ ] All shot-list clips prepped (stacked alpha) and committed; credits logged.
 - [ ] Alaska tail, Mickey film and Santa sleigh wired and screenshot-checked; smoke test + flash check pass.
 - [ ] CONTROL board + handoff (with the credit balance left) updated.
+
+## Status (2026-11-18, end of session)
+Owner picks: Connor take 3, Alaska 2, Orion 3, Gandalf 1, Santa 1, Pooh 2 (start frames saved in `assets/characters/`).
+Mickey: **blocked** by the image provider twice (the 1928-mouse wording and a neutral one) → no clip; s05 keeps the
+drone film screen. Pooh: blocked when the artist was named; the neutral re-try ("1920s storybook teddy bear") worked.
+Spares #30–32 not used.
+
+| Clip id | Kind (how WP-08 plays it) | Notes |
+|---|---|---|
+| `pet-<name>-idle` ×4 | loop | breathe, blink, tail |
+| `pet-<name>-talk` ×4 | loop | cut to the line length |
+| `pet-<name>-lookup` ×4 | once, hold last frame | ends looking up (Gandalf's look-up is subtle) |
+| `s03-alaska-boss`, `s03-alaska-nooo`, `s03-gandalf-bat`, `s03-gandalf-oops` | once | star in code |
+| `s05-connor-hide`, `s05-gandalf-bells` | once | |
+| `s07-pooh-float` (10 s) | once | floats, looks in the pot, lowers it (star in code) |
+| `s07-connor-brave` | once | |
+| `s07-connor-carry` | loop | walk cycle in place; code moves him |
+| `s08-gandalf-soft` | once | |
+| `s10-<name>-wave` ×4 | once | Orion waves early, then sits |
+| `s04-alaska-tail` | loop | wired (s04 `CLIP_OF.pomTail`) |
+| `s10-santa-sleigh` | loop | wired: rides the s10 sparkle trail |
+
+All pets face right (¾ view); use `flip: true` for the other direction.
