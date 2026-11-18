@@ -1,7 +1,7 @@
 // s10 · Gran final (1:30), visuals only. Santa's sleigh clip (WP-04b) rides the sparkle trail; the pets wave goodbye from
 // their stage slots at `wave` (WP-08, scenes/stage.js), gone before `cut`.
 // A warm ripple from the lit star, footlights burst, a sparkle trail where the sleigh will fly, soft fireworks,
-// then the stars gather into the family constellation (from one media-pack photo, processed on the iPad) and
+// then the stars gather into the family constellation (hand-traced from one family photo: family-stars.js) and
 // "¡Feliz Navidad!". Fades to the starfield (TREATMENT §04).
 import { cueSheet, beatGrid, megaTree, firework3d, sparkleBurst, footlights, boxFaces, snowfall,
   starHalo, projectedStar, photoToConstellation, fallbackConstellation, loadFonts,
@@ -10,6 +10,7 @@ import { cueSheet, beatGrid, megaTree, firework3d, sparkleBurst, footlights, box
 import { SHOW_HUES } from '../palette.js';
 import * as media from '../media.js';
 import { BEATMAPS } from './beatmaps.js';
+import { FAMILY_STARS } from './family-stars.js';
 import { drawClip, preloadClips } from '../fx/clips.js';
 import { skyBase, stripSnow, from, beatClock, boxFace, BOX_ZONES } from './common.js';
 import { stageLayout, drawPets, preloadTracks, act, PETS } from './stage.js';
@@ -77,10 +78,11 @@ const FOUNTAINS = (() => {
   return [{ x: 0.52, t0: k(0.3), t1: z, seed: 3 }, { x: 0.6, t0: k(0.3), t1: z, seed: 7 }, { x: 0.06, t0: k(0.65), t1: z, seed: 11 }];
 })();
 
-// Family constellation: computed once from a media-pack photo named "family…" (never leaves the device).
-let family = fallbackConstellation();
+// Family constellation: the committed hand-traced stars (family-stars.js); a media-pack photo named "family…" still
+// overrides them (computed on the device, never leaves it).
+let family = FAMILY_STARS || fallbackConstellation();
 let familyLoading = false;
-let familyIsPhoto = false;
+let familyIsPhoto = !!FAMILY_STARS;
 async function loadFamily() {
   if (familyLoading) return;
   familyLoading = true;
