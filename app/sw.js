@@ -2,7 +2,7 @@
 // Bump VERSION whenever any shell file changes, or the iPad keeps serving the old copy.
 // The smoke test fails if a .html/.css/.js file in app/ is missing from SHELL.
 // Media-pack files live in IndexedDB, not here, and never go over the network.
-const VERSION = 'v20';
+const VERSION = 'v21';
 const CACHE = `christmas-mapper-${VERSION}`;
 const SHELL = [
   './',
@@ -56,6 +56,34 @@ const SHELL = [
   'assets/clips/s04-gandalf-pop.mp4',
   'assets/clips/s04-connor-tail.mp4',
   'assets/clips/s04-orion-ears.mp4',
+  'assets/clips/pet-alaska-idle.mp4',
+  'assets/clips/pet-alaska-lookup.mp4',
+  'assets/clips/pet-alaska-talk.mp4',
+  'assets/clips/pet-connor-idle.mp4',
+  'assets/clips/pet-connor-lookup.mp4',
+  'assets/clips/pet-connor-talk.mp4',
+  'assets/clips/pet-gandalf-idle.mp4',
+  'assets/clips/pet-gandalf-lookup.mp4',
+  'assets/clips/pet-gandalf-talk.mp4',
+  'assets/clips/pet-orion-idle.mp4',
+  'assets/clips/pet-orion-lookup.mp4',
+  'assets/clips/pet-orion-talk.mp4',
+  'assets/clips/s03-alaska-boss.mp4',
+  'assets/clips/s03-alaska-nooo.mp4',
+  'assets/clips/s03-gandalf-bat.mp4',
+  'assets/clips/s03-gandalf-oops.mp4',
+  'assets/clips/s04-alaska-tail.mp4',
+  'assets/clips/s05-connor-hide.mp4',
+  'assets/clips/s05-gandalf-bells.mp4',
+  'assets/clips/s07-connor-brave.mp4',
+  'assets/clips/s07-connor-carry.mp4',
+  'assets/clips/s07-pooh-float.mp4',
+  'assets/clips/s08-gandalf-soft.mp4',
+  'assets/clips/s10-alaska-wave.mp4',
+  'assets/clips/s10-connor-wave.mp4',
+  'assets/clips/s10-gandalf-wave.mp4',
+  'assets/clips/s10-orion-wave.mp4',
+  'assets/clips/s10-santa-sleigh.mp4',
   'js/scenes/index.js',
   'js/scenes/common.js',
   'js/scenes/placeholder.js',
