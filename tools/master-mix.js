@@ -261,7 +261,10 @@ function suddenJumps(file, top = 8) {
   const j = JSON.parse(meas.slice(meas.lastIndexOf('{'), meas.lastIndexOf('}') + 1));
   const ln = `loudnorm=I=${MASTER.I}:TP=${MASTER.TP}:LRA=${MASTER.LRA}:measured_I=${j.input_i}:measured_TP=${j.input_tp}:measured_LRA=${j.input_lra}:measured_thresh=${j.input_thresh}:offset=${j.target_offset}:linear=true`;
   const final = path.join(out, 'master-mix.m4a');
-  ffmpeg(['-i', premaster, '-af', `${ln},aresample=${RATE}`, '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', final]);
+  // Linear loudnorm can't catch inter-sample peaks and the AAC encode adds ~0.5 dB on top (first real render: −0.8
+  // dBTP), so a 4×-oversampled brick-wall limiter at −2 dBFS sits after it. It only touches rare peaks.
+  const limiter = `aresample=${RATE * 4},alimiter=limit=0.79:attack=1:release=60:level=false,aresample=${RATE}`;
+  ffmpeg(['-i', premaster, '-af', `${ln},${limiter}`, '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', final]);
 
   // checks
   const after = ffLog(['-i', final, '-af', 'ebur128=peak=true:framelog=quiet', '-f', 'null', '-']);
