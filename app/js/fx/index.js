@@ -18,4 +18,5 @@ export * from './cosmos.js';
 export * from './stars.js';
 export * from './toys.js';
 export * from './mickey-stars.js';
-export * from './pet-stars.js';
+export * from './portrait-swarm.js';
+export * from './pet-portraits.js';
