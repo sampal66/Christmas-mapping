@@ -83,14 +83,15 @@ Placing the story clips, voices, mix (WP-08). New dependencies. Changing timings
 Owner picks: Connor take 3, Alaska 2, Orion 3, Gandalf 1, Santa 1, Pooh 2 (start frames saved in `assets/characters/`).
 Mickey: **blocked** by the image provider twice (the 1928-mouse wording and a neutral one) → no clip; s05 keeps the
 drone film screen. Pooh: blocked when the artist was named; the neutral re-try ("1920s storybook teddy bear") worked.
-Spares #30–32 not used.
+Spares #30–32 not used. **Spend ≈ 68.4k** (worst case: start frames 6.9k incl. ≈ 2.3k of blocked image runs that may be refunded;
+27 × 5 s clips 57.3k; Pooh 10 s 4.2k) → ≈ 57.6k of the 125,959 left.
 
 | Clip id | Kind (how WP-08 plays it) | Notes |
 |---|---|---|
 | `pet-<name>-idle` ×4 | loop | breathe, blink, tail |
 | `pet-<name>-talk` ×4 | loop | cut to the line length |
 | `pet-<name>-lookup` ×4 | once, hold last frame | ends looking up (Gandalf's look-up is subtle) |
-| `s03-alaska-boss`, `s03-alaska-nooo`, `s03-gandalf-bat`, `s03-gandalf-oops` | once | star in code |
+| `s03-alaska-boss`, `s03-alaska-nooo`, `s03-gandalf-bat`, `s03-gandalf-oops` | once | star in code. Kling drew a flying prop in `nooo`: masked, a tiny fragment remains near her paw at ≈ 1.2 s |
 | `s05-connor-hide`, `s05-gandalf-bells` | once | |
 | `s07-pooh-float` (10 s) | once | floats, looks in the pot, lowers it (star in code) |
 | `s07-connor-brave` | once | |

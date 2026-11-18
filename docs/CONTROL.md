@@ -17,7 +17,7 @@
 | WP-02 | [Media pack + offline mode](work-packages/WP-02-media-offline.md) | WP-00 | ✅ done (PR #2) | `claude/wp-02-media-offline` | M8, M9 |
 | WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | ✅ done (PR #6) | `claude/wp-03-effects-scenes` | C1 (s00, s01, s02, s04, s06, s09, s10) + owner notes (3D swarm, mega-tree, box tower, atlas art) |
 | WP-04 | [Character pipeline](work-packages/WP-04-characters.md): model sheets, clip layer (`fx/clips.js`), s04 rummaging clips; Mickey film + Santa sleigh after the credit upgrade | WP-03, WP-10, ElevenLabs connector | ✅ done (PR #11) | `claude/wp-04-characters` | C2, C3 |
-| WP-04b | [Story acting clips + Alaska tail, Mickey film, Santa sleigh](work-packages/WP-04b-story-clips.md) (32 clips, ≈ 75k of the 125,959 credits that must last the whole project) | WP-04 merged | 🟢 next | — | C2, C3 |
+| WP-04b | [Story acting clips + Alaska tail, Mickey film, Santa sleigh](work-packages/WP-04b-story-clips.md) (32 clips, ≈ 75k of the 125,959 credits that must last the whole project) | WP-04 merged | 🟡 in review | `claude/charming-ritchie-iqlwbf` | C2, C3 |
 | WP-05 | [Music sourcing + beat maps](work-packages/WP-05-music-beats.md): PD military-band carols, Musopen Tchaikovsky, ElevenLabs music box + 3 underscores; beat maps (auto + tap tool) applied to the light-show scenes | WP-03, WP-10 | ✅ done (PR #7) | `claude/wp-05-music-beats` | C5, C1 beat sync |
 | WP-06 | [Spanish script + narration and pet voices](work-packages/WP-06-script-voices.md) (`docs/SCRIPT.md`, ≈3 min of speech; TREATMENT §03–§04) | WP-10 | ✅ done (PR #8) | `claude/wp-06-script-voices` | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
@@ -49,6 +49,11 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-18 · WP-04b** — Owner picked start frames (Connor 3, Alaska 2, Orion 3, Gandalf 1, Santa 1, Pooh 2) → 28 new clips in `app/assets/clips/` (12 pet idle/talk/look-up, 10 actions incl. Pooh 10 s, 4 waves, Alaska tail, Santa sleigh); kinds (loop / once-and-hold) in the WP-04b brief Status table. Wired: s04 Alaska tail, s10 sleigh rides the sparkle trail. **Mickey: no clip** (provider blocked both prompts) → s05 keeps the drone film screen. `sw.js` v21.
+  Credits: ≈ 68.4k spent (worst case; ≈ 2.3k of it is blocked image runs that may be refunded) → **≈ 57.6k of the 125,959 left** (owner: confirm in ElevenLabs; the connector can't read the balance). Spares #30–32 unused.
+  For WP-08: pets face right (`flip` for left); talk loops are cut to line length; look-ups and actions hold their last frame. `s03-alaska-nooo` has a tiny stray fragment near her paw at ≈1.2 s (masked Kling prop); `pet-gandalf-lookup` is subtle.
+  Gotchas: kling's start frames are text-only (no reference wired). `creative_generate_video` can't set 10 s: create the node with `estimate_only`, `creative_update_node` `duration_secs: 10`, then `creative_run_flow_nodes`. Estimates leave empty stub nodes on the flow. The app now pre-caches ≈ 17 MB of clips: check iPad storage in WP-09.
 
 - **2026-11-18 · WP-04 fix** — Owner TV review: animations good, but black boxes behind them. Clips are now **stacked alpha** (`tools/clip-alpha.js`: colour on top, flood-filled matte below; `clip-prep.sh` calls it) and `fx/clips.js` rebuilds a transparent frame (re-keyed after each seek). Same 4 clips re-prepped (≈ 0.5 MB each). `sw.js` v20.
   Owner: **125,959 ElevenLabs credits must last the whole project** → WP-04b brief written with a budget (≈ 75k, stop at 80k; ≈ 38k left unallocated).
