@@ -27,6 +27,6 @@ out of) its constellation in s06's calm pauses: Orion (tabby) by Orion, Connor b
 - The pets' cartoon clips (WP-04), voices/mix (WP-08), changing s06 timing or the atlas art.
 
 ## Acceptance
-- [ ] Four pet star figures appear in s06's pauses, each with a small move; Orion smiles.
-- [ ] Flash check and smoke test pass; render cost of s06 not noticeably higher (it is already the costliest scene).
-- [ ] PRD status, TREATMENT note, CONTROL board + handoff updated.
+- [x] Four pet star figures appear in s06's pauses, each with a small move; Orion smiles.
+- [x] Flash check and smoke test pass; render cost of s06 not noticeably higher (it is already the costliest scene).
+- [x] PRD status, TREATMENT note, CONTROL board + handoff updated.

@@ -114,7 +114,7 @@ sparkles) are drawn in code, not in the clip.
   scintillation; no flat round dots. The story's **lost star** is the warmest and brightest (gold-white, slowly turning
   spikes): five-point on the tree, night-sky star while lost (s03 escape → s06 constellations → s07 honey pot and
   Connor), five-point again once it's back on the tree.
-- **Constellation art:** the real 1822 Jamieson atlas engravings as light lines (ice) behind the stars, lines
+- **Constellation art:** the real 1824 *Urania's Mirror* engravings (Sidney Hall; no coordinate grid; soft lines, no hard threshold) as light lines (ice) behind the stars, lines
   thickened ≈1 px so they survive projection; each figure's name, dimmed, in spaced engraved capitals (Spanish).
   The art appears a couple of seconds after the stars have formed.
 - **Drone-show style (owner, 2026-11-17):** constellations, the closing family constellation, the greeting and the
@@ -181,6 +181,7 @@ Which scene uses which zone: [TREATMENT §07](TREATMENT.md).
 - The UI must be hideable (Hide ✕, top-left corner to restore), because whatever is on screen is projected.
 
 ## Changelog
+- **2026-11-18** — WP-11b/11c: constellation art is now *Urania's Mirror* (1824), grid-free (owner).
 - **2026-11-17** — §06 mega-tree patterns; §07 stacked gift tower with front + side faces (owner notes, WP-03).
 - **2026-11-17** — §06: smooth beat feel (no surges) and the 3D drone-show point style for stars and fireworks (owner notes).
 - **2026-11-17** — §06: every light-show animation moves to the beat (owner note, WP-03); beat-accent safety cap.
