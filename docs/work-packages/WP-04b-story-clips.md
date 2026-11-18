@@ -84,7 +84,7 @@ Owner picks: Connor take 3, Alaska 2, Orion 3, Gandalf 1, Santa 1, Pooh 2 (start
 Mickey: **blocked** by the image provider twice (the 1928-mouse wording and a neutral one) → no clip; s05 keeps the
 drone film screen. Pooh: blocked when the artist was named; the neutral re-try ("1920s storybook teddy bear") worked.
 Spares #30–32 not used. **Spend ≈ 68.4k** (worst case: start frames 6.9k incl. ≈ 2.3k of blocked image runs that may be refunded;
-27 × 5 s clips 57.3k; Pooh 10 s 4.2k) → ≈ 57.6k of the 125,959 left.
+27 × 5 s clips 57.3k; Pooh 10 s 4.2k) → owner confirmed 59,890 left.
 
 | Clip id | Kind (how WP-08 plays it) | Notes |
 |---|---|---|
