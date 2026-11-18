@@ -1,5 +1,5 @@
-// s10 · Gran final (1:30), visuals only (the pets' wave is a WP-08 clip laid on top; Santa's sleigh clip, WP-04b, rides
-// the sparkle trail here).
+// s10 · Gran final (1:30), visuals only. Santa's sleigh clip (WP-04b) rides the sparkle trail; the pets wave goodbye from
+// their stage slots at `wave` (WP-08, scenes/stage.js), gone before `cut`.
 // A warm ripple from the lit star, footlights burst, a sparkle trail where the sleigh will fly, soft fireworks,
 // then the stars gather into the family constellation (from one media-pack photo, processed on the iPad) and
 // "¡Feliz Navidad!". Fades to the starfield (TREATMENT §04).
@@ -12,6 +12,7 @@ import * as media from '../media.js';
 import { BEATMAPS } from './beatmaps.js';
 import { drawClip, preloadClips } from '../fx/clips.js';
 import { skyBase, stripSnow, from, beatClock, boxFace, BOX_ZONES } from './common.js';
+import { stageLayout, drawPets, preloadTracks, act, PETS } from './stage.js';
 
 const cues = [
   // Stretched (×1.3) to the whole Jingle Bells track (ends ≈1:51) so the music is never cut mid-phrase.
@@ -121,6 +122,9 @@ function sequence() {
 }
 
 const SLEIGH = 's10-santa-sleigh';
+// The pets' wave: each fades in just before `wave`, waves (staggered 0.3 s, left → right), and fades out before `cut`.
+const WAVES = Object.fromEntries(PETS.map((p, i) => [p, [act(`s10-${p}-wave`, C.at('wave') + 0.3 * i, C.at('cut'))]]));
+
 /**
  * Draws the sleigh clip with the back of the sleigh on the trail's head (path(k), k = 0..1 across the sky), tilted
  * a little along the arc. Fades in and out at the sky's edges. Nothing is drawn while the clip is missing: the
@@ -143,7 +147,7 @@ export default {
   // Live-moment fallback (TREATMENT §05): show the projected star if the real one isn't on the tree.
   options: { projectedStar: false },
   zones: ['wall', 'rightStrip', 'backdrop', 'stage', ...BOX_ZONES, 'tree', 'star'],
-  enter() { loadFonts(); loadFamily(); sequence(); preloadClips([SLEIGH]); },
+  enter() { loadFonts(); loadFamily(); sequence(); preloadClips([SLEIGH]); preloadTracks(WAVES); },
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
     const fw = C.env(local, 'fireworks', 'wave', 2, 3);
@@ -175,6 +179,9 @@ export default {
         for (const f of FOUNTAINS) sparkFountain(ctx, w, h, local, { ...f, y: 0.97, height: 0.3, alpha: 0.85 * A, surge: pulse });
         for (const f of FIREWORKS) firework3d(ctx, w, h, local, { ...f, alpha: A });
         snowfall(ctx, w, h, soft, { density: 0.5 * B.steps(local, C.at('wave'), 8), alpha: A });
+        if (local > C.at('wave') - 2 && local < C.at('cut')) {
+          drawPets(ctx, stageLayout(env, w, h), WAVES, local, { inAt: C.at('wave') - 1.6, outAt: C.at('cut') - 1.8, outEnd: C.at('cut') - 0.2 });
+        }
         // The swarm: sparks gather into the family constellation, then spell the greeting.
         if (fam > 0) {
           const text = local >= C.at('title');

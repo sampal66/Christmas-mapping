@@ -69,7 +69,7 @@ const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Num
     const show = await page.evaluate(async () => {
       const { scenes, holds } = await import('./js/scenes/index.js');
       const last = scenes.at(-1);
-      return { total: last.start + last.duration, holds, unbeaten: scenes.filter((x) => !x.placeholder && !x.beats?.bpm && !x.beats?.times).map((x) => x.id),
+      return { total: last.start + last.duration, holds, unbeaten: scenes.filter((x) => !x.placeholder && !x.story && !x.beats?.bpm && !x.beats?.times).map((x) => x.id),
         scenes: scenes.map((x) => ({ id: x.id, start: x.start, duration: x.duration })) };
     });
     const seek = (t) => page.evaluate(({ v }) => { const b = document.getElementById('seekBar'); b.value = String(v); b.dispatchEvent(new Event('change')); }, { v: t / show.total });

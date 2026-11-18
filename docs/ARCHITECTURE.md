@@ -6,7 +6,7 @@
 | | |
 |---|---|
 | **Status** | v1 — Mapper v0, timeline/audio and media pack + offline built; export designed, not yet built |
-| **Last updated** | 2026-11-16 |
+| **Last updated** | 2026-11-18 |
 
 ---
 
@@ -248,8 +248,10 @@ export default {
 | 2026-11-18 | s06 constellation art is *Urania's Mirror* (1824). Each figure is cut out along a hand-traced outline. Engraved lines become soft alpha (local darkening, no threshold) plus a faint body tone, saved as 800 px grey+alpha PNGs. Star positions are read off the cards. | Owner: the Jamieson crops looked distorted (hard threshold on low-res thumbnails) and the grid was unwanted. Erasing the grid smeared the art; these cards have no grid. |
 | 2026-11-18 | Character clips (`fx/clips.js`) are **stacked-alpha MP4s** (colour on top, matte below, made by `tools/clip-alpha.js` with an edge flood fill so pupils stay opaque); each drawn frame is rebuilt into a transparent canvas and composited normally. One muted inline `<video>` per clip, re-seeked to scene time on drift and re-keyed after each seek; loaded as **blobs** (media pack first, then committed `app/assets/clips/<id>.mp4`); a missing clip returns `false` and the caller draws its placeholder | owner: the first `'screen'`-blend version showed black boxes on the wall. Safari has no VP9 alpha, and H.264 plays everywhere. Blob URLs: Safari plays `<video>` only from range-capable sources (SW cache hits aren't). Time sync keeps pause/scrub/Cut/MP4 export right |
 | 2026-11-18 | WP-04b clip library: pets are **one clip per pet** (WP-08 places them side by side on the ground line), all from one standing start frame per pet (¾ view, facing right; `flip` mirrors). Kinds: `idle`/`talk` loops (crossfaded seam), `lookup` and action shots **play once and hold the last frame**, `s10-*-wave` once. Mickey has **no clip**: the image provider blocked every 1928-mouse prompt, so s05 keeps the drone film screen (`mickeyStars(..., { film: true })`). Santa's sleigh rides the s10 sparkle trail in code | single-character shots stay on model; a look-up ends in a different pose, so a loop would snap back. Re-prompting a blocked cameo again would only burn credits |
+| 2026-11-18 | Story stage (`scenes/stage.js`, WP-08): the pets are drawn on the **wall** zone, between the sky and the lost star (star-story's `drawEscape`/`drawReturn` take a `mid` callback), feet on the backdrop's bottom edge (kept inside the wall). Dogs on the floor left of the gift tower, cats on the tower top (left → right Alaska, Connor, Orion, Gandalf; never over the tree). **One fixed size per pet** (owner, from a family photo: Connor 1, Alaska 0.75, Orion = Gandalf 0.5), changed only for depth; Connor's height is set by s07 (his mouth meets the star's carry path). Each clip is drawn by a measured `FRAME` table (pet centre, share of frame height) from its first frame, so the pet keeps its size and spot whichever clip plays. A pet's track is `{ at, end, id, loop }` events over its idle loop, cross-faded 0.3 s. Story scenes carry `story: true` (no beat grid) | the star must stay in front of Connor's mouth and Pooh's pot, and the backdrop canvas sits above the wall. Clips are cropped to their own motion, so drawing every clip at one height made the pets change size (owner) |
 
 ## Changelog
+- **2026-11-18** — WP-08: story stage helper, fixed pet sizes, per-clip framing table (§07).
 - **2026-11-18** — WP-04b: clip library conventions, no Mickey clip, sleigh in s10 (§07).
 - **2026-11-18** — WP-04 fix: stacked-alpha clips replace the screen blend (§07).
 - **2026-11-18** — WP-04: character clip layer (`fx/clips.js`) decision (§07).

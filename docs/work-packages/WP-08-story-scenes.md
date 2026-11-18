@@ -58,3 +58,12 @@ or the star's paths. Mickey clips (the providers block them).
 - [ ] s08 26–45 s has its visual beat.
 - [ ] Smoke test + flash check pass; render cost per scene reported; screenshots checked.
 - [ ] PRD C1/C6/C7 status, ARCHITECTURE §07 (stage helper), CONTROL board + handoff updated.
+
+## Status (2026-11-18, end of session)
+All acceptance items done (see the CONTROL handoff). Deviations from the steps above, on purpose:
+- Pets are drawn on the **wall** zone (not the backdrop) so the star, drawn on the wall after them, stays in front of
+  Connor's mouth and Pooh's pot. Cats sit on the gift tower's top (there is no room for four on the floor).
+- s07: Alaska joins the cats on the tower so Connor's walk to the tree is clear; Connor faces left all scene.
+- s03: `s03-gandalf-bat` starts at bat −3 (its swipe is 2.5 s in); the line starts at bat −5.5 on the talk loop.
+- s07: Pooh's clip starts at pooh-in +3 and holds its last frame (pot held out) through `found`.
+- Owner rule added: one fixed size per pet (Connor 1, Alaska 0.75, Orion = Gandalf 0.5), changed only for depth.

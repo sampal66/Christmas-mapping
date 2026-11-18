@@ -124,6 +124,8 @@ export function spanningLines(pts) {
 /**
  * Photo → constellation, computed on the device (the photo never leaves the iPad). Picks well-spaced points
  * on strong edges and bright areas, then joins them with a spanning tree.
+ * A cut-out with a transparent background (e.g. the people lifted out of the photo on the iPad, props erased) is
+ * honoured: transparent pixels are never picked, and the figures' outline counts as an edge.
  * source: an image/bitmap/canvas. Returns { stars, lines, aspect } for constellation().
  */
 export function photoToConstellation(source, { points = 70, sampleW = 112 } = {}) {
@@ -137,10 +139,15 @@ export function photoToConstellation(source, { points = 70, sampleW = 112 } = {}
   g.drawImage(source, 0, 0, sw, sh);
   const px = g.getImageData(0, 0, sw, sh).data;
   const lum = new Float32Array(sw * sh);
-  for (let i = 0; i < sw * sh; i++) lum[i] = (0.2126 * px[i * 4] + 0.7152 * px[i * 4 + 1] + 0.0722 * px[i * 4 + 2]) / 255;
+  const alpha = new Float32Array(sw * sh);
+  for (let i = 0; i < sw * sh; i++) {
+    alpha[i] = px[i * 4 + 3] / 255;
+    lum[i] = alpha[i] * (0.2126 * px[i * 4] + 0.7152 * px[i * 4 + 1] + 0.0722 * px[i * 4 + 2]) / 255;
+  }
   const cand = [];
   for (let y = 1; y < sh - 1; y++) {
     for (let x = 1; x < sw - 1; x++) {
+      if (alpha[y * sw + x] < 0.5) continue;                // background removed: not part of the figures
       const L = (dx, dy) => lum[(y + dy) * sw + x + dx];
       const gx = L(1, -1) + 2 * L(1, 0) + L(1, 1) - L(-1, -1) - 2 * L(-1, 0) - L(-1, 1);
       const gy = L(-1, 1) + 2 * L(0, 1) + L(1, 1) - L(-1, -1) - 2 * L(0, -1) - L(1, -1);
