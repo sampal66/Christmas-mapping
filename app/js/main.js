@@ -7,6 +7,7 @@ import { scenes, holds, preshow, cutTime } from './scenes/index.js';
 import { skyBase, SKY_ZONES } from './scenes/common.js';
 import * as media from './media.js';
 import { clipsFrame } from './fx/clips.js';
+import { IdleMusic } from './idle-music.js';
 
 const STORAGE_KEY = 'christmas-mapping.layout.v1';
 
@@ -24,6 +25,10 @@ const t0 = performance.now();
 const clock = new MasterClock();
 const timeline = new Timeline(scenes, holds);
 let started = false;             // false = pre-show loop
+// The s00 music-box loop plays while the show isn't running (pre-show and after the finale), never during it.
+const idleMusic = new IdleMusic();
+window.__idleMusic = idleMusic;
+for (const ev of ['pointerdown', 'keydown']) document.addEventListener(ev, () => idleMusic.unlock(), { capture: true });
 let holding = null;              // active hold point while looping
 let syncTest = false;
 let syncBase = 0, lastBeep = -1;
@@ -267,6 +272,7 @@ function frame(now) {
     }
   }
   clipsFrame(mode === 'show' && started && clock.playing);   // character clips follow the show clock
+  idleMusic.update(mode === 'show' && !started && !syncTest);
   if (perf.last) {
     const k = 0.05;                                        // exponential moving average
     perf.frameMs += ((now - perf.last) - perf.frameMs) * k;
@@ -386,6 +392,7 @@ async function renderMediaList() {
       if (!confirm(`Delete "${name}" from this device?`)) return;
       try { await media.remove(name); } catch (err) { alert(err.message); }
       if (name === 'master-mix') loadMasterMix();
+      if (name === 'music-box-loop') idleMusic.load();
       renderMediaList();
     });
     li.append(label, del);
@@ -417,12 +424,14 @@ $('mediaFiles').addEventListener('change', async (e) => {
   await renderMediaList();
   if (failed) $('mediaStatus').textContent = failed;
   if (files.some((f) => media.logicalName(f.name) === 'master-mix')) loadMasterMix();
+  if (files.some((f) => media.logicalName(f.name) === 'music-box-loop')) idleMusic.load();
 });
 
 async function initMedia() {
   try { await media.check(); } catch (err) { $('mediaStatus').textContent = err.message; return; }
   await renderMediaList();
   loadMasterMix();
+  idleMusic.load();
 }
 
 // ---------- panel ----------
