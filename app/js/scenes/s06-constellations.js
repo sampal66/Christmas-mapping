@@ -3,11 +3,11 @@
 // The whole wall becomes a starry sky; a swarm of star points forms the constellations
 // as turning 3D figures (Orion, Canis Major and Minor, Felis), then the lost star, which slips away; slow shooting
 // stars; snow on the right wall (TREATMENT §04). In each pause the pet whose sky it is forms beside it as a star figure
-// (WP-11b, fx/pet-stars.js): Orion smiles, Connor looks up, Alaska is unimpressed, Gandalf pounces.
+// (fx/portrait-swarm.js): each pet as a star-swarm portrait of its cartoon art (owner, 2026-11-18).
 import { cueSheet, beatGrid, twinkleStars, shootingStars, starHalo, glowSprite, dot, additive, sparkleBurst,
   cloudScatter, cloudConstellation, cloudGroup, cloudStar, formation, renderCloud, sweepColors, nebula,
   drawCard, shapeRect, loadAtlasArt, atlasLabel, warpField, aurora, galaxy, megaTree, prog, smooth,
-  formationState, projector, drawStar, lostStar, petStars,
+  formationState, projector, drawStar, lostStar, portraitSwarm, PET_PORTRAITS,
   ORION, CANIS_MAJOR, CANIS_MINOR, FELIS, easeInOutSine, clamp } from '../fx/index.js';
 import { BEATMAPS } from './beatmaps.js';
 import { skyBase, stripSnow, beatClock } from './common.js';
@@ -88,10 +88,10 @@ function sequence() {
 // back before the next ride. from: seconds after the cue; gone 1 s before the next cue (back over its last 2 s).
 // src: the formation-sequence entry the drones come from.
 const PETS = [
-  { pet: 'orion', cue: 'orion', from: 9, to: 'canis', x: 0.845, y: 0.33, size: 0.23, src: 1 },
-  { pet: 'connor', cue: 'canis', from: 7.5, to: 'felis', x: 0.83, y: 0.44, size: 0.18, src: 2 },
-  { pet: 'alaska', cue: 'canis', from: 8, to: 'felis', x: 0.875, y: 0.21, size: 0.185, src: 2 },
-  { pet: 'gandalf', cue: 'felis', from: 7.5, to: 'cut', x: 0.87, y: 0.33, size: 0.22, src: 3 },
+  { pet: 'orion', cue: 'orion', from: 9, to: 'canis', x: 0.845, y: 0.3, size: 0.19, src: 1 },
+  { pet: 'connor', cue: 'canis', from: 7.5, to: 'felis', x: 0.82, y: 0.39, size: 0.15, src: 2 },
+  { pet: 'alaska', cue: 'canis', from: 8, to: 'felis', x: 0.89, y: 0.18, size: 0.15, src: 2 },
+  { pet: 'gandalf', cue: 'felis', from: 7.5, to: 'cut', x: 0.87, y: 0.3, size: 0.18, src: 3 },
 ];
 
 // The lost star (the tree's five-point star, now a night-sky star since it escaped in s03) travels through the
@@ -188,7 +188,7 @@ export default {
         // The pet star figures, each beside its own constellation during the pause.
         for (const p of PETS) {
           const t0 = C.at(p.cue) + p.from;
-          petStars(ctx, w, h, bt, local - t0, { pet: p.pet, x: p.x, y: p.y, size: p.size, alpha: A, end: C.at(p.to) - 1 - t0,
+          portraitSwarm(ctx, w, h, bt, local - t0, { data: PET_PORTRAITS[p.pet], x: p.x, y: p.y, size: p.size, alpha: A, end: C.at(p.to) - 1 - t0, flip: true,
             source: { cloud: sequence()[p.src].cloud, cx: SWARM.cx, cy: SWARM.cy, scale: SWARM.scale } });
         }
         // The named stars as real stars (spectral colours, spikes on the bright ones) once each figure has formed.

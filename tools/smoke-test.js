@@ -20,6 +20,16 @@ function missingFromShell() {
   return walk(ROOT).filter((f) => /\.(html|css|js|woff2|png|mp4)$/.test(f) && f !== 'sw.js' && !sw.includes(`'${f}'`));
 }
 
+// 1 s quiet 440 Hz WAV (8 kHz mono) standing in for the idle music-box loop.
+function tinyWav() {
+  const n = 8000, b = Buffer.alloc(44 + n * 2);
+  b.write('RIFF', 0); b.writeUInt32LE(36 + n * 2, 4); b.write('WAVEfmt ', 8); b.writeUInt32LE(16, 16);
+  b.writeUInt16LE(1, 20); b.writeUInt16LE(1, 22); b.writeUInt32LE(8000, 24); b.writeUInt32LE(16000, 28);
+  b.writeUInt16LE(2, 32); b.writeUInt16LE(16, 34); b.write('data', 36); b.writeUInt32LE(n * 2, 40);
+  for (let i = 0; i < n; i++) b.writeInt16LE(Math.round(2000 * Math.sin(i * 2 * Math.PI * 440 / 8000)), 44 + i * 2);
+  return b;
+}
+
 const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Number); return m * 60 + ss; };
 
 (async () => {
@@ -69,7 +79,7 @@ const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Num
     const show = await page.evaluate(async () => {
       const { scenes, holds } = await import('./js/scenes/index.js');
       const last = scenes.at(-1);
-      return { total: last.start + last.duration, holds, unbeaten: scenes.filter((x) => !x.placeholder && !x.beats?.bpm && !x.beats?.times).map((x) => x.id),
+      return { total: last.start + last.duration, holds, unbeaten: scenes.filter((x) => !x.placeholder && !x.story && !x.beats?.bpm && !x.beats?.times).map((x) => x.id),
         scenes: scenes.map((x) => ({ id: x.id, start: x.start, duration: x.duration })) };
     });
     const seek = (t) => page.evaluate(({ v }) => { const b = document.getElementById('seekBar'); b.value = String(v); b.dispatchEvent(new Event('change')); }, { v: t / show.total });
@@ -145,6 +155,22 @@ const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Num
     await page.locator('#mediaList li[data-name="photo-1"] button').click();
     await page.waitForTimeout(300);
     check(await page.locator('#mediaList li[data-name="photo-1"]').count() === 0, 'delete removes the file');
+
+    // Idle music: the media-pack music-box loop plays in pre-show (after the first tap) and stops when the show plays.
+    await page.setInputFiles('#mediaFiles', { name: 'music-box-loop.wav', mimeType: 'audio/wav', buffer: tinyWav() });
+    await page.locator('#mediaList li[data-name="music-box-loop"]').waitFor({ timeout: 3000 });
+    await page.click('[data-mode=show]');
+    await page.waitForTimeout(800);
+    const idle = () => page.evaluate(() => ({ on: window.__idleMusic.on, paused: window.__idleMusic.audio?.paused ?? true }));
+    check((await idle()).on && !(await idle()).paused, 'idle music-box loop plays in pre-show');
+    await page.click('#playBtn');
+    await page.waitForTimeout(900);
+    check(!(await idle()).on && (await idle()).paused, 'idle music stops when the show plays');
+    await page.click('#restartBtn');           // was playing → restarts; pause it again
+    await page.click('#playBtn');
+    await page.locator('#mediaList li[data-name="music-box-loop"] button').click();
+    await page.waitForTimeout(300);
+    check(!(await idle()).on, 'no idle music once the file is deleted');
 
     // Room model page: renders, reports the fit, and pushes model-generated zones into the Mapper.
     await page.goto(url + 'model.html');

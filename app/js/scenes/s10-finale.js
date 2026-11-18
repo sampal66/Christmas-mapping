@@ -1,17 +1,18 @@
-// s10 · Gran final (1:30), visuals only (the pets' wave is a WP-08 clip laid on top; Santa's sleigh clip, WP-04b, rides
-// the sparkle trail here).
+// s10 · Gran final (1:30), visuals only. Santa's sleigh clip (WP-04b) rides the sparkle trail; the pets wave goodbye from
+// their stage slots at `wave` (WP-08, scenes/stage.js), gone before `cut`.
 // A warm ripple from the lit star, footlights burst, a sparkle trail where the sleigh will fly, soft fireworks,
-// then the stars gather into the family constellation (from one media-pack photo, processed on the iPad) and
+// then the stars gather into the family portrait (a star-swarm portrait from one family photo: family-portrait.js) and
 // "¡Feliz Navidad!". Fades to the starfield (TREATMENT §04).
 import { cueSheet, beatGrid, megaTree, firework3d, sparkleBurst, footlights, boxFaces, snowfall,
-  starHalo, projectedStar, photoToConstellation, fallbackConstellation, loadFonts,
-  cloudScatter, cloudConstellation, cloudHeart, cloudText, formation, renderCloud, sweepColors,
+  starHalo, projectedStar, loadFonts, portraitSwarm,
+  cloudScatter, cloudSphere, cloudText, formation, renderCloud, sweepColors,
   glowSprite, dot, additive, glowStroke, easeInOutSine, clamp, rand, sparkFountain } from '../fx/index.js';
 import { SHOW_HUES } from '../palette.js';
-import * as media from '../media.js';
 import { BEATMAPS } from './beatmaps.js';
+import { FAMILY_PORTRAIT } from './family-portrait.js';
 import { drawClip, preloadClips } from '../fx/clips.js';
 import { skyBase, stripSnow, from, beatClock, boxFace, BOX_ZONES } from './common.js';
+import { stageLayout, drawPets, preloadTracks, act, PETS, aspectFix } from './stage.js';
 
 const cues = [
   // Stretched (×1.3) to the whole Jingle Bells track (ends ≈1:51) so the music is never cut mid-phrase.
@@ -76,28 +77,11 @@ const FOUNTAINS = (() => {
   return [{ x: 0.52, t0: k(0.3), t1: z, seed: 3 }, { x: 0.6, t0: k(0.3), t1: z, seed: 7 }, { x: 0.06, t0: k(0.65), t1: z, seed: 11 }];
 })();
 
-// Family constellation: computed once from a media-pack photo named "family…" (never leaves the device).
-let family = fallbackConstellation();
-let familyLoading = false;
-let familyIsPhoto = false;
-async function loadFamily() {
-  if (familyLoading) return;
-  familyLoading = true;
-  try {
-    const files = await media.list();
-    const f = files.find((x) => /^family/i.test(x.name) && /^image\//.test(x.type));
-    if (!f) return;
-    const url = await media.objectUrl(f.name);
-    const img = new Image();
-    img.src = url;
-    await img.decode();
-    family = photoToConstellation(img, { points: 72 }) || family;
-    familyIsPhoto = true;
-    seq = null;                                   // rebuild the swarm with the photo's shape
-  } catch (e) {
-    console.warn('family constellation: using the fallback shape', e);
-  }
-}
+// Family portrait (owner, 2026-11-18): a star-swarm portrait of Papá, Mamá and the baby, made from one family photo
+// with tools/portrait.js (only the light points are in the repo). It forms out of the swarm, sways, then holds
+// still facing the room, and flies back into the swarm, which writes the greeting.
+const PORTRAIT = { x: 0.73, y: 0.275, size: 0.27 };
+const PORTRAIT_OUT = 1.5;          // s after `title` when the portrait is back in the swarm
 
 // The closing swarm (drone-show style): sparks rise and gather into the family constellation as a turning 3D
 // figure, then re-form as "¡Feliz Navidad!" written in points.
@@ -111,7 +95,8 @@ function sequence() {
   seqFonts = fontsReady();
   const sparks = cloudScatter(N, { w: 3.2, h: 0.6, d: 1.4, seed: 91 });
   for (let i = 0; i < N; i++) sparks.p[i * 3 + 1] += 1.9;      // start below the formation, rising into it
-  const fam = familyIsPhoto ? cloudConstellation(family, N, { size: 0.95, seed: 93 }) : cloudHeart(N, { size: 0.9, seed: 93 });
+  // while the portrait shows, the swarm waits as a small glowing ball at its centre (the portrait forms out of it)
+  const fam = cloudSphere(N, { size: 0.12, seed: 93 });
   seq = [
     { at: 0, cloud: sparks },
     { at: C.at('family-constellation'), cloud: fam, dur: 6.5 },
@@ -121,6 +106,9 @@ function sequence() {
 }
 
 const SLEIGH = 's10-santa-sleigh';
+// The pets' wave: each fades in just before `wave`, waves (staggered 0.3 s, left → right), and fades out before `cut`.
+const WAVES = Object.fromEntries(PETS.map((p, i) => [p, [act(`s10-${p}-wave`, C.at('wave') + 0.3 * i, C.at('cut'))]]));
+
 /**
  * Draws the sleigh clip with the back of the sleigh on the trail's head (path(k), k = 0..1 across the sky), tilted
  * a little along the arc. Fades in and out at the sky's edges. Nothing is drawn while the clip is missing: the
@@ -143,7 +131,7 @@ export default {
   // Live-moment fallback (TREATMENT §05): show the projected star if the real one isn't on the tree.
   options: { projectedStar: false },
   zones: ['wall', 'rightStrip', 'backdrop', 'stage', ...BOX_ZONES, 'tree', 'star'],
-  enter() { loadFonts(); loadFamily(); sequence(); preloadClips([SLEIGH]); },
+  enter() { loadFonts(); sequence(); preloadClips([SLEIGH]); preloadTracks(WAVES); },
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
     const fw = C.env(local, 'fireworks', 'wave', 2, 3);
@@ -175,8 +163,22 @@ export default {
         for (const f of FOUNTAINS) sparkFountain(ctx, w, h, local, { ...f, y: 0.97, height: 0.3, alpha: 0.85 * A, surge: pulse });
         for (const f of FIREWORKS) firework3d(ctx, w, h, local, { ...f, alpha: A });
         snowfall(ctx, w, h, soft, { density: 0.5 * B.steps(local, C.at('wave'), 8), alpha: A });
-        // The swarm: sparks gather into the family constellation, then spell the greeting.
-        if (fam > 0) {
+        if (local > C.at('wave') - 2 && local < C.at('cut')) {
+          drawPets(ctx, stageLayout(env, w, h), WAVES, local, { inAt: C.at('wave') - 1.6, outAt: C.at('cut') - 1.8, outEnd: C.at('cut') - 0.2 });
+        }
+        // The family portrait: forms out of the swarm, holds still facing the room, flies back for the greeting.
+        const famAt = C.at('family-constellation'), pEnd = C.at('title') + PORTRAIT_OUT - famAt;
+        if (local > famAt && local < famAt + pEnd) {
+          // undo the wall canvas's non-square pixels so the faces keep their proportions
+          const k = aspectFix(env, w, h);
+          ctx.save(); ctx.translate(PORTRAIT.x * w, 0); ctx.scale(k, 1); ctx.translate(-PORTRAIT.x * w, 0);
+          portraitSwarm(ctx, w, h, bt, local - famAt, { data: FAMILY_PORTRAIT, ...PORTRAIT, alpha: A, end: pEnd, hold: [3.5, pEnd - 2.5],
+            source: { cloud: formation(local, sequence()), cx: SWARM.cx, cy: SWARM.cy, scale: SWARM.scale } });
+          ctx.restore();
+        }
+        // The swarm: sparks gather, hand over to the portrait, then spell the greeting.
+        const handOff = clamp((local - famAt) / 2.5) * (1 - clamp((local - C.at('title') + 0.5) / 2));
+        if (fam > 0 && handOff < 0.99) {
           const text = local >= C.at('title');
           const settle = text ? C.prog(local, 'title', { after: 4.5 }) : 0;
           renderCloud(ctx, w, h, bt, formation(local, sequence()), {
@@ -185,7 +187,7 @@ export default {
             rotY: (0.42 * Math.sin(bt * 0.2)) * (1 - settle) + 0.08 * Math.sin(bt * 0.3) * settle,
             rotX: 0.1 * Math.sin(bt * 0.14) * (1 - settle),
             color: text ? sweepColors(['gold', 'gold', 'snow', 'candle'], bt, 0.1, 0.35) : sweepColors(['gold', 'candle', 'rose', 'gold'], bt, 0.08),
-            alpha: A * Math.min(1, fam * 4) * (0.9 + 0.1 * bar),
+            alpha: A * Math.min(1, fam * 4) * (1 - handOff) * (0.9 + 0.1 * bar),
             size: text ? 0.85 : 1,
           });
         }

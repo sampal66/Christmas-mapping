@@ -8,7 +8,7 @@
 |---|---|
 | **Status** | v1 — requirements agreed, build in progress |
 | **Show date** | December 24, 2026 (evening) |
-| **Last updated** | 2026-11-17 |
+| **Last updated** | 2026-11-18 |
 
 ---
 
@@ -69,13 +69,13 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 ### 5.2 Show content
 | ID | Feature | Priority | Status |
 |---|---|---|---|
-| C1 | 11 scenes (see §07 and [TREATMENT](TREATMENT.md)), ≈12 minutes (10–15), light show first | Must | ⏳ light-show scenes built (s00, s01, s02, s04, s06, s09, s10 visuals; WP-03); story scenes s03/s05/s07/s08 are timed placeholders (WP-08); s04 box chaos + s05 drone Mickey built, s01/s10 polished (WP-11); s06 pet star figures built (WP-11b) |
-| C2 | 4 pet characters in classic hand-drawn style (Connor, Alaska, Orion, Gandalf) | Must | ✅ clips made: s04 rummaging (WP-04) + 27 story clips (idle/talk/look-up per pet, actions, waves) and Alaska's tail (WP-04b); s06 star figures (WP-11b). Placing the story clips → WP-08 |
-| C3 | Public-domain cameos: *Steamboat Willie* Mickey (1928) and E.H. Shepard-style Pooh | Should | ✅ star-figure Mickey (1928 design) in s05 (WP-11; no clip: the provider blocked it); Shepard-style Pooh clip `s07-pooh-float` (WP-04b), placed by WP-08 |
+| C1 | 11 scenes (see §07 and [TREATMENT](TREATMENT.md)), ≈12 minutes (10–15), light show first | Must | ⏳ light-show scenes built (s00, s01, s02, s04, s06, s09, s10 visuals; WP-03); story scenes s03, s05, s07, s08 built with the pets acting on their SCRIPT cues + the s10 wave (WP-08); s04 box chaos + s05 drone Mickey built, s01/s10 polished (WP-11); s06 pet star figures built (WP-11b) |
+| C2 | 4 pet characters in classic hand-drawn style (Connor, Alaska, Orion, Gandalf) | Must | ✅ clips made: s04 rummaging (WP-04) + 27 story clips (idle/talk/look-up per pet, actions, waves) and Alaska's tail (WP-04b); s06 star figures (WP-11b). Story clips placed on the stage (WP-08, `scenes/stage.js`) |
+| C3 | Public-domain cameos: *Steamboat Willie* Mickey (1928) and E.H. Shepard-style Pooh | Should | ✅ star-figure Mickey (1928 design) in s05 (WP-11; no clip: the provider blocked it); Shepard-style Pooh clip `s07-pooh-float` (WP-04b), placed in s07 with the star in his pot (WP-08) |
 | C4 | Spanish narration: bright, warm storyteller, neutral Latin American accent, plus pet character voices; ≈3 min of speech in total | Must | 🔵 WP-06: script approved ([SCRIPT.md](SCRIPT.md)); 6 voices cast, all lines generated; take picks pending |
 | C5 | Instrumental public-domain Christmas music, plus original stingers and effects | Must | 🟡 WP-05: every music cue sourced (PD USAF Band recordings + ElevenLabs originals, assets/CREDITS.md); owner listening checks + master-mix assembly left |
-| C6 | Tender first-Christmas message from Papá and Mamá; no photos on screen, but one family photo becomes the closing constellation (processed on device) | Must | ⏳ |
-| C7 | Live finale: real star placed with the baby, tree lights plugged in, big closing | Must | ⏳ |
+| C6 | Tender first-Christmas message from Papá and Mamá; no photos on screen, but one family photo becomes the closing constellation (processed on device) | Must | ⏳ s08 built (WP-08); closing **star-swarm family portrait** in s10 (~4,900 lights from one family photo, owner chose to commit the points; the photo is not in the repo); message audio → WP-08b mix |
+| C7 | Live finale: real star placed with the baby, tree lights plugged in, big closing | Must | ⏳ s10 pets' wave built (WP-08); on-wall rehearsal → WP-09 |
 
 ### 5.3 Out of scope
 - Commercial use or public performances.
@@ -138,6 +138,8 @@ Target ≈12 min (agreed range 10–15). The beat sheet, live-moment plan and cu
 | Tree too bright or green | Tree lights off until the finale; the flocked tips take colour well. |
 
 ## Changelog
+- **2026-11-18** — WP-08/08b session: C6 family portrait; pets as star-swarm portraits (s06).
+- **2026-11-18** — WP-08: C1/C2/C3/C6/C7 status (story scenes built, pets placed, s10 wave, cut-out family photo).
 - **2026-11-18** — WP-04b: C2/C3 status (story clips, Pooh clip, no Mickey clip).
 - **2026-11-18** — WP-04: C2/C3 status (model sheets, clip layer, s04 clips; WP-04b).
 - **2026-11-17** — WP-11b: C1/C2 status (s06 pet star figures).

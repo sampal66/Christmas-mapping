@@ -13,6 +13,13 @@ const bez = (p0, p1, lift, k) => {
   return [(1 - k) ** 2 * p0[0] + 2 * k * (1 - k) * cx + k * k * p1[0], (1 - k) ** 2 * p0[1] + 2 * k * (1 - k) * cy + k * k * p1[1]];
 };
 
+// s07's path points in backdrop fractions (the honey pot, where Connor takes it, where he puts it down); stage.js
+// places Pooh's pot and Connor's mouth on these.
+export const RETURN_PATH = { pot: [0.42, 0.32], paw: [0.24, 0.84], end: [0.04, 0.84] };
+
+/** s07: how far along Connor's walk (PAW → END) the star is, 0..1 (Connor's position follows it). */
+export const carryProgress = (local, C) => easeInOutSine(prog(local, C.at('carry'), C.at('fly')));
+
 /** The star zone's centre and five-point radius in wall pixels (so the hand-over between zones is seamless). */
 function starOnWall(env, w) {
   const c = from(env, 'star', 0.5, 0.5, [0.33, 0.17]);
@@ -20,8 +27,11 @@ function starOnWall(env, w) {
   return { c, R: 0.36 * Math.abs(r[0] - l[0]) * w };
 }
 
-/** s03: the star is batted off the tree, turns into a night-sky star, bounces off the gift tower and escapes. */
-export function drawEscape(zoneId, ctx, w, h, t, local, env, C) {
+/**
+ * s03: the star is batted off the tree, turns into a night-sky star, bounces off the gift tower and escapes.
+ * `mid` (optional) draws on the wall between the sky and the star: WP-08's pets, so the star stays in front of them.
+ */
+export function drawEscape(zoneId, ctx, w, h, t, local, env, C, mid = null) {
   const bat = C.at('bat');
   if (zoneId === 'star') {
     if (local < bat) projectedStar(ctx, w, h, t, { alpha: clamp(local / 2), spin: 1 });
@@ -29,6 +39,7 @@ export function drawEscape(zoneId, ctx, w, h, t, local, env, C) {
   }
   if (zoneId !== 'wall') return;
   skyBase(zoneId, ctx, w, h, t);
+  mid?.();
   if (local < bat) return;
   const { c, R } = starOnWall(env, w);
   const S = [c[0] * w, c[1] * h];
@@ -45,8 +56,11 @@ export function drawEscape(zoneId, ctx, w, h, t, local, env, C) {
   sparkleBurst(ctx, w, h, local, { t0: bat + 2.6, x: Bp[0] / w, y: Bp[1] / h, count: 22, spread: 0.08, up: 0.6, colors: ['gold', 'snow'], duration: 1.6 });
 }
 
-/** s07: found in Pooh's honey pot, handed down, carried by Connor, flown to the tree tip, five-point again. */
-export function drawReturn(zoneId, ctx, w, h, t, local, env, C) {
+/**
+ * s07: found in Pooh's honey pot, handed down, carried by Connor, flown to the tree tip, five-point again.
+ * `mid` as in drawEscape (Pooh and the pets, under the star).
+ */
+export function drawReturn(zoneId, ctx, w, h, t, local, env, C, mid = null) {
   const settle = C.at('settle');
   if (zoneId === 'star') {
     const a = clamp((local - settle - 2.5) / 0.5);
@@ -58,17 +72,18 @@ export function drawReturn(zoneId, ctx, w, h, t, local, env, C) {
   }
   if (zoneId !== 'wall') return;
   skyBase(zoneId, ctx, w, h, t);
+  mid?.();
   const found = C.at('found');
   if (local < found || local > settle + 2.6) return;
   const bd = (u, v) => { const p = from(env, 'backdrop', u, v, [0.53 + u * 0.47, v]); return [p[0] * w, p[1] * h]; };
-  const POT = bd(0.42, 0.32), PAW = bd(0.24, 0.84), END = bd(0.04, 0.84);
+  const POT = bd(...RETURN_PATH.pot), PAW = bd(...RETURN_PATH.paw), END = bd(...RETURN_PATH.end);
   const { c, R } = starOnWall(env, w);
   const TIP = [c[0] * w, c[1] * h];
   let pos, k = 1;                                            // k: 1 = night star, 0 = five-point
   if (local < found + 7) pos = POT;                           // glowing in the honey pot
   else if (local < C.at('carry')) pos = bez(POT, PAW, 0.02 * h, easeInOutSine(prog(local, found + 7, C.at('carry'))));
   else if (local < C.at('fly')) {                             // carried along the ground line, bobbing with each step
-    const q = easeInOutSine(prog(local, C.at('carry'), C.at('fly')));
+    const q = carryProgress(local, C);
     pos = [PAW[0] + (END[0] - PAW[0]) * q, PAW[1] + (END[1] - PAW[1]) * q - Math.abs(Math.sin(local * Math.PI * 1.8)) * 0.012 * h];
   } else if (local < settle) pos = bez(END, TIP, 0.18 * h, easeInOutSine(prog(local, C.at('fly'), settle)));
   else { pos = TIP; k = 1 - clamp((local - settle) / 2.2); }

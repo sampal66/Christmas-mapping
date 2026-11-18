@@ -2,7 +2,7 @@
 // Bump VERSION whenever any shell file changes, or the iPad keeps serving the old copy.
 // The smoke test fails if a .html/.css/.js file in app/ is missing from SHELL.
 // Media-pack files live in IndexedDB, not here, and never go over the network.
-const VERSION = 'v21';
+const VERSION = 'v25';
 const CACHE = `christmas-mapper-${VERSION}`;
 const SHELL = [
   './',
@@ -22,6 +22,7 @@ const SHELL = [
   'js/homography.js',
   'js/layout.js',
   'js/media.js',
+  'js/idle-music.js',
   'js/model-store.js',
   'js/model-view.js',
   'js/timeline.js',
@@ -46,7 +47,8 @@ const SHELL = [
   'js/fx/stars.js',
   'js/fx/toys.js',
   'js/fx/mickey-stars.js',
-  'js/fx/pet-stars.js',
+  'js/fx/portrait-swarm.js',
+  'js/fx/pet-portraits.js',
   'js/fx/clips.js',
   'assets/atlas/orion.png',
   'assets/atlas/canisMajor.png',
@@ -86,13 +88,18 @@ const SHELL = [
   'assets/clips/s10-santa-sleigh.mp4',
   'js/scenes/index.js',
   'js/scenes/common.js',
-  'js/scenes/placeholder.js',
+  'js/scenes/stage.js',
+  'js/scenes/family-portrait.js',
   'js/scenes/star-story.js',
   'js/scenes/s00-preshow.js',
   'js/scenes/s01-wall-wakes.js',
   'js/scenes/s02-tree-alive.js',
+  'js/scenes/s03-star-escapes.js',
   'js/scenes/s04-magic-boxes.js',
+  'js/scenes/s05-where-is-the-star.js',
   'js/scenes/s06-constellations.js',
+  'js/scenes/s07-honey-pot.js',
+  'js/scenes/s08-for-baby.js',
   'js/scenes/s09-real-star.js',
   'js/scenes/s10-finale.js',
   'fonts/mountains-of-christmas-latin-700-normal.woff2',

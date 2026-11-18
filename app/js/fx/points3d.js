@@ -198,10 +198,11 @@ export function morphClouds(a, b, k, { stagger = 0.4, lift = 0.5, seed = 17, out
 /**
  * Draw a cloud. opts: cx, cy (0..1 centre on the zone), scale (pixels per unit, as a share of min(w, h)),
  * rotX/rotY/rotZ (radians), dist (camera distance in units; smaller = stronger perspective), size (point radius
- * scale), alpha, color (token, or fn(i, x, y, z) → token), twinkle (0..1).
+ * scale), alpha, color (token, or fn(i, x, y, z) → token), twinkle (0..1), core (white centre of each light:
+ * smaller keeps a picture's colours).
  */
 export function renderCloud(ctx, w, h, t, cloud, opts = {}) {
-  const { cx = 0.5, cy = 0.5, scale = 0.25, rotX = 0, rotY = 0, rotZ = 0, dist = 3.2, size = 1, alpha = 1, color = 'snow', twinkle = 0.15 } = opts;
+  const { cx = 0.5, cy = 0.5, scale = 0.25, rotX = 0, rotY = 0, rotZ = 0, dist = 3.2, size = 1, alpha = 1, color = 'snow', twinkle = 0.15, core = 0.3 } = opts;
   if (alpha <= 0.002 || !cloud) return;
   const S = Math.min(w, h) * scale;
   const base = Math.max(2.5, Math.min(w, h) / 260) * size;
@@ -224,7 +225,7 @@ export function renderCloud(ctx, w, h, t, cloud, opts = {}) {
   const op = ctx.globalCompositeOperation, ga = ctx.globalAlpha;
   ctx.globalCompositeOperation = 'lighter';
   for (const [tok, arr] of buckets) {
-    const sprite = glowSprite(tok, 0.3);
+    const sprite = glowSprite(tok, core);
     for (let j = 0; j < arr.length; j += 4) {
       const r = arr[j + 2] * 2.2;
       ctx.globalAlpha = ga * alpha * arr[j + 3];
