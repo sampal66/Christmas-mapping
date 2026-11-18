@@ -48,3 +48,55 @@ then 5–8 (story extras, ≈ 10.6k), then 9–11 (nice-to-have and high-risk it
 
 Not proposed: anything with modern Disney or Pixar designs, Paddington or copyrighted songs (AGENTS §06); a group clip
 of all four pets (keeping four characters consistent in one generation is too risky for the budget).
+
+## Part B · More public-domain characters for a baby's first Christmas (owner request, 2026-11-18)
+
+> The owner asked for public-domain, free-to-use children's characters beyond the two allowed cameos.
+> **This needs a rule change**: AGENTS §06 allows only Steamboat Willie Mickey and Shepard-style Pooh. Nothing below is
+> used until the owner approves the change (draft wording at the end).
+> Copyright status below is for the **US** (works published in 1930 or earlier are public domain as of 2026). Other
+> countries count life + 70 years, so it can differ. The show is a private family screening, so the risk is low either way.
+> Rules for every item: use the **original book or engraving look**, never a later studio version (Disney, Pixar,
+> modern merchandise). Never use a trademarked logo or a modern product name in on-screen text. Record each character's
+> source in `assets/CREDITS.md`. Same safety limits (DESIGN_SYSTEM §06) and the same cel-clip pipeline (stacked alpha).
+
+### Candidates (ranked by fit with the story and the audience)
+
+| # | Character · source (PD basis) | Scene · time | What it adds | Credits | Risk |
+|---|---|---|---|---|---|
+| B1 | **Nutcracker soldier**: Hoffmann 1816, Tchaikovsky 1892 | s04 · 3:45 (`box2-open`) | A wooden Nutcracker marches out of the box and salutes. Toys come alive, which is the box scene's idea, and it links to the Nutcracker music in s06. | start frame 2 × 190 + kling 5 s = **2,501** | Low. Use an original design (red coat, tall black hat), not a film version. |
+| B2 | **The Velveteen Rabbit**: Margery Williams, illustrated by William Nicholson, 1922 | s08 · 8:40–9:00 (`gather`) | A worn toy rabbit nuzzles up by the pets and its ears twitch as it "becomes Real". The book is about a child's first toy, a quiet echo of the s08 message. Code adds the star dust. | **2,501** | Low. |
+| B3 | **The Gingerbread Man**: folk tale, *St. Nicholas* magazine 1875 | s04 · 4:15 (`finale`) | A gingerbread cookie hops out of box 1, waves and runs off ("catch me"), while the dogs' heads turn. | **2,501** | Low. |
+| B4 | **Peter Rabbit**: Beatrix Potter 1902 (PD in the US; Potter died 1943, so PD in life + 70 countries since 2014) | s10 · 11:06 (`wave`) | A small rabbit in a blue jacket, in Potter's watercolour style, waves with the pets. A classic first-year baby book. | **2,501** | Medium: the publisher holds trademarks on the name, and a provider may block "Peter Rabbit". Describe the character in the prompt without naming him; no name on screen. |
+| B5 | **Piglet** (1926) / **Tigger** (1928): A.A. Milne, illustrated by E.H. Shepard (US PD since 2022 / 2024) | s07 · 7:39 (`found`) | Pooh's friend peeks over the balloon string, then waves goodbye with Pooh (pairs with items 2–3). | **2,501** | Medium-high: same legal basis as the Pooh we already use, but providers may treat it like Disney. Shepard look only, stop at the first block. |
+| B6 | **Cheshire Cat**: Lewis Carroll, illustrated by John Tenniel, 1865 | s06 · 6:41 (`felis` + 3) | Next to Felis, a grin fades in before the cat appears, right on Gandalf's "¡Un gato! ¡Ese soy yo!". | **2,501** | Low-medium. Tenniel's cross-hatched style, not pink stripes. |
+| B7 | **"Twinkle, Twinkle, Little Star"**: Jane Taylor 1806, traditional French melody | s00 pre-show / s09 hold loop | The show is about a star: a music-box or celesta *Twinkle Twinkle* under the baby's star moment (s09), or as the idle tune. | ElevenLabs music, ≈ 1,000 (estimate; confirm before generating, AGENTS §07) | Low. Music, not a character. A public-domain recording is an alternative. |
+| — | **Free, no credits:** *Hey Diddle Diddle* (nursery rhyme), the cow jumping over the moon as an s06 drone-swarm constellation, built in code like the pet portraits | s06 sky ride | A nursery-rhyme laugh in the sky. | 0 (code WP) | None. |
+
+Not recommended:
+- **Minnie** (Steamboat Willie, 1928) and early **Pluto** (1930): public domain in the US, but providers block Disney characters as they did Mickey.
+- **Felix the Cat** (early shorts are PD, but the trademark is active), **Raggedy Ann** (active trademark), **Tintin** and **Popeye** (aggressive rights holders, or not for babies).
+- Still forbidden: Rudolph, Frosty, Paddington, *The Snowman*.
+
+### How it fits the 40k
+
+Each new character needs its own start frame (2 takes ≈ 380), because none is on file. Suggested mix (owner picks):
+
+| Set | Items | Credits |
+|---|---|---|
+| Part A 1–8 (frozen-moment fixes + story extras) | 1–8 | 25,452 |
+| Part B picks | B1 Nutcracker, B2 Velveteen Rabbit, B3 Gingerbread, B4 Peter Rabbit | 10,004 |
+| Music | B7 Twinkle Twinkle (estimate) | ≈ 1,000 |
+| **Total** | | **≈ 36,456** |
+| Contingency inside the 40k | | ≈ 3,544 |
+
+This drops Part A items 9–11 (pre-show music box, Orion out of box 2, Mickey film; 9,244), because B1/B3 do the box
+scene better. If more of Part B is wanted, B5 and B6 (5,002) replace items 7–8 (Orion eye-roll, Santa goodnight
+wave; 4,242).
+
+### Draft rule change for AGENTS §06 (apply only after owner approval)
+
+> **Allowed cameos:** *Steamboat Willie* Mickey (1928 design), E.H. Shepard-style Pooh, and these public-domain
+> characters in their original book look: the Nutcracker, the Velveteen Rabbit, the Gingerbread Man, Beatrix
+> Potter's Peter Rabbit (no name on screen), Shepard-style Piglet and Tigger, Tenniel's Cheshire Cat, and Mother Goose
+> nursery-rhyme figures. Never a later studio design. Record each source in `assets/CREDITS.md`.

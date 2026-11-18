@@ -180,7 +180,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 ## Open decisions / waiting on owner
 
-- **ElevenLabs budget (owner, 2026-11-18):** 59,890 credits left. Up to **40,000** may go to new generations; keep **≈ 20,000 in reserve** for fixes once the projector arrives (~Nov 27, WP-09). The wider dog re-takes (≈ 14k) come out of the reserve, not the 40k. Owner to approve items from [WP-12-proposal](work-packages/WP-12-proposal.md) before anything is generated.
+- **ElevenLabs budget (owner, 2026-11-18):** 59,890 credits left. Up to **40,000** may go to new generations; keep **≈ 20,000 in reserve** for fixes once the projector arrives (~Nov 27, WP-09). The wider dog re-takes (≈ 14k) come out of the reserve, not the 40k. Owner to approve items from [WP-12-proposal](work-packages/WP-12-proposal.md) before anything is generated. Part B (owner request) proposes more public-domain characters (Nutcracker, Velveteen Rabbit, Gingerbread Man, Peter Rabbit, Piglet/Tigger, Cheshire Cat) plus *Twinkle Twinkle*: it **needs an AGENTS §06 rule change**, drafted in the proposal, not applied.
 - ✅ Animation approach A chosen; style test passed (Gandalf #4, kling-2.5-turbo ≈2.1k credits per 5 s clip). Owner will buy **Creator** (121k/mo) for the character work. **Check the ElevenLabs credit balance**: ≈30 clips ≈ 45–65k credits on the cheaper video models (TREATMENT §09).
 - ✅ Projector decided: HAPPRUN H1 (throw ratio 1.4) on the tripod at 3.5 m, head 1.45 m; buy Nov 27. See [STAGE_SURVEY §03e](STAGE_SURVEY.md).
 - ✅ LCD-black design note: handled in DESIGN_SYSTEM §02 (`dusk` base, fade to starfield). Check the `dusk` value on the wall in WP-09.
