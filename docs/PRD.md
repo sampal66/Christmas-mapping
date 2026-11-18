@@ -74,7 +74,7 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 | C3 | Public-domain cameos: *Steamboat Willie* Mickey (1928) and E.H. Shepard-style Pooh | Should | ✅ star-figure Mickey (1928 design) in s05 (WP-11; no clip: the provider blocked it); Shepard-style Pooh clip `s07-pooh-float` (WP-04b), placed in s07 with the star in his pot (WP-08) |
 | C4 | Spanish narration: bright, warm storyteller, neutral Latin American accent, plus pet character voices; ≈3 min of speech in total | Must | 🔵 WP-06: script approved ([SCRIPT.md](SCRIPT.md)); 6 voices cast, all lines generated; take picks pending |
 | C5 | Instrumental public-domain Christmas music, plus original stingers and effects | Must | 🟡 WP-05: every music cue sourced (PD USAF Band recordings + ElevenLabs originals, assets/CREDITS.md); owner listening checks + master-mix assembly left |
-| C6 | Tender first-Christmas message from Papá and Mamá; no photos on screen, but one family photo becomes the closing constellation (processed on device) | Must | ⏳ s08 built: pets gather, the star warms, their constellations twinkle in the 26–45 s music-only beat (WP-08); the family photo constellation (s10) now uses a cut-out photo's transparency (figures only); message audio → WP-08b |
+| C6 | Tender first-Christmas message from Papá and Mamá; no photos on screen, but one family photo becomes the closing constellation (processed on device) | Must | ⏳ s08 built (WP-08); closing **star-swarm family portrait** in s10 (~4,900 lights from one family photo, owner chose to commit the points; the photo is not in the repo); message audio → WP-08b mix |
 | C7 | Live finale: real star placed with the baby, tree lights plugged in, big closing | Must | ⏳ s10 pets' wave built (WP-08); on-wall rehearsal → WP-09 |
 
 ### 5.3 Out of scope
@@ -138,6 +138,7 @@ Target ≈12 min (agreed range 10–15). The beat sheet, live-moment plan and cu
 | Tree too bright or green | Tree lights off until the finale; the flocked tips take colour well. |
 
 ## Changelog
+- **2026-11-18** — WP-08/08b session: C6 family portrait; pets as star-swarm portraits (s06).
 - **2026-11-18** — WP-08: C1/C2/C3/C6/C7 status (story scenes built, pets placed, s10 wave, cut-out family photo).
 - **2026-11-18** — WP-04b: C2/C3 status (story clips, Pooh clip, no Mickey clip).
 - **2026-11-18** — WP-04: C2/C3 status (model sheets, clip layer, s04 clips; WP-04b).

@@ -22,7 +22,7 @@
 | WP-06 | [Spanish script + narration and pet voices](work-packages/WP-06-script-voices.md) (`docs/SCRIPT.md`, ≈3 min of speech; TREATMENT §03–§04) | WP-10 | ✅ done (PR #8) | `claude/wp-06-script-voices` | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
 | WP-08 | [Story scenes s03, s05, s07, s08 + the pets' wave in s10](work-packages/WP-08-story-scenes.md): places the WP-04b clips on SCRIPT §03 cues around the star motion; s08 26–45 s visual beat (silence check) | WP-04b, WP-06 | 🟡 in review | `claude/hopeful-knuth-uibswc` | C1, C2, C3, C6, C7 |
-| WP-08b | [Master mix + idle music box](work-packages/WP-08b-master-mix.md): one cloud-rendered `master-mix.m4a` (music + voices + sfx, never committed) + the s00 music-box loop while idle/after the finale | WP-05, WP-06 | 🟢 ready (any order with WP-08) | — | C4, C5, M8 |
+| WP-08b | [Master mix + idle music box](work-packages/WP-08b-master-mix.md): one cloud-rendered `master-mix.m4a` (music + voices + sfx, never committed) + the s00 music-box loop while idle/after the finale | WP-05, WP-06 | 🔵 in progress (mix render waits on the ElevenLabs connector) | `claude/hopeful-knuth-uibswc` (PR #15) | C4, C5, M8 |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
 | WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | ✅ done (PR #10) | `claude/wp-11b-pet-constellations` | C1, C2 |
@@ -50,6 +50,10 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-18 · WP-08b (same session) + portraits** — Idle music box (`idle-music.js`, smoke-tested) and `tools/master-mix.js` (tested on stand-ins) done. **Left:** reconnect ElevenLabs (signed out: voices, sfx, underscores, s04/s09 music, music box live there), retry Commons for O Christmas Tree + Waltz (429; Carol, Silent Nights, Jingle Bells downloaded), render with `--src <dir> --out <dir> --previews`, hand over master-mix + music-box-loop.
+  Owner asked for **star-swarm portraits**: s06 pets now ≈1,100-light swarms of their cartoon art (`fx/portrait-swarm.js`, `fx/pet-portraits.js`; `pet-stars.js` removed); s10 ends on a ≈4,900-light **family portrait** (owner chose to commit the points; photo not kept). Rebuild with `tools/portrait.js` (header lists options; family used cut-out → face sharpen → 'led' mode, faces as focus ellipses, baby 10×).
+  Cost: s10 worst ≈56 ms headless (was 43): if the iPad drops frames, regenerate the family portrait with fewer points (3,500). Drive download hosts were added to this environment for the photo.
 
 - **2026-11-18 · WP-08** — s03/s05/s07/s08 built (`scenes/s03-…`, `s05-…`, `s07-…`, `s08-…`; placeholder.js removed) + s10 wave, on the new **`scenes/stage.js`**: pets drawn on the wall between the sky and the star (`mid` hook in star-story; motion unchanged), dogs on the floor by the tower, cats on the tower top, Pooh's pot / Connor's mouth on the star's path. s08 26–45 s: pets' constellations twinkle + star warms. `sw.js` v22. Render ≈ 5–8 ms avg headless.
   Owner (this session): **one fixed size per pet** (Connor 1, Alaska 0.75, Orion = Gandalf 0.5; change only for depth); per-clip `FRAME` table (measured from each clip's first frame) keeps size/spot across clips: re-measure if a clip is re-cut.

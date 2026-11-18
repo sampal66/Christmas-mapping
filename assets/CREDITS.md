@@ -58,3 +58,10 @@ Generated 2026-11-17 for this show; original recordings, owned by the account ho
 | `s04-box-chaos.mp3`: joyful chaotic cartoon-orchestra romp, 75 s, 132 bpm 4/4 (replaces `s04-sugar-plum.mp3` in the mix) | ElevenLabs Music v2.5, flow "CMS WP-06 sound effects", 1 take | original | sections: tiptoe → burst 0:15 → bigger 0:26 → quiet 0:44 → finale 0:57 → last chord 1:11; level −21…−13 dB RMS, max rise 6.8 dB/s (no hits) |
 | `s09-hold-bells.mp3`: warm bell "magic train" cue, 32 s, 120 bpm 4/4 (replaces the music box in s09; s00 keeps it) | ElevenLabs Music v2.5, same flow, 1 take | original (in that spirit; no film melody) | scene 0 = file 7.97 s; loop file 15.97–27.97 s (6 bars, 1 dB seam) |
 | `s04-sfx-rummage` (12 s loop), `s04-sfx-tumble`, `s04-sfx-wobble`, `s04-sfx-flurry` | ElevenLabs Sound Effects v2, same flow, 1 take each | original | soft box-search layers for s04 (SCRIPT §06) |
+
+## Star-swarm portraits (2026-11-18)
+
+| File | Source | Licence | Notes |
+|---|---|---|---|
+| `app/js/fx/pet-portraits.js` | derived from `assets/characters/<pet>/start-standing.jpg` (our own generated art, above) by `tools/portrait.js` | as the source art | light points only |
+| `app/js/scenes/family-portrait.js` | derived from one family photo supplied by the owner (not in the repo) by `tools/portrait.js` | owner's own; published at the owner's request (2026-11-18) | light points only; the photo was processed in a scratch folder and not kept |
