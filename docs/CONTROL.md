@@ -54,7 +54,7 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
 - **2026-11-18 · WP-08c** — Ear tips: `EAR_FADE` (top 4 % fades) on every pet clip (s04 peeks too); all but 3 s04 clips touch row 0. Star-dust arrivals/exits in `drawPets` (s03/s05/s07/s08/s10 wave); `towerGlow` lights the tower in the story scenes and the s10 wave. s07: Connor says his line (talk loop), walks 1.5 stride-matched cycles (clip time ← distance, `carryWalk`), looks up at `fly`; the star rises in a sparkle arc to the tip by `settle`. `sw.js` v26. Smoke + flash check pass.
-  **Left:** owner OK for wider dog re-takes (Connor + Alaska idle/talk/lookup = 6 clips ≈ 2.3k credits each ≈ 14k; s07/s10 dog action clips also touch the top); then re-measure `FRAME` and drop `EAR_FADE` for those clips. Check Connor's walk end vs the tree on the real wall (WP-09): `WALK.cycles`.
+  **Left:** owner chose the fade for now; only if it looks wrong on the wall: wider dog re-takes (Connor + Alaska idle/talk/lookup = 6 clips ≈ 2.3k credits each ≈ 14k; s07/s10 dog action clips also touch the top); then re-measure `FRAME` and drop `EAR_FADE` for those clips. Check Connor's walk end vs the tree on the real wall (WP-09): `WALK.cycles`.
 
 - **2026-11-18 · WP-08 close-out** — PR #15 merged (owner). Owner review of the live show → **WP-08c** brief (ears cut in the clips themselves: tips past the video's top edge, start frames are fine; pop-in entrances; dark boxes make the cats float; Connor's 20 s floor slide skates). Owner asked for an **automatic pre-check** once everything is assembled → **WP-12** brief. **`docs/BOX_SPECS.md`**: 40 cm + 30 cm white cubes for the owner's cardboard build.
   Order: WP-08b (when ElevenLabs is back) and WP-08c in any order → WP-12 → owner's manual scene check → WP-09 on the wall.
@@ -175,7 +175,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 - ✅ LCD-black design note: handled in DESIGN_SYSTEM §02 (`dusk` base, fade to starfield). Check the `dusk` value on the wall in WP-09.
 - Tape-measure the remaining items in [STAGE_SURVEY §05](STAGE_SURVEY.md) (star size, counter height).
 - ✅ PR #1 merged and GitHub Pages enabled: https://sampal66.github.io/Christmas-mapping/
-- WP-08c: OK (or not) the wider-framed dog re-takes for the cut ear tips: Connor + Alaska idle/talk/lookup, 6 clips ≈ 14k credits (soft fade is live meanwhile).
+- WP-08c ear tips: owner (2026-11-18) keeps the soft fade for now; wider-framed dog re-takes (Connor + Alaska idle/talk/lookup, 6 clips ≈ 14k credits) only if the fade doesn't read well on the real wall (WP-09).
 - Reconnect the ElevenLabs connector with full permissions (from a PC). This blocks WP-04 and WP-05.
 - More pet photos (full body, side view) for WP-04.
 - Soundbar model (for WP-01 delay defaults; optional).
