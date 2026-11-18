@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Prepares a generated character clip for the app (WP-04; DESIGN_SYSTEM §09). Cloud-side only: ffmpeg is not an app
 # dependency. Steps: crush near-black to pure black (so the 'screen' blend leaves no grey box), crop to the
-# character's bounding box over the whole clip, scale to ≤ 540 px tall, H.264 CRF 28, 30 fps, no audio, faststart.
+# character's bounding box over the whole clip, scale to ≤ 540 px tall, 30 fps, then pack it as stacked alpha
+# (tools/clip-alpha.js: colour on top, matte below; H.264 CRF 26, no audio, faststart).
 # With --loop, the clip's last 0.5 s crossfades into its first 0.5 s so it repeats without a seam.
 #
 # Usage: tools/clip-prep.sh <in.mp4> <id> [--loop] [--pad N] [--maxh N]
@@ -17,8 +18,9 @@ while [ $# -gt 0 ]; do
   esac
   shift
 done
-out="$(dirname "$0")/../app/assets/clips/$id.mp4"
-mkdir -p "$(dirname "$out")"
+final="$(dirname "$0")/../app/assets/clips/$id.mp4"
+mkdir -p "$(dirname "$final")"
+out="$(mktemp --suffix=.mp4)"   # cropped colour clip; packed with its matte at the end
 
 # Levels: anything under ≈7 % brightness becomes black (the generator's "black" drifts to dark grey).
 levels="colorlevels=rimin=0.07:gimin=0.07:bimin=0.07"
@@ -40,8 +42,11 @@ if [ $loop = 1 ]; then
   off=$(awk -v d="$D" -v x=$x 'BEGIN{printf "%.3f", d - 2*x}')
   ffmpeg -v error -y -i "$in" -filter_complex \
     "[0:v]$crop,split[a][b];[a]trim=start=$x,setpts=PTS-STARTPTS[main];[b]trim=0:$x,setpts=PTS-STARTPTS[head];[main][head]xfade=transition=fade:duration=$x:offset=$off[v]" \
-    -map "[v]" -an -c:v libx264 -preset slow -crf 28 -movflags +faststart "$out"
+    -map "[v]" -an -c:v libx264 -preset fast -crf 12 "$out"
 else
-  ffmpeg -v error -y -i "$in" -vf "$crop" -an -c:v libx264 -preset slow -crf 28 -movflags +faststart "$out"
+  ffmpeg -v error -y -i "$in" -vf "$crop" -an -c:v libx264 -preset fast -crf 12 "$out"
 fi
-printf '%s  crop %sx%s+%s+%s → %s  %s\n' "$id" "$cw" "$ch" "$x1" "$y1" "$(ffprobe -v error -show_entries stream=width,height:format=duration -of csv=p=0 "$out" | tr '\n' ' ')" "$(du -h "$out" | cut -f1)"
+# Stacked alpha: colour on top, matte below (no black box behind the character, on any browser).
+node "$(dirname "$0")/clip-alpha.js" "$out" "$final" >/dev/null
+rm -f "$out"
+printf '%s  crop %sx%s+%s+%s → %s  %s\n' "$id" "$cw" "$ch" "$x1" "$y1" "$(ffprobe -v error -show_entries stream=width,height:format=duration -of csv=p=0 "$final" | tr '\n' ' ')" "$(du -h "$final" | cut -f1)"

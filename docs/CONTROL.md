@@ -17,7 +17,7 @@
 | WP-02 | [Media pack + offline mode](work-packages/WP-02-media-offline.md) | WP-00 | ✅ done (PR #2) | `claude/wp-02-media-offline` | M8, M9 |
 | WP-03 | [Effects library + light-show scenes](work-packages/WP-03-effects-scenes.md) | WP-01, WP-10 | ✅ done (PR #6) | `claude/wp-03-effects-scenes` | C1 (s00, s01, s02, s04, s06, s09, s10) + owner notes (3D swarm, mega-tree, box tower, atlas art) |
 | WP-04 | [Character pipeline](work-packages/WP-04-characters.md): model sheets, clip layer (`fx/clips.js`), s04 rummaging clips; Mickey film + Santa sleigh after the credit upgrade | WP-03, WP-10, ElevenLabs connector | ✅ done (PR #11) | `claude/wp-04-characters` | C2, C3 |
-| WP-04b | Story acting library (≈29 clips for s03/s05/s07/s08/s10, shot list in the WP-04 brief) + Alaska tail re-prompt + Mickey film + Santa sleigh; needs the ElevenLabs upgrade (≈84k+) | WP-04 merged, owner judged s04 clips on TV/projector | ⚪ needs brief (copy the WP-04 shot list) | — | C2, C3 |
+| WP-04b | [Story acting clips + Alaska tail, Mickey film, Santa sleigh](work-packages/WP-04b-story-clips.md) (32 clips, ≈ 75k of the 125,959 credits that must last the whole project) | WP-04 merged | 🟢 next | — | C2, C3 |
 | WP-05 | [Music sourcing + beat maps](work-packages/WP-05-music-beats.md): PD military-band carols, Musopen Tchaikovsky, ElevenLabs music box + 3 underscores; beat maps (auto + tap tool) applied to the light-show scenes | WP-03, WP-10 | ✅ done (PR #7) | `claude/wp-05-music-beats` | C5, C1 beat sync |
 | WP-06 | [Spanish script + narration and pet voices](work-packages/WP-06-script-voices.md) (`docs/SCRIPT.md`, ≈3 min of speech; TREATMENT §03–§04) | WP-10 | ✅ done (PR #8) | `claude/wp-06-script-voices` | C4 |
 | WP-07 | MP4 export tool | WP-01 | ⚪ needs brief | — | M10 |
@@ -49,6 +49,9 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-18 · WP-04 fix** — Owner TV review: animations good, but black boxes behind them. Clips are now **stacked alpha** (`tools/clip-alpha.js`: colour on top, flood-filled matte below; `clip-prep.sh` calls it) and `fx/clips.js` rebuilds a transparent frame (re-keyed after each seek). Same 4 clips re-prepped (≈ 0.5 MB each). `sw.js` v20.
+  Owner: **125,959 ElevenLabs credits must last the whole project** → WP-04b brief written with a budget (≈ 75k, stop at 80k; ≈ 38k left unallocated).
 
 - **2026-11-18 · WP-04** — Brief written + approved; owner capped spend at the 18.8k credits left (upgrade later). Model sheets picked (Connor 2, Alaska 1, Orion 1; Gandalf = style test #4) → `assets/characters/`. `fx/clips.js`: blob-loaded `<video>` per clip, `'screen'` blend, re-seeked to scene time; media pack overrides `app/assets/clips/<id>.mp4`. `tools/clip-prep.sh` (black crush, crop, 540 px, CRF 28, `--loop` crossfade).
   s04: Gandalf ears + pop (peaks on `box1-open`), Connor tail (loop), Orion ears in; placeholders stay as fallback. ≈15.9k credits spent.
