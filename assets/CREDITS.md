@@ -79,8 +79,10 @@ Generated 2026-11-17 for this show; original recordings, owned by the account ho
 |---|---|---|---|
 | `app/js/fx/pet-portraits.js` | derived from `assets/characters/<pet>/start-standing.jpg` (our own generated art, above) by `tools/portrait.js` | as the source art | light points only |
 | `app/js/scenes/family-portrait.js` | derived from one family photo supplied by the owner (not in the repo) by `tools/portrait.js` | owner's own; published at the owner's request (2026-11-18) | light points only; the photo was processed in a scratch folder and not kept |
+| `app/js/fx/cow-portrait.js` | derived from `assets/characters/cow/cow-moon.svg`, an original drawing made in code for this project (WP-13b) of *Hey Diddle Diddle* (public-domain nursery rhyme) | our own work | light points only; no copied art |
 
 ## Changelog
+- **2026-11-19** — WP-13b: the cow over the moon (original SVG → star swarm).
 - **2026-11-19** — WP-14b: four public-domain characters (start frames + clips) with their sources.
 - **2026-11-19** — WP-14a: 11 clips and 6 last-frame start images.
 - **2026-11-18** — WP-08b: music sourced from Commons Ogg transcodes for the cloud master mix; take-A rule and `s10-todos-01` layering noted.

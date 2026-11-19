@@ -7,7 +7,7 @@
 import { cueSheet, beatGrid, twinkleStars, shootingStars, starHalo, glowSprite, dot, additive, sparkleBurst,
   cloudScatter, cloudConstellation, cloudGroup, cloudStar, formation, renderCloud, sweepColors, nebula,
   drawCard, shapeRect, loadAtlasArt, atlasLabel, warpField, aurora, galaxy, megaTree, prog, smooth,
-  formationState, projector, drawStar, lostStar, portraitSwarm, PET_PORTRAITS,
+  formationState, projector, drawStar, lostStar, portraitSwarm, PET_PORTRAITS, COW_MOON,
   ORION, CANIS_MAJOR, CANIS_MINOR, FELIS, easeInOutSine, clamp } from '../fx/index.js';
 import { BEATMAPS } from './beatmaps.js';
 import { skyBase, stripSnow, beatClock } from './common.js';
@@ -93,6 +93,11 @@ const PETS = [
   { pet: 'alaska', cue: 'canis', from: 8, to: 'felis', x: 0.89, y: 0.18, size: 0.15, src: 2 },
   { pet: 'gandalf', cue: 'felis', from: 7.5, to: 'cut', x: 0.87, y: 0.3, size: 0.18, src: 3 },
 ];
+
+// Hey Diddle Diddle (WP-13b, B0): in the quiet middle section after the last ride, the drones the swarm dissolved
+// into gather again as the cow jumping over the moon, where the constellations stood, just as the lost star slips
+// away over it; it flies back to the sky 1 s before 'out'. from: seconds after 'glint'.
+const COW = { cue: 'glint', from: 2.5, x: 0.66, y: 0.36, size: 0.2 };
 
 // The lost star (the tree's five-point star, now a night-sky star since it escaped in s03) travels through the
 // whole scene: it arrives from the sky where it vanished, rides with the swarm into each constellation and rests
@@ -191,6 +196,10 @@ export default {
           portraitSwarm(ctx, w, h, bt, local - t0, { data: PET_PORTRAITS[p.pet], x: p.x, y: p.y, size: p.size, alpha: A, end: C.at(p.to) - 1 - t0, flip: true,
             source: { cloud: sequence()[p.src].cloud, cx: SWARM.cx, cy: SWARM.cy, scale: SWARM.scale } });
         }
+        // The cow over the moon (see COW), out of the dissolved swarm.
+        const c0 = C.at(COW.cue) + COW.from;
+        portraitSwarm(ctx, w, h, bt, local - c0, { data: COW_MOON, x: COW.x, y: COW.y, size: COW.size, alpha: A, end: C.at('out') - 1 - c0,
+          hold: [4, 9], source: { cloud: sequence()[4].cloud, cx: SWARM.cx, cy: SWARM.cy, scale: SWARM.scale } });
         // The named stars as real stars (spectral colours, spikes on the bright ones) once each figure has formed.
         const P = projector(w, h, view);
         const F = formationState(local, sequence());

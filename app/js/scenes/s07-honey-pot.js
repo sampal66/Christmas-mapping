@@ -4,9 +4,9 @@
 // The star's motion is star-story.js's drawReturn: Pooh's pot and Connor's mouth are placed on its path.
 import { cueSheet, loadFonts, easeInOutSine, clamp } from '../fx/index.js';
 import { drawReturn, RETURN_PATH, carryWalk, walkSpan } from './star-story.js';
-import { stageLayout, drawPets, drawPetClip, preloadTracks, talk, look, act, CONNOR_MOUTH, PET_SIZE } from './stage.js';
+import { stageLayout, storyChimney, drawPets, drawPetClip, preloadTracks, talk, look, act, CONNOR_MOUTH, PET_SIZE } from './stage.js';
 import { preloadClips } from '../fx/clips.js';
-import { BOX_ZONES, storyTower, skyBase } from './common.js';
+import { BOX_ZONES, storyTower, storyAlpha, skyBase } from './common.js';
 import { stripStarPath, pixelAspect } from '../fx/strip.js';
 
 const cues = [{ t: 0, name: 'pooh-in' }, { t: 15, name: 'found' }, { t: 30, name: 'carry' }, { t: 50, name: 'fly' }, { t: 60, name: 'settle' }, { t: 71, name: 'out' }];
@@ -82,6 +82,7 @@ export default {
     const L = zoneId === 'wall' ? stageLayout(env, w, h) : null;
     const unit = L ? L.H * L.k * PET_SIZE.connor : undefined;
     drawReturn(zoneId, ctx, w, h, t, local, env, C, () => {
+      storyChimney(ctx, L, t, storyAlpha(local, c('out'), duration));
       drawPooh(ctx, L, w, h, local, env);
       // Connor faces left (toward the tree) all scene, his mouth on the star's path: at PAW, then a few steps
       // toward the tree. Alaska joins the cats on the tower, out of his way.
