@@ -1,6 +1,8 @@
 # WP-12 · Show review, proposed fixes and enhancement proposals
 
-> **This document is a proposal: nothing has been generated or built yet.** The owner picks items. Credits are
+> **Owner decision (2026-11-19): the Recommended package (§7) is approved, including the §5 rule change.** It is split into sessions WP-14a, WP-14b, WP-13a, WP-13b and WP-15 (see CONTROL). Items outside the package (A9–A11, B5, B6, P4–P7) stay proposals.
+>
+> Original note: The owner picks items. Credits are
 > spent only after approval (AGENTS §07). Some characters need a rule change (§5).
 > Sources: the first full pre-check run (`node tools/precheck.js`, 2026-11-18), the CONTROL handoffs, and the
 > scene code. Times are show times (m:ss) on the 11:57 timeline.
