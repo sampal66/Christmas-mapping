@@ -4,7 +4,7 @@
 > Big parts are built in **separate Claude sessions**, one work package (WP) each, so no session's context
 > window gets large. Rules: [AGENTS.md §03a](AGENTS.md#03a--session-strategy-small-context-windows).
 
-**Show date:** 2026-12-24 · **Last updated:** 2026-11-18 · **Live app:** https://sampal66.github.io/Christmas-mapping/
+**Show date:** 2026-12-24 · **Last updated:** 2026-11-19 · **Live app:** https://sampal66.github.io/Christmas-mapping/
 
 ---
 
@@ -26,7 +26,7 @@
 | WP-08c | [Story polish: owner notes](work-packages/WP-08c-story-polish.md): soft ear tips (clips cut at the top), star-dust arrivals/exits, softly lit gift tower under the cats, a short natural Connor carry | WP-08 | ✅ done (PR #17) | `claude/jolly-newton-qtuh8g` | C1, C2 |
 | WP-12 | [Automatic show pre-check](work-packages/WP-12-precheck.md): one command, whole show headless → report + contact sheets, before the owner's manual scene review | WP-08b, WP-08c | ✅ done (PR #19) | `claude/wp-12-precheck` | success metrics |
 | WP-14a | [Story clips round 2](work-packages/WP-14a-story-clips-2.md): look-up loops (no frozen pets), Pooh hold + wave, Connor peek, Gandalf/Orion beats, Santa swoop + goodnight; s10 Orion timing (25,452 credits spent) | WP-12 | ✅ done (PR #21) | `claude/wp-14a-story-clips-2` | C2, C3 |
-| WP-14b | [Public-domain characters](work-packages/WP-14b-pd-characters.md): Nutcracker, Velveteen Rabbit, Gingerbread Man, Peter Rabbit (≤ 10,004 credits) | WP-14a | 🔵 in progress | `claude/wp-14b-pd-characters` | C2, C3 |
+| WP-14b | [Public-domain characters](work-packages/WP-14b-pd-characters.md): Nutcracker, Velveteen Rabbit, Gingerbread Man, Peter Rabbit (≤ 10,004 credits) | WP-14a | 🟡 in review (draft PR) | `claude/wp-14b-pd-characters` | C2, C3 |
 | WP-13a | [Right wall in every scene + theatre curtains + perf valves](work-packages/WP-13a-right-wall-curtains.md) (0 credits) | WP-12 | ✅ done (PR #20) | `claude/wp-13a-right-wall-curtains` | C1 |
 | WP-13b | [Gift tower as a snowy cottage + the cow over the moon](work-packages/WP-13b-cottage-cow.md) (0 credits) | WP-13a, WP-14a | ⚪ waiting (owner starts it after reviewing WP-14a) | — | C1 |
 | WP-15 | [Audio round 2](work-packages/WP-15-audio-round-2.md): listen-check fixes, Twinkle Twinkle (s09), Santa's voice, new sfx, master-mix re-render (≤ 1,400 credits) | WP-14a, WP-14b, owner listen notes | ⚪ waiting | — | C4, C5 |
@@ -59,6 +59,8 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
+- **2026-11-19 · WP-14b** — 4 public-domain characters (10,006 credits, owner OK'd +2; **≈ 24,432 left**): owner picked frames (Nutcracker 1, Velveteen 2, Gingerbread 1, rabbit 2) and OK'd the clips. s04 Nutcracker march (`box2-open`) + Gingerbread run (`finale`) on the **small box top** (`GUESTS` in s04); s08 Velveteen loop + s10 rabbit wave on the tower between the cats (`drawGuest`, `GUEST_SIZE` in stage.js). Sources in CREDITS. `sw.js` v30. Pre-check PASS (guests now checked for placement + frozen frames).
+  Gotchas: box 2's top is hidden under box 1 (box zones draw over the wall), so nothing can stand on it. Guest FRAME rows are first-frame bboxes, anchor = feet (y 1). Gingerbread has no code sprite fallback. The 6 "speaker not drawn" lines (s06, s10 pre-wave) are outside this WP. WP-15 can now start (S4 sfx for the Nutcracker/Gingerbread).
 - **2026-11-19 · WP-14a** — 11 clips (25,452 credits; **34,438 left**), owner saw the takes and OK'd wiring all 11. `chain()`/`then` in stage.js: every `look()` → look-loop after 5 s; s05 hide → Connor peek; Pooh float → hold → wave; s03 Gandalf ready, s05 Orion yawn; s10 Santa swoop (sleigh loop = fallback) + goodnight at `title`; F1: s10 pets stay to wave + 12.6, idle after the wave, Orion talks. `sw.js` v29 (after merging WP-13a). PR #21 merged at the owner's request (2026-11-19); WP-13b and WP-14b can start. Pre-check PASS: 0 frozen ≥ 8 s, 0 placement flags; s10 worst 57 ms (was ≈ 53).
   Gotchas: follow-on clips' FRAME rows are matched to the previous clip's **last** frame (scratch `match.js`: bbox of A's last frame vs B's first frame → fill + anchor; 4th FRAME value = anchor y). The connector has no upload: start images are committed under `assets/characters/` and attached by raw GitHub URL. Kling drew a glint in `s03-gandalf-ready` (top 116 px cut before prep). **WP-13a runs in parallel** (s10 curtains + firework valve, sw.js): whichever PR merges second merges main first, takes sw.js VERSION = max + 1 with both SHELL lists, keeps both doc lines, re-runs smoke + pre-check.
 - **2026-11-19 · WP-13a** — Right strip drawn in every scene (`fx/strip.js`: s02 sparkles, s03 falling star, s04 toy rain, s05 stockings on `jingle`, s07 star path, s08 aurora); theatre curtains `fx/curtains.js` (closed in s00, open s01 0.3→4.5 s, close s10 title+8→+13 s); `PERF` valves in `js/perf.js` (`?perf=…`, saved on the device; how-to in app/README). `sw.js` v28 (+perf.js, curtains.js, strip.js).

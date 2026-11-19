@@ -35,3 +35,19 @@ Piglet, Tigger, Cheshire Cat, Mickey (not in the package); sound effects (WP-15)
 - [ ] 4 characters generated within budget, owner-picked frames, sources in CREDITS.md.
 - [ ] Pre-check passes; each new character is placed on its box or floor line.
 - [ ] Smoke test passes; docs, the CONTROL board and handoff updated.
+
+## Status (2026-11-19, end of session)
+Spent **10,006 credits** (owner OK'd the 2 over budget; 34,438 → ≈ 24,432 left): 4 start-frame nodes × 2 takes
+(gpt-image-2.5-sunburst, 1,523) + 4 kling-2.5-turbo 5 s clips (8,483). Flow `63DYIGTm4n0F8ectFnlO`. Owner picked the
+frames (Nutcracker 1, Velveteen 2, Gingerbread 1, rabbit 2), saw the clip takes and OK'd wiring all four.
+
+| Clip id | Kind | Wired |
+|---|---|---|
+| `s04-nutcracker-march` | once | s04 `box2-open` → +6.6 s, rises out of the **small box (tower top)**, sinks back in; nutcracker sprite = fallback |
+| `s04-gingerbread-run` | once (ends empty) | s04 `finale`, small box top; no code sprite exists, so no fallback |
+| `s08-velveteen-rabbit` | loop (4.5 s) | s08 `gather` + 0.6 → `out`, tower top between the cats, facing left |
+| `s10-rabbit-wave` | once | s10 star-dust arrival with the pets, waves at `wave` + 1.2, leaves at + 6.6 |
+
+Deviation: the Nutcracker stands on the small box, not box 2: box 2's top is hidden under box 1 and the box zones draw
+over the wall, so on box 2 he was invisible (first pre-check sheet). Box 1's lid now also pops at `box2-open`.
+Pre-check: PASS, 0 placement flags (guests checked like pets), 0 frozen ≥ 8 s; s10 worst 50 ms headless (was 57).

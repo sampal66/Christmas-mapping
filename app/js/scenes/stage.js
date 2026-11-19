@@ -61,7 +61,7 @@ const FRAME = {
  * The guests' sizes, relative to Connor like PET_SIZE (WP-14b): the toy rabbit and the small rabbit sit between the cats
  * on the gift tower, a little smaller than them. The s04 guests are sized to the boxes instead (s04-magic-boxes.js).
  */
-export const GUEST_SIZE = { velveteen: 0.36, rabbit: 0.42 };
+export const GUEST_SIZE = { velveteen: 0.42, rabbit: 0.48 };
 // The pet's body width / its height (idle start frame), for laying out slots before the clips load.
 const BODY = Object.fromEntries(['alaska', 'connor', 'orion', 'gandalf'].map((p) => [p, FRAME[`pet-${p}-idle`][2] / FRAME[`pet-${p}-idle`][1]]));
 
