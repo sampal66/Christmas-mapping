@@ -61,6 +61,17 @@ function load(id) {
 /** Starts loading clips ahead of time (call from a scene's enter()). */
 export function preloadClips(ids) { for (const id of ids) if (!clips.has(id)) load(id); }
 
+// Test hook (tools/precheck.js): called on every drawClip() with what was asked for and, when drawn, where it landed
+// (the canvas transform at the anchor plus the drawn box). Null in the app, so it costs nothing on show night.
+let probe = null;
+export function setClipProbe(fn) { probe = fn; }
+
+/** True while any clip is still loading or seeking (tools/precheck.js waits on it before reading a frame). */
+export function clipsBusy() {
+  for (const c of clips.values()) if (!c.failed && (!c.ready || c.video?.seeking)) return true;
+  return false;
+}
+
 /** True once the clip can be drawn. */
 export function clipReady(id) { return !!(clips.get(id) || load(id)).ready; }
 
@@ -116,7 +127,7 @@ function keyed(c, fade = 0) {
  */
 export function drawClip(ctx, id, time, opts = {}) {
   const c = clips.get(id) || load(id);
-  if (!c.ready || c.failed) return false;
+  if (!c.ready || c.failed) { probe?.({ id, time, drawn: false, failed: c.failed }); return false; }
   const v = c.video;
   const dur = v.duration || 0;
   if (!(dur > 0) || !v.videoWidth) return false;
@@ -133,7 +144,7 @@ export function drawClip(ctx, id, time, opts = {}) {
   else if (!moving && !v.paused) v.pause();
 
   const frame = keyed(c, topFade);
-  if (!frame) return false;
+  if (!frame) { probe?.({ id, time, drawn: false }); return false; }
   const [u0, v0, u1, v1] = crop;
   const fw = frame.width, fh = frame.height;
   const sw = (u1 - u0) * fw, sh = (v1 - v0) * fh;
@@ -144,6 +155,7 @@ export function drawClip(ctx, id, time, opts = {}) {
   if (rotate) ctx.rotate(rotate);
   if (flip) ctx.scale(-1, 1);
   ctx.drawImage(frame, u0 * fw, v0 * fh, sw, sh, -anchor[0] * dw, -anchor[1] * dh, dw, dh);
+  if (probe) probe({ id, time: ct, drawn: true, held: !loop && time >= dur - 0.04, m: ctx.getTransform(), box: [-anchor[0] * dw, -anchor[1] * dh, dw, dh], alpha: ctx.globalAlpha, anchor, canvas: ctx.canvas });
   ctx.restore();
   return true;
 }

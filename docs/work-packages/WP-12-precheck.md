@@ -40,8 +40,18 @@ step in AGENTS §03 (run it before asking the owner to review scenes).
 Fixing what it finds (those go to their own WPs), on-wall calibration (WP-09), audio rendering (WP-08b).
 
 ## Acceptance
-- [ ] `node tools/precheck.js` runs in one go, writes the report and contact sheets, and exits non-zero on a
+- [x] `node tools/precheck.js` runs in one go, writes the report and contact sheets, and exits non-zero on a
       failure (missing clip, console error, flash failure, length mismatch).
-- [ ] The report is short: a summary table first, then details only for what failed or is flagged.
-- [ ] Contact sheets sent to the owner after the first full run.
-- [ ] AGENTS §03, CLAUDE.md, the CONTROL board and handoff are updated.
+- [x] The report is short: a summary table first, then details only for what failed or is flagged.
+- [x] Contact sheets sent to the owner after the first full run.
+- [x] AGENTS §03, CLAUDE.md, the CONTROL board and handoff are updated.
+
+## Status (2026-11-18, done)
+- `tools/precheck.js` (≈ 3 min; `--no-flash` / `--no-sheets` for a ≈ 1 min pass; `--feet-tol`, `--out`). Extra check
+  beyond the brief, **3b · frozen pets**: stretches where a once-and-hold clip sits on its last frame. App change:
+  `fx/clips.js` `setClipProbe` / `clipsBusy` (test hook, inert in the app), `sw.js` v27. `tools/show-table.js` shared with `master-mix.js`.
+- First run: **PASS**. Flagged: s08 pets frozen ≈ 49 s on their look-ups (plus 9–17 s stretches in s03/s05/s07),
+  Pooh a still for 22.5 s in s07, s10-orion-01 spoken after the pets have left, s06/s10/s04 render cost
+  over 33 ms headless (iPad check in WP-09), 29 clips with ear tips in the top row (faded by `EAR_FADE`).
+- Owner request (same session): [proposed ElevenLabs generations ≤ 40k](WP-12-review-and-proposals.md) (appended to the report). Nothing generated.
+

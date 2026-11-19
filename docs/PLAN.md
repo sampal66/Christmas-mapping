@@ -166,6 +166,8 @@ halo marks the tip. On-the-night cuts (to ≈10 min) are listed in [TREATMENT §
 | 3 | Nov 30–Dec 6 | First calibration on the real wall. Scenes 1, 2, 4, 6 (code effects). Music sourced. |
 | 4 | Dec 7–13 | Story beats 3, 5, 7 (characters). Narration generated. |
 | 5 | Dec 14–20 | Scenes 8–10. Full run-throughs. **MP4 backup.** |
+| 1b | Nov 19–26 | *(actual, after WP-12)* **WP-14a** story clips round 2 → **WP-14b** public-domain characters → **WP-15** audio round 2 + master-mix re-render; alongside **WP-13a** right wall + curtains → **WP-13b** cottage + cow. |
+| 2b | Nov 27+ | *(actual)* **WP-09** on the real wall: calibration, iPad fps (perf valves), ears (re-takes from the 20k reserve), moon-disc decision, pre-check with the calibrated layout. |
 | 6 | Dec 21–24 | Dress rehearsal (practise the star moment!). **Show on Dec 24.** |
 
 ## 8. Repo structure
@@ -189,5 +191,6 @@ christmas-mapping/
 - Soundbar model (later). Reconnect the ElevenLabs connector from a PC with full permissions.
 
 ## Changelog
+- **2026-11-19** — §7: work sessions after WP-12 (WP-13a/b, WP-14a/b, WP-15, then WP-09).
 - **2026-11-17** — §2: USB-C hub requirements (owner question, WP-03 session).
 - **2026-11-17** — §4, §5, §6 updated to the WP-10 treatment (new scene titles, music per scene, adult audience, live-moment operator).

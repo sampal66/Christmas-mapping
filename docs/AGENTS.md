@@ -7,7 +7,7 @@
 | | |
 |---|---|
 | **Status** | v1.1 |
-| **Last updated** | 2026-11-16 |
+| **Last updated** | 2026-11-18 |
 
 ---
 
@@ -28,7 +28,7 @@ Agents must keep the show **safe, legal, private and on schedule** (Dec 24, 2026
 | **Docs agent** (Claude session) | Keep PRD / DESIGN_SYSTEM / ARCHITECTURE / PLAN / SCRIPT current | repo | after every decision or feature |
 | **Content agent** (Claude + ElevenLabs MCP) | Narration, sfx, music, character model sheets and clips | ElevenLabs connector | when a scene's assets are needed |
 | **Research agent** (Claude + web) | Hardware, public-domain sources, technique lookups | WebSearch, Firecrawl | on demand |
-| **QA agent** (Claude session) | Smoke tests, performance checks, safety-limit review | `tools/smoke-test.js`, screenshots | before every PR |
+| **QA agent** (Claude session) | Smoke tests, performance checks, safety-limit review, show pre-check | `tools/smoke-test.js`, `tools/precheck.js`, screenshots | before every PR; pre-check before every owner scene review |
 
 One Claude session usually plays several roles. Spawn sub-agents only when the owner asks.
 
@@ -42,7 +42,10 @@ One Claude session usually plays several roles. Spawn sub-agents only when the o
 1. **Branch:** work on the session's `claude/...` branch; never push to `main` directly.
 2. **Small, reviewable commits**, with messages that explain the *why*.
 3. **Test before pushing:** run `node tools/smoke-test.js` (it serves `app/` and checks for errors). For visual
-   changes, take a screenshot and look at it.
+   changes, take a screenshot and look at it. **Before asking the owner to review scenes**, run
+   `node tools/precheck.js [--mix master-mix.m4a]` (≈ 3 min): it plays the whole show headless and writes
+   `precheck/report.md` (assembly, script ↔ picture, placement, frozen pets, timeline, safety, render cost) plus one
+   contact sheet per scene; it exits non-zero on a failure. Send the owner the report and sheets; never commit `precheck/`.
 4. **Docs are part of done.** Update the PRD feature status, record decisions in ARCHITECTURE §07, and add a
    changelog line in each document you touch.
 5. **PR:** one draft PR per branch, with a description of what changed and how it was tested. The owner merges.
@@ -98,7 +101,11 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
    - **Never commit** the baby's name, family photos, personal audio, or other personal details.
    - Use `{BABY}` in scripts and docs; personal media goes in the on-device media pack.
 3. **Copyright:** only original work, public-domain works or properly licensed assets.
-   - **Allowed cameos:** *Steamboat Willie* Mickey (1928 design) and E.H. Shepard-style Pooh only.
+   - **Allowed cameos:** *Steamboat Willie* Mickey (1928 design), E.H. Shepard-style Pooh, and these public-domain
+     characters in their original book look (owner, 2026-11-19): the Nutcracker, the Velveteen Rabbit, the
+     Gingerbread Man, Beatrix Potter's Peter Rabbit (no name on screen), Shepard-style Piglet and Tigger, Tenniel's
+     Cheshire Cat, and Mother Goose nursery-rhyme figures. Never a later studio design; record each source in
+     `assets/CREDITS.md`.
    - **Not allowed:** modern Disney or Pixar designs, Paddington, copyrighted songs (*Rudolph*, *Frosty*,
      *Sleigh Ride*, *White Christmas*…).
    - Record the source and licence of every downloaded asset in `assets/CREDITS.md`.
@@ -141,5 +148,7 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 - An auto-calibration agent (projected pattern + iPad camera).
 
 ## Changelog
+- **2026-11-19** — §06: public-domain characters added to the allowed cameos (owner approved, WP-12).
+- **2026-11-18** — §02/§03: QA runs `tools/precheck.js` before every owner scene review (WP-12).
 - **2026-11-16** — v1.1: §03a session strategy (one WP per session, narrow reads, mandatory handoff); CONTROL.md.
 - **2026-11-16** — v1: roles, workflow, hard rules (privacy, copyright, safety, language), credits policy, DoD.

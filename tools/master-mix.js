@@ -15,8 +15,8 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync, spawnSync } = require('child_process');
+const { scriptLines, sceneTable } = require('./show-table');
 
-const ROOT = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const opt = (name, dflt) => { const i = args.indexOf(`--${name}`); return i >= 0 ? args[i + 1] : dflt; };
 const flag = (name) => args.includes(`--${name}`);
@@ -105,32 +105,6 @@ function loudness(file, from = 0, len = null) {
   const log = ffLog(['-ss', String(from), ...(len ? ['-t', String(len)] : []), '-i', file, '-af', 'ebur128=framelog=quiet', '-f', 'null', '-']);
   const m = /I:\s+(-?[\d.]+) LUFS/.exec(log.slice(log.lastIndexOf('Summary')));
   return m ? Number(m[1]) : -70;
-}
-
-/** Voice lines from SCRIPT §03: { id, scene (prefix), cue, offset, est }. */
-function scriptLines() {
-  const md = fs.readFileSync(path.join(ROOT, 'docs/SCRIPT.md'), 'utf8');
-  const sec = md.slice(md.indexOf('## 03'), md.indexOf('## 04'));
-  const out = [];
-  for (const row of sec.split('\n')) {
-    const c = row.split('|').map((x) => x.trim());
-    const m = /^(s\d\d-[a-z]+-\d\d)/.exec(c[1] || '');
-    if (!m) continue;
-    const cm = /^([a-z-]+)\s*([+\-−])\s*([\d.]+)$/.exec(c[2].replace(/\(.*?\)/g, '').replace(/\s+/g, ' ').trim());
-    if (!cm) throw new Error(`can't read cue "${c[2]}" for ${m[1]}`);
-    out.push({ id: m[1], scenePrefix: m[1].slice(0, 3), cue: cm[1], offset: (cm[2] === '+' ? 1 : -1) * Number(cm[3]), est: Number(c[4]) || 0, opt: /\(opt\)/.test(c[1]) });
-  }
-  return out;
-}
-
-/** Scenes with absolute starts and their cue times (snapped to the beat grid as the scenes do). */
-async function sceneTable() {
-  const { scenes } = await import(path.join(ROOT, 'app/js/scenes/index.js'));
-  const { cueSheet, beatGrid } = await import(path.join(ROOT, 'app/js/fx/cues.js'));
-  return scenes.map((s) => {
-    const C = cueSheet(s.cues, s.beats ? beatGrid(s.beats) : null);
-    return { id: s.id, start: s.start, duration: s.duration, at: (k) => (typeof k === 'number' ? k : C.at(k)) };
-  });
 }
 
 /** The ducking envelope as an ffmpeg volume expression: 1 outside speech, DUCK_DB inside, ramped. */
