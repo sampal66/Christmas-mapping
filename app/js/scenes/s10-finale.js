@@ -12,7 +12,7 @@ import { BEATMAPS } from './beatmaps.js';
 import { FAMILY_PORTRAIT } from './family-portrait.js';
 import { drawClip, preloadClips } from '../fx/clips.js';
 import { skyBase, stripSnow, from, beatClock, boxFace, BOX_ZONES } from './common.js';
-import { stageLayout, drawPets, preloadTracks, act, PETS, aspectFix } from './stage.js';
+import { stageLayout, drawPets, preloadTracks, act, talk, PETS, aspectFix } from './stage.js';
 
 const cues = [
   // Stretched (×1.3) to the whole Jingle Bells track (ends ≈1:51) so the music is never cut mid-phrase.
@@ -118,7 +118,9 @@ const NIGHT_AT = 0.3, NIGHT_LEN = 5.5;   // goodnight pass: s after `title`, s l
 // rises away in star dust as the family portrait starts forming.
 const PETS_OUT = C.at('wave') + 12.6;
 const PETS_GONE = PETS_OUT + 3.5;        // last pet's dissolve + rising sparkles done
-const WAVES = Object.fromEntries(PETS.map((p, i) => [p, [act(`s10-${p}-wave`, C.at('wave') + 0.3 * i, PETS_GONE)]]));
+// After the 5 s wave each pet breathes on its idle loop (never a held last frame); Orion talks on his line.
+const WAVES = Object.fromEntries(PETS.map((p, i) => [p, [act(`s10-${p}-wave`, C.at('wave') + 0.3 * i, C.at('wave') + 0.3 * i + 5)]]));
+WAVES.orion.push(talk('orion', C.at('wave') + 8, 4.5));                                 // s10-orion-01
 
 /**
  * Draws the sleigh clip with the back of the sleigh on the trail's head (path(k), k = 0..1 across the sky), tilted

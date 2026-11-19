@@ -25,7 +25,7 @@
 | WP-08b | [Master mix + idle music box](work-packages/WP-08b-master-mix.md): one cloud-rendered `master-mix.m4a` (music + voices + sfx, never committed) + the s00 music-box loop while idle/after the finale | WP-05, WP-06 | ✅ done (PR #15 code, PR #18 render) | `claude/wp-08b-master-mix` | C4, C5, M8 |
 | WP-08c | [Story polish: owner notes](work-packages/WP-08c-story-polish.md): soft ear tips (clips cut at the top), star-dust arrivals/exits, softly lit gift tower under the cats, a short natural Connor carry | WP-08 | ✅ done (PR #17) | `claude/jolly-newton-qtuh8g` | C1, C2 |
 | WP-12 | [Automatic show pre-check](work-packages/WP-12-precheck.md): one command, whole show headless → report + contact sheets, before the owner's manual scene review | WP-08b, WP-08c | ✅ done (PR #19) | `claude/wp-12-precheck` | success metrics |
-| WP-14a | [Story clips round 2](work-packages/WP-14a-story-clips-2.md): look-up loops (no frozen pets), Pooh hold + wave, Connor peek, Gandalf/Orion beats, Santa swoop + goodnight; s10 Orion timing (≤ 25,452 credits) | WP-12 | 🟢 ready to start | — | C2, C3 |
+| WP-14a | [Story clips round 2](work-packages/WP-14a-story-clips-2.md): look-up loops (no frozen pets), Pooh hold + wave, Connor peek, Gandalf/Orion beats, Santa swoop + goodnight; s10 Orion timing (25,452 credits spent) | WP-12 | 🟡 in review (draft PR) | `claude/wp-14a-story-clips-2` | C2, C3 |
 | WP-14b | [Public-domain characters](work-packages/WP-14b-pd-characters.md): Nutcracker, Velveteen Rabbit, Gingerbread Man, Peter Rabbit (≤ 10,004 credits) | WP-14a | ⚪ waiting | — | C2, C3 |
 | WP-13a | [Right wall in every scene + theatre curtains + perf valves](work-packages/WP-13a-right-wall-curtains.md) (0 credits) | WP-12 | 🟢 ready to start | — | C1 |
 | WP-13b | [Gift tower as a snowy cottage + the cow over the moon](work-packages/WP-13b-cottage-cow.md) (0 credits) | WP-13a | ⚪ waiting | — | C1 |
@@ -58,6 +58,9 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-19 · WP-14a** — 11 clips (25,452 credits; **34,438 left**), owner saw the takes and OK'd wiring all 11. `chain()`/`then` in stage.js: every `look()` → look-loop after 5 s; s05 hide → Connor peek; Pooh float → hold → wave; s03 Gandalf ready, s05 Orion yawn; s10 Santa swoop (sleigh loop = fallback) + goodnight at `title`; F1: s10 pets stay to wave + 12.6, idle after the wave, Orion talks. `sw.js` v28. Pre-check PASS: 0 frozen ≥ 8 s, 0 placement flags; s10 worst 57 ms (was ≈ 53).
+  Gotchas: follow-on clips' FRAME rows are matched to the previous clip's **last** frame (scratch `match.js`: bbox of A's last frame vs B's first frame → fill + anchor; 4th FRAME value = anchor y). The connector has no upload: start images are committed under `assets/characters/` and attached by raw GitHub URL. Kling drew a glint in `s03-gandalf-ready` (top 116 px cut before prep). **WP-13a runs in parallel** (s10 curtains + firework valve, sw.js): whichever PR merges second merges main first, takes sw.js VERSION = max + 1 with both SHELL lists, keeps both doc lines, re-runs smoke + pre-check.
 
 - **2026-11-19 · WP-12 close-out** — Owner approved the **Recommended package** of [WP-12-review-and-proposals](work-packages/WP-12-review-and-proposals.md) → briefs WP-14a, WP-14b, WP-13a, WP-13b, WP-15 on the board; PLAN §7 updated; AGENTS §06 cameo list extended (public-domain characters, book look only). PR #19 merged at the owner's request.
   Next: **WP-14a** (session opened from this one). WP-13a can run alongside. WP-15 needs the owner's listen-check notes (s04 4:23.9, drums, s08 swell, seam).

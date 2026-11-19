@@ -66,5 +66,7 @@ the takes (contact sheet) and approved wiring all 11. Flow `63DYIGTm4n0F8ectFnlO
 | `s10-santa-swoop` (10 s) | once | Santa sleigh | s10 sleigh trail (replaces the loop; loop = fallback) |
 | `s10-santa-goodnight` | once | Santa sleigh | s10 `title` + 0.3, over the tree |
 
-F1 done: s10 pets stay until `wave` + 12.6 (Orion's line is `wave` + 8, 4.5 s). Known: Pooh's balloon leaves the top
+F1 done: s10 pets stay until `wave` + 12.6 (Orion's line is `wave` + 8, 4.5 s); after their 5 s wave they breathe on
+the idle loop and Orion talks on his line (otherwise the pre-check flagged 8 s held wave frames). s07 Gandalf moved to
+tower 0.86 (the look-loop's tail swing put the frame past the wall edge). Pre-check: PASS, 0 frozen ≥ 8 s. Known: Pooh's balloon leaves the top
 of the frame in the last second of the wave (he is fading out then); Gandalf's ear tips/paw are clipped at the swat.

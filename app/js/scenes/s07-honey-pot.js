@@ -86,7 +86,7 @@ export default {
           connor: { x: mouthX + CONNOR_MOUTH * L.H * L.k * PET_SIZE.connor, flip: true },
           alaska: { ...top(0.1), flip: false },
           orion: top(0.53),
-          gandalf: top(0.9),
+          gandalf: top(0.86),                                // the look-loop's tail swings wider than the look-up's
         },
       });
     }, { unit });
