@@ -6,6 +6,7 @@ import { cueSheet, loadFonts, snowfall, starHalo, constellation, ORION, CANIS_MA
   easeInOutSine, clamp } from '../fx/index.js';
 import { drawWarmStar } from './star-story.js';
 import { skyBase, BOX_ZONES, storyTower } from './common.js';
+import { stripAurora } from '../fx/strip.js';
 import { stageLayout, drawPets, preloadTracks, look, act } from './stage.js';
 
 const cues = [{ t: 0, name: 'gather' }, { t: 20, name: 'message' }, { t: 45, name: 'missing' }, { t: 56, name: 'out' }];
@@ -40,7 +41,7 @@ export default {
   duration,
   cues,
   story: true,
-  zones: ['wall', 'star', ...BOX_ZONES],
+  zones: ['wall', 'star', ...BOX_ZONES, 'rightStrip'],
   enter() { loadFonts(); preloadTracks(tracks); },
   draw(zoneId, ctx, w, h, t, local, env) {
     if (storyTower(zoneId, ctx, w, h, t, local, c('out'), duration)) return;
@@ -48,6 +49,12 @@ export default {
     if (zoneId === 'star') {
       drawWarmStar(zoneId, ctx, w, h, t, local);
       starHalo(ctx, w, h, t, { intensity: 0.3 * swell(local) * A, color: 'candle', pulse: 0.15, period: 6, size: 0.65 });
+      return;
+    }
+    if (zoneId === 'rightStrip') {
+      // WP-13a: a slow aurora round the corner, a little brighter on the music's swell.
+      skyBase(zoneId, ctx, w, h, t);
+      stripAurora(ctx, w, h, t, { alpha: A * easeInOutSine(clamp(local / 6)) * (0.45 + 0.3 * swell(local)) });
       return;
     }
     if (zoneId !== 'wall') return;
