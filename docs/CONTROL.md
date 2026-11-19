@@ -28,7 +28,7 @@
 | WP-14a | [Story clips round 2](work-packages/WP-14a-story-clips-2.md): look-up loops (no frozen pets), Pooh hold + wave, Connor peek, Gandalf/Orion beats, Santa swoop + goodnight; s10 Orion timing (25,452 credits spent) | WP-12 | ✅ done (PR #21) | `claude/wp-14a-story-clips-2` | C2, C3 |
 | WP-14b | [Public-domain characters](work-packages/WP-14b-pd-characters.md): Nutcracker, Velveteen Rabbit, Gingerbread Man, Peter Rabbit (≤ 10,004 credits) | WP-14a | ✅ done (PR #22) | `claude/wp-14b-pd-characters` | C2, C3 |
 | WP-13a | [Right wall in every scene + theatre curtains + perf valves](work-packages/WP-13a-right-wall-curtains.md) (0 credits) | WP-12 | ✅ done (PR #20) | `claude/wp-13a-right-wall-curtains` | C1 |
-| WP-13b | [Gift tower as a snowy cottage + the cow over the moon](work-packages/WP-13b-cottage-cow.md) (0 credits) | WP-13a, WP-14a | 🟡 in review (draft PR) | claude/wp-13b-cottage-cow | C1 |
+| WP-13b | [Gift tower as a snowy cottage + the cow over the moon](work-packages/WP-13b-cottage-cow.md) (0 credits) | WP-13a, WP-14a | ✅ done (PR #24, merged at the owner's request) | — | C1 |
 | WP-15 | [Audio round 2](work-packages/WP-15-audio-round-2.md): listen-check fixes, Twinkle Twinkle (s09), Santa's voice, new sfx, master-mix re-render (≤ 1,400 credits) | WP-14a, WP-14b, owner listen notes | ⚪ waiting | — | C4, C5 |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
@@ -59,7 +59,7 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
 
-- **2026-11-19 · WP-13b** — Cottage in s03/s05/s07/s08 (`cottageFace` in fx/stage.js on top of `towerGlow` with `ribbon: false`; windows, door + wreath, snow caps; box2Side window flickers while Connor hides in s05) + chimney puff on the wall at `towerAt(CHIMNEY_AT = 0.95)` (`storyChimney`, drawn before the pets). Cow over the moon swarm in s06's quiet section (`COW`: glint + 2.5 s → out − 1 s, out of the dissolved swarm). 0 credits. sw.js v31.
+- **2026-11-19 · WP-13b** — Cottage in s03/s05/s07/s08 (`cottageFace` in fx/stage.js on top of `towerGlow` with `ribbon: false`; windows, door + wreath, snow caps; box2Side window flickers while Connor hides in s05) + chimney puff on the wall at `towerAt(CHIMNEY_AT = 0.95)` (`storyChimney`, drawn before the pets). Cow over the moon swarm in s06's quiet section (`COW`: glint + 2.5 s → out − 1 s, out of the dissolved swarm). 0 credits. sw.js v31. PR #24 merged at the owner's request (2026-11-19).
   Art: `assets/characters/cow/cow-moon.svg` (owner asked mid-WP for the §05 cel style: cream rim, flat tones + highlight, big eye, lifted darks; redrawn). Rebuild: render the SVG to an 800×600 PNG, then `tools/portrait.js` with the opts in `fx/cow-portrait.js`.
   Pre-check PASS: 0 placement flags, flash 2/s, jump 0.43; s06 worst 60 ms headless (the cow adds ≈ 2–3 ms; worst frame is elsewhere). Window/door layout is per face in `COTTAGE`: line it up on the real boxes in WP-09. Merge order vs WP-15: second PR merges main, sw.js = max + 1.
 
