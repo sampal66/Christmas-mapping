@@ -42,6 +42,8 @@ canvas.zone{position:absolute;left:0;top:0;transform-origin:0 0}</style><body><d
 // ---------- in-page renderer ----------
 async function pageSetup() {
   const PETS = ['alaska', 'connor', 'orion', 'gandalf'];
+  // WP-14b: the public-domain guests get the same placement checks as the pets (their clip ids carry their name).
+  const GUESTS = ['nutcracker', 'gingerbread', 'velveteen', 'rabbit'];
   const { scenes } = await import('/js/scenes/index.js');
   const { defaultLayout } = await import('/js/layout.js');
   const { cssMatrixForQuad, stageToUnit, unitToStage } = await import('/js/homography.js');
@@ -105,7 +107,7 @@ async function pageSetup() {
 
   /** Plain-data summary of one record: pet, feet, box corners and the placement verdicts. */
   function describe(r) {
-    const pet = PETS.find((p) => r.id.includes(`-${p}-`)) || null;
+    const pet = [...PETS, ...GUESTS].find((p) => r.id.includes(`-${p}-`)) || null;
     const out = { id: r.id, zone: r.zone, drawn: r.drawn, failed: !!r.failed, pet, alpha: r.alpha ?? 0 };
     if (!r.drawn) return out;
     const { m, box: [bx, by, bw, bh] } = r;
@@ -125,7 +127,15 @@ async function pageSetup() {
         const dFloor = Math.abs(feet[1] - L.floorY);
         const s = (feet[0] - t0[0]) / ((t1[0] - t0[0]) || 1);
         const dTower = s > -0.05 && s < 1.05 ? Math.abs(feet[1] - L.towerAt(Math.min(1, Math.max(0, s)))[1]) : Infinity;
-        out.offLine = Math.round(Math.min(dFloor, dTower));
+        // the s04 guests stand on the big box's visible top edges (left of and under the small box)
+        const dBox = Math.min(...['box2Side', 'box2'].map((id) => {
+          const a = env(wall).from(id, 0, 0), b = env(wall).from(id, 1, 0);
+          if (!a || !b) return Infinity;
+          const [ax, ay] = [a[0] * w, a[1] * h], [bx2, by2] = [b[0] * w, b[1] * h];
+          const f = (feet[0] - ax) / ((bx2 - ax) || 1);
+          return f > -0.05 && f < 1.05 ? Math.abs(feet[1] - (ay + (by2 - ay) * Math.min(1, Math.max(0, f)))) : Infinity;
+        }));
+        out.offLine = Math.round(Math.min(dFloor, dTower, dBox));
       }
     }
     return out;
@@ -262,7 +272,7 @@ async function contactSheet(browser, scene, frames, file) {
       // frozen pets: a once-and-hold clip sitting on its last frame (a still picture on the wall)
       const run = {};
       recs.forEach((frame, k) => {
-        for (const p of [...PETS, 'pooh']) {
+        for (const p of [...PETS, 'pooh', 'nutcracker', 'gingerbread', 'velveteen', 'rabbit']) {
           const r = frame.find((x) => x.drawn && x.alpha > 0.5 && x.id.includes(`-${p}-`));
           const key = `${s.id}|${p}`;
           if (r?.held) { (run[key] ||= { from: ts[k], id: r.id }).to = ts[k] + SAMPLE; }
