@@ -5,7 +5,7 @@ import { cueSheet, loadFonts, mickeyStars, MICKEY_TIMING } from '../fx/index.js'
 import { skyBase, BOX_ZONES, storyTower } from './common.js';
 import { easeInOutSine, clamp } from '../fx/util.js';
 import { stripStockings, pixelAspect } from '../fx/strip.js';
-import { stageLayout, drawPets, preloadTracks, talk, look, act } from './stage.js';
+import { stageLayout, drawPets, preloadTracks, talk, look, act, chain } from './stage.js';
 
 const cues = [{ t: 0, name: 'regroup' }, { t: 15, name: 'jingle' }, { t: 30, name: 'mickey-in' }, { t: 45, name: 'mickey-out' }, { t: 45, name: 'cut' }, { t: 56, name: 'out' }];
 const C = cueSheet(cues);
@@ -23,12 +23,12 @@ const tracks = {
     talk('alaska', c('mickey-out') + 2, 5.6),                                            // s05-alaska-03
   ],
   orion: [
-    talk('orion', c('regroup') + 6, 2.9),                                                // s05-orion-01
+    act('s05-orion-yawn', c('regroup') + 6, c('regroup') + 11),                          // s05-orion-01: eye-roll + yawn (WP-14a)
     up('orion', 2),
     talk('orion', c('mickey-out') + 8, 2.5),                                             // s05-orion-02 (opt)
   ],
   connor: [
-    act('s05-connor-hide', c('jingle') + 2, point + 0.6),                                // s05-connor-01: stays down
+    chain(act('s05-connor-hide', c('jingle') + 2, point + 0.6), 's05-connor-peek', 5),  // s05-connor-01: stays down, peeking (WP-14a)
     up('connor', 1),
   ],
   gandalf: [

@@ -21,6 +21,8 @@ this show, owned by the account holder under the ElevenLabs plan terms. No third
 | `app/assets/clips/s04-*.mp4` | start frame gpt-image-2.5-sunburst → kling-2.5-turbo image-to-video, 5 s | s04 rummaging shots (WP-04 brief) | prepped with `tools/clip-prep.sh` |
 | `assets/characters/<pet>/start-standing.jpg`, `santa/start-sleigh.jpg` | gpt-image-2.5-sunburst, text-only | WP-04b start frames (owner picks: Connor 3, Alaska 2, Orion 3, Gandalf 1, Santa 1) | 4 takes each, 190 credits per take |
 | `app/assets/clips/pet-*.mp4`, `s03-*`, `s05-*`, `s07-*`, `s08-*`, `s10-*`, `s04-alaska-tail.mp4` | start frame → kling-2.5-turbo image-to-video, 5 s (2,121 credits each); `s07-pooh-float` 10 s (4,242) | WP-04b story acting clips + Alaska tail + Santa sleigh | prepped with `tools/clip-prep.sh`. Santa, sleigh and reindeer are an original design |
+| `assets/characters/<pet>/start-lookloop.jpg`, `connor/start-peek.jpg`, `pooh/start-hold.jpg` | last frames of our own WP-04b clips (`pet-<pet>-lookup`, `s05-connor-hide`, `s07-pooh-float`), extracted with ffmpeg | WP-14a start frames | our own generated art |
+| `app/assets/clips/pet-*-lookloop.mp4`, `s03-gandalf-ready`, `s05-connor-peek`, `s05-orion-yawn`, `s07-pooh-hold`, `s07-pooh-wave`, `s10-santa-goodnight`, `s10-santa-swoop` | start frame → kling-2.5-turbo image-to-video, 5 s (2,121 credits each); `s10-santa-swoop` 10 s (4,242) | WP-14a story clips round 2 (25,452 credits) | prepped with `tools/clip-prep.sh`; `s03-gandalf-ready` had its top 116 px cut before prep to drop a glint Kling drew |
 | `app/assets/clips/s07-pooh-float.mp4` | same chain; start frame (Pooh take 2) prompted as a generic 1920s storybook teddy bear (pencil and watercolour, no clothes) | Pooh cameo, after E.H. Shepard's public-domain 1926 book style (allowed cameo, AGENTS §06) | the provider blocked prompts that named the artist or the 1928 mouse film: no Mickey clip exists |
 
 ## Music (WP-05) — kept on the device, not committed
@@ -67,4 +69,5 @@ Generated 2026-11-17 for this show; original recordings, owned by the account ho
 | `app/js/scenes/family-portrait.js` | derived from one family photo supplied by the owner (not in the repo) by `tools/portrait.js` | owner's own; published at the owner's request (2026-11-18) | light points only; the photo was processed in a scratch folder and not kept |
 
 ## Changelog
+- **2026-11-19** — WP-14a: 11 clips and 6 last-frame start images.
 - **2026-11-18** — WP-08b: music sourced from Commons Ogg transcodes for the cloud master mix; take-A rule and `s10-todos-01` layering noted.

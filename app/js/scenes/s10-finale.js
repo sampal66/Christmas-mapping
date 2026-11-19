@@ -12,7 +12,7 @@ import { BEATMAPS } from './beatmaps.js';
 import { FAMILY_PORTRAIT } from './family-portrait.js';
 import { drawClip, preloadClips } from '../fx/clips.js';
 import { skyBase, stripSnow, from, beatClock, boxFace, BOX_ZONES } from './common.js';
-import { stageLayout, drawPets, preloadTracks, act, PETS, aspectFix } from './stage.js';
+import { stageLayout, drawPets, preloadTracks, act, talk, PETS, aspectFix } from './stage.js';
 import { curtains, curtainOpen } from '../fx/curtains.js';
 import { PERF } from '../perf.js';
 
@@ -111,21 +111,38 @@ function sequence() {
   return seq;
 }
 
-const SLEIGH = 's10-santa-sleigh';
-// The pets' wave: each arrives in star dust just before `wave`, waves (staggered 0.3 s, left → right), and rises away in star dust before `cut`.
-const WAVES = Object.fromEntries(PETS.map((p, i) => [p, [act(`s10-${p}-wave`, C.at('wave') + 0.3 * i, C.at('cut'))]]));
+// Santa (WP-14a): a 10 s close swoop rides the sparkle trail for "¡Miren! ¡Es Santa!" (it starts on the same start
+// frame as the old in-place sleigh loop, which stays as the fallback while it loads), and a goodnight wave over the
+// tree under the last "¡Feliz Navidad!". Sizes and anchors are matched to the sleigh loop's first frame, so the sleigh
+// is the same size in all three at scale 1 (rows: frame-height factor, anchor).
+const SLEIGH = 's10-santa-sleigh', SWOOP = 's10-santa-swoop', GOODNIGHT = 's10-santa-goodnight';
+const SANTA = { [SLEIGH]: [1, [0.08, 0.62]], [SWOOP]: [1 / 0.965, [0.059, 0.678]], [GOODNIGHT]: [1 / 1.084, [0.059, 0.672]] };
+const SLEIGH_H = 0.15;                   // the sleigh loop's frame height, share of the wall height
+const NIGHT_AT = 0.3, NIGHT_LEN = 5.5;   // goodnight pass: s after `title`, s long
+// The pets' wave: each arrives in star dust just before `wave`, waves (staggered 0.3 s, left → right), stays on
+// stage while Orion says s10-orion-01 (wave +8, 4.5 s: his arc pays off with the pets there, WP-12 R4 / F1), then
+// rises away in star dust as the family portrait starts forming.
+const PETS_OUT = C.at('wave') + 12.6;
+const PETS_GONE = PETS_OUT + 3.5;        // last pet's dissolve + rising sparkles done
+// After the 5 s wave each pet breathes on its idle loop (never a held last frame); Orion talks on his line.
+const WAVES = Object.fromEntries(PETS.map((p, i) => [p, [act(`s10-${p}-wave`, C.at('wave') + 0.3 * i, C.at('wave') + 0.3 * i + 5)]]));
+WAVES.orion.push(talk('orion', C.at('wave') + 8, 4.5));                                 // s10-orion-01
 
 /**
  * Draws the sleigh clip with the back of the sleigh on the trail's head (path(k), k = 0..1 across the sky), tilted
  * a little along the arc. Fades in and out at the sky's edges. Nothing is drawn while the clip is missing: the
  * sparkle trail alone carries the moment then.
  */
-function sleigh(ctx, w, h, path, k, age, alpha) {
+function sleigh(ctx, w, h, path, k, age, alpha, { id = SWOOP, scale = 1, edge = 0.06 } = {}) {
   const [x0, y0] = path(Math.max(0, k - 0.01)), [x1, y1] = path(Math.min(1, k + 0.01));
   const [x, y] = path(k);
-  const fade = clamp(Math.min(k / 0.06, (1 - k) / 0.06));
+  const fade = clamp(Math.min(k / edge, (1 - k) / edge));
   const tilt = clamp(Math.atan2(y1 - y0, x1 - x0), -0.3, 0.3) * 0.6;
-  drawClip(ctx, SLEIGH, age, { x, y, h: h * 0.15, anchor: [0.08, 0.62], alpha: alpha * fade, loop: true, rotate: tilt });
+  const draw = (cid, loop) => {
+    const [f, anchor] = SANTA[cid];
+    return drawClip(ctx, cid, age, { x, y, h: h * SLEIGH_H * scale * f, anchor, alpha: alpha * fade, loop, rotate: tilt });
+  };
+  if (!draw(id, false)) draw(SLEIGH, true);
 }
 
 export default {
@@ -137,7 +154,7 @@ export default {
   // Live-moment fallback (TREATMENT §05): show the projected star if the real one isn't on the tree.
   options: { projectedStar: false },
   zones: ['wall', 'rightStrip', 'backdrop', 'stage', ...BOX_ZONES, 'tree', 'star'],
-  enter() { loadFonts(); sequence(); preloadClips([SLEIGH]); preloadTracks(WAVES); },
+  enter() { loadFonts(); sequence(); preloadClips([SLEIGH, SWOOP, GOODNIGHT]); preloadTracks(WAVES); },
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
     const fw = C.env(local, 'fireworks', 'wave', 2, 3);
@@ -158,7 +175,8 @@ export default {
         const sp = C.prog(local, 'sleigh', { after: 9 });
         if (sp > 0 && sp < 1) {
           const path = (k) => [(-0.05 + k * 1.1) * w, (0.42 - Math.sin(k * Math.PI) * 0.3) * h];
-          sleigh(ctx, w, h, path, sp, local - C.at('sleigh'), A);
+          // the close pass: the sleigh swells as it comes nearest, mid-sky
+          sleigh(ctx, w, h, path, sp, local - C.at('sleigh'), A, { scale: 1.25 + 0.45 * Math.sin(sp * Math.PI) });
           for (let j = 0; j < 26; j++) {
             const k = sp - j * 0.012;
             if (k < 0) break;
@@ -169,8 +187,8 @@ export default {
         for (const f of FOUNTAINS) sparkFountain(ctx, w, h, local, { ...f, y: 0.97, height: 0.3, alpha: 0.85 * A, surge: pulse });
         for (const f of FIREWORKS) if (!(PERF.fireworks && f.lite)) firework3d(ctx, w, h, local, { ...f, alpha: A });
         snowfall(ctx, w, h, soft, { density: 0.5 * B.steps(local, C.at('wave'), 8), alpha: A });
-        if (local > C.at('wave') - 2.5 && local < C.at('cut')) {
-          drawPets(ctx, stageLayout(env, w, h), WAVES, local, { inAt: C.at('wave') - 2.2, outAt: C.at('cut') - 3 });
+        if (local > C.at('wave') - 2.5 && local < PETS_GONE) {
+          drawPets(ctx, stageLayout(env, w, h), WAVES, local, { inAt: C.at('wave') - 2.2, outAt: PETS_OUT });
         }
         // The family portrait: forms out of the swarm, holds still facing the room, flies back for the greeting.
         const famAt = C.at('family-constellation'), pEnd = C.at('title') + PORTRAIT_OUT - famAt;
@@ -197,6 +215,12 @@ export default {
             size: text ? 0.85 : 1,
           });
         }
+        // Santa's goodnight (WP-14a): one slow pass over the tree, left of the greeting, waving once.
+        const gk = (local - C.at('title') - NIGHT_AT) / NIGHT_LEN;
+        if (gk > 0 && gk < 1) {
+          const night = (k) => [(0.06 + k * 0.42) * w, (0.13 - Math.sin(k * Math.PI) * 0.06) * h];
+          sleigh(ctx, w, h, night, gk, local - C.at('title') - NIGHT_AT, A, { id: GOODNIGHT, edge: 0.15 });
+        }
         break;
       }
       case 'rightStrip':
@@ -214,7 +238,7 @@ export default {
         const f = boxFace(zoneId);
         // During the pets' wave the beat faces dim to the story scenes' soft tower glow (WP-08c), so the cats stand
         // on a lit gift tower without it pulling focus.
-        const wv = C.env(local, C.at('wave') - 2.5, 'cut', 2, 2);
+        const wv = C.env(local, C.at('wave') - 2.5, PETS_OUT + 1, 2, 2);
         boxFaces(ctx, w, h, local, { beats: B, shift: f.top ? 0 : B.beatLen / 2, mode: fw > 0.5 ? 'all' : 'cells', face: f.face,
           colors: f.top ? ['plum', 'rose'] : ['cranberry', 'gold'], level: A * (0.4 + 0.4 * fw) * (1 - 0.5 * fam) * (1 - 0.75 * wv), seed: f.top ? 5 : 6 });
         towerGlow(ctx, w, h, t, { face: f.face, top: f.top, level: f.top ? 0.16 : 0.13, alpha: A * wv });

@@ -12,7 +12,7 @@ const C = cueSheet(cues);
 const duration = 75;
 const c = C.at;
 
-// Clip timeline per pet (SCRIPT §03: cue + offset, ≈ s = line length). Look-ups hold their last frame.
+// Clip timeline per pet (SCRIPT §03: cue + offset, ≈ s = line length). Look-ups chain into their look-loop (WP-14a).
 const lookAll = (p, i) => look(p, c('tradition') + 11 + 0.3 * i, c('tradition') + 17);    // "its light guides Santa"
 const tracks = {
   alaska: [
@@ -30,6 +30,7 @@ const tracks = {
   ],
   gandalf: [
     lookAll('gandalf', 3),
+    act('s03-gandalf-ready', c('bat') - 10.5, c('bat') - 5.5),                          // eyes on the star, wiggle, swat (WP-14a)
     // s03-gandalf-01 starts at bat −5.5 on the talk loop; the bat clip's swipe lands 2.5 s in, so it starts at
     // bat −3 and the knock lands on `bat`, where drawEscape knocks the star off the tree.
     talk('gandalf', c('bat') - 5.5, 2.5),

@@ -18,7 +18,10 @@ export const CLIP_FILES = [
   'pet-gandalf-lookup', 'pet-gandalf-talk', 'pet-orion-idle', 'pet-orion-lookup', 'pet-orion-talk',
   's03-alaska-boss', 's03-alaska-nooo', 's03-gandalf-bat', 's03-gandalf-oops', 's04-alaska-tail', 's05-connor-hide',
   's05-gandalf-bells', 's07-connor-brave', 's07-connor-carry', 's07-pooh-float', 's08-gandalf-soft',
-  's10-alaska-wave', 's10-connor-wave', 's10-gandalf-wave', 's10-orion-wave', 's10-santa-sleigh'
+  's10-alaska-wave', 's10-connor-wave', 's10-gandalf-wave', 's10-orion-wave', 's10-santa-sleigh',
+  // WP-14a
+  'pet-alaska-lookloop', 'pet-connor-lookloop', 'pet-gandalf-lookloop', 'pet-orion-lookloop', 's03-gandalf-ready', 's05-connor-peek',
+  's05-orion-yawn', 's07-pooh-hold', 's07-pooh-wave', 's10-santa-swoop', 's10-santa-goodnight'
 ];
 
 /**
