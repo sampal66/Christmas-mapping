@@ -6,10 +6,10 @@ import { BEATMAPS } from './beatmaps.js';
 import { cueSheet, beatGrid, projectedStar, starHalo, twinkleStars, easeInOutSine, prog } from '../fx/index.js';
 import { skyBase } from './common.js';
 
-const LOOP = 12;                            // seconds per loop pass = 6 bars of the 4/4 bell loop at 120 bpm
-// Music: the original "magic train" bell loop (owner, 2026-11-17), 120 bpm 4/4; scene 0 = file 7.97 s and the hold loops
-// file 15.97–27.97 s (6 bars). LOOP must stay a whole number of bars so the seam is invisible; the tracked beat times
-// are in scenes/beatmaps.js.
+const LOOP = 12;                            // seconds per loop pass = 6 bars of 4/4 at 120 bpm = one Twinkle melody pass
+// Music (WP-15): a celesta / music-box "Twinkle, Twinkle, Little Star", 120 bpm 4/4; the mix splices it so the hold
+// loops exactly one 6-bar melody pass (see MUSIC in tools/master-mix.js). LOOP must stay a whole number of bars so the
+// seam is invisible; the tracked beat times are in scenes/beatmaps.js.
 const beats = { bpm: 120, ...BEATMAPS['s09-real-star'] };
 const B = beatGrid(beats);
 const cues = [

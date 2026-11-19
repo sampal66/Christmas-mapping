@@ -68,11 +68,12 @@ export const BEATMAPS = {
     84.427, 84.77, 85.103, 85.437, 85.77, 86.113, 86.457, 86.8, 87.133, 87.467, 87.8, 88.14, 88.48, 88.82,
     89.167, 89.513, 89.86, 90.21
   ] },
-  // music-box loop (ElevenLabs original, 24 s): exactly 90 bpm 3/4 (checked with tools/beats.js); the mix starts the file at 1.64 s, its first downbeat
+  // "Twinkle, Twinkle, Little Star" (WP-15, ElevenLabs original arrangement of the PD lullaby, 24 s): steady 120 bpm 4/4
+  // (tools/beats.js on the spliced file the mix uses: every beat within 0.01 s of the 0.5 s grid). Scene 0 = spliced 0;
+  // the hold loops 8–20 s = original file 4.97–16.97 (one 6-bar melody pass). See MUSIC in tools/master-mix.js.
   's09-real-star': { perBar: 4, times: [
-    0, 0.5, 1, 1.5, 2, 2.51, 3, 3.51, 4, 4.5, 5, 5.51, 6.01, 6.5, 7.01, 7.51, 8, 8.5, 9, 9.5, 10, 10.51, 11.01, 11.5,
-    12.01, 12.5, 13, 13.5, 14.01, 14.5, 15, 15.5, 16, 16.5, 17.01, 17.5, 18.01, 18.51, 19.01, 19.51, 20.01, 20.51,
-    20.98, 21.5, 22
+    0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5,
+    12, 12.5, 13, 13.5, 14, 14.5, 15, 15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5, 22
   ] },
   // "Jingle Bells" (2020), USAF Band of Mid-America Starlifter and Roots in Blue, whole track 0:00–1:56 (ends ≈1:51); 159 bpm 4/4
   's10-finale': { perBar: 4, times: [
