@@ -21,7 +21,8 @@ export const CLIP_FILES = [
   's10-alaska-wave', 's10-connor-wave', 's10-gandalf-wave', 's10-orion-wave', 's10-santa-sleigh',
   // WP-14a
   'pet-alaska-lookloop', 'pet-connor-lookloop', 'pet-gandalf-lookloop', 'pet-orion-lookloop', 's03-gandalf-ready', 's05-connor-peek',
-  's05-orion-yawn', 's07-pooh-hold', 's07-pooh-wave', 's10-santa-swoop', 's10-santa-goodnight'
+  's05-orion-yawn', 's07-pooh-hold', 's07-pooh-wave', 's10-santa-swoop', 's10-santa-goodnight',
+  's04-nutcracker-march', 's04-gingerbread-run', 's08-velveteen-rabbit', 's10-rabbit-wave'
 ];
 
 /**

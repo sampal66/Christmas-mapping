@@ -12,7 +12,7 @@ import { BEATMAPS } from './beatmaps.js';
 import { FAMILY_PORTRAIT } from './family-portrait.js';
 import { drawClip, preloadClips } from '../fx/clips.js';
 import { skyBase, stripSnow, from, beatClock, boxFace, BOX_ZONES } from './common.js';
-import { stageLayout, drawPets, preloadTracks, act, talk, PETS, aspectFix } from './stage.js';
+import { stageLayout, drawPets, drawGuest, preloadTracks, act, talk, PETS, aspectFix } from './stage.js';
 import { curtains, curtainOpen } from '../fx/curtains.js';
 import { PERF } from '../perf.js';
 
@@ -123,6 +123,10 @@ const NIGHT_AT = 0.3, NIGHT_LEN = 5.5;   // goodnight pass: s after `title`, s l
 // stage while Orion says s10-orion-01 (wave +8, 4.5 s: his arc pays off with the pets there, WP-12 R4 / F1), then
 // rises away in star dust as the family portrait starts forming.
 const PETS_OUT = C.at('wave') + 12.6;
+// WP-14b: a small rabbit in a blue jacket (after Beatrix Potter, 1902; never named on screen) waves with them from
+// the gift tower between the cats, after the pets' staggered waves, then leaves in star dust before his wave clip
+// would freeze on its last frame.
+const RABBIT = 's10-rabbit-wave', RABBIT_AT = C.at('wave') + 1.2, RABBIT_OUT = RABBIT_AT + 5.4;
 const PETS_GONE = PETS_OUT + 3.5;        // last pet's dissolve + rising sparkles done
 // After the 5 s wave each pet breathes on its idle loop (never a held last frame); Orion talks on his line.
 const WAVES = Object.fromEntries(PETS.map((p, i) => [p, [act(`s10-${p}-wave`, C.at('wave') + 0.3 * i, C.at('wave') + 0.3 * i + 5)]]));
@@ -154,7 +158,7 @@ export default {
   // Live-moment fallback (TREATMENT §05): show the projected star if the real one isn't on the tree.
   options: { projectedStar: false },
   zones: ['wall', 'rightStrip', 'backdrop', 'stage', ...BOX_ZONES, 'tree', 'star'],
-  enter() { loadFonts(); sequence(); preloadClips([SLEIGH, SWOOP, GOODNIGHT]); preloadTracks(WAVES); },
+  enter() { loadFonts(); sequence(); preloadClips([SLEIGH, SWOOP, GOODNIGHT, RABBIT]); preloadTracks(WAVES); },
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
     const fw = C.env(local, 'fireworks', 'wave', 2, 3);
@@ -188,7 +192,10 @@ export default {
         for (const f of FIREWORKS) if (!(PERF.fireworks && f.lite)) firework3d(ctx, w, h, local, { ...f, alpha: A });
         snowfall(ctx, w, h, soft, { density: 0.5 * B.steps(local, C.at('wave'), 8), alpha: A });
         if (local > C.at('wave') - 2.5 && local < PETS_GONE) {
-          drawPets(ctx, stageLayout(env, w, h), WAVES, local, { inAt: C.at('wave') - 2.2, outAt: PETS_OUT });
+          const L = stageLayout(env, w, h);
+          drawPets(ctx, L, WAVES, local, { inAt: C.at('wave') - 2.2, outAt: PETS_OUT });
+          const [rx, ry] = L.towerAt(0.515);
+          drawGuest(ctx, L, 'rabbit', RABBIT, local, { x: rx, y: ry, flip: true, inAt: C.at('wave') - 2.2, outAt: RABBIT_OUT, at: RABBIT_AT });
         }
         // The family portrait: forms out of the swarm, holds still facing the room, flies back for the greeting.
         const famAt = C.at('family-constellation'), pEnd = C.at('title') + PORTRAIT_OUT - famAt;

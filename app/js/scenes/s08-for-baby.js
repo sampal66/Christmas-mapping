@@ -7,7 +7,8 @@ import { cueSheet, loadFonts, snowfall, starHalo, constellation, ORION, CANIS_MA
 import { drawWarmStar } from './star-story.js';
 import { skyBase, BOX_ZONES, storyTower } from './common.js';
 import { stripAurora } from '../fx/strip.js';
-import { stageLayout, drawPets, preloadTracks, look, act } from './stage.js';
+import { stageLayout, drawPets, drawGuest, preloadTracks, look, act } from './stage.js';
+import { preloadClips } from '../fx/clips.js';
 
 const cues = [{ t: 0, name: 'gather' }, { t: 20, name: 'message' }, { t: 45, name: 'missing' }, { t: 56, name: 'out' }];
 const C = cueSheet(cues);
@@ -21,6 +22,10 @@ const tracks = {
   orion: [gaze('orion', 2)],
   gandalf: [gaze('gandalf', 3), act('s08-gandalf-soft', c('missing') + 6, duration)],     // s08-gandalf-01
 };
+
+// WP-14b: the Velveteen Rabbit (Williams / Nicholson 1922) sits on the gift tower between the cats, facing the team,
+// ears twitching on its loop: a child's first toy "becoming Real", a quiet echo of the message.
+const VELVETEEN = 's08-velveteen-rabbit';
 
 // The callback (wall fractions: open sky right of the star, above the backdrop's pets). Each figure draws on in turn.
 const BEAT = [26, 45];
@@ -42,7 +47,7 @@ export default {
   cues,
   story: true,
   zones: ['wall', 'star', ...BOX_ZONES, 'rightStrip'],
-  enter() { loadFonts(); preloadTracks(tracks); },
+  enter() { loadFonts(); preloadTracks(tracks); preloadClips([VELVETEEN]); },
   draw(zoneId, ctx, w, h, t, local, env) {
     if (storyTower(zoneId, ctx, w, h, t, local, c('out'), duration)) return;
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
@@ -67,6 +72,9 @@ export default {
           progress: clamp((local - f.at) / 5), color: f.color, lineColor: 'ice', alpha: 0.55 * cb, starSize: 0.7, seed: f.at });
       }
     }
-    drawPets(ctx, stageLayout(env, w, h), tracks, local, { inAt: c('gather'), outAt: c('out') });
+    const L = stageLayout(env, w, h);
+    drawPets(ctx, L, tracks, local, { inAt: c('gather'), outAt: c('out') });
+    const [vx, vy] = L.towerAt(0.515);
+    drawGuest(ctx, L, 'velveteen', VELVETEEN, local, { x: vx, y: vy, flip: true, inAt: c('gather') + 0.6, outAt: c('out'), loop: true });
   },
 };

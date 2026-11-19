@@ -53,7 +53,15 @@ const FRAME = {
   'pet-gandalf-lookloop': [0.6, 1.0, 1.407, 1], 'pet-orion-lookloop': [0.576, 0.989, 1.278, 1],
   's05-connor-peek': [0.467, 1.365, 1.756, 0.998],
   's07-pooh-hold': [0.84, 0.989, 0.47, 0.786], 's07-pooh-wave': [0.872, 0.987, 0.467, 0.801],   // s07 passes the pot as anchor
+  // WP-14b public-domain guests (first frame; the gingerbread run is wide because he runs off to the right).
+  's04-nutcracker-march': [0.459, 0.998, 0.589], 's04-gingerbread-run': [0.274, 0.952, 1.378],
+  's08-velveteen-rabbit': [0.495, 0.998, 0.611], 's10-rabbit-wave': [0.514, 0.998, 0.533],
 };
+/**
+ * The guests' sizes, relative to Connor like PET_SIZE (WP-14b): the toy rabbit and the small rabbit sit between the cats
+ * on the gift tower, a little smaller than them. The s04 guests are sized to the boxes instead (s04-magic-boxes.js).
+ */
+export const GUEST_SIZE = { velveteen: 0.42, rabbit: 0.48 };
 // The pet's body width / its height (idle start frame), for laying out slots before the clips load.
 const BODY = Object.fromEntries(['alaska', 'connor', 'orion', 'gandalf'].map((p) => [p, FRAME[`pet-${p}-idle`][2] / FRAME[`pet-${p}-idle`][1]]));
 
@@ -157,7 +165,7 @@ const xy = ([x, y]) => ({ x, y });
 /** Draws one clip of a pet with its feet (or `anchor`) at x, y. Returns false when the clip isn't available. */
 export function drawPetClip(ctx, L, pet, id, time, { x, y, flip = false, alpha = 1, loop = false, anchor, scale = 1 }) {
   const [cx, fill, , ay = 1] = FRAME[id] || [0.5, 1];
-  const hh = L.H * (PET_SIZE[pet] ?? 1) * scale / fill;
+  const hh = L.H * (PET_SIZE[pet] ?? GUEST_SIZE[pet] ?? 1) * scale / fill;
   if (!anchor) anchor = [cx, ay];
   ctx.save();
   ctx.translate(x, y);
@@ -225,4 +233,22 @@ export function drawPets(ctx, L, tracks, local, { inAt = 0, outAt = Infinity, ov
     starDustArrive(ctx, local, { x: s.x, y: cy, size: sw, spark, t0: arrive, dur: SWIRL, alpha: a0, seed: i + 1, dir: i % 2 ? -1 : 1 });
     starDustLeave(ctx, local, { x: s.x, y: cy, size: ph, spark, width: ph * BODY[p] * L.k, t0: leave, dur: RISE, alpha: a0, seed: i + 5 });
   }
+}
+
+/**
+ * A WP-14b guest on the stage: arrives and leaves in star dust like the pets (as a 5th, so its swirl comes after
+ * theirs), playing one clip from `at` (looped or once). opts: x, y (feet), flip, inAt, outAt, at, loop.
+ */
+export function drawGuest(ctx, L, guest, id, local, { x, y, flip = false, inAt, outAt = Infinity, at = inAt, loop = false }) {
+  const { alpha, scale, arrive, leave } = presence(local, 4, inAt, outAt);
+  const ph = L.H * GUEST_SIZE[guest], cy = y - 0.5 * ph, spark = 0.03 * L.H;
+  if (alpha > 0.01) {
+    ctx.save();
+    ctx.translate(x, cy); ctx.scale(scale, scale); ctx.translate(-x, -cy);
+    drawPetClip(ctx, L, guest, id, local - at, { x, y, flip, alpha, loop });
+    ctx.restore();
+  }
+  const width = ph * (FRAME[id]?.[2] ?? 1) * 0.5 * L.k;
+  starDustArrive(ctx, local, { x, y: cy, size: Math.max(ph, 0.75 * L.H), spark, t0: arrive, dur: SWIRL, seed: 9, dir: 1 });
+  starDustLeave(ctx, local, { x, y: cy, size: ph, spark, width, t0: leave, dur: RISE, seed: 13 });
 }

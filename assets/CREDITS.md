@@ -25,6 +25,18 @@ this show, owned by the account holder under the ElevenLabs plan terms. No third
 | `app/assets/clips/pet-*-lookloop.mp4`, `s03-gandalf-ready`, `s05-connor-peek`, `s05-orion-yawn`, `s07-pooh-hold`, `s07-pooh-wave`, `s10-santa-goodnight`, `s10-santa-swoop` | start frame → kling-2.5-turbo image-to-video, 5 s (2,121 credits each); `s10-santa-swoop` 10 s (4,242) | WP-14a story clips round 2 (25,452 credits) | prepped with `tools/clip-prep.sh`; `s03-gandalf-ready` had its top 116 px cut before prep to drop a glint Kling drew |
 | `app/assets/clips/s07-pooh-float.mp4` | same chain; start frame (Pooh take 2) prompted as a generic 1920s storybook teddy bear (pencil and watercolour, no clothes) | Pooh cameo, after E.H. Shepard's public-domain 1926 book style (allowed cameo, AGENTS §06) | the provider blocked prompts that named the artist or the 1928 mouse film: no Mickey clip exists |
 
+## Public-domain characters (WP-14b) — generated for this show in the original book look
+
+Allowed cameos (AGENTS §06, owner 2026-11-19). Each is a fresh generated drawing (ElevenLabs flow `63DYIGTm4n0F8ectFnlO`,
+gpt-image-2.5-sunburst start frame, 2 takes, owner pick → kling-2.5-turbo 5 s), never a studio design. No names on screen.
+
+| File | Character | Public-domain basis | Notes |
+|---|---|---|---|
+| `assets/characters/nutcracker/start-standing.jpg`, `app/assets/clips/s04-nutcracker-march.mp4` | Nutcracker soldier (take 1) | E.T.A. Hoffmann, *Nussknacker und Mausekönig* (1816); Tchaikovsky's ballet (1892) | original design (red coat, tall hat, wooden jaw); not any film or ballet production's design |
+| `assets/characters/velveteen/start-standing.jpg`, `app/assets/clips/s08-velveteen-rabbit.mp4` | The Velveteen Rabbit (take 2) | Margery Williams, illustrated by William Nicholson (1922): US public domain since 1998 | worn plush toy after the 1922 book look |
+| `assets/characters/gingerbread/start-standing.jpg`, `app/assets/clips/s04-gingerbread-run.mp4` | The Gingerbread Man (take 1) | American folk tale, *St. Nicholas Magazine* (1875) | generic iced cookie |
+| `assets/characters/rabbit/start-standing.jpg`, `app/assets/clips/s10-rabbit-wave.mp4` | small rabbit in a blue jacket (take 2) | after Beatrix Potter's *The Tale of Peter Rabbit* (1902): public domain (US, and UK/EU since 2014) | prompt describes him without naming him or the author; never named on screen; the name may still be a trademark |
+
 ## Music (WP-05) — kept on the device, not committed
 
 Recordings are **not in the repo** (size); the ElevenLabs originals were sent to the owner in the WP-05 session; the owner downloads the others from the links below (original file, from a home
@@ -69,5 +81,6 @@ Generated 2026-11-17 for this show; original recordings, owned by the account ho
 | `app/js/scenes/family-portrait.js` | derived from one family photo supplied by the owner (not in the repo) by `tools/portrait.js` | owner's own; published at the owner's request (2026-11-18) | light points only; the photo was processed in a scratch folder and not kept |
 
 ## Changelog
+- **2026-11-19** — WP-14b: four public-domain characters (start frames + clips) with their sources.
 - **2026-11-19** — WP-14a: 11 clips and 6 last-frame start images.
 - **2026-11-18** — WP-08b: music sourced from Commons Ogg transcodes for the cloud master mix; take-A rule and `s10-todos-01` layering noted.

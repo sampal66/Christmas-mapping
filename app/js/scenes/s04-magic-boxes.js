@@ -12,6 +12,7 @@ import { BEATMAPS } from './beatmaps.js';
 import { from, beatClock, boxFace, BOX_ZONES, skyBase } from './common.js';
 import { PERF } from '../perf.js';
 import { stripToyRain, pixelAspect } from '../fx/strip.js';
+import { drawPetClip, aspectFix } from './stage.js';
 
 const cues = [
   { t: 14.76, name: 'box1-open' },      // first burst: the full orchestra tumbles in
@@ -58,7 +59,7 @@ const CLEARS = [C.at('cut'), C.at('out')];
 // Box wobbles (the s04-sfx-wobble hits at 3 / 8 / 11.5 s and after the cut) and big lid pops (on the bursts).
 const WOBBLES = [[3, 'box2'], [8, 'box1'], [11.5, 'box2'], [C.at('cut') + 1.2, 'box1'], [C.at('cut') + 4.8, 'box2'], [C.at('cut') + 8.4, 'box1'],
   ...WAVES.filter((w) => w.n >= 4).map((w) => [w.t, SOURCES[w.src][2]])].map(([t, b]) => [B.quantize(t), b]);
-const POPS = { box1: [C.at('box1-open'), C.at('finale'), B.quantize(68.4)], box2: [C.at('box2-open'), C.at('finale') + B.beatLen, B.quantize(68.4)] };
+const POPS = { box1: [C.at('box1-open'), C.at('box2-open'), C.at('finale'), B.quantize(68.4)], box2: [C.at('box2-open'), C.at('finale') + B.beatLen, B.quantize(68.4)] };
 // Pets rummaging inside the boxes (WP-04): [kind, box zone, u, from, to, clip?]. Each peek plays its character clip
 // (cel animation on black, rising out of the box top); the code sprite `kind` is the fallback while a clip is missing.
 // Connor and Orion use the big box's left shoulder: its right shoulder runs off the wall zone (the right-wall corner).
@@ -73,6 +74,16 @@ const PEEKS = [
   ['pomTail', 'box1', 0.25, C.at('cut') + 9.2, C.at('finale') - 0.3], ['huskyTail', 'box2Side', 0.2, 59, 67.5], ['pomTail', 'box1', 0.22, 60, 67.8],
 ];
 const LOOPS = new Set(['s04-connor-tail', 's04-alaska-tail']);
+// WP-14b: public-domain toys come alive and stand on the tower top (cel clips, feet on the small box's top edge: the
+// big box's top is hidden under the small box, and the box zones draw over the wall). The Nutcracker
+// (Hoffmann 1816) marches out at box2-open (the small box's lid pops with the big one's) and salutes, then sinks back in before his salute would
+// freeze; the Gingerbread Man (folk tale, 1875) hops out of the small box at the finale, waves and runs off to the
+// right (his clip ends empty). h: drawn height as a share of the wall height. toy: code sprite drawn while the clip
+// is missing (the Gingerbread Man has none: the toy rain carries on without him).
+const GUESTS = [
+  { id: 's04-nutcracker-march', zone: 'box1', u: 0.42, at: C.at('box2-open'), h: 0.17, until: 6.6, toy: 'nutcracker' },
+  { id: 's04-gingerbread-run', zone: 'box1', u: 0.35, at: C.at('finale'), h: 0.14, until: 5.1, toy: null },
+];
 
 function wobbleOf(local, box) {
   let v = 0;
@@ -176,6 +187,24 @@ function drawPets(ctx, w, h, local, env, t, alpha) {
   }
 }
 
+/** The WP-14b guests rising out of their box, standing on its top edge (everything below the edge is cut away). */
+function drawGuests(ctx, w, h, local, env, alpha) {
+  const k = aspectFix(env, w, h);
+  for (const g of GUESTS) {
+    const age = local - g.at;
+    if (age < -0.4 || age > g.until + 0.5) continue;
+    const up = clamp(Math.min(age / 0.4, (g.until + 0.4 - age) / 0.4));
+    if (up <= 0.01) { drawClip(ctx, g.id, age, { alpha: 0 }); continue; }             // loads and seeks it early
+    const [u, v] = from(env, g.zone, g.u, 0, [0.85, 0.6]);
+    const x = u * w, y = v * h, hh = h * g.h, dy = hh * (1 - easeOutBack(up)) * 1.05;
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, w, y); ctx.clip();
+    const ok = drawPetClip(ctx, { H: hh, k }, g.toy || 'guest', g.id, age, { x, y: y + dy, alpha });
+    if (!ok && g.toy) drawToy(ctx, g.toy, x, y + dy - 0.5 * hh, hh, 0, alpha);
+    ctx.restore();
+  }
+}
+
 /**
  * A character clip rising out of a box top at (x, y): its bottom edge sits on the box top and everything below it
  * is clipped away, so the pet seems to be inside the box. `up` (0..1) slides it in and out. False when no clip.
@@ -216,7 +245,7 @@ export default {
   cues,
   beats,
   zones: ['wall', ...BOX_ZONES, 'backdrop', 'stage', 'rightStrip'],
-  enter() { preloadClips([...Object.values(CLIP_OF), 's04-gandalf-pop']); },
+  enter() { preloadClips([...Object.values(CLIP_OF), 's04-gandalf-pop', ...GUESTS.map((g) => g.id)]); },
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = easeInOutSine(clamp(local / 2)) * (1 - easeInOutSine(C.prog(local, 'out', duration)));
     const fin = B.steps(local, C.at('finale'), 2);
@@ -226,6 +255,7 @@ export default {
         skyBase(zoneId, ctx, w, h, beatClock(B, t - local, local).soft);
         drawToys(ctx, w, h, local, env, pulse, A);
         drawPets(ctx, w, h, local, env, t, A);
+        drawGuests(ctx, w, h, local, env, A);
         break;
       case 'box1': case 'box1Side': case 'box2': case 'box2Side': {
         // The tower: big box (box2) at the bottom, small box (box1) on top. Each box's front and side are
