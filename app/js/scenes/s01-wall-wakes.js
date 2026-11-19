@@ -4,6 +4,7 @@ import { cueSheet, beatGrid, edgeTrace, edgeRunners, snowfall, footlights, spark
   cloudScatter, cloudSnowflake, cloudStar, formation, renderCloud, sweepColors, clamp } from '../fx/index.js';
 import { BEATMAPS } from './beatmaps.js';
 import { skyBase, outlineOf, from, beatClock, boxFace, BOX_ZONES } from './common.js';
+import { curtains, curtainOpen } from '../fx/curtains.js';
 
 const cues = [
   { t: 2, name: 'trace' },
@@ -17,6 +18,8 @@ const beats = { bpm: 152, ...BEATMAPS['s01-wall-wakes'] };
 const B = beatGrid(beats);
 const C = cueSheet(cues, B);
 const duration = 60;
+// Theatre curtains (WP-13a): closed in the pre-show, they open slowly as the music starts, so the traces begin behind them.
+const CURTAIN = { openAt: 0.3, dur: 4.2 };
 
 // WP-11 review (owner: s01 felt thin after the traces): once each outline is drawn, comets of light chase round it
 // on the beat, and a drone swarm rises from the floor line into a turning 3D snowflake on the snow swell, becomes a
@@ -115,5 +118,6 @@ export default {
         projectedStar(ctx, w, h, bt, { alpha: A * (0.85 + 0.15 * bar) * (0.35 * trace(14, 4) + 0.55 * B.steps(local, C.at('welcome'), 3)) });
         break;
     }
+    if (zoneId === 'wall' || zoneId === 'rightStrip') curtains(ctx, w, h, t, { open: curtainOpen(local, CURTAIN), zone: zoneId === 'wall' ? 'wall' : 'strip' });
   },
 };

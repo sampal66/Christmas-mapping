@@ -13,6 +13,8 @@ import { FAMILY_PORTRAIT } from './family-portrait.js';
 import { drawClip, preloadClips } from '../fx/clips.js';
 import { skyBase, stripSnow, from, beatClock, boxFace, BOX_ZONES } from './common.js';
 import { stageLayout, drawPets, preloadTracks, act, talk, PETS, aspectFix } from './stage.js';
+import { curtains, curtainOpen } from '../fx/curtains.js';
+import { PERF } from '../perf.js';
 
 const cues = [
   // Stretched (×1.3) to the whole Jingle Bells track (ends ≈1:51) so the music is never cut mid-phrase.
@@ -71,6 +73,9 @@ const FIREWORKS = [];
   const crown = fEnd - 2 * B.perBar;
   [0.08, 0.58, 0.7, 0.82, 0.94].forEach((x, j) => shell(crown, i++, { x, y: 0.14 + (j % 2) * 0.06, type: 'willow', radius: 0.26, count: 90, color: 'gold', color2: 'candle' }));
 }
+// PERF.fireworks valve (WP-13a, off by default): every third non-willow shell can be skipped; the willow canopies and
+// the crown stay, so the display still builds.
+FIREWORKS.forEach((f, i) => { f.lite = f.type !== 'willow' && i % 3 === 2; });
 // Gold spark fountains on the floor line (between the tree and the tower, and at the far left) under the volleys.
 const FOUNTAINS = (() => {
   const a = C.at('fireworks'), z = C.at('wave') - 2, k = (q) => B.quantize(a + (z - a) * q);
@@ -81,7 +86,8 @@ const FOUNTAINS = (() => {
 // with tools/portrait.js (only the light points are in the repo). It forms out of the swarm, sways, then holds
 // still facing the room, and flies back into the swarm, which writes the greeting.
 const PORTRAIT = { x: 0.73, y: 0.275, size: 0.27 };
-const PORTRAIT_OUT = 1.5;          // s after `title` when the portrait is back in the swarm
+const PORTRAIT_OUT = 1.5;
+const CURTAIN_AFTER_TITLE = 8;     // s after `title` when the curtains start to close (closed by `out`)          // s after `title` when the portrait is back in the swarm
 
 // The closing swarm (drone-show style): sparks rise and gather into the family constellation as a turning 3D
 // figure, then re-form as "¡Feliz Navidad!" written in points.
@@ -179,7 +185,7 @@ export default {
           }
         }
         for (const f of FOUNTAINS) sparkFountain(ctx, w, h, local, { ...f, y: 0.97, height: 0.3, alpha: 0.85 * A, surge: pulse });
-        for (const f of FIREWORKS) firework3d(ctx, w, h, local, { ...f, alpha: A });
+        for (const f of FIREWORKS) if (!(PERF.fireworks && f.lite)) firework3d(ctx, w, h, local, { ...f, alpha: A });
         snowfall(ctx, w, h, soft, { density: 0.5 * B.steps(local, C.at('wave'), 8), alpha: A });
         if (local > C.at('wave') - 2.5 && local < PETS_GONE) {
           drawPets(ctx, stageLayout(env, w, h), WAVES, local, { inAt: C.at('wave') - 2.2, outAt: PETS_OUT });
@@ -257,6 +263,10 @@ export default {
         sparkleBurst(ctx, w, h, local, { t0: 0.2, count: 26, spread: 0.7, colors: ['gold', 'candle', 'snow'], duration: 2.4, alpha: A });
         break;
       }
+    }
+    // Theatre curtains (WP-13a): they close once the greeting has been read, before the fade to the pre-show.
+    if (zoneId === 'wall' || zoneId === 'rightStrip') {
+      curtains(ctx, w, h, t, { open: curtainOpen(local, { closeAt: C.at('title') + CURTAIN_AFTER_TITLE, dur: 5 }), zone: zoneId === 'wall' ? 'wall' : 'strip' });
     }
   },
 };

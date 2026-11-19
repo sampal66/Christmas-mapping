@@ -2,7 +2,7 @@
 // Bump VERSION whenever any shell file changes, or the iPad keeps serving the old copy.
 // The smoke test fails if a .html/.css/.js file in app/ is missing from SHELL.
 // Media-pack files live in IndexedDB, not here, and never go over the network.
-const VERSION = 'v28';
+const VERSION = 'v29';
 const CACHE = `christmas-mapper-${VERSION}`;
 const SHELL = [
   './',
@@ -28,6 +28,7 @@ const SHELL = [
   'js/timeline.js',
   'js/stage-model.js',
   'js/palette.js',
+  'js/perf.js',
   'js/fx/index.js',
   'js/fx/util.js',
   'js/fx/cues.js',
@@ -44,6 +45,8 @@ const SHELL = [
   'js/fx/megatree.js',
   'js/fx/atlas.js',
   'js/fx/cosmos.js',
+  'js/fx/curtains.js',
+  'js/fx/strip.js',
   'js/fx/stars.js',
   'js/fx/toys.js',
   'js/fx/mickey-stars.js',

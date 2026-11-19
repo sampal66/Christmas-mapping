@@ -6,7 +6,8 @@ import { cueSheet, loadFonts, easeInOutSine, clamp } from '../fx/index.js';
 import { drawReturn, RETURN_PATH, carryWalk, walkSpan } from './star-story.js';
 import { stageLayout, drawPets, drawPetClip, preloadTracks, talk, look, act, CONNOR_MOUTH, PET_SIZE } from './stage.js';
 import { preloadClips } from '../fx/clips.js';
-import { BOX_ZONES, storyTower } from './common.js';
+import { BOX_ZONES, storyTower, skyBase } from './common.js';
+import { stripStarPath, pixelAspect } from '../fx/strip.js';
 
 const cues = [{ t: 0, name: 'pooh-in' }, { t: 15, name: 'found' }, { t: 30, name: 'carry' }, { t: 50, name: 'fly' }, { t: 60, name: 'settle' }, { t: 71, name: 'out' }];
 const C = cueSheet(cues);
@@ -67,10 +68,17 @@ export default {
   duration,
   cues,
   story: true,
-  zones: ['wall', 'star', ...BOX_ZONES],
+  zones: ['wall', 'star', ...BOX_ZONES, 'rightStrip'],
   enter() { loadFonts(); preloadTracks(tracks); preloadClips([POOH, POOH_HOLD, POOH_WAVE]); },
   draw(zoneId, ctx, w, h, t, local, env) {
     if (storyTower(zoneId, ctx, w, h, t, local, c('out'), duration)) return;
+    if (zoneId === 'rightStrip') {
+      // WP-13a: the star's path home lights up round the corner while it is found and carried, then guides it in.
+      skyBase(zoneId, ctx, w, h, t);
+      const a = easeInOutSine(clamp((local - c('found')) / 3)) * (1 - easeInOutSine(clamp((local - c('settle') - 4) / (c('out') - c('settle') - 4))));
+      stripStarPath(ctx, w, h, t, { alpha: a, fill: clamp((local - c('found') - 3) / (c('fly') - c('found') - 3)), k: pixelAspect(env, w, h) });
+      return;
+    }
     const L = zoneId === 'wall' ? stageLayout(env, w, h) : null;
     const unit = L ? L.H * L.k * PET_SIZE.connor : undefined;
     drawReturn(zoneId, ctx, w, h, t, local, env, C, () => {
