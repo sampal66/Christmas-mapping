@@ -1,5 +1,5 @@
 // Shared scene helpers.
-import { duskBase, snowfall, towerGlow, clamp, easeInOutSine } from '../fx/index.js';
+import { duskBase, snowfall, towerGlow, cottageFace, clamp, easeInOutSine } from '../fx/index.js';
 
 /** Zones that are sky (they show the dusk starfield whenever no scene draws them, never black). */
 export const SKY_ZONES = ['wall', 'rightStrip'];
@@ -34,15 +34,23 @@ export function boxFace(zoneId) {
 }
 export const BOX_ZONES = ['box1', 'box1Side', 'box2', 'box2Side'];
 
+/** The story-scene tower's fade: in over the first 3 s, out from `outAt` to `end`. */
+export function storyAlpha(local, outAt, end) {
+  return easeInOutSine(clamp(local / 3)) * (1 - easeInOutSine(clamp((local - outAt) / Math.max(0.1, end - outAt))));
+}
+
 /**
- * Story scenes (WP-08c): the gift tower softly lit, so the cats on top stand on something. Fades in over the first
- * 3 s and out from `outAt` to `end`. Returns false for zones that aren't box faces.
+ * Story scenes (WP-08c): the gift tower softly lit, so the cats on top stand on something, dressed as a snowy
+ * cottage (WP-13b: windows, a door with a wreath, snow on the top edges; the chimney is drawn on the wall by
+ * scenes/stage.js `storyChimney`). Fades with storyAlpha. opts.flicker (0..1): the window beside Connor flickers.
+ * Returns false for zones that aren't box faces.
  */
-export function storyTower(zoneId, ctx, w, h, t, local, outAt, end) {
+export function storyTower(zoneId, ctx, w, h, t, local, outAt, end, opts = {}) {
   const f = boxFace(zoneId);
   if (!f) return false;
-  const alpha = easeInOutSine(clamp(local / 3)) * (1 - easeInOutSine(clamp((local - outAt) / Math.max(0.1, end - outAt))));
-  towerGlow(ctx, w, h, t, { face: f.face, top: f.top, level: f.top ? 0.16 : 0.13, alpha });
+  const alpha = storyAlpha(local, outAt, end);
+  towerGlow(ctx, w, h, t, { face: f.face, top: f.top, level: f.top ? 0.16 : 0.13, alpha, ribbon: false });
+  cottageFace(ctx, w, h, t, { box: f.box, face: f.face, alpha, flicker: opts.flicker || 0 });
   return true;
 }
 

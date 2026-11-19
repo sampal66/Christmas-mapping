@@ -20,3 +20,4 @@ export * from './toys.js';
 export * from './mickey-stars.js';
 export * from './portrait-swarm.js';
 export * from './pet-portraits.js';
+export * from './cow-portrait.js';

@@ -1,0 +1,89 @@
+<!-- The cow jumping over the moon (Hey Diddle Diddle, public-domain nursery rhyme). Original drawing made in code for
+     this project (WP-13b) in the show's character style (DESIGN_SYSTEM §05: 1940s cel look, warm cream rim instead of
+     dark ink, 2–3 flat tones + a soft highlight, big eyes, rubber-hose limbs, lifted darks). Source art for the s06
+     star swarm: rendered to PNG, then tools/portrait.js → app/js/fx/cow-portrait.js. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="800" height="600">
+  <rect width="400" height="300" fill="#000"/>
+  <defs>
+    <clipPath id="body"><path d="M118 98 C116 70 158 56 202 60 C244 62 266 74 270 94 C274 116 250 130 208 130 C166 132 136 128 126 116 C120 110 118 104 118 98 Z"/></clipPath>
+    <mask id="cres"><rect width="400" height="300" fill="#000"/><circle cx="190" cy="226" r="62" fill="#fff"/><circle cx="224" cy="206" r="54" fill="#000"/></mask>
+  </defs>
+
+  <!-- the moon: a sleepy crescent, gold with a warm shadow tone and a cream rim -->
+  <g mask="url(#cres)">
+    <circle cx="190" cy="226" r="62" fill="#F6E7C8"/>
+    <circle cx="190" cy="226" r="58" fill="#F2B544"/>
+    <circle cx="200" cy="236" r="58" fill="#FFCF66"/>
+  </g>
+  <path d="M150 220 Q158 228 166 220" fill="none" stroke="#B9782E" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M156 244 Q166 252 176 246" fill="none" stroke="#B9782E" stroke-width="3.5" stroke-linecap="round"/>
+  <ellipse cx="150" cy="234" rx="7" ry="5" fill="#F59A7E" opacity="0.8"/>
+
+  <g transform="rotate(-7 200 96)">
+  <!-- neck, under the body and head -->
+  <path d="M246 84 C256 70 266 62 280 60" stroke="#F6E7C8" stroke-width="30" stroke-linecap="round" fill="none"/>
+  <path d="M246 84 C256 70 266 62 280 60" stroke="#EFE6D6" stroke-width="23" stroke-linecap="round" fill="none"/>
+  <g stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- far legs (shadow tone), cream rim under each -->
+    <path d="M154 118 C138 132 124 142 108 146" stroke="#F6E7C8" stroke-width="20"/>
+    <path d="M154 118 C138 132 124 142 108 146" stroke="#CDBFA8" stroke-width="13"/>
+    <path d="M232 120 C248 134 264 140 280 140" stroke="#F6E7C8" stroke-width="20"/>
+    <path d="M232 120 C248 134 264 140 280 140" stroke="#CDBFA8" stroke-width="13"/>
+    <!-- tail with a caramel tuft -->
+    <path d="M124 94 C102 86 92 66 100 50" stroke="#F6E7C8" stroke-width="9"/>
+    <path d="M124 94 C102 86 92 66 100 50" stroke="#EFE6D6" stroke-width="4"/>
+  </g>
+  <path d="M100 50 C92 44 94 34 102 36 C104 30 114 32 110 42 C116 44 112 54 104 52 Z" fill="#B07A4A" stroke="#F6E7C8" stroke-width="3"/>
+
+  <!-- body: cream base, a shadow along the belly, caramel patches, soft highlight on the back -->
+  <path d="M118 98 C116 70 158 56 202 60 C244 62 266 74 270 94 C274 116 250 130 208 130 C166 132 136 128 126 116 C120 110 118 104 118 98 Z" fill="#EFE6D6" stroke="#F6E7C8" stroke-width="5"/>
+  <g clip-path="url(#body)">
+    <ellipse cx="196" cy="132" rx="90" ry="20" fill="#CDBFA8"/>
+    <path d="M150 64 C170 58 186 70 180 86 C174 100 152 98 146 86 C142 76 142 68 150 64 Z" fill="#B07A4A"/>
+    <path d="M214 92 C230 84 248 94 244 108 C240 120 220 120 212 110 C206 104 208 96 214 92 Z" fill="#B07A4A"/>
+    <path d="M118 96 C128 92 136 100 132 110 C128 116 118 114 116 106 Z" fill="#B07A4A"/>
+    <ellipse cx="196" cy="72" rx="46" ry="7" fill="#FFF8EA" opacity="0.7"/>
+  </g>
+  <!-- udder -->
+  <path d="M188 128 C190 140 204 140 206 128 Z" fill="#F2A7A0" stroke="#F6E7C8" stroke-width="3"/>
+
+  <!-- near legs: rubber-hose curves, kicked out behind and reaching forward -->
+  <g stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M142 112 C124 124 106 128 90 122" stroke="#F6E7C8" stroke-width="21"/>
+    <path d="M142 112 C124 124 106 128 90 122" stroke="#EFE6D6" stroke-width="14"/>
+    <path d="M244 112 C262 124 280 126 298 118" stroke="#F6E7C8" stroke-width="21"/>
+    <path d="M244 112 C262 124 280 126 298 118" stroke="#EFE6D6" stroke-width="14"/>
+  </g>
+  <!-- hooves (lifted dark: warm taupe, never black) -->
+  <g fill="#9C7A5E" stroke="#F6E7C8" stroke-width="3">
+    <ellipse cx="86" cy="121" rx="8" ry="9"/><ellipse cx="104" cy="147" rx="8" ry="9"/>
+    <ellipse cx="303" cy="117" rx="8" ry="9"/><ellipse cx="285" cy="140" rx="8" ry="9"/>
+  </g>
+
+  <!-- head: turned to us, big happy eye, pink muzzle, ear and little horns -->
+  <path d="M282 46 C278 36 282 30 288 30" stroke="#F6E7C8" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <path d="M282 46 C278 36 282 30 288 30" stroke="#F2B544" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M304 44 C306 34 312 30 318 32" stroke="#F6E7C8" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <path d="M304 44 C306 34 312 30 318 32" stroke="#F2B544" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M276 56 C262 52 256 58 262 64 C266 68 274 66 278 64 Z" fill="#F2A7A0" stroke="#F6E7C8" stroke-width="3"/>
+  <path d="M270 68 C266 50 280 40 296 42 C314 44 322 56 320 70 C318 80 304 86 290 86 C278 86 272 80 270 68 Z" fill="#EFE6D6" stroke="#F6E7C8" stroke-width="4"/>
+  <path d="M286 48 C292 44 302 46 304 52 C298 56 290 56 286 48 Z" fill="#B07A4A"/>
+  <ellipse cx="312" cy="80" rx="16" ry="12" fill="#F2A7A0" stroke="#F6E7C8" stroke-width="3"/>
+  <ellipse cx="308" cy="79" rx="2.4" ry="3" fill="#B9686A"/>
+  <ellipse cx="318" cy="78" rx="2.4" ry="3" fill="#B9686A"/>
+  <path d="M302 88 Q310 94 318 89" stroke="#B9686A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="296" cy="64" rx="8" ry="10" fill="#FFFFFF" stroke="#F6E7C8" stroke-width="2"/>
+  <ellipse cx="298" cy="66" rx="4.5" ry="6" fill="#5A6478"/>
+  <circle cx="300" cy="63" r="1.8" fill="#FFFFFF"/>
+  <path d="M288 54 Q296 50 304 54" stroke="#B07A4A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  </g>
+
+  <!-- twinkles round the jump: small four-point sparkles -->
+  <g fill="#FFCF66" stroke="#F6E7C8" stroke-width="1">
+    <path d="M66 74 L69 82 L77 85 L69 88 L66 96 L63 88 L55 85 L63 82 Z"/>
+    <path d="M336 152 L338 158 L344 160 L338 162 L336 168 L334 162 L328 160 L334 158 Z"/>
+    <path d="M300 232 L302 237 L307 239 L302 241 L300 246 L298 241 L293 239 L298 237 Z"/>
+    <path d="M88 196 L90 201 L95 203 L90 205 L88 210 L86 205 L81 203 L86 201 Z"/>
+  </g>
+</svg>

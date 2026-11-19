@@ -3,9 +3,9 @@
 // The star's motion is star-story.js's drawEscape; the pets (stage.js) act on the SCRIPT §03 cues around it.
 import { cueSheet, loadFonts } from '../fx/index.js';
 import { drawEscape } from './star-story.js';
-import { BOX_ZONES, storyTower, skyBase } from './common.js';
+import { BOX_ZONES, storyTower, storyAlpha, skyBase } from './common.js';
 import { stripFallingStar, pixelAspect } from '../fx/strip.js';
-import { stageLayout, drawPets, preloadTracks, talk, look, act } from './stage.js';
+import { stageLayout, storyChimney, drawPets, preloadTracks, talk, look, act } from './stage.js';
 
 const cues = [{ t: 0, name: 'pets-in' }, { t: 15, name: 'tradition' }, { t: 40, name: 'bat' }, { t: 50, name: 'escape' }, { t: 71, name: 'out' }];
 const C = cueSheet(cues);
@@ -63,7 +63,9 @@ export default {
       return;
     }
     drawEscape(zoneId, ctx, w, h, t, local, env, C, () => {
-      drawPets(ctx, stageLayout(env, w, h), tracks, local, { inAt: c('pets-in'), outAt: c('out') });
+      const L = stageLayout(env, w, h);
+      storyChimney(ctx, L, t, storyAlpha(local, c('out'), duration));
+      drawPets(ctx, L, tracks, local, { inAt: c('pets-in'), outAt: c('out') });
     });
   },
 };

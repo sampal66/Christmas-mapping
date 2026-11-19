@@ -2,10 +2,10 @@
 // over his eyes), Gandalf hears Santa's bells, then the old film flickers on and the drone-swarm Mickey (WP-11,
 // fx/mickey-stars.js; no Mickey clip exists) whistles and points up: everyone looks up (TREATMENT §04, SCRIPT §03).
 import { cueSheet, loadFonts, mickeyStars, MICKEY_TIMING } from '../fx/index.js';
-import { skyBase, BOX_ZONES, storyTower } from './common.js';
+import { skyBase, BOX_ZONES, storyTower, storyAlpha } from './common.js';
 import { easeInOutSine, clamp } from '../fx/util.js';
 import { stripStockings, pixelAspect } from '../fx/strip.js';
-import { stageLayout, drawPets, preloadTracks, talk, look, act, chain } from './stage.js';
+import { stageLayout, storyChimney, drawPets, preloadTracks, talk, look, act, chain } from './stage.js';
 
 const cues = [{ t: 0, name: 'regroup' }, { t: 15, name: 'jingle' }, { t: 30, name: 'mickey-in' }, { t: 45, name: 'mickey-out' }, { t: 45, name: 'cut' }, { t: 56, name: 'out' }];
 const C = cueSheet(cues);
@@ -46,7 +46,9 @@ export default {
   zones: ['backdrop', 'wall', ...BOX_ZONES, 'rightStrip'],
   enter() { loadFonts(); preloadTracks(tracks); },
   draw(zoneId, ctx, w, h, t, local, env) {
-    if (storyTower(zoneId, ctx, w, h, t, local, c('out'), duration)) return;
+    // WP-13b: the window beside Connor flickers while he hides, then settles as he peeks out.
+    const flicker = easeInOutSine(clamp((local - c('jingle') - 2) / 1.5)) * (1 - easeInOutSine(clamp((local - point - 0.6) / 3)));
+    if (storyTower(zoneId, ctx, w, h, t, local, c('out'), duration, { flicker })) return;
     if (zoneId === 'backdrop') {
       mickeyStars(ctx, w, h, t, local - c('mickey-in'), { x: 0.26, y: 0.5, size: 0.25 });
       return;
@@ -60,6 +62,8 @@ export default {
     }
     if (zoneId !== 'wall') return;
     skyBase(zoneId, ctx, w, h, t);
-    drawPets(ctx, stageLayout(env, w, h), tracks, local, { inAt: c('regroup'), outAt: c('out') });
+    const L = stageLayout(env, w, h);
+    storyChimney(ctx, L, t, storyAlpha(local, c('out'), duration));
+    drawPets(ctx, L, tracks, local, { inAt: c('regroup'), outAt: c('out') });
   },
 };

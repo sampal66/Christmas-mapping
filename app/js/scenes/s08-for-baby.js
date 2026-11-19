@@ -5,9 +5,9 @@
 import { cueSheet, loadFonts, snowfall, starHalo, constellation, ORION, CANIS_MAJOR, CANIS_MINOR, FELIS,
   easeInOutSine, clamp } from '../fx/index.js';
 import { drawWarmStar } from './star-story.js';
-import { skyBase, BOX_ZONES, storyTower } from './common.js';
+import { skyBase, BOX_ZONES, storyTower, storyAlpha } from './common.js';
 import { stripAurora } from '../fx/strip.js';
-import { stageLayout, drawPets, drawGuest, preloadTracks, look, act } from './stage.js';
+import { stageLayout, storyChimney, drawPets, drawGuest, preloadTracks, look, act } from './stage.js';
 import { preloadClips } from '../fx/clips.js';
 
 const cues = [{ t: 0, name: 'gather' }, { t: 20, name: 'message' }, { t: 45, name: 'missing' }, { t: 56, name: 'out' }];
@@ -73,6 +73,7 @@ export default {
       }
     }
     const L = stageLayout(env, w, h);
+    storyChimney(ctx, L, t, storyAlpha(local, c('out'), duration));
     drawPets(ctx, L, tracks, local, { inAt: c('gather'), outAt: c('out') });
     const [vx, vy] = L.towerAt(0.515);
     drawGuest(ctx, L, 'velveteen', VELVETEEN, local, { x: vx, y: vy, flip: true, inAt: c('gather') + 0.6, outAt: c('out'), loop: true });

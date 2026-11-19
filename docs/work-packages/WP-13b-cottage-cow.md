@@ -28,6 +28,6 @@ jumping over the moon as a star swarm. These are items P3 and B0 of
 A physical moon disc (P4, decide in WP-09), new clips, audio.
 
 ## Acceptance
-- [ ] Cottage textures in the story scenes only; cats and dogs unchanged on their lines (pre-check placement).
-- [ ] Cow swarm in s06 without breaking the beat map or flash limits.
-- [ ] Docs, the CONTROL board and handoff updated.
+- [x] Cottage textures in the story scenes only; cats and dogs unchanged on their lines (pre-check placement).
+- [x] Cow swarm in s06 without breaking the beat map or flash limits.
+- [x] Docs, the CONTROL board and handoff updated.
