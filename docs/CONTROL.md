@@ -55,7 +55,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 - **2026-11-18 · WP-12** — `node tools/precheck.js [--mix file]` (≈ 3 min, `--no-flash --no-sheets` ≈ 1 min) → `precheck/report.md` + `sheet-sNN.png` (git-ignored). First run PASS; sheets + report sent to the owner. `fx/clips.js` test hook `setClipProbe`/`clipsBusy`; `tools/show-table.js` now shared with master-mix; `sw.js` v27.
   Flagged (fix in a code WP or with the proposal): s08 pets frozen ≈ 49 s on held look-ups (also 9–17 s in s03/s05/s07), Pooh a still 22.5 s, **s10-orion-01 spoken after the pets leave** (free fix: `outAt`), s04/s06/s10 > 33 ms worst headless.
-  Owner asked for [proposed ElevenLabs generations ≤ 40k](work-packages/WP-12-proposal.md): 11 items ≈ 34.7k + 5.3k contingency, **awaiting owner approval; nothing generated**.
+  Owner asked for [proposed ElevenLabs generations ≤ 40k](work-packages/WP-12-review-and-proposals.md): 11 items ≈ 34.7k + 5.3k contingency, **awaiting owner approval; nothing generated**.
   Gotchas: an ffmpeg 1-row `crop` on yuv420 rounds to 0 rows (convert to `gray` first). Pre-check renders the default layout: re-run after WP-09 with the calibrated one if needed.
 
 - **2026-11-18 · WP-08b render** — Pulled every source (music flow `ppF1…`, sfx flow `EjbT…`, 46 voice lines from `dn8q…`; Commons music as **.ogg transcodes**, originals 429) → `master-mix.m4a` 11:57.0, −16 LUFS, −1.5 dBTP, no missing sources/overlaps; + `music-box-loop.m4a` (20 s, bar-grid loop) + 10 scene previews → owner (media pack only). Nothing new generated.
@@ -180,7 +180,7 @@ Newest first. Each session appends **≤ 5 lines**: what was done, what's left, 
 
 ## Open decisions / waiting on owner
 
-- **ElevenLabs budget (owner, 2026-11-18):** 59,890 credits left. Up to **40,000** may go to new generations; keep **≈ 20,000 in reserve** for fixes once the projector arrives (~Nov 27, WP-09). The wider dog re-takes (≈ 14k) come out of the reserve, not the 40k. Owner to approve items from [WP-12-proposal](work-packages/WP-12-proposal.md) before anything is generated. Part B (owner request) proposes more public-domain characters (Nutcracker, Velveteen Rabbit, Gingerbread Man, Peter Rabbit, Piglet/Tigger, Cheshire Cat) plus *Twinkle Twinkle*: it **needs an AGENTS §06 rule change**, drafted in the proposal, not applied.
+- **ElevenLabs budget (owner, 2026-11-18):** 59,890 credits left. Up to **40,000** may go to new generations; keep **≈ 20,000 in reserve** for fixes once the projector arrives (~Nov 27, WP-09). The wider dog re-takes (≈ 14k) come out of the reserve, not the 40k. Owner to approve items from [WP-12-review-and-proposals](work-packages/WP-12-review-and-proposals.md) before anything is generated. Part B (owner request) proposes more public-domain characters (Nutcracker, Velveteen Rabbit, Gingerbread Man, Peter Rabbit, Piglet/Tigger, Cheshire Cat) plus *Twinkle Twinkle*: it **needs an AGENTS §06 rule change**, drafted in the proposal, not applied.
 - ✅ Animation approach A chosen; style test passed (Gandalf #4, kling-2.5-turbo ≈2.1k credits per 5 s clip). Owner will buy **Creator** (121k/mo) for the character work. **Check the ElevenLabs credit balance**: ≈30 clips ≈ 45–65k credits on the cheaper video models (TREATMENT §09).
 - ✅ Projector decided: HAPPRUN H1 (throw ratio 1.4) on the tripod at 3.5 m, head 1.45 m; buy Nov 27. See [STAGE_SURVEY §03e](STAGE_SURVEY.md).
 - ✅ LCD-black design note: handled in DESIGN_SYSTEM §02 (`dusk` base, fade to starfield). Check the `dusk` value on the wall in WP-09.

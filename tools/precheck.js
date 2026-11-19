@@ -23,7 +23,7 @@ const opt = (name, dflt) => { const i = args.indexOf(`--${name}`); return i >= 0
 const flag = (name) => args.includes(`--${name}`);
 const OUT = path.resolve(opt('out', path.join(ROOT, 'precheck')));
 const MIX = opt('mix', '');
-const PROPOSAL = path.join(ROOT, 'docs/work-packages/WP-12-proposal.md');   // appended to the report when present
+const PROPOSAL = path.join(ROOT, 'docs/work-packages/WP-12-review-and-proposals.md');   // appended to the report when present
 
 const BUDGET_MS = 33;        // worst render ms per frame (headless software raster: real fps is checked on the iPad, WP-09)
 const FEET_TOL = Number(opt('feet-tol', 4));         // px off the floor / tower line before a pet is flagged

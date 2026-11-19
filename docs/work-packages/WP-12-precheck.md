@@ -53,5 +53,5 @@ Fixing what it finds (those go to their own WPs), on-wall calibration (WP-09), a
 - First run: **PASS**. Flagged: s08 pets frozen ≈ 49 s on their look-ups (plus 9–17 s stretches in s03/s05/s07),
   Pooh a still for 22.5 s in s07, s10-orion-01 spoken after the pets have left, s06/s10/s04 render cost
   over 33 ms headless (iPad check in WP-09), 29 clips with ear tips in the top row (faded by `EAR_FADE`).
-- Owner request (same session): [proposed ElevenLabs generations ≤ 40k](WP-12-proposal.md) (appended to the report). Nothing generated.
+- Owner request (same session): [proposed ElevenLabs generations ≤ 40k](WP-12-review-and-proposals.md) (appended to the report). Nothing generated.
 
