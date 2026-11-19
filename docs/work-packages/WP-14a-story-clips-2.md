@@ -50,3 +50,21 @@ Part B characters (WP-14b), audio (WP-15), the right wall and cottage textures (
 - [ ] Pre-check passes with 0 frozen stretches ≥ 8 s; Orion's line is spoken with the pets on stage.
 - [ ] Render cost of s10 not worse than +5 ms worst headless (the Santa swoop is ≤ its drawn size).
 - [ ] Smoke test passes; PRD C2/C3 status, ARCHITECTURE §07 and the CONTROL board + handoff updated.
+
+## Status (2026-11-19, end of session)
+11 clips generated (one take each, default settings, no re-runs): **25,452 credits** (59,890 → 34,438 left). Owner saw
+the takes (contact sheet) and approved wiring all 11. Flow `63DYIGTm4n0F8ectFnlO`, nodes labelled with the clip ids.
+
+| Clip id | Kind | Start frame | Wired |
+|---|---|---|---|
+| `pet-<pet>-lookloop` ×4 | loop | `assets/characters/<pet>/start-lookloop.jpg` (last frame of the look-up) | every `look()`: after 5 s (`chain`, stage.js) |
+| `s07-pooh-hold` | loop | `assets/characters/pooh/start-hold.jpg` (last frame of the float) | s07 `found` − 2 → `carry` + 1 |
+| `s07-pooh-wave` | once | same | s07 `carry` + 1, as he floats away |
+| `s05-connor-peek` | loop | `assets/characters/connor/start-peek.jpg` (last frame of the hide) | s05: hide + 5 s → `point` + 0.6 |
+| `s03-gandalf-ready` | once | Gandalf standing | s03 `bat` − 10.5 → −5.5 (top 116 px cut: Kling drew a glint) |
+| `s05-orion-yawn` | once | Orion standing | s05-orion-01 (`regroup` + 6, replaces the talk loop) |
+| `s10-santa-swoop` (10 s) | once | Santa sleigh | s10 sleigh trail (replaces the loop; loop = fallback) |
+| `s10-santa-goodnight` | once | Santa sleigh | s10 `title` + 0.3, over the tree |
+
+F1 done: s10 pets stay until `wave` + 12.6 (Orion's line is `wave` + 8, 4.5 s). Known: Pooh's balloon leaves the top
+of the frame in the last second of the wave (he is fading out then); Gandalf's ear tips/paw are clipped at the swat.

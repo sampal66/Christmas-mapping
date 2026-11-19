@@ -13,11 +13,16 @@ const C = cueSheet(cues);
 const duration = 75;
 const c = C.at;
 
-const POOH = 's07-pooh-float';
+const POOH = 's07-pooh-float', POOH_HOLD = 's07-pooh-hold', POOH_WAVE = 's07-pooh-wave';
 // Pooh's 10 s clip floats, looks in the pot and holds it out; it starts 3 s in so the pot is held out (its last
-// frame) when the star appears in it at `found`. The pot sits at (0.75, 0.80) of that frame.
+// frame) at `found` − 2. Then (WP-14a) the hold loop (balloon bob, kind look down, mouth moving on s07-pooh-01) while
+// the star is in his pot, and the wave goodbye as he floats away. Both start on the float clip's last frame; each
+// clip's anchor is where the pot is in that clip's first frame, so the pot stays on the star's path through the
+// changes.
 const POOH_START = c('pooh-in') + 3;
-const POOH_POT = [0.75, 0.8];
+const POOH_POT = { [POOH]: [0.75, 0.8], [POOH_HOLD]: [0.84, 0.786], [POOH_WAVE]: [0.872, 0.801] };
+const POOH_CLIPS = [[POOH, POOH_START, false], [POOH_HOLD, c('found') - 2, true], [POOH_WAVE, c('carry') + 1, false]];
+const POOH_XFADE = 0.3;
 const POOH_H = 0.36;                     // share of the wall height, balloon included
 
 const settleLook = (p, i) => look(p, c('fly') + 1 + 0.3 * i, duration);   // follow the star up to the tree tip
@@ -46,7 +51,14 @@ function drawPooh(ctx, L, w, h, local, env) {
   const bob = (1 - still) * Math.sin(local * 1.3) * 0.012 * h;
   const y = pot[1] * h - (1 - enter) * 0.55 * h - leave * 0.7 * h + bob;
   const x = pot[0] * w + leave * 0.06 * w + (1 - still) * Math.sin(local * 0.7) * 0.004 * w;
-  drawPetClip(ctx, { ...L, H: POOH_H * h }, 'pooh', POOH, local - POOH_START, { x, y, anchor: POOH_POT, alpha: enter * (1 - leave) });
+  const PL = { ...L, H: POOH_H * h }, alpha = enter * (1 - leave);
+  let i = 0;
+  while (i + 1 < POOH_CLIPS.length && local >= POOH_CLIPS[i + 1][1]) i++;
+  const one = ([id, at, loop], a) => drawPetClip(ctx, PL, 'pooh', id, local - at, { x, y, anchor: POOH_POT[id], alpha: a, loop });
+  const k = i > 0 ? clamp((local - POOH_CLIPS[i][1]) / POOH_XFADE) : 1;
+  if (k < 1) one(POOH_CLIPS[i - 1], alpha * (1 - k));
+  // a clip that hasn't loaded yet keeps the previous one on screen rather than leaving a gap
+  if (!one(POOH_CLIPS[i], alpha * k) && i > 0 && k >= 1) one(POOH_CLIPS[i - 1], alpha);
 }
 
 export default {
@@ -56,7 +68,7 @@ export default {
   cues,
   story: true,
   zones: ['wall', 'star', ...BOX_ZONES],
-  enter() { loadFonts(); preloadTracks(tracks); preloadClips([POOH]); },
+  enter() { loadFonts(); preloadTracks(tracks); preloadClips([POOH, POOH_HOLD, POOH_WAVE]); },
   draw(zoneId, ctx, w, h, t, local, env) {
     if (storyTower(zoneId, ctx, w, h, t, local, c('out'), duration)) return;
     const L = zoneId === 'wall' ? stageLayout(env, w, h) : null;

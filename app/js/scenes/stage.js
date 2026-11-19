@@ -7,9 +7,10 @@
 // Orion, Gandalf and nobody is ever over the tree. Sizes are relative to Connor, whose size is fixed by s07: the star
 // rides at his mouth along star-story's carry path, so his mouth height above the floor sets his height.
 //
-// Clip choice: a pet's track is a list of events { at, end, id, loop, time? } (later events win while they overlap;
-// `time(local)`, when given, sets the clip time, e.g. a walk cycle driven by the distance walked). Between
-// events the pet plays its idle loop. Every change of clip cross-fades over XFADE seconds. A missing or still-loading
+// Clip choice: a pet's track is a list of events { at, end, id, loop, time?, then? } (later events win while they
+// overlap; `time(local)`, when given, sets the clip time, e.g. a walk cycle driven by the distance walked; `then`
+// { id, after, loop } chains a follow-on clip `after` s into the event, so a once-clip never freezes on its last frame
+// (WP-14a: look-up → look-loop, hide → peek). Between events the pet plays its idle loop. Every change of clip cross-fades over XFADE seconds. A missing or still-loading
 // clip simply isn't drawn.
 import { drawClip, preloadClips, EAR_FADE } from '../fx/clips.js';
 import { easeInOutSine, clamp, starDustArrive, starDustLeave } from '../fx/index.js';
@@ -32,6 +33,9 @@ const CONNOR_MOUTH_UP = 0.7 / 0.944;
 // fills a different share of each frame. Measured from each clip's first frame (the matte's bounding box):
 // [x of the pet's centre, share of the frame height the pet fills, frame width / height]. A clip is drawn so the pet
 // in it has its fixed size and stands on the same spot, whichever clip plays. Re-measure if a clip is re-cut.
+// Follow-on clips (a `then`, WP-14a) start on the previous clip's LAST frame, so their row is matched to that frame
+// instead (scratch tool in the WP-14a handoff): [anchor x, fill, frame width / height, anchor y], the anchor being the
+// feet point, so the pose lands exactly where the previous clip left it.
 const FRAME = {
   'pet-alaska-idle': [0.488, 1.0, 0.974], 'pet-alaska-lookup': [0.54, 1.0, 0.974], 'pet-alaska-talk': [0.538, 0.991, 1.044],
   'pet-connor-idle': [0.512, 0.993, 1.093], 'pet-connor-lookup': [0.503, 0.994, 1.07], 'pet-connor-talk': [0.506, 0.994, 1.104],
@@ -42,13 +46,24 @@ const FRAME = {
   's07-connor-brave': [0.444, 0.987, 1.211], 's07-connor-carry': [0.493, 0.944, 1.222], 's07-pooh-float': [0.4, 0.985, 0.563],
   's08-gandalf-soft': [0.547, 0.994, 1.207], 's10-alaska-wave': [0.477, 0.994, 1.178], 's10-connor-wave': [0.454, 0.994, 1.319],
   's10-gandalf-wave': [0.556, 0.998, 1.263], 's10-orion-wave': [0.555, 1.0, 1.419],
+  // WP-14a. Start-frame clips, measured like the rows above:
+  's03-gandalf-ready': [0.506, 1.0, 1.37], 's05-orion-yawn': [0.578, 0.996, 1.174],
+  // Follow-on clips, matched to the last frame of the clip before them (4th value: anchor y).
+  'pet-alaska-lookloop': [0.518, 1.0, 0.97, 1], 'pet-connor-lookloop': [0.503, 0.994, 1.122, 1],
+  'pet-gandalf-lookloop': [0.6, 1.0, 1.407, 1], 'pet-orion-lookloop': [0.576, 0.989, 1.278, 1],
+  's05-connor-peek': [0.467, 1.365, 1.756, 0.998],
+  's07-pooh-hold': [0.84, 0.989, 0.47, 0.786], 's07-pooh-wave': [0.872, 0.987, 0.467, 0.801],   // s07 passes the pot as anchor
 };
 // The pet's body width / its height (idle start frame), for laying out slots before the clips load.
 const BODY = Object.fromEntries(['alaska', 'connor', 'orion', 'gandalf'].map((p) => [p, FRAME[`pet-${p}-idle`][2] / FRAME[`pet-${p}-idle`][1]]));
 
 export const idleOf = (p) => `pet-${p}-idle`;
 export const talk = (p, at, len) => ({ at, end: at + len, id: `pet-${p}-talk`, loop: true });
-export const look = (p, at, end) => ({ at, end, id: `pet-${p}-lookup`, loop: false });
+/** A clip that, `after` s in, hands over to another clip (default: a loop) for the rest of its event. */
+export const chain = (ev, id, after, loop = true) => ({ ...ev, then: { id, after, loop } });
+const LOOK_LEN = 5;                      // the look-up clips are 5.03 s; the look-loop starts on their last frame
+/** Look up at the star and keep looking (breathing, blinking: the look-loop), never a still picture. */
+export const look = (p, at, end) => chain({ at, end, id: `pet-${p}-lookup`, loop: false }, `pet-${p}-lookloop`, LOOK_LEN);
 export const act = (id, at, end, loop = false) => ({ at, end, id, loop });
 
 /** Every clip a set of tracks can play (idle loops included): for a scene's enter(). */
@@ -56,7 +71,7 @@ export function trackClips(tracks) {
   const ids = new Set();
   for (const [p, evs] of Object.entries(tracks)) {
     if (PETS.includes(p)) ids.add(idleOf(p));
-    for (const e of evs) ids.add(e.id);
+    for (const e of evs) { ids.add(e.id); if (e.then) ids.add(e.then.id); }
   }
   return [...ids];
 }
@@ -66,7 +81,9 @@ export const preloadTracks = (tracks) => preloadClips(trackClips(tracks));
 function stateAt(pet, events, local) {
   for (let i = events.length - 1; i >= 0; i--) {
     const e = events[i];
-    if (local >= e.at && local < e.end) return { id: e.id, at: e.at, loop: e.loop, time: e.time };
+    if (local < e.at || local >= e.end) continue;
+    if (e.then && local >= e.at + e.then.after) return { id: e.then.id, at: e.at + e.then.after, loop: e.then.loop };
+    return { id: e.id, at: e.at, loop: e.loop, time: e.time };
   }
   return { id: idleOf(pet), at: -1.7 * PETS.indexOf(pet), loop: true };
 }
@@ -78,6 +95,8 @@ function segmentStart(events, local) {
   for (const e of events) {
     if (e.at <= local && e.at > s) s = e.at;
     if (e.end <= local && e.end > s) s = e.end;
+    const h = e.then && e.at + e.then.after;
+    if (h && h <= local && h < e.end && h > s) s = h;
   }
   return s;
 }
@@ -137,9 +156,9 @@ const xy = ([x, y]) => ({ x, y });
 
 /** Draws one clip of a pet with its feet (or `anchor`) at x, y. Returns false when the clip isn't available. */
 export function drawPetClip(ctx, L, pet, id, time, { x, y, flip = false, alpha = 1, loop = false, anchor, scale = 1 }) {
-  const [cx, fill] = FRAME[id] || [0.5, 1];
+  const [cx, fill, , ay = 1] = FRAME[id] || [0.5, 1];
   const hh = L.H * (PET_SIZE[pet] ?? 1) * scale / fill;
-  if (!anchor) anchor = [cx, 1];
+  if (!anchor) anchor = [cx, ay];
   ctx.save();
   ctx.translate(x, y);
   ctx.scale(L.k, 1);
