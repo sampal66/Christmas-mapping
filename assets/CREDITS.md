@@ -72,6 +72,8 @@ Generated 2026-11-17 for this show; original recordings, owned by the account ho
 | `s04-box-chaos.mp3`: joyful chaotic cartoon-orchestra romp, 75 s, 132 bpm 4/4 (replaces `s04-sugar-plum.mp3` in the mix) | ElevenLabs Music v2.5, flow "CMS WP-06 sound effects", 1 take | original | sections: tiptoe → burst 0:15 → bigger 0:26 → quiet 0:44 → finale 0:57 → last chord 1:11; level −21…−13 dB RMS, max rise 6.8 dB/s (no hits) |
 | `s09-hold-bells.mp3`: warm bell "magic train" cue, 32 s, 120 bpm 4/4 (replaces the music box in s09; s00 keeps it) | ElevenLabs Music v2.5, same flow, 1 take | original (in that spirit; no film melody) | scene 0 = file 7.97 s; loop file 15.97–27.97 s (6 bars, 1 dB seam) |
 | `s04-sfx-rummage` (12 s loop), `s04-sfx-tumble`, `s04-sfx-wobble`, `s04-sfx-flurry` | ElevenLabs Sound Effects v2, same flow, 1 take each | original | soft box-search layers for s04 (SCRIPT §06) |
+| `s09-twinkle.mp3`: celesta / music-box *Twinkle, Twinkle, Little Star* (trad. melody, PD composition), 24 s, 120 bpm 4/4 (WP-15; replaces `s09-hold-bells` in s09) | ElevenLabs Music v2.5, flow "CMS WP-06 sound effects", node "s09 Twinkle (WP-15)", 1 take, 360 credits | original arrangement | the mix splices it (`tools/master-mix.js` MUSIC): the hold loops one 6-bar melody pass, original file 4.97–16.97 s (seam spectral match 0.92, 0.3 dB) |
+| `s04-sfx-march` (2.5 s, wooden toy-soldier "tock" steps), `s04-sfx-hop` (3 s, one soft cookie hop) (WP-15) | ElevenLabs Sound Effects v2, same flow, 1 take each (8 + 17 credits) | original | the Nutcracker's march (box2-open +0.4) and the Gingerbread Man's hop (finale +0.4) |
 
 ## Star-swarm portraits (2026-11-18)
 
@@ -81,6 +83,7 @@ Generated 2026-11-17 for this show; original recordings, owned by the account ho
 | `app/js/scenes/family-portrait.js` | derived from one family photo supplied by the owner (not in the repo) by `tools/portrait.js` | owner's own; published at the owner's request (2026-11-18) | light points only; the photo was processed in a scratch folder and not kept |
 
 ## Changelog
+- **2026-11-19** — WP-15: Twinkle (s09), the Nutcracker march and Gingerbread hop sound effects.
 - **2026-11-19** — WP-14b: four public-domain characters (start frames + clips) with their sources.
 - **2026-11-19** — WP-14a: 11 clips and 6 last-frame start images.
 - **2026-11-18** — WP-08b: music sourced from Commons Ogg transcodes for the cloud master mix; take-A rule and `s10-todos-01` layering noted.

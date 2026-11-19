@@ -200,10 +200,12 @@ specific extras only if something sounds off or is missing). Flow "CMS WP-06 sou
 | s03-sfx-whoosh | s03 · escape | magic whoosh with a shimmer tail as the star flies away | 3 |
 | s04-sfx-boxopen | s04 · box1-open, box2-open | sparkle burst as a box lid opens (used twice) | 2 |
 | s04-sfx-spring | s04 · box2-open | gentle jack-in-the-box spring | 1 |
-| s04-sfx-rummage | s04 · box1-open → cut, finale → out | soft rummaging bed under the music: tissue, wrapping, toys shuffling (seamless loop, ≈ −16 dB) | 12 (loop) |
+| s04-sfx-rummage | s04 · box1-open → cut +2.4 (WP-15: covers the music's rest), finale → out | soft rummaging bed under the music: tissue, wrapping, toys shuffling (seamless loop, ≈ −16 dB) | 12 (loop) |
 | s04-sfx-tumble | s04 · after each burst, through the finale | toys tumbling out: plush thumps, wooden clacks, a bell, ribbon swish | 4 |
-| s04-sfx-wobble | s04 · intro and after `cut` | a box wobbling and hopping with something busy inside | 2 |
+| s04-sfx-wobble | s04 · intro and `cut` +2.2 (WP-15) | a box wobbling and hopping with something busy inside | 2 |
 | s04-sfx-flurry | s04 · between bursts | toys flying: wind-up whirr, tiny bells, xylophone, gentle slide whistle | 3 |
+| s04-sfx-march | s04 · box2-open +0.4 | the Nutcracker's soft wooden "tock" march (WP-15) | 2.5 |
+| s04-sfx-hop | s04 · finale +0.4 | the Gingerbread Man's soft hop (WP-15) | 3 |
 | s05-sfx-jingle | s05 · jingle | soft, distant jingle bells, no sharp attack | 2 |
 | s05-sfx-whistle | s05 · mickey-in | jaunty whistled 1920s-style tune (original melody, music model), old-film tone | 8 |
 | s05-sfx-projector | s05 · mickey-in → mickey-out | very quiet old film-projector purr under Mickey's clip (seamless loop) | 10 (loop) |
