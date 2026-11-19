@@ -26,6 +26,10 @@ A browser-based projection-mapping tool for the iPad. It has no build step: plai
 - Scenes live in `js/scenes/` (running order and hold points in `js/scenes/index.js`); effects in `js/fx/`, colours in
   `js/palette.js`. Show also has **Cut ⏭** (jump to the current scene's `cut` cue, for the on-the-night cut list), a
   **Finale: projected star** checkbox (live-moment fallback) and an fps/draw-time readout.
+- **Performance valves** (only if the fps readout drops on the wall): open the app once as
+  `index.html?perf=portrait,toys,fireworks` (any of the three, or `all`). The choice is saved on the iPad, so the
+  home-screen icon keeps it; `?perf=none` turns them off again. `portrait`: s10 family portrait 4,877 → 3,500 lights;
+  `toys`: a third fewer s04 objects per toss wave; `fireworks`: a third fewer s10 shells (details in `js/perf.js`).
 - **Gift-box tower:** the small box stands on the big one. Each box has two zones to calibrate, its front and its
   left side (`Gift box 1 · front`, `Gift box 1 · side`, …), so effects wrap round the corner.
 - **Family constellation:** the finale turns one media-pack photo whose name starts with `family` (e.g.

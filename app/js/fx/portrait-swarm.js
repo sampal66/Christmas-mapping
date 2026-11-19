@@ -4,6 +4,22 @@
 // The points get a little depth (brighter points nearer), so the figure shimmers and shows depth as it turns.
 import { morphClouds, renderCloud } from './points3d.js';
 import { clamp, easeInOutSine, rand } from './util.js';
+import { PERF } from '../perf.js';
+
+/** PERF.portrait valve (WP-13a): a big figure thinned evenly to this many lights. */
+export const PORTRAIT_LITE = 3500;
+const liteCache = new WeakMap();
+function thinned(c) {
+  if (c.n <= PORTRAIT_LITE) return c;
+  let l = liteCache.get(c);
+  if (l) return l;
+  const r = PORTRAIT_LITE / c.n, keep = [];
+  for (let i = 0; i < c.n; i++) if (Math.floor((i + 1) * r) > Math.floor(i * r)) keep.push(i);
+  l = { n: keep.length, p: new Float32Array(keep.length * 3), s: new Float32Array(keep.length), col: new Array(keep.length), size: c.size };
+  keep.forEach((j, i) => { l.p.set(c.p.subarray(j * 3, j * 3 + 3), i * 3); l.s[i] = c.s[j]; l.col[i] = c.col[j]; });
+  liteCache.set(c, l);
+  return l;
+}
 
 const cache = new WeakMap();
 
@@ -42,7 +58,7 @@ export function portraitSwarm(ctx, w, h, t, age, opts = {}) {
   const { data, x = 0.85, y = 0.35, size = 0.2, alpha = 1, end = 10, source, flip = false, hold = null } = opts;
   const T = { ...PORTRAIT_TIMING, ...(opts.timing || {}) };
   if (!data || age < 0 || age > end || alpha <= 0.01) return;
-  const live = cloudPortrait(data);
+  const live = PERF.portrait ? thinned(cloudPortrait(data)) : cloudPortrait(data);
   const kin = clamp(age / T.form), kout = clamp((end - age) / T.out), k = Math.min(kin, kout);
   let cloud = live;
   if (source?.cloud && k < 1) {

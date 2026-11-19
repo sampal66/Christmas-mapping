@@ -10,6 +10,8 @@ import { TOYS, TOY_NAMES, drawToy, tossSpec, tossAt, petPeek, boxLid, poof } fro
 import { drawClip, EAR_FADE, preloadClips } from '../fx/clips.js';
 import { BEATMAPS } from './beatmaps.js';
 import { from, beatClock, boxFace, BOX_ZONES, skyBase } from './common.js';
+import { PERF } from '../perf.js';
+import { stripToyRain, pixelAspect } from '../fx/strip.js';
 
 const cues = [
   { t: 14.76, name: 'box1-open' },      // first burst: the full orchestra tumbles in
@@ -97,7 +99,7 @@ function toysFor(env, w, h) {
   const pts = {};
   for (const [k, [zone, u]] of Object.entries(SOURCES)) pts[k] = from(env, zone, u, 0, { b1: [0.84, 0.52], b2L: [0.76, 0.68], b2R: [0.95, 0.67] }[k]);
   const left = from(env, 'box2Side', 0, 1, [0.72, 0.97]);
-  const key = `${w}x${h}|${JSON.stringify(pts)}|${left}`;
+  const key = `${w}x${h}|${JSON.stringify(pts)}|${left}|${PERF.toys}`;
   if (toyCache?.key === key) return toyCache.list;
   const floorY = Math.min(left[1], 0.97) * h;
   const xMax = left[0] * w;
@@ -105,11 +107,13 @@ function toysFor(env, w, h) {
   const list = [];
   WAVES.forEach((wv, wi) => {
     const [ox, oy] = [pts[wv.src][0] * w, pts[wv.src][1] * h];
-    for (let i = 0; i < wv.n; i++) {
+    // PERF.toys valve (WP-13a): a third fewer objects per wave; the single off-beat toys stay
+    const n = PERF.toys && wv.n > 1 ? Math.ceil(wv.n * 2 / 3) : wv.n;
+    for (let i = 0; i < n; i++) {
       const sd = wi * 97 + i * 7.3;
       const name = TOY_NAMES[Math.floor(rand(sd) * TOY_NAMES.length)];
       const size = h * (0.07 + rand(sd + 0.1) * 0.045) * (TOYS[name].long ? 1.15 : 1);
-      const into = wv.n > 1 && rand(sd + 0.2) < 0.12;
+      const into = n > 1 && rand(sd + 0.2) < 0.12;
       const xT = into ? ox + (rand(sd + 0.3) - 0.5) * size * 2 : xMax - size * 0.6 - (xMax - 0.05 * w) * rand(sd + 0.3) ** 1.25;
       const t0 = wv.t + i * 0.05;
       const spec = tossSpec({ t0, x0: ox, y0: oy, xT, floor: floorY - size * 0.38 - rand(sd + 0.4) * h * 0.05, rise: h * (0.18 + rand(sd + 0.5) * 0.36 * wv.power),
@@ -211,7 +215,7 @@ export default {
   duration,
   cues,
   beats,
-  zones: ['wall', ...BOX_ZONES, 'backdrop', 'stage'],
+  zones: ['wall', ...BOX_ZONES, 'backdrop', 'stage', 'rightStrip'],
   enter() { preloadClips([...Object.values(CLIP_OF), 's04-gandalf-pop']); },
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = easeInOutSine(clamp(local / 2)) * (1 - easeInOutSine(C.prog(local, 'out', duration)));
@@ -272,6 +276,15 @@ export default {
             sparkleBurst(ctx, w, h, local, { t0: B.time(j * B.perBar), x, y: y - 0.05, up: 0.5, spread: 0.3, count: 34, colors: j % 2 ? COLORS.box2 : COLORS.box1, duration: 2.2, seed: 30 + j, alpha: A });
           }
         }
+        break;
+      }
+      case 'rightStrip': {
+        // WP-13a: a soft toy rain slides down round the corner once box 1 bursts; thinner in the quiet restart.
+        const { soft } = beatClock(B, t - local, local);
+        skyBase(zoneId, ctx, w, h, soft);
+        const quiet = C.env(local, 'cut', 'finale', 1.5, 1.5);
+        const level = clamp((local - C.at('box1-open')) / 4) * (0.65 + 0.35 * fin) * (1 - 0.6 * quiet);
+        stripToyRain(ctx, w, h, soft, { alpha: A, level, k: pixelAspect(env, w, h) });
         break;
       }
       case 'stage':

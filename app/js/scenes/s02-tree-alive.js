@@ -5,6 +5,7 @@ import { cueSheet, beatGrid, megaTree, ornamentPops, starHalo, projectedStar, ad
 import { SHOW_HUES, mix } from '../palette.js';
 import { BEATMAPS } from './beatmaps.js';
 import { skyBase, from, beatClock } from './common.js';
+import { stripSparkleDrift, pixelAspect } from '../fx/strip.js';
 
 const cues = [
   { t: 0, name: 'build' },
@@ -27,7 +28,7 @@ export default {
   duration,
   cues,
   beats,
-  zones: ['tree', 'star', 'wall'],
+  zones: ['tree', 'star', 'wall', 'rightStrip'],
   draw(zoneId, ctx, w, h, t, local, env) {
     const A = 1 - easeInOutSine(C.prog(local, 'out', duration));
     const build = C.prog(local, 'build', 'drop');
@@ -64,6 +65,11 @@ export default {
     } else if (zoneId === 'star') {
       projectedStar(ctx, w, h, bt, { alpha: A * (0.4 + 0.2 * drop + 0.4 * glow) * (0.85 + 0.15 * pulse), spin: 1 });
       starHalo(ctx, w, h, t, { intensity: A * glow * (0.75 + 0.25 * bar), pulse: 0, size: 0.5 });
+    } else if (zoneId === 'rightStrip') {
+      // WP-13a: sparkles drift slowly up round the corner, brighter after the drop, gold at the star's glow.
+      skyBase(zoneId, ctx, w, h, soft);
+      stripSparkleDrift(ctx, w, h, bt, { alpha: A * (0.45 + 0.3 * drop + 0.25 * glow) * (0.9 + 0.1 * bar),
+        colors: glow > 0.5 ? ['gold', 'candle', 'snow'] : ['gold', 'snow', 'ice'], k: pixelAspect(env, w, h) });
     } else if (zoneId === 'wall') {
       skyBase(zoneId, ctx, w, h, soft);
       // Soft coloured echo round the tree (the tree zone itself sits on top and blacks out the middle).

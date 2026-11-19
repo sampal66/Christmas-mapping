@@ -27,14 +27,14 @@
 | WP-12 | [Automatic show pre-check](work-packages/WP-12-precheck.md): one command, whole show headless → report + contact sheets, before the owner's manual scene review | WP-08b, WP-08c | ✅ done (PR #19) | `claude/wp-12-precheck` | success metrics |
 | WP-14a | [Story clips round 2](work-packages/WP-14a-story-clips-2.md): look-up loops (no frozen pets), Pooh hold + wave, Connor peek, Gandalf/Orion beats, Santa swoop + goodnight; s10 Orion timing (≤ 25,452 credits) | WP-12 | 🟢 ready to start | — | C2, C3 |
 | WP-14b | [Public-domain characters](work-packages/WP-14b-pd-characters.md): Nutcracker, Velveteen Rabbit, Gingerbread Man, Peter Rabbit (≤ 10,004 credits) | WP-14a | ⚪ waiting | — | C2, C3 |
-| WP-13a | [Right wall in every scene + theatre curtains + perf valves](work-packages/WP-13a-right-wall-curtains.md) (0 credits) | WP-12 | 🟢 ready to start | — | C1 |
-| WP-13b | [Gift tower as a snowy cottage + the cow over the moon](work-packages/WP-13b-cottage-cow.md) (0 credits) | WP-13a | ⚪ waiting | — | C1 |
+| WP-13a | [Right wall in every scene + theatre curtains + perf valves](work-packages/WP-13a-right-wall-curtains.md) (0 credits) | WP-12 | ✅ done (PR #20) | `claude/wp-13a-right-wall-curtains` | C1 |
+| WP-13b | [Gift tower as a snowy cottage + the cow over the moon](work-packages/WP-13b-cottage-cow.md) (0 credits) | WP-13a, WP-14a | ⚪ waiting (owner starts it after reviewing WP-14a) | — | C1 |
 | WP-15 | [Audio round 2](work-packages/WP-15-audio-round-2.md): listen-check fixes, Twinkle Twinkle (s09), Santa's voice, new sfx, master-mix re-render (≤ 1,400 credits) | WP-14a, WP-14b, owner listen notes | ⚪ waiting | — | C4, C5 |
 | WP-10 | [Show treatment + design system review](work-packages/WP-10-treatment.md) → [TREATMENT.md](TREATMENT.md) | WP-00 | ✅ done (PR #5) | `claude/wp-10-treatment` | C1, C4, C6, C7 |
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
 | WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | ✅ done (PR #10) | `claude/wp-11b-pet-constellations` | C1, C2 |
 | WP-11c | [s06 atlas art from *Urania's Mirror*](work-packages/WP-11c-urania-art.md) (owner: current plates distorted, grid unwanted) | WP-11b | ✅ done (PR #10, same session) | `claude/wp-11b-pet-constellations` | C1 |
-| WP-09 | On-wall calibration + rehearsal checklist | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
+| WP-09 | On-wall calibration + rehearsal checklist; if fps drops, switch on the perf valves (`?perf=portrait,toys,fireworks`, see `app/js/perf.js`) | projector arrives (~Nov 28) | ⚪ waiting | — | success metrics |
 
 Status keys: 🟢 ready to start · 🔵 in progress · 🟡 in review (PR open) · ✅ done · ⚪ waiting on a dependency · ⏸️ deferred
 
@@ -58,6 +58,11 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-19 · WP-13a** — Right strip drawn in every scene (`fx/strip.js`: s02 sparkles, s03 falling star, s04 toy rain, s05 stockings on `jingle`, s07 star path, s08 aurora); theatre curtains `fx/curtains.js` (closed in s00, open s01 0.3→4.5 s, close s10 title+8→+13 s); `PERF` valves in `js/perf.js` (`?perf=…`, saved on the device; how-to in app/README). `sw.js` v28 (+perf.js, curtains.js, strip.js).
+  Checks: smoke + flash check pass, pre-check run; each strip motion ≤ 2.5 ms incl. its sky; curtains ≈ 2 ms (baked, 1:1 blit when closed). Headless "worst" per scene is noisy (±10 ms run to run, even on untouched s06).
+  PR #20 merged at the owner's request (2026-11-19). **WP-13b waits until the owner has reviewed WP-14a.**
+  Gotchas: s00 no longer draws the backdrop (the curtain on the wall shows through it). Merge with WP-14a: s10 only gained the curtain block at the end of `draw` + the firework `lite` filter; sw.js take the higher VERSION + 1 and keep both SHELL additions.
 
 - **2026-11-19 · WP-12 close-out** — Owner approved the **Recommended package** of [WP-12-review-and-proposals](work-packages/WP-12-review-and-proposals.md) → briefs WP-14a, WP-14b, WP-13a, WP-13b, WP-15 on the board; PLAN §7 updated; AGENTS §06 cameo list extended (public-domain characters, book look only). PR #19 merged at the owner's request.
   Next: **WP-14a** (session opened from this one). WP-13a can run alongside. WP-15 needs the owner's listen-check notes (s04 4:23.9, drums, s08 swell, seam).
