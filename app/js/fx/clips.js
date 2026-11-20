@@ -121,6 +121,20 @@ function keyed(c, fade = 0) {
   return c.out;
 }
 
+/** Test hook only: [x0, y0, x1, y1] of the keyed frame's opaque pixels (alpha > 50 %), in frame px; null if empty. */
+function matteBox(c, frame) {
+  if (c.matteAt === c.keyedAt && c.matte !== undefined) return c.matte;
+  const { width: w, height: h } = frame;
+  const d = frame.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, w, h).data;
+  let x0 = w, y0 = h, x1 = -1, y1 = -1;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (d[(y * w + x) * 4 + 3] > 128) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+  }
+  c.matteAt = c.keyedAt;
+  c.matte = x1 < 0 ? null : [x0, y0, x1 + 1, y1 + 1];
+  return c.matte;
+}
+
 /**
  * Draws a clip's frame at `time` seconds into the clip.
  * opts: x, y (anchor point, px), h (drawn height, px), anchor [ax, ay] (0..1 of the drawn box, default bottom
@@ -159,7 +173,12 @@ export function drawClip(ctx, id, time, opts = {}) {
   if (rotate) ctx.rotate(rotate);
   if (flip) ctx.scale(-1, 1);
   ctx.drawImage(frame, u0 * fw, v0 * fh, sw, sh, -anchor[0] * dw, -anchor[1] * dh, dw, dh);
-  if (probe) probe({ id, time: ct, drawn: true, held: !loop && time >= dur - 0.04, m: ctx.getTransform(), box: [-anchor[0] * dw, -anchor[1] * dh, dw, dh], alpha: ctx.globalAlpha, anchor, canvas: ctx.canvas });
+  if (probe) {
+    // the matte's bounding box in the drawn box's coordinates (WP-16 overlap check): test-only, so the scan is fine here
+    const mb = matteBox(c, frame), sx = dw / sw, sy = dh / sh, ox = -anchor[0] * dw - u0 * fw * sx, oy = -anchor[1] * dh - v0 * fh * sy;
+    probe({ id, time: ct, drawn: true, held: !loop && time >= dur - 0.04, m: ctx.getTransform(), box: [-anchor[0] * dw, -anchor[1] * dh, dw, dh], alpha: ctx.globalAlpha, anchor, canvas: ctx.canvas,
+      matte: mb && [ox + mb[0] * sx, oy + mb[1] * sy, (mb[2] - mb[0]) * sx, (mb[3] - mb[1]) * sy] });
+  }
   ctx.restore();
   return true;
 }

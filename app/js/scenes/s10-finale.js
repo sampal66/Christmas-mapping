@@ -194,7 +194,7 @@ export default {
         if (local > C.at('wave') - 2.5 && local < PETS_GONE) {
           const L = stageLayout(env, w, h);
           drawPets(ctx, L, WAVES, local, { inAt: C.at('wave') - 2.2, outAt: PETS_OUT });
-          const [rx, ry] = L.towerAt(0.515);
+          const { x: rx, y: ry } = L.guest;
           drawGuest(ctx, L, 'rabbit', RABBIT, local, { x: rx, y: ry, flip: true, inAt: C.at('wave') - 2.2, outAt: RABBIT_OUT, at: RABBIT_AT });
         }
         // The family portrait: forms out of the swarm, holds still facing the room, flies back for the greeting.
