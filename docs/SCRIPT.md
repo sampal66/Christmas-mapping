@@ -46,6 +46,7 @@
 | Connor | CMS Connor | `C241plScZxHDNe72ZOXT` |
 | Orion | CMS Orion | `5pC8wi2ibUVfMORndBWM` |
 | Pooh | CMS Pooh | `TAyICBNyjxfszzKuFMaC` |
+| Santa (WP-15) | CMS Santa | `VpoAdkEB4HGC6l4MJRMg` |
 
 **Accent rule (owner):** neutral Latin American Spanish with no regional accent, like Mexican film dubbing. Never a
 Castilian (Spain) accent. Generation uses `eleven_v4` with a `[neutral Mexican Spanish accent]` tag at the start of each line,
@@ -154,6 +155,7 @@ brave, Orion secretly helps, Alaska shares the lead.*
 |---|---|---|---|---|---|
 | s10-gandalf-01 | sleigh +1 | Gandalf | 3.4 | ¡Miren! ¡Es Santa! ¡Vio la estrella! | Look! It's Santa! He saw the star! |
 | s10-connor-01 | sleigh +5 | Connor | 2.5 | ¡Y esta vez… no me asusté! | And this time… I wasn't scared! |
+| s10-santa-01 | sleigh +7.6 | Santa | 3.5 | ¡Jo, jo, jo! ¡Feliz Navidad! | Ho, ho, ho! Merry Christmas! |
 | s10-alaska-01 | wave +0 | Alaska | 4.0 | ¡Todos en fila! A la una, a las dos, y… | Everyone in line! One, two, and… |
 | s10-todos-01 | wave +4.2 | Gandalf, Alaska, Connor, Orion | 1.5 | ¡Feliz Navidad! | Merry Christmas! |
 | s10-orion-01 | wave +8 | Orion | 4.5 | …Bueno. Admito que esto sí valió la pena. | …Fine. I admit this was worth it. |
@@ -242,6 +244,7 @@ Every take A and sound effect laid on its cue (real lengths), checked against th
   (soft fade in), so the finale never drops into silence.
 
 ## Changelog
+- **2026-11-20** — v1.8 (WP-15): Santa's soft voice (owner picked preview C) and `s10-santa-01` on his swoop, right after Connor; §06: Nutcracker march, Gingerbread hop, s04 rummage/wobble re-timed.
 - **2026-11-17** — v1.7: owner approved all audio (voices, sfx, new music); s08 pause gets a visual beat.
 - **2026-11-17** — v1.6: 4 s04 box-search effects (owner); s04 music and s09 hold loop replaced (TREATMENT §04).
 - **2026-11-17** — v1.5: §07 silence check; 4 cue offsets nudged to remove overlaps; ≈ s column = real take lengths.
