@@ -75,7 +75,7 @@ export default {
     const L = stageLayout(env, w, h);
     storyChimney(ctx, L, t, storyAlpha(local, c('out'), duration));
     drawPets(ctx, L, tracks, local, { inAt: c('gather'), outAt: c('out') });
-    const [vx, vy] = L.towerAt(0.515);
+    const { x: vx, y: vy } = L.guest;
     drawGuest(ctx, L, 'velveteen', VELVETEEN, local, { x: vx, y: vy, flip: true, inAt: c('gather') + 0.6, outAt: c('out'), loop: true });
   },
 };

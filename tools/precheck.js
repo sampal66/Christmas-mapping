@@ -5,7 +5,8 @@
 // Usage: node tools/precheck.js [--mix master-mix.m4a] [--out precheck] [--no-flash] [--no-sheets]
 //   Writes <out>/report.md and <out>/sheet-<scene>.png (scratch output: precheck/ is git-ignored, never commit it).
 //   Exit code 1 on a failure: console error, missing clip or shell file, sw.js VERSION not bumped, flash check
-//   failure, a cue outside its scene, or a mix whose length doesn't match the timeline. Other findings are flagged ⚠.
+//   failure, two characters overlapping (WP-16), a cue outside its scene, or a mix whose length doesn't match the
+//   timeline. Other findings are flagged ⚠.
 //
 // How it renders: the page builds the same zone canvases as the Mapper (default layout, CSS homography per zone, masks
 // and occluders) and draws every zone at an exact show time, the way main.js does. Character clips are paused at
@@ -27,6 +28,7 @@ const PROPOSAL = path.join(ROOT, 'docs/work-packages/WP-12-review-and-proposals.
 
 const BUDGET_MS = 33;        // worst render ms per frame (headless software raster: real fps is checked on the iPad, WP-09)
 const FEET_TOL = Number(opt('feet-tol', 4));         // px off the floor / tower line before a pet is flagged
+const OVERLAP = 0.03;        // share of the smaller character's box two characters may overlap before they're flagged (WP-16)
 const FROZEN_S = 8;          // s on a held last frame before a pet is flagged as a still picture
 const SAMPLE = 0.5;          // s between frames of the clip-coverage pass
 const PETS = ['alaska', 'connor', 'orion', 'gandalf'];
@@ -116,6 +118,13 @@ async function pageSetup() {
     const feet = P(0, 0);
     const w = r.canvas.width, h = r.canvas.height;
     out.feet = feet.map((v) => Math.round(v));
+    // WP-16: the matte's bounding box on this canvas (axis-aligned, px), for the overlap check
+    if (r.matte) {
+      const [mx, my, mw, mh] = r.matte;
+      const q = [P(mx, my), P(mx + mw, my), P(mx + mw, my + mh), P(mx, my + mh)];
+      const xs = q.map((p) => p[0]), ys = q.map((p) => p[1]);
+      out.bbox = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+    }
     // body samples: a column above the feet and two beside it (the frame's transparent margins are left out)
     const pts = [];
     for (const fy of [0.15, 0.4, 0.65]) for (const fx of [-0.22, 0, 0.22]) pts.push(P(fx * bw, -fy * bh));
@@ -144,6 +153,7 @@ async function pageSetup() {
   window.__pc = {
     errors,
     scenes: scenes.map((s) => ({ id: s.id, start: s.start, duration: s.duration })),
+    margin: Object.fromEntries(Object.entries(L.margin).map(([k, v]) => [k, Math.round(v)])),
     /** Fast pass: draw once, return which clips were asked for (no waiting for videos). */
     probe(t) { return render(t).map((r) => ({ id: r.id, drawn: r.drawn, failed: !!r.failed, held: !!r.held, zone: r.zone, alpha: r.alpha ?? 0 })); },
     /** Exact frame: draw, wait until every clip has loaded and landed on its seek, draw again. */
@@ -256,12 +266,14 @@ async function contactSheet(browser, scene, frames, file) {
   const scriptRows = [];         // { id, t, issue }
   const offStage = [];
   const placement = [];          // flagged placement findings
+  const overlaps = [];           // WP-16: characters overlapping each other at cue + 1 s
   const frozen = [];             // { scene, pet, from, to, id }: held last frames
   const sheets = [];
-  let flash, shell, mix;
+  let flash, shell, mix, layoutMargin = {};
   try {
     await page.goto(`http://localhost:${server.address().port}/__precheck.html`);
     await page.evaluate(pageSetup);
+    layoutMargin = await page.evaluate(() => window.__pc.margin);
 
     // 1 · assembly: every scene drawn every SAMPLE s; which clips are asked for
     for (const s of table) {
@@ -320,6 +332,22 @@ async function contactSheet(browser, scene, frames, file) {
           if (r.overTree) issues.push('over the tree');
           if (r.offLine > FEET_TOL) issues.push(`feet ${r.offLine} px off the floor/tower line`);
           if (issues.length) placement.push({ scene: s.id, cue: q.name, t, id: r.id, feet: r.feet, issues });
+        }
+        // WP-16 overlap: any two characters on the wall whose mattes' boxes overlap by > OVERLAP of the smaller one
+        // (a cross-fading character is the union of its two clips' boxes)
+        const who = {};
+        for (const r of recs.filter((x) => x.drawn && x.pet && x.zone === 'wall' && x.alpha > 0.3 && x.bbox)) {
+          const b = who[r.pet];
+          who[r.pet] = b ? { ids: `${b.ids}+${r.id}`, box: [Math.min(b.box[0], r.bbox[0]), Math.min(b.box[1], r.bbox[1]), Math.max(b.box[2], r.bbox[2]), Math.max(b.box[3], r.bbox[3])] } : { ids: r.id, box: r.bbox };
+        }
+        const names = Object.keys(who);
+        for (let i = 0; i < names.length; i++) for (let j = i + 1; j < names.length; j++) {
+          const a = who[names[i]].box, b = who[names[j]].box;
+          const ix = Math.min(a[2], b[2]) - Math.max(a[0], b[0]), iy = Math.min(a[3], b[3]) - Math.max(a[1], b[1]);
+          if (ix <= 0 || iy <= 0) continue;
+          const area = (q) => (q[2] - q[0]) * (q[3] - q[1]);
+          const share = (ix * iy) / Math.min(area(a), area(b));
+          if (share > OVERLAP) overlaps.push({ scene: s.id, cue: q.name, t, pair: `${names[i]} (${who[names[i]].ids}) × ${names[j]} (${who[names[j]].ids})`, share, px: Math.round(ix) });
         }
         if (!flag('no-sheets')) {
           const png = await page.locator('#stage').screenshot();
@@ -381,6 +409,7 @@ async function contactSheet(browser, scene, frames, file) {
     if (p.b > q.a + 0.05 && !q.id.startsWith('s10-todos')) voice.push(`${p.id} (ends ${fmt(p.b)}) overlaps ${q.id} (starts ${fmt(q.a)})`);
   }
   if (tl.length) fail.push('timeline');
+  if (overlaps.length) fail.push('overlaps');
   mix = mixLength(total);
   if (mix && !mix.ok) fail.push('mix length');
 
@@ -398,6 +427,7 @@ async function contactSheet(browser, scene, frames, file) {
       `${table.length} scenes, ${asked.size} clips asked for, ${consoleErrors.length} console errors; sw.js ${shell.version}${shell.base ? ` (main ${shell.mainVersion}${shell.appChanged ? ', app changed' : ''})` : ''}, ${shell.shell} shell files`],
     ['2 · Script ↔ picture', ok(!scriptRows.length, true), `${lines.filter((l) => !l.id.includes('narrador')).length} on-stage lines; ${scriptRows.length} idle while speaking, ${offStage.length} speaker not drawn`],
     ['3 · Placement', ok(!placement.length, true), `${placement.length} flagged at cue +1 s; ${ears.length} clips with top-row content (ears, soft-faded by EAR_FADE)`],
+    ['3c · Overlaps', ok(!overlaps.length), `${overlaps.length} pairs of characters overlapping > ${OVERLAP * 100} % of the smaller one at cue +1 s (matte boxes); floor spare ${layoutMargin.floor} px, tower spare ${layoutMargin.tower} px`],
     ['3b · Frozen pets', ok(!longFrozen.length, true), `${longFrozen.length} stretches ≥ ${FROZEN_S} s where a pet holds a clip's last frame (longest ${longFrozen.length ? `${(longFrozen[0].to - longFrozen[0].from).toFixed(0)} s` : '–'})`],
     ['4 · Timeline', ok(!tl.length && (!mix || mix.ok)) + (voice.length ? ' ⚠️' : ''), `${fmt(total)} total, ${holdScenes.length} hold, cuts: ${cuts.join(', ')}; mix: ${mix ? `${fmt(mix.len)} ${mix.ok ? 'matches' : 'MISMATCH'}` : 'not supplied (--mix)'}`],
     ['5 · Safety', flash.skipped ? '–' : ok(!flash.failed), flash.skipped ? 'skipped (--no-flash)' : `worst ${flash.worstFlash} flashes/s (limit 3), max jump ${flash.worstJump.toFixed(2)} (limit 0.5), seams ${flash.seams.join(', ') || '–'}`],
@@ -415,6 +445,7 @@ async function contactSheet(browser, scene, frames, file) {
   sect('Shell', [...shell.missing.map((m) => `SHELL file missing: ${m}`), ...(shell.bumped ? [] : [`app/ changed since ${shell.base} but VERSION is still ${shell.version}`])]);
   sect('Script ↔ picture: speaker idle while talking', scriptRows.map((r) => `${r.id} @ ${fmt(r.t)}: ${r.who} plays ${r.clip}`));
   sect('Script ↔ picture: speaker not on stage', offStage.map((r) => `${r.id} @ ${fmt(r.t)}: ${r.who} not drawn`));
+  sect('Overlaps', overlaps.map((o) => `${o.scene} ${o.cue} +1 s (${fmt(o.t)}): ${o.pair}: ${(o.share * 100).toFixed(0)} % of the smaller box (${o.px} px wide)`));
   sect('Placement', placement.map((p) => `${p.scene} ${p.cue} +1 s (${fmt(p.t)}): ${p.id} at ${p.feet.join(', ')}: ${p.issues.join('; ')}`));
   sect('Frozen pets (held last frame)', longFrozen.map((f) => `${f.scene} ${f.pet}: ${fmt(f.from)}–${fmt(f.to)} (${(f.to - f.from).toFixed(1)} s) on ${f.id}`));
   if (ears.length) md.push('<details><summary>Clips with content in the top row (share of frames)</summary>', '', ears.map(([id, k]) => `${id} ${Math.round(k * 100)} %`).join(' · '), '', '</details>', '');

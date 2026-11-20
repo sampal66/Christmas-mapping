@@ -64,6 +64,26 @@ const FRAME = {
 export const GUEST_SIZE = { velveteen: 0.42, rabbit: 0.48 };
 // The pet's body width / its height (idle start frame), for laying out slots before the clips load.
 const BODY = Object.fromEntries(['alaska', 'connor', 'orion', 'gandalf'].map((p) => [p, FRAME[`pet-${p}-idle`][2] / FRAME[`pet-${p}-idle`][1]]));
+/**
+ * WP-16: how far each clip reaches left and right of its anchor at its widest frame (the matte's bounding box over every
+ * frame, sampled at 10 fps, 2026-11-20), in units of the character's height, as drawn unflipped. The slots are laid out
+ * from these rather than from the idle body, so a tail swish, a wave or Connor lying flat never reaches into a
+ * neighbour. Re-measure if a clip is re-cut (scratch tool in the WP-16 handoff).
+ */
+const REACH = {
+  'pet-alaska-idle': [0.466, 0.489], 'pet-alaska-lookup': [0.517, 0.439], 'pet-alaska-talk': [0.56, 0.472],
+  'pet-connor-idle': [0.554, 0.535], 'pet-connor-lookup': [0.54, 0.533], 'pet-connor-talk': [0.562, 0.549],
+  'pet-gandalf-idle': [0.68, 0.513], 'pet-gandalf-lookup': [0.647, 0.524], 'pet-gandalf-talk': [0.802, 0.494],
+  'pet-orion-idle': [0.72, 0.48], 'pet-orion-lookup': [0.628, 0.473], 'pet-orion-talk': [0.701, 0.491],
+  's03-alaska-boss': [0.504, 0.717], 's03-alaska-nooo': [0.521, 0.697], 's03-gandalf-bat': [0.717, 1.018],
+  's03-gandalf-oops': [0.656, 0.559], 's05-connor-hide': [0.554, 0.721], 's05-gandalf-bells': [0.748, 0.514],
+  's07-connor-brave': [0.543, 0.68], 's07-connor-carry': [0.63, 0.649], 's08-gandalf-soft': [0.664, 0.55],
+  's10-alaska-wave': [0.565, 0.62], 's10-connor-wave': [0.602, 0.724], 's10-gandalf-wave': [0.702, 0.545],
+  's10-orion-wave': [0.778, 0.63], 's03-gandalf-ready': [0.693, 0.677], 's05-orion-yawn': [0.664, 0.496],
+  'pet-alaska-lookloop': [0.495, 0.46], 'pet-connor-lookloop': [0.566, 0.552],
+  'pet-gandalf-lookloop': [0.844, 0.563], 'pet-orion-lookloop': [0.742, 0.546], 's05-connor-peek': [0.601, 0.68],
+  's08-velveteen-rabbit': [0.301, 0.307], 's10-rabbit-wave': [0.275, 0.26],
+};
 
 export const idleOf = (p) => `pet-${p}-idle`;
 export const talk = (p, at, len) => ({ at, end: at + len, id: `pet-${p}-talk`, loop: true });
@@ -123,10 +143,69 @@ export function aspectFix(env, w, h) {
 
 const at = (env, zone, u, v, fb) => env?.from?.(zone, u, v) || fb;
 
+/** A character's widest [left, right] reach in wall px as it stands (flip swaps the sides), over the clips in `ids`. */
+function reachPx(L, who, ids, flip) {
+  let l = 0, r = 0;
+  for (const id of ids) {
+    const q = REACH[id];
+    if (q && id.includes(`-${who}-`)) { l = Math.max(l, q[0]); r = Math.max(r, q[1]); }
+  }
+  const u = L.H * (PET_SIZE[who] ?? GUEST_SIZE[who] ?? 1) * L.k;
+  return flip ? [r * u, l * u] : [l * u, r * u];
+}
+const ALL_CLIPS = Object.keys(REACH);
+
+/**
+ * Lays items ([left, right] reaches in px) out left → right between x0 and x1 with equal gaps, the ends included. A gap
+ * is at most maxGap; room beyond that is left at the start (packEnd) or shared out evenly. Returns the anchor xs and
+ * the spare room (negative: the items overlap by that much in total).
+ */
+function row(items, x0, x1, maxGap = Infinity, packEnd = false) {
+  const need = items.reduce((s, [l, r]) => s + l + r, 0);
+  const spare = x1 - x0 - need;
+  const gap = Math.min(maxGap, spare / (items.length + 1));
+  let x = packEnd ? x1 - need - items.length * gap : x0 + gap;
+  const xs = items.map(([l, r]) => { const a = x + l; x += l + r + gap; return a; });
+  return { xs, spare };
+}
+
+// The tower's ends: a character at an end may reach past the edge (a head or tail in the air) as long as its feet
+// stay FOOT of its height inside it. Its right end is also the wall's edge (the small box runs off the wall zone).
+const FOOT = 0.3;
+// The cottage chimney's half-width (its snow cap, fx/stage.js chimneyPuff, drawn at size H · CHIMNEY_SIZE).
+const CHIMNEY_SIZE = 0.5, CHIMNEY_HALF = 0.62 * 0.55 * CHIMNEY_SIZE;
+
+/**
+ * Characters in a row along the tower top, left → right, each clear of the next (WP-16). items: { who, flip = true,
+ * ids = every clip } for a pet or guest (ids: the clips it can play there), { reach: [left, right] } for a spot, or
+ * 'chimney'. Returns one { x, y, flip }
+ * per item, plus `spare` (px of room left; negative = the row overlaps by that much).
+ */
+export function towerRow(L, items) {
+  const box = items.map((it) => {
+    if (it === 'chimney') { const c = CHIMNEY_HALF * L.H; return [c, c]; }
+    if (it.reach) return it.reach;
+    return reachPx(L, it.who, it.ids || ALL_CLIPS, it.flip ?? true);
+  });
+  const t0 = L.towerAt(0)[0], t1 = Math.min(L.towerAt(1)[0], L.w);
+  const hang = (it, side) => (it === 'chimney' || it.reach ? 0 : Math.max(0, side - FOOT * L.H * (PET_SIZE[it.who] ?? GUEST_SIZE[it.who]) * L.k));
+  const { xs, spare } = row(box, t0 - hang(items[0], box[0][0]), t1 + hang(items.at(-1), box.at(-1)[1]));
+  const out = xs.map((x, i) => ({ ...xy(L.towerAt(clamp((x - L.towerAt(0)[0]) / ((L.towerAt(1)[0] - L.towerAt(0)[0]) || 1)))), x, flip: items[i].flip ?? true }));
+  out.spare = spare;
+  return out;
+}
+
 /**
  * The stage in this zone's pixels: floor line, the top of the gift tower, Connor's height, and a slot (feet point,
- * facing) per pet. Uses the backdrop's bottom edge as the floor, kept inside the zone.
+ * facing) per pet, plus the tower's guest spot and chimney. Uses the backdrop's bottom edge as the floor, kept inside
+ * the zone.
+ *
+ * WP-16 (owner: Alaska stood behind Connor's tail): every slot is laid out from the characters' widest reach (REACH),
+ * so nobody overlaps a neighbour in any clip. Floor, left → right between the tree's right edge and the big box: Alaska,
+ * Connor, packed toward the box (gaps ≤ MAX_GAP). Tower top: Orion, the guest spot (s08 Velveteen, s10 rabbit),
+ * Gandalf, the chimney. `margin` reports the spare px on each row.
  */
+const MAX_GAP = 0.15;                                        // of Connor's height
 export function stageLayout(env, w, h) {
   const k = aspectFix(env, w, h);
   const P = (zone, u, v, fb) => { const q = at(env, zone, u, v, fb); return q ? [q[0] * w, q[1] * h] : null; };
@@ -134,41 +213,51 @@ export function stageLayout(env, w, h) {
   const floorY = Math.min(P('backdrop', RETURN_PATH.paw[0], 1, [0.65, 1])[1], 0.99 * h);
   // Connor's size: his mouth in the s07 carry clip meets the star's carry path above the floor.
   const H = clamp((floorY - paw[1]) / CONNOR_MOUTH_UP, 0.1 * h, 0.3 * h);
-  const width = (p) => H * PET_SIZE[p] * BODY[p] * k;
-  // The dogs stand close to the tower (as far from the tree as they can): Connor just left of the big box, Alaska
-  // tucked in front of his shoulder.
-  const box = P('box2Side', 0, 1, null) || P('box2', 0, 1, [0.76, 1]);
-  const connorX = box[0] - 0.56 * width('connor');
-  const alaskaX = connorX - 0.5 * width('connor') - 0.2 * width('alaska');
   // Tower top: the visible side face's top edge, then the front face's.
   const sideL = P('box1Side', 0, 0, null), sideR = P('box1Side', 1, 0, null);
   const frontL = P('box1', 0, 0, [0.79, 0.52]), frontR = P('box1', 1, 0, [0.9, 0.52]);
-  const L = sideL && sideR ? sideL : frontL;
+  const TL = sideL && sideR ? sideL : frontL;
   const towerAt = (s) => {                                   // s: 0..1 across the whole top edge
-    const x = L[0] + (frontR[0] - L[0]) * s;
-    const seg = x < frontL[0] && L !== frontL ? [sideL, sideR] : [frontL, frontR];
+    const x = TL[0] + (frontR[0] - TL[0]) * s;
+    const seg = x < frontL[0] && TL !== frontL ? [sideL, sideR] : [frontL, frontR];
     const f = clamp((x - seg[0][0]) / ((seg[1][0] - seg[0][0]) || 1));
     return [x, seg[0][1] + (seg[1][1] - seg[0][1]) * f];
   };
+  const L = { k, H, w, floorY, paw, towerAt };
+
+  // Floor: from the tree's right edge at floor level (the tree is a cone: its tip at the zone's top centre, its widest
+  // at the bottom corners) to the big box's left edge. The dogs face right, toward the tower.
+  const box = P('box2Side', 0, 1, null) || P('box2', 0, 1, [0.76, 1]);
+  const tip = P('tree', 0.5, 0, null), base = P('tree', 1, 1, null);
+  const treeR = tip && base ? tip[0] + (base[0] - tip[0]) * clamp((floorY - tip[1]) / ((base[1] - tip[1]) || 1)) : -Infinity;
+  const floor = row([reachPx(L, 'alaska', ALL_CLIPS, false), reachPx(L, 'connor', ALL_CLIPS, false)], treeR, box[0], MAX_GAP * H * k, true);
+
+  // Tower: in s03 the guest spot is empty, so Gandalf's s03 clips (the bat swing, the ready crouch) may use it and
+  // don't count toward his reach.
+  const cats = towerRow(L, [
+    { who: 'orion' },
+    { reach: [0, 1].map((i) => Math.max(...['velveteen', 'rabbit'].map((g) => reachPx(L, g, ALL_CLIPS, true)[i]))) },   // guest spot
+    { who: 'gandalf', ids: ALL_CLIPS.filter((id) => !id.startsWith('s03-')) },
+    'chimney',
+  ]);
   return {
-    k, H, floorY, paw, towerAt,
+    ...L,
     slot: {
-      alaska: { x: alaskaX, y: floorY, flip: false },
-      connor: { x: connorX, y: floorY, flip: false },
-      orion: { ...xy(towerAt(0.27)), flip: true },          // the cats face left, toward the team and the tree
-      gandalf: { ...xy(towerAt(0.76)), flip: true },
+      alaska: { x: floor.xs[0], y: floorY, flip: false },
+      connor: { x: floor.xs[1], y: floorY, flip: false },
+      orion: cats[0],                                        // the cats face left, toward the team and the tree
+      gandalf: cats[2],
     },
+    guest: { x: cats[1].x, y: cats[1].y },
+    chimney: { x: cats[3].x, y: cats[3].y },
+    margin: { floor: floor.spare, tower: cats.spare },
   };
 }
 const xy = ([x, y]) => ({ x, y });
 
-/** Where the cottage chimney stands on the tower top (0..1 along it): right of Gandalf, clear of the guests' spot. */
-export const CHIMNEY_AT = 0.95;
-
-/** The cottage chimney and its puff (WP-13b), on the wall above the small box; draw before the pets. */
+/** The cottage chimney and its puff (WP-13b), on the tower top right of Gandalf (L.chimney); draw before the pets. */
 export function storyChimney(ctx, L, t, alpha) {
-  const [x, y] = L.towerAt(CHIMNEY_AT);
-  chimneyPuff(ctx, 0, 0, t, { x, y, size: L.H * 0.5, alpha });
+  chimneyPuff(ctx, 0, 0, t, { x: L.chimney.x, y: L.chimney.y, size: L.H * CHIMNEY_SIZE, alpha });
 }
 
 /** Draws one clip of a pet with its feet (or `anchor`) at x, y. Returns false when the clip isn't available. */
