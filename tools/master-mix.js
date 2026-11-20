@@ -2,7 +2,8 @@
 // `master-mix.m4a` for the on-device media pack. Cloud/offline tool (Node + the system ffmpeg); not an app dependency.
 // The audio never goes in the repo: the 🔒 lines say the baby's real name (AGENTS §06).
 //
-// Usage: node tools/master-mix.js --src <dir with the source audio> --out <output dir> [--strict] [--previews]
+// Usage: node tools/master-mix.js --src <dir with the source audio> --out <output dir> [--strict] [--previews] [--idle]
+//   --idle also renders the s00 `music-box-loop.m4a` from the `music-box` source (see IDLE_LOOP).
 //   Source files are looked up by base name, any audio extension (.mp3 .m4a .wav .ogg .flac):
 //     music  MUSIC[scene].file below       voices  <SCRIPT §03 line id>    sfx  <SCRIPT §06 id>
 //   Missing files are reported and left out (--strict makes that an error), so a music-only draft can be checked early.
@@ -25,25 +26,33 @@ const flag = (name) => args.includes(`--${name}`);
 
 /**
  * Music running order (TREATMENT §04): per scene, the file, where in it the excerpt starts (`from`), and the fade at
- * the scene's tail. The excerpt always runs the scene's full length (s09: its 22 s; the app loops 8–20 s live).
+ * the scene's tail. Optional: `fadeIn` (s, overrides MUSIC_FADE_IN), `soften` (tames a drum kit: SOFTEN below),
+ * `splice` (see spliced()). The excerpt always runs the scene's full length (s09: its 22 s; the app loops 8–20 s live).
  */
 const MUSIC = {
-  's01-wall-wakes': { file: 'o-christmas-tree', from: 0, fadeOut: 4 },
+  // WP-15 (listen check): the big band hits full level 0.7 s in from silence (+19 dB jump at 0:00.7), so a 3 s swell;
+  // its drum kit softened like s10's.
+  's01-wall-wakes': { file: 'o-christmas-tree', from: 0, fadeOut: 4, fadeIn: 3, soften: true },
   's02-tree-alive': { file: 'carol-of-the-bells', from: 0, fadeOut: 4 },
   's03-star-escapes': { file: 's03-underscore', from: 0, fadeOut: 4 },
-  's04-magic-boxes': { file: 's04-box-chaos', from: 0, fadeOut: 4 },
+  's04-magic-boxes': { file: 's04-box-chaos', from: 0, fadeOut: 4, fadeIn: 2 },   // WP-15: softer start out of s03's tail
   's05-where-is-the-star': { file: 's05-underscore', from: 0, fadeOut: 4 },
-  's06-constellations': { file: 'waltz-of-the-flowers', from: 88.94, fadeOut: 4 },
+  // WP-15: the excerpt opens on a full chord (−7 dB within 1 s), so a longer swell.
+  's06-constellations': { file: 'waltz-of-the-flowers', from: 88.94, fadeOut: 4, fadeIn: 2.5 },
   's07-honey-pot': { file: 's07-underscore', from: 0, fadeOut: 4 },
-  // 1:00 picked so the swell lands in the 26–45 s music-only beat (SCRIPT §07); re-pick by ear if it doesn't.
-  's08-for-baby': { file: 'silent-nights', from: 0, fadeOut: 4 },
-  's09-real-star': { file: 's09-hold-bells', from: 7.97, fadeOut: 2 },
-  's10-finale': { file: 'jingle-bells', from: 0, fadeOut: 4 },
+  // WP-15: from 13 s the track's swell (file 48–54 s, ≈ 8 dB over its surroundings) lands at scene 35–41 s, inside the
+  // 26–45 s music-only beat (SCRIPT §07), instead of on the 45 s narration; it also skips the 2 s silent intro.
+  's08-for-baby': { file: 'silent-nights', from: 13, fadeOut: 4 },
+  // Twinkle (WP-15): 120 bpm 4/4, its 12 s melody cycle repeats best at file 4.97 → 16.97 (bar lines). The scene's
+  // hold loops 8–20 s, so the first two intro bars play twice: splice → [0.95, 4.97] + [0.97, end] (20 ms crossfade),
+  // which puts file 4.97 at 8.00 and file 16.97 at 20.00.
+  's09-real-star': { file: 's09-twinkle', from: 0, fadeOut: 2, splice: [[0.95, 4.97], [0.97, null]] },
+  's10-finale': { file: 'jingle-bells', from: 0, fadeOut: 4, soften: true },
 };
 
 /**
  * Sound effects (SCRIPT §06): [id, scene, cue, offset, options]. `loopTo` repeats a seamless loop up to that cue
- * (or seconds after the cue as a number), `gain` in dB relative to the sfx level.
+ * (or seconds after the cue as a number, or [cue, seconds after it]), `gain` in dB relative to the sfx level.
  */
 const SFX = [
   ['s03-sfx-sparkle', 's03-star-escapes', 'pets-in', 0.5],
@@ -51,15 +60,20 @@ const SFX = [
   ['s03-sfx-whoosh', 's03-star-escapes', 'escape', 0],
   ['s04-sfx-wobble', 's04-magic-boxes', 0, 1],
   ['s04-sfx-boxopen', 's04-magic-boxes', 'box1-open', 0],
-  ['s04-sfx-rummage', 's04-magic-boxes', 'box1-open', 0.5, { loopTo: 'cut', gain: -8 }],
+  // WP-15: runs on through the music's 1 s near-silent rest after `cut` so the pizzicato restart isn't a jump from silence.
+  ['s04-sfx-rummage', 's04-magic-boxes', 'box1-open', 0.5, { loopTo: ['cut', 2.4], gain: -8 }],
   ['s04-sfx-tumble', 's04-magic-boxes', 'box1-open', 2],
   ['s04-sfx-flurry', 's04-magic-boxes', 'box1-open', 6],
   ['s04-sfx-boxopen', 's04-magic-boxes', 'box2-open', 0],
   ['s04-sfx-spring', 's04-magic-boxes', 'box2-open', 0.2],
+  ['s04-sfx-march', 's04-magic-boxes', 'box2-open', 0.4, { gain: -3 }],   // WP-15 S4: the Nutcracker marches ≈ 0.4–2.5 s
   ['s04-sfx-tumble', 's04-magic-boxes', 'box2-open', 2],
   ['s04-sfx-flurry', 's04-magic-boxes', 'box2-open', 8],
-  ['s04-sfx-wobble', 's04-magic-boxes', 'cut', 1],
+  // WP-15: was cut +1, inside the music's 1 s near-silent rest (−50 dB) → +18.8 dB jump at 4:23.9; now after the
+  // pizzicato restarts, and softer.
+  ['s04-sfx-wobble', 's04-magic-boxes', 'cut', 2.2, { gain: -6 }],
   ['s04-sfx-rummage', 's04-magic-boxes', 'finale', 0, { loopTo: 'out', gain: -8 }],
+  ['s04-sfx-hop', 's04-magic-boxes', 'finale', 0.4],                         // WP-15 S4: the Gingerbread Man's hop
   ['s04-sfx-tumble', 's04-magic-boxes', 'finale', 1],
   ['s04-sfx-flurry', 's04-magic-boxes', 'finale', 3],
   ['s04-sfx-tumble', 's04-magic-boxes', 'finale', 7],
@@ -78,8 +92,18 @@ const LEVEL = { music: -17, voice: -15, sfx: -23 };
 const DUCK_DB = -7;          // music under speech
 const DUCK_RAMP = 0.35;      // s
 const MUSIC_FADE_IN = 0.8;   // s: each scene's music swells in rather than starting at full level
+// Drum-kit softener (WP-15 listen check, s01/s10 big-band kits): a gentle fast compressor shaves the snare/kick
+// transients and a high shelf rounds the cymbals; the source is then levelled as usual.
+const SOFTEN = 'acompressor=threshold=0.125:ratio=3:attack=2:release=120,highshelf=f=5000:g=-4';
 const MASTER = { I: -16, TP: -1.5, LRA: 11 };
 const RATE = 48000;
+
+/**
+ * Idle music-box loop (s00, WP-08b; seam fixed in WP-15). The ElevenLabs music box (24 s) is exactly 90 bpm 3/4, so a
+ * bar is 2 s and its first downbeat is at 1.30 s (tools/beats.js). The loop is 10 bars, 1.30 → 21.30 s, and the 0.5 s
+ * after its end is crossfaded over its first 0.5 s, so the HTML audio loop wraps on a bar line with no hard cut.
+ */
+const IDLE_LOOP = { file: 'music-box', from: 1.3, len: 20, xfade: 0.5, lufs: -20 };
 
 // ---------- helpers ----------
 const run = (cmd, a, o = {}) => execFileSync(cmd, a, { stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 30, ...o });
@@ -93,6 +117,15 @@ function findSource(dir, base) {
 }
 function duration(file) {
   return Number(run('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file]).toString().trim());
+}
+/** Joins excerpts of one file ([from, to|null] pairs) with 20 ms crossfades into a WAV; returns its path. */
+function spliced(file, parts, dest) {
+  const XF = 0.02;
+  const trims = parts.map(([a, b], k) => `[0]atrim=start=${a}${b == null ? '' : `:end=${b}`},asetpts=N/SR/TB[p${k}]`);
+  let chain = '', last = 'p0';
+  for (let k = 1; k < parts.length; k++) { chain += `;[${last}][p${k}]acrossfade=d=${XF}:c1=tri:c2=tri[x${k}]`; last = `x${k}`; }
+  ffmpeg(['-i', file, '-filter_complex', trims.join(';') + chain, '-map', `[${last}]`, '-ar', String(RATE), dest]);
+  return dest;
 }
 /** ffmpeg's log (stderr) for an analysis run: the measurement filters print there. */
 function ffLog(a) {
@@ -157,10 +190,11 @@ function suddenJumps(file, top = 8) {
   // music
   for (const s of scenes) {
     const m = MUSIC[s.id];
-    const file = m && findSource(src, m.file);
+    let file = m && findSource(src, m.file);
     if (!file) { missing.push(m ? m.file : `(no music for ${s.id})`); continue; }
+    if (m.splice) file = spliced(file, m.splice, path.join(out, `${m.file}-spliced.wav`));
     const avail = duration(file) - m.from;
-    inputs.push({ file, kind: 'music', at: s.start, from: m.from, len: Math.min(s.duration, avail), fadeOut: m.fadeOut, label: s.id });
+    inputs.push({ file, kind: 'music', at: s.start, from: m.from, len: Math.min(s.duration, avail), fadeOut: m.fadeOut, fadeIn: m.fadeIn, soften: !!m.soften, label: s.id });
   }
   // voices
   const lines = scriptLines().map((l) => {
@@ -179,7 +213,8 @@ function suddenJumps(file, top = 8) {
     const file = findSource(src, id);
     if (!file) { missing.push(id); continue; }
     const at = s.start + s.at(cue) + off;
-    const until = o.loopTo == null ? null : s.start + (typeof o.loopTo === 'number' ? s.at(cue) + o.loopTo : s.at(o.loopTo));
+    const until = o.loopTo == null ? null : s.start + (typeof o.loopTo === 'number' ? s.at(cue) + o.loopTo
+      : Array.isArray(o.loopTo) ? s.at(o.loopTo[0]) + o.loopTo[1] : s.at(o.loopTo));
     inputs.push({ file, kind: 'sfx', at, from: 0, len: until ? until - at : duration(file), loop: !!until, gainDb: o.gain || 0, fadeOut: until ? 1 : 0, label: id });
   }
   const uniqMissing = [...new Set(missing)];
@@ -205,8 +240,8 @@ function suddenJumps(file, top = 8) {
   inputs.forEach((i, n) => {
     fa.push(...(i.loop ? ['-stream_loop', '-1'] : []), '-ss', String(i.from), '-t', String(i.len.toFixed(3)), '-i', i.file);
     // music enters with a short swell (the previous scene's music has just faded out), others click-free
-    const fadeIn = i.kind === 'music' && i.at > 0 ? MUSIC_FADE_IN : 0.02;
-    const f = [`aresample=${RATE}`, 'aformat=channel_layouts=stereo', `volume=${i.gainDb.toFixed(2)}dB`, `afade=t=in:d=${fadeIn}`];
+    const fadeIn = i.fadeIn != null ? i.fadeIn : i.kind === 'music' && i.at > 0 ? MUSIC_FADE_IN : 0.02;
+    const f = [`aresample=${RATE}`, 'aformat=channel_layouts=stereo', ...(i.soften ? [SOFTEN] : []), `volume=${i.gainDb.toFixed(2)}dB`, `afade=t=in:d=${fadeIn}`];
     if (i.fadeOut) f.push(`afade=t=out:st=${Math.max(0, i.len - i.fadeOut).toFixed(3)}:d=${i.fadeOut}`);
     else f.push(`afade=t=out:st=${Math.max(0, i.len - 0.03).toFixed(3)}:d=0.03`);
     const ms = Math.max(0, Math.round(i.at * 1000));
@@ -236,8 +271,9 @@ function suddenJumps(file, top = 8) {
   const ln = `loudnorm=I=${MASTER.I}:TP=${MASTER.TP}:LRA=${MASTER.LRA}:measured_I=${j.input_i}:measured_TP=${j.input_tp}:measured_LRA=${j.input_lra}:measured_thresh=${j.input_thresh}:offset=${j.target_offset}:linear=true`;
   const final = path.join(out, 'master-mix.m4a');
   // Linear loudnorm can't catch inter-sample peaks and the AAC encode adds ~0.5 dB on top (first real render: −0.8
-  // dBTP), so a 4×-oversampled brick-wall limiter at −2 dBFS sits after it. It only touches rare peaks.
-  const limiter = `aresample=${RATE * 4},alimiter=limit=0.79:attack=1:release=60:level=false,aresample=${RATE}`;
+  // dBTP), so a 4×-oversampled brick-wall limiter sits after it. It only touches rare peaks. WP-15: −2.5 dBFS (at
+  // −2 dBFS the full render measured −1.4 dBTP after the AAC encode).
+  const limiter = `aresample=${RATE * 4},alimiter=limit=0.75:attack=1:release=60:level=false,aresample=${RATE}`;
   ffmpeg(['-i', premaster, '-af', `${ln},${limiter}`, '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', final]);
 
   // checks
@@ -273,6 +309,21 @@ function suddenJumps(file, top = 8) {
   if (flag('previews')) {
     for (const s of scenes) {
       ffmpeg(['-ss', String(s.start), '-t', String(s.duration), '-i', final, '-c:a', 'aac', '-b:a', '128k', path.join(out, `preview-${s.id.slice(0, 3)}.m4a`)]);
+    }
+  }
+  if (flag('idle')) {
+    const L = IDLE_LOOP, file = findSource(src, L.file);
+    if (!file) console.warn(`--idle: no ${L.file} source`);
+    else {
+      // in steps: one filter graph that splits, crossfades and joins the same input fails in ffmpeg 6 ("Invalid data")
+      const a = L.from, b = L.from + L.len, x = L.xfade, tmp = (n) => path.join(out, `idle-${n}.wav`);
+      ffmpeg(['-i', file, '-af', `atrim=${a}:${a + x},asetpts=N/SR/TB,afade=t=in:d=${x}:curve=qsin`, tmp('head')]);
+      ffmpeg(['-i', file, '-af', `atrim=${b}:${b + x},asetpts=N/SR/TB,afade=t=out:d=${x}:curve=qsin`, tmp('tail')]);
+      ffmpeg(['-i', file, '-af', `atrim=${a + x}:${b},asetpts=N/SR/TB`, tmp('mid')]);
+      ffmpeg(['-i', tmp('head'), '-i', tmp('tail'), '-filter_complex', 'amix=inputs=2:normalize=0', tmp('seam')]);
+      ffmpeg(['-i', tmp('seam'), '-i', tmp('mid'), '-filter_complex', `[0][1]concat=n=2:v=0:a=1,loudnorm=I=${L.lufs}:TP=-2:linear=true`,
+        '-ar', String(RATE), '-c:a', 'aac', '-b:a', '128k', path.join(out, 'music-box-loop.m4a')]);
+      for (const n of ['head', 'tail', 'mid', 'seam']) fs.rmSync(tmp(n), { force: true });
     }
   }
   fs.rmSync(premaster, { force: true });

@@ -46,6 +46,7 @@
 | Connor | CMS Connor | `C241plScZxHDNe72ZOXT` |
 | Orion | CMS Orion | `5pC8wi2ibUVfMORndBWM` |
 | Pooh | CMS Pooh | `TAyICBNyjxfszzKuFMaC` |
+| Santa (WP-15) | CMS Santa | `VpoAdkEB4HGC6l4MJRMg` |
 
 **Accent rule (owner):** neutral Latin American Spanish with no regional accent, like Mexican film dubbing. Never a
 Castilian (Spain) accent. Generation uses `eleven_v4` with a `[neutral Mexican Spanish accent]` tag at the start of each line,
@@ -154,6 +155,7 @@ brave, Orion secretly helps, Alaska shares the lead.*
 |---|---|---|---|---|---|
 | s10-gandalf-01 | sleigh +1 | Gandalf | 3.4 | ¡Miren! ¡Es Santa! ¡Vio la estrella! | Look! It's Santa! He saw the star! |
 | s10-connor-01 | sleigh +5 | Connor | 2.5 | ¡Y esta vez… no me asusté! | And this time… I wasn't scared! |
+| s10-santa-01 | sleigh +7.6 | Santa | 3.5 | ¡Jo, jo, jo! ¡Feliz Navidad! | Ho, ho, ho! Merry Christmas! |
 | s10-alaska-01 | wave +0 | Alaska | 4.0 | ¡Todos en fila! A la una, a las dos, y… | Everyone in line! One, two, and… |
 | s10-todos-01 | wave +4.2 | Gandalf, Alaska, Connor, Orion | 1.5 | ¡Feliz Navidad! | Merry Christmas! |
 | s10-orion-01 | wave +8 | Orion | 4.5 | …Bueno. Admito que esto sí valió la pena. | …Fine. I admit this was worth it. |
@@ -200,10 +202,12 @@ specific extras only if something sounds off or is missing). Flow "CMS WP-06 sou
 | s03-sfx-whoosh | s03 · escape | magic whoosh with a shimmer tail as the star flies away | 3 |
 | s04-sfx-boxopen | s04 · box1-open, box2-open | sparkle burst as a box lid opens (used twice) | 2 |
 | s04-sfx-spring | s04 · box2-open | gentle jack-in-the-box spring | 1 |
-| s04-sfx-rummage | s04 · box1-open → cut, finale → out | soft rummaging bed under the music: tissue, wrapping, toys shuffling (seamless loop, ≈ −16 dB) | 12 (loop) |
+| s04-sfx-rummage | s04 · box1-open → cut +2.4 (WP-15: covers the music's rest), finale → out | soft rummaging bed under the music: tissue, wrapping, toys shuffling (seamless loop, ≈ −16 dB) | 12 (loop) |
 | s04-sfx-tumble | s04 · after each burst, through the finale | toys tumbling out: plush thumps, wooden clacks, a bell, ribbon swish | 4 |
-| s04-sfx-wobble | s04 · intro and after `cut` | a box wobbling and hopping with something busy inside | 2 |
+| s04-sfx-wobble | s04 · intro and `cut` +2.2 (WP-15) | a box wobbling and hopping with something busy inside | 2 |
 | s04-sfx-flurry | s04 · between bursts | toys flying: wind-up whirr, tiny bells, xylophone, gentle slide whistle | 3 |
+| s04-sfx-march | s04 · box2-open +0.4 | the Nutcracker's soft wooden "tock" march (WP-15) | 2.5 |
+| s04-sfx-hop | s04 · finale +0.4 | the Gingerbread Man's soft hop (WP-15) | 3 |
 | s05-sfx-jingle | s05 · jingle | soft, distant jingle bells, no sharp attack | 2 |
 | s05-sfx-whistle | s05 · mickey-in | jaunty whistled 1920s-style tune (original melody, music model), old-film tone | 8 |
 | s05-sfx-projector | s05 · mickey-in → mickey-out | very quiet old film-projector purr under Mickey's clip (seamless loop) | 10 (loop) |
@@ -240,6 +244,7 @@ Every take A and sound effect laid on its cue (real lengths), checked against th
   (soft fade in), so the finale never drops into silence.
 
 ## Changelog
+- **2026-11-20** — v1.8 (WP-15): Santa's soft voice (owner picked preview C) and `s10-santa-01` on his swoop, right after Connor; §06: Nutcracker march, Gingerbread hop, s04 rummage/wobble re-timed.
 - **2026-11-17** — v1.7: owner approved all audio (voices, sfx, new music); s08 pause gets a visual beat.
 - **2026-11-17** — v1.6: 4 s04 box-search effects (owner); s04 music and s09 hold loop replaced (TREATMENT §04).
 - **2026-11-17** — v1.5: §07 silence check; 4 cue offsets nudged to remove overlaps; ≈ s column = real take lengths.
