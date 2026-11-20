@@ -13,7 +13,7 @@
 // (WP-14a: look-up → look-loop, hide → peek). Between events the pet plays its idle loop. Every change of clip cross-fades over XFADE seconds. A missing or still-loading
 // clip simply isn't drawn.
 import { drawClip, preloadClips, EAR_FADE } from '../fx/clips.js';
-import { easeInOutSine, clamp, starDustArrive, starDustLeave } from '../fx/index.js';
+import { easeInOutSine, clamp, starDustArrive, starDustLeave, chimneyPuff } from '../fx/index.js';
 import { RETURN_PATH } from './star-story.js';
 
 export const PETS = ['alaska', 'connor', 'orion', 'gandalf'];
@@ -161,6 +161,15 @@ export function stageLayout(env, w, h) {
   };
 }
 const xy = ([x, y]) => ({ x, y });
+
+/** Where the cottage chimney stands on the tower top (0..1 along it): right of Gandalf, clear of the guests' spot. */
+export const CHIMNEY_AT = 0.95;
+
+/** The cottage chimney and its puff (WP-13b), on the wall above the small box; draw before the pets. */
+export function storyChimney(ctx, L, t, alpha) {
+  const [x, y] = L.towerAt(CHIMNEY_AT);
+  chimneyPuff(ctx, 0, 0, t, { x, y, size: L.H * 0.5, alpha });
+}
 
 /** Draws one clip of a pet with its feet (or `anchor`) at x, y. Returns false when the clip isn't available. */
 export function drawPetClip(ctx, L, pet, id, time, { x, y, flip = false, alpha = 1, loop = false, anchor, scale = 1 }) {
