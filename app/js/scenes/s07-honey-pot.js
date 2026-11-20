@@ -4,7 +4,7 @@
 // The star's motion is star-story.js's drawReturn: Pooh's pot and Connor's mouth are placed on its path.
 import { cueSheet, loadFonts, easeInOutSine, clamp } from '../fx/index.js';
 import { drawReturn, RETURN_PATH, carryWalk, walkSpan } from './star-story.js';
-import { stageLayout, towerRow, trackClips, drawPets, drawPetClip, preloadTracks, talk, look, act, CONNOR_MOUTH, PET_SIZE } from './stage.js';
+import { stageLayout, towerRow, trackClips, xfadeAlphas, drawPets, drawPetClip, preloadTracks, talk, look, act, CONNOR_MOUTH, PET_SIZE } from './stage.js';
 import { preloadClips } from '../fx/clips.js';
 import { BOX_ZONES, storyTower, skyBase } from './common.js';
 import { stripStarPath, pixelAspect } from '../fx/strip.js';
@@ -61,9 +61,10 @@ function drawPooh(ctx, L, w, h, local, env) {
   while (i + 1 < POOH_CLIPS.length && local >= POOH_CLIPS[i + 1][1]) i++;
   const one = ([id, at, loop], a) => drawPetClip(ctx, PL, 'pooh', id, local - at, { x, y, anchor: POOH_POT[id], alpha: a, loop });
   const k = i > 0 ? clamp((local - POOH_CLIPS[i][1]) / POOH_XFADE) : 1;
-  if (k < 1) one(POOH_CLIPS[i - 1], alpha * (1 - k));
+  const [a, b] = xfadeAlphas(k, alpha);                      // no see-through dip half-way (stage.js)
+  if (k < 1) one(POOH_CLIPS[i - 1], a);
   // a clip that hasn't loaded yet keeps the previous one on screen rather than leaving a gap
-  if (!one(POOH_CLIPS[i], alpha * k) && i > 0 && k >= 1) one(POOH_CLIPS[i - 1], alpha);
+  if (!one(POOH_CLIPS[i], b) && i > 0 && k >= 1) one(POOH_CLIPS[i - 1], alpha);
 }
 
 export default {

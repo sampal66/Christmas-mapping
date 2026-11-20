@@ -274,6 +274,14 @@ export function drawPetClip(ctx, L, pet, id, time, { x, y, flip = false, alpha =
 }
 
 /**
+ * Opacities [outgoing, incoming] for a cross-fade at e (0..1), the incoming clip drawn on top. Two layers at 1 − e and e
+ * only cover 1 − (1 − e)·e of the wall (75 % half-way), so the pet dimmed for a moment at every clip change (owner,
+ * 2026-11-20). Instead the incoming clip fades in over the first half while the outgoing one stays solid under it, and
+ * the outgoing one fades out over the second half under the now-solid incoming one: the body stays fully opaque.
+ */
+export const xfadeAlphas = (e, alpha = 1) => [alpha * Math.min(1, 2 * (1 - e)), alpha * Math.min(1, 2 * e)];
+
+/**
  * Draws a pet at `local` from its track: the current clip, cross-faded with the previous one for XFADE seconds
  * after each change. opts: x, y (feet), flip, alpha, scale.
  */
@@ -285,9 +293,9 @@ export function drawPet(ctx, L, pet, events, local, opts) {
   if (k < 1) {
     const prev = stateAt(pet, events, s0 - 1e-3);
     if (prev.id !== cur.id) {
-      const e = easeInOutSine(clamp(k));
-      drawPetClip(ctx, L, pet, prev.id, clipTime(prev, local), { ...opts, loop: prev.loop, alpha: (opts.alpha ?? 1) * (1 - e) });
-      drawPetClip(ctx, L, pet, cur.id, clipTime(cur, local), { ...opts, loop: cur.loop, alpha: (opts.alpha ?? 1) * e });
+      const [a, b] = xfadeAlphas(easeInOutSine(clamp(k)), opts.alpha ?? 1);
+      drawPetClip(ctx, L, pet, prev.id, clipTime(prev, local), { ...opts, loop: prev.loop, alpha: a });
+      drawPetClip(ctx, L, pet, cur.id, clipTime(cur, local), { ...opts, loop: cur.loop, alpha: b });
       return;
     }
   }
