@@ -67,7 +67,11 @@ async function pageSetup() {
     stage.appendChild(c);
     return { z, ctx: c.getContext('2d') };
   });
-  const env = (z) => ({ zone: z, from(id, u, v) { const o = byId[id]; if (!o) return null; const [x, y] = unitToStage(o.quad, u, v); return stageToUnit(z.quad, x, y); } });
+  const env = (z) => ({
+    zone: z,
+    from(id, u, v) { const o = byId[id]; if (!o) return null; const [x, y] = unitToStage(o.quad, u, v); return stageToUnit(z.quad, x, y); },
+    occluders: () => layout.zones.filter((o) => o.occluder).map((o) => o.mask.map(([u, v]) => { const [x, y] = unitToStage(o.quad, u, v); return stageToUnit(z.quad, x, y); })),
+  });
   let zoneNow = null;
   let recs = [];
   setClipProbe((r) => recs.push({ ...r, zone: zoneNow }));

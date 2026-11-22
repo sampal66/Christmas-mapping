@@ -15,6 +15,7 @@
 import { drawClip, preloadClips, EAR_FADE } from '../fx/clips.js';
 import { easeInOutSine, clamp, starDustArrive, starDustLeave, chimneyPuff } from '../fx/index.js';
 import { RETURN_PATH } from './star-story.js';
+import { spanAt } from '../stage-model.js';
 
 export const PETS = ['alaska', 'connor', 'orion', 'gandalf'];
 /**
@@ -230,7 +231,13 @@ export function stageLayout(env, w, h) {
   const box = P('box2Side', 0, 1, null) || P('box2', 0, 1, [0.76, 1]);
   const tip = P('tree', 0.5, 0, null), base = P('tree', 1, 1, null);
   const treeR = tip && base ? tip[0] + (base[0] - tip[0]) * clamp((floorY - tip[1]) / ((base[1] - tip[1]) || 1)) : -Infinity;
-  const floor = row([reachPx(L, 'alaska', ALL_CLIPS, false), reachPx(L, 'connor', ALL_CLIPS, false)], treeR, box[0], MAX_GAP * H * k, true);
+  // WP-09a: the tree's shadow and the obstacles that stay on the sideboard (occluder zones) cut the floor; the dogs take
+  // the rightmost free stretch that fits them (else the widest one).
+  const dogs = [reachPx(L, 'alaska', ALL_CLIPS, false), reachPx(L, 'connor', ALL_CLIPS, false)];
+  const need = dogs.reduce((s, [l, r]) => s + l + r, 0);
+  const blocked = (env?.occluders?.() || []).map((poly) => bandSpan(poly.map(([u, v]) => [u * w, v * h]), floorY - H, floorY)).filter(Boolean);
+  const span = freeSpan(treeR, box[0], blocked, need);
+  const floor = row(dogs, span[0], span[1], MAX_GAP * H * k, true);
 
   // Tower: in s03 the guest spot is empty, so Gandalf's s03 clips (the bat swing, the ready crouch) may use it and
   // don't count toward his reach.
@@ -251,7 +258,28 @@ export function stageLayout(env, w, h) {
     guest: { x: cats[1].x, y: cats[1].y },
     chimney: { x: cats[3].x, y: cats[3].y },
     margin: { floor: floor.spare, tower: cats.spare },
+    floorSpan: span, floorNeed: need, blocked,
   };
+}
+
+/** The x-range (px) a convex polygon covers within the horizontal band y0..y1 (null: it misses the band). */
+function bandSpan(poly, y0, y1) {
+  const xs = poly.filter(([, y]) => y >= y0 && y <= y1).map(([x]) => x);
+  for (const y of [y0, y1]) { const s = spanAt(poly, y); if (s) xs.push(...s); }
+  return xs.length ? [Math.min(...xs), Math.max(...xs)] : null;
+}
+
+/** The free stretches of a..b once the blocked ranges are cut out: the rightmost one at least `need` long (the dogs
+ *  pack toward the box), else the widest. */
+function freeSpan(a, b, blocked, need) {
+  const free = [];
+  let x = a;
+  for (const [l, r] of blocked.filter(([l, r]) => r > a && l < b).sort((p, q) => p[0] - q[0])) {
+    if (l > x) free.push([x, l]);
+    x = Math.max(x, r);
+  }
+  if (b > x) free.push([x, b]);
+  return free.filter(([l, r]) => r - l >= need).at(-1) || free.sort((p, q) => (q[1] - q[0]) - (p[1] - p[0]))[0] || [a, Math.max(a, b)];
 }
 const xy = ([x, y]) => ({ x, y });
 

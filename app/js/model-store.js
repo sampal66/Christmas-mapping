@@ -27,3 +27,15 @@ export function saveModel(model) {
 export function clearModel() {
   try { localStorage.removeItem(KEY); } catch { /* ignore */ }
 }
+
+// Setup-flow progress (WP-09a): the current card, the locked spot, skipped fields. Measurements live in the model.
+const SETUP_KEY = 'christmas-mapping.setup.v1';
+export function loadSetup() {
+  try { return { step: 0, ...(JSON.parse(localStorage.getItem(SETUP_KEY)) || {}) }; } catch { return { step: 0 }; }
+}
+export function saveSetup(setup) {
+  try { localStorage.setItem(SETUP_KEY, JSON.stringify(setup)); } catch { /* ignore */ }
+}
+export function clearSetup() {
+  try { localStorage.removeItem(SETUP_KEY); } catch { /* ignore */ }
+}

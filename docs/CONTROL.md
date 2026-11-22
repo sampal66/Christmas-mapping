@@ -4,7 +4,7 @@
 > Big parts are built in **separate Claude sessions**, one work package (WP) each, so no session's context
 > window gets large. Rules: [AGENTS.md §03a](AGENTS.md#03a--session-strategy-small-context-windows).
 
-**Show date:** 2026-12-24 · **Last updated:** 2026-11-20 · **Live app:** https://sampal66.github.io/Christmas-mapping/
+**Show date:** 2026-12-24 · **Last updated:** 2026-11-22 · **Live app:** https://sampal66.github.io/Christmas-mapping/
 
 ---
 
@@ -35,7 +35,7 @@
 | WP-11 | [s04 box chaos + s05 Mickey drawn in stars + scene audit](work-packages/WP-11-box-chaos-mickey-stars.md) (owner notes 2026-11-17) | WP-03, WP-06 | ✅ done (PR #9) | `claude/wp-11-box-chaos-mickey-stars` | C1, C2, C3 |
 | WP-11b | [s06 pets as star figures](work-packages/WP-11b-pet-constellations.md) (audit miss: "pets as constellations", Orion smiles) | WP-11 | ✅ done (PR #10) | `claude/wp-11b-pet-constellations` | C1, C2 |
 | WP-11c | [s06 atlas art from *Urania's Mirror*](work-packages/WP-11c-urania-art.md) (owner: current plates distorted, grid unwanted) | WP-11b | ✅ done (PR #10, same session) | `claude/wp-11b-pet-constellations` | C1 |
-| WP-09a | [Projector placement + guided room survey](work-packages/WP-09a-room-survey.md): find the projector spot with live wall guides (frame, level grid, stage target vs. the real tree shadow), then the tape-measure survey from that spot; tree shadow + obstacles in the model, fit report, box suggestions | WP-16 | 🟢 ready to start | — | M1–M4, C1 |
+| WP-09a | [Projector placement + guided room survey](work-packages/WP-09a-room-survey.md): find the projector spot with live wall guides (frame, level grid, stage target vs. the real tree shadow), then the tape-measure survey from that spot; tree shadow + obstacles in the model, fit report, box suggestions | WP-16 | 🟡 draft PR #27 (owner: run Setup on the wall) | `claude/wp-09a-room-survey` | M1–M4, C1 |
 | WP-09b | [Guided calibration from the survey](work-packages/WP-09b-guided-calibration.md): zone-by-zone nudges over the model (kept as offsets), star on the topper, scene preview + margins, show-night quick re-check | WP-09a + the owner's setup on the wall | ⚪ waiting | — | M1–M4, C1 |
 | WP-16b | Story-scene frame rate: 21–22 fps seen on the wall in s03 (clip keying on the CPU, re-seeks) → the frozen Connor | WP-16 | ⚪ needs brief | — | M1, C2 |
 | WP-17 | Brighter tree light show, no dead spots (owner, first projector test) | WP-09a | ⚪ needs brief | — | C1 |
@@ -63,6 +63,11 @@ Definition of Done, then update docs/CONTROL.md (status + handoff note) and open
 ## Handoff log
 
 Newest first. Each session appends **≤ 5 lines**: what was done, what's left, and any gotchas for the next session.
+
+- **2026-11-22 · WP-09a** — 0 credits. Room model page → **Setup** (`setup-view.js`, analysis in `survey.js`): A rough room → `rankSpots` (7×3×3 grid in `model.limits`, ≈ 130 ms) → projected guides (border, level grid, green stage target, red predicted shadow) → Lock spot → throw from frame width; B tape cards (lens, wall, sideboard, obstacles, tree, right wall, boxes) → report + `suggestBoxes`. Progress resumes after reload; export/import round-trips (checked headless). sw.js v34. Smoke + pre-check PASS (0 overlaps, floor spare 29 px).
+  Model: `shadows()` casts the tree cone, star and obstacles from the lens → occluder zones `shadow`, `starShadow`, `obstacleN` (`occluder: true`, mask, nothing drawn outside Calibrate); scenes get `env.occluders()` and `stageLayout` packs the dogs into the rightmost free floor stretch. Default spot B: dogs only ≈ 3 cm clear of the shadow (5 cm tree error → in it = the wall test); best default spot x −30 cm, 350 cm, lens 170 cm → ≈ 12 cm, throw fits.
+  **Left (owner):** do the Setup on the wall (enter the real tripod area first: `limits` x −30…150, y 300…350, lens 120…170 cm are guesses), export the setup JSON for WP-09b. The exact first-test spot was never recorded, so the "reproduction" is the 3 cm margin vs the ±10 cm tree tolerance.
+  Gotchas: keep the tree and star as separate occluders (one hull widened the floor shadow ≈ 6 cm). Smoke now expects 12 model zones (10 + 2 shadows); every obstacle adds one. Saved layouts get the shadow zones from the defaults via `mergeDefaults` (not re-fitted to a hand calibration: WP-09b).
 
 - **2026-11-20 · WP-16** — 0 credits. `stageLayout` lays every slot out from a new `REACH` table (each clip's widest matte extent left/right of its anchor over all frames, 10 fps) with `row()`: floor = Alaska, Connor between the tree's right edge (cone line) and the big box, packed toward the box (spare 30 px, gaps ≈ 10 px; Alaska 1118 → 966 px, Connor 1277 → 1242); tower via `towerRow()` = Orion, guest spot (`L.guest`, s08/s10), Gandalf, chimney (`L.chimney`, spare 33 px). s07 lays its tower out from its own tracks (Alaska, Orion, Gandalf) and **drops the chimney** (no room: owner can ask for it back with Gandalf's tail in front of it). Precheck 3c (new, fails the run): matte-box overlap > 3 % at cue + 1 s → 0 now, 11 on the old layout. sw.js v33. Pre-check PASS. PR #26 merged at the owner's request (2026-11-22); WP-09a session opened.
   Owner, same day: pets "dim out softly" → cross-fade dip fixed (`xfadeAlphas`, 78 % → 100 %). "Connor froze in one of the last scenes": not reproducible headless (clips all move; precheck 0 frozen); likely iPad load in s10 (5–6 clips keyed on the CPU at once → drift → `drawClip` re-seeks > 0.15 s → stalls). Proposed WP-16b, waiting on the owner (which scene/device).

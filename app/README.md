@@ -21,6 +21,10 @@ A browser-based projection-mapping tool for the iPad. It has no build step: plai
 - **Room model** (`model.html`, linked under Layout file): a metric model of the stage and projector.
   It shows the projector, top and side views, whether the projector covers everything (throw ratio), and editable
   measurements. "Use in Mapper" loads zones generated from the model. The default zones also come from it.
+  **Setup** (top right, WP-09a) walks through it card by card with the projector on: rough room → ranked tripod spots →
+  **Project guides** (border, level grid, green stage target, red predicted shadow; tap to close) → **Lock spot** → throw
+  check → the tape survey from that spot → report + box suggestions. Progress survives a reload; **Export setup** saves
+  the measurements as JSON (no photos, no names).
 - **Room photo preview**: put a photo of the wall behind the zones. The photo stays on the device and is never uploaded.
 - **Layout file**: export/import the calibration as JSON.
 - Scenes live in `js/scenes/` (running order and hold points in `js/scenes/index.js`); effects in `js/fx/`, colours in
