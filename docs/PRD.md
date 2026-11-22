@@ -64,7 +64,7 @@ Deliver a reliable, delightful, baby-safe show on Dec 24 that:
 | M9 | Works offline once loaded (no Wi-Fi needed on show night) | Should | ✅ WP-02 |
 | M10 | 1080p **MP4 export** of the calibrated show as a backup | Must | ⏳ |
 | M11 | Pre-show idle loop | Should | ✅ WP-01 (starfield); behind closed theatre curtains since WP-13a |
-| M12 | **Room model**: a spatial model of the real stage and projector that generates the default zones and checks projector fit | Should | ✅ stage survey |
+| M12 | **Room model**: a spatial model of the real stage and projector that generates the default zones and checks projector fit | Should | ✅ stage survey; ✅ guided Setup (projector spot + tape survey, shadow/obstacle occluders, fit report: WP-09a) |
 
 ### 5.2 Show content
 | ID | Feature | Priority | Status |
@@ -140,6 +140,7 @@ Target ≈12 min (agreed range 10–15). The beat sheet, live-moment plan and cu
 | Tree too bright or green | Tree lights off until the finale; the flocked tips take colour well. |
 
 ## Changelog
+- **2026-11-22** — WP-09a: M12 status (guided Setup on the Room model page).
 - **2026-11-20** — WP-16: C2 status (pet spacing: no character overlaps another).
 - **2026-11-19** — WP-13b: C1 status (story-scene cottage, s06 cow over the moon).
 - **2026-11-19** — WP-14b: C3 status (four public-domain characters).

@@ -6,12 +6,12 @@
   <title>Room Model</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <style>
-    :root { --bg: #0b0d14; --panel: #151a26; --fg: #eef2ff; --muted: #9aa3b8; --accent: #ffd54f; --line: rgba(255,255,255,.15); --ok: #4cc38a; --bad: #e8475f; }
+    :root { --warn: #f2b84b; --bg: #0b0d14; --panel: #151a26; --fg: #eef2ff; --muted: #9aa3b8; --accent: #ffd54f; --line: rgba(255,255,255,.15); --ok: #4cc38a; --bad: #e8475f; }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.4 -apple-system, system-ui, sans-serif; }
     header { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--line); }
     header a { color: var(--accent); }
-    main { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; padding: 16px; align-items: start; }
+    main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px; padding: 16px; align-items: start; }
     @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
     section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
     h2 { font-size: 14px; margin: 0 0 8px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
@@ -31,6 +31,37 @@
     .ok { color: var(--ok); } .bad { color: var(--bad); }
     .hint { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
     #verdict { font-size: 14px; margin: 0 0 8px; }
+    /* Setup flow (WP-09a) */
+    #setup h2 { display: flex; justify-content: space-between; gap: 8px; }
+    #setup h2 button { padding: 2px 8px; font-size: 12px; text-transform: none; }
+    #setup h3 { margin: 6px 0 4px; font-size: 17px; }
+    #setupDots { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+    .dot { width: 22px; height: 22px; padding: 0; border-radius: 50%; background: #2a3247; }
+    .dot.on { background: var(--accent); } .dot.skip { border-color: var(--warn); }
+    .diag { width: 100%; height: auto; background: #0b0f18; border-radius: 6px; margin: 6px 0; }
+    label.f { grid-template-columns: 1fr 76px 22px; }
+    label.f .u { color: var(--muted); font-size: 12px; }
+    label.f .warn { grid-column: 1 / -1; color: var(--warn); font-size: 12px; }
+    label.f .warn:empty { display: none; }
+    input[type=number], input[type=text] { font-size: 16px; } /* ≥ 16 px: Safari doesn't zoom on focus */
+    input[type=text] { padding: 6px; border-radius: 6px; border: 1px solid var(--line); background: #0f131d; color: var(--fg); min-width: 0; }
+    .badin { border-color: var(--bad) !important; }
+    .check ul li, ul.report li { border-bottom: none; display: block; padding: 2px 0; }
+    ul.report li { display: grid; grid-template-columns: 1fr; border-bottom: 1px solid var(--line); padding: 5px 0; }
+    ul.report li span:first-child { color: var(--muted); font-size: 12px; }
+    .warnc { color: var(--warn); }
+    .spot { border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; margin: 6px 0; font-size: 13px; }
+    .spot.now { border-style: dashed; }
+    .spot button { float: right; padding: 4px 10px; }
+    .spot small { color: var(--muted); }
+    .obs { display: grid; grid-template-columns: 1fr repeat(3, 62px) 34px; gap: 4px; align-items: end; margin: 4px 0; }
+    .obs label { display: block; font-size: 11px; color: var(--muted); margin: 0; }
+    .obs button { padding: 6px 0; }
+    .filebtn { display: inline-flex; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: #222a3b; cursor: pointer; grid-template-columns: none; margin: 0; }
+    .filebtn input { display: none; }
+    #guideOverlay { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; align-items: center; justify-content: center; }
+    #guideOverlay[hidden] { display: none; }
+    #guideCanvas { width: min(100vw, calc(100vh * 16 / 9)); height: auto; border-radius: 0; }
   </style>
 </head>
 <body>
@@ -50,7 +81,13 @@
       </div>
     </div>
     <aside>
-      <section>
+      <section id="setup">
+        <h2><span>Setup · <span id="setupStep"></span></span><button id="setupRestart" title="Start the setup again">Restart</button></h2>
+        <div id="setupDots"></div>
+        <div id="setupCard"></div>
+        <div class="row"><button id="setupBack">Back</button><button id="setupSkip">Skip / not sure</button><button class="primary" id="setupNext">Next</button></div>
+      </section>
+      <section style="margin-top:16px">
         <h2>Fit</h2>
         <p id="verdict"></p>
         <ul id="coverage"></ul>
@@ -68,6 +105,7 @@
       </section>
     </aside>
   </main>
+  <div id="guideOverlay" hidden><canvas id="guideCanvas" width="1920" height="1080"></canvas></div>
   <script type="module" src="js/model-view.js"></script>
 </body>
 </html>

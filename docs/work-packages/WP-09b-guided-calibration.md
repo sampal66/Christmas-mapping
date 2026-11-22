@@ -20,7 +20,8 @@ re-measurement doesn't throw the hand work away.
 - `docs/work-packages/WP-09a-room-survey.md` (what the survey produces) and its handoff line in CONTROL
 - `app/js/main.js` (Calibrate mode: handles, corners, mask points, nudge, save), `app/js/effects.js`
   (`calibrationPattern`)
-- `app/js/stage-model.js` (`layoutFromModel`, the shadow and obstacle zones from WP-09a), `app/js/model-store.js`
+- `app/js/stage-model.js` (`layoutFromModel`, the occluder zones from WP-09a: `shadow`, `starShadow`, `obstacleN`, flagged
+  `occluder: true`), `app/js/model-store.js` (setup progress key), `app/js/survey.js` (`analyse`: margins for the checks)
 - `app/js/scenes/stage.js` only to check the dogs' slots after calibration
 
 ## Build

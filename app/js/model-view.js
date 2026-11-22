@@ -1,7 +1,8 @@
 // Room model page: shows the spatial model from three sides, what the projector covers, and pushes
 // model-generated zones into the Mapper. Drawing is plain Canvas 2D; no state leaves the device.
-import { layoutFromModel, coverage, projectorCamera, project, requiredThrowRatio } from './stage-model.js';
+import { layoutFromModel, coverage, projectorCamera, project, requiredThrowRatio, shadows, spanAt } from './stage-model.js';
 import { loadModel, saveModel, clearModel } from './model-store.js';
+import { initSetup, refreshSetup } from './setup-view.js';
 
 const LAYOUT_KEY = 'christmas-mapping.layout.v1';
 const $ = (id) => document.getElementById(id);
@@ -23,6 +24,7 @@ const FIELDS = [
 ];
 
 let model = loadModel();
+let candidates = [];             // the Setup flow's best spots, marked on the top/side views
 
 const getPath = (obj, path) => path.split('.').reduce((o, k) => o[k], obj);
 function setPath(obj, path, value) {
@@ -42,6 +44,7 @@ $('form').addEventListener('input', (e) => {
   setPath(model, e.target.dataset.path, v);
   saveModel(model);
   render();
+  refreshSetup();
 });
 
 // ---------- projector view ----------
@@ -75,15 +78,18 @@ function drawProjector() {
   // zones from the model
   for (const z of layoutFromModel(model, cam).zones) {
     const q = z.quad.map(([x, y]) => [(x + PAD.x) * s, (y + PAD.y) * s]);
-    ctx.beginPath(); q.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath();
-    ctx.strokeStyle = z.color; ctx.lineWidth = 2; ctx.setLineDash(z.hidden ? [4, 4] : []); ctx.stroke(); ctx.setLineDash([]);
+    if (!z.occluder) {   // an occluder's quad is only its bounding box: draw its outline instead
+      ctx.beginPath(); q.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath();
+      ctx.strokeStyle = z.color; ctx.lineWidth = 2; ctx.setLineDash(z.hidden ? [4, 4] : []); ctx.stroke(); ctx.setLineDash([]);
+    }
     if (z.mask) {
       const map = ([u, v]) => bilerp(q, u, v);
       const m = z.mask.map(map);
       ctx.beginPath(); m.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath();
-      ctx.fillStyle = 'rgba(174,213,129,.25)'; ctx.fill();
+      ctx.fillStyle = z.occluder ? 'rgba(255,92,108,.16)' : 'rgba(174,213,129,.25)'; ctx.fill();
+      if (z.occluder) { ctx.strokeStyle = '#ff5c6c'; ctx.setLineDash([5, 4]); ctx.lineWidth = 1.5; ctx.stroke(); ctx.setLineDash([]); }
     }
-    ctx.fillStyle = z.color; ctx.font = '12px system-ui'; ctx.fillText(z.label, q[0][0] + 4, q[0][1] + 14);
+    if (!z.occluder) { ctx.fillStyle = z.color; ctx.font = '12px system-ui'; ctx.fillText(z.label, q[0][0] + 4, q[0][1] + 14); }
   }
   // star outline, tree axis
   poly([[tree.x, tree.y, star.topZ - star.size], [tree.x, tree.y, star.topZ]], '#ffd54f', 2);
@@ -144,6 +150,14 @@ function drawTop() {
   }
   ctx.fillStyle = '#ffd54f'; ctx.fillRect(X(pj.pos[0]) - 6, Y(pj.pos[1]) - 4, 12, 8);
   ctx.fillText('projector', X(pj.pos[0]) + 8, Y(pj.pos[1]) + 16);
+  // tripod area (room limits) and the Setup flow's candidate spots
+  const lim = model.limits;
+  ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
+  ctx.strokeRect(X(lim.x[0]), Y(lim.y[0]), (lim.x[1] - lim.x[0]) * s, (lim.y[1] - lim.y[0]) * s); ctx.setLineDash([]);
+  candidates.forEach((c, i) => markSpot(ctx, X(c.pos[0]), Y(c.pos[1]), i + 1));
+  // the tree's shadow on the main wall at the sideboard top
+  const sh = spanAt(shadows(model, cam)[0].wall, sb.height);
+  if (sh) { ctx.strokeStyle = '#ff5c6c'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(X(sh[0]), Y(0) + 3); ctx.lineTo(X(sh[1]), Y(0) + 3); ctx.stroke(); ctx.fillStyle = '#ff9aa4'; ctx.fillText('shadow', X(sh[0]), Y(0) + 18); }
   scaleBar(ctx, s, c.height);
 }
 
@@ -173,9 +187,15 @@ function drawSide() {
     ctx.lineTo(X(pj.pos[1] - Math.cos(pitch) * len), Z(pj.pos[2] + Math.sin(pitch) * len)); ctx.stroke();
   }
   ctx.fillStyle = '#ffd54f'; ctx.fillRect(X(pj.pos[1]) - 6, Z(pj.pos[2]) - 4, 12, 8);
+  candidates.forEach((c, i) => markSpot(ctx, X(c.pos[1]), Z(c.pos[2]), i + 1));
   ctx.fillStyle = '#9aa3b8'; ctx.font = '12px system-ui';
   ctx.fillText('wall', X(0) + 4, Z(room.ceiling) + 14); ctx.fillText('bar', X(model.counter.y), Z(model.counter.z) - 6);
   scaleBar(ctx, s, c.height);
+}
+
+function markSpot(ctx, x, y, n) {
+  ctx.strokeStyle = '#4cc38a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y, 8, 0, Math.PI * 2); ctx.stroke();
+  ctx.fillStyle = '#4cc38a'; ctx.font = 'bold 11px system-ui'; ctx.fillText(String(n), x - 3, y + 4);
 }
 
 function scaleBar(ctx, s, h) {
@@ -209,7 +229,7 @@ $('useBtn').addEventListener('click', () => {
     location.href = './';
   } catch (err) { alert(`Could not save: ${err.message}`); }
 });
-$('resetBtn').addEventListener('click', () => { clearModel(); model = loadModel(); buildForm(); render(); });
+$('resetBtn').addEventListener('click', () => { clearModel(); model = loadModel(); buildForm(); render(); refreshSetup(); });
 $('exportBtn').addEventListener('click', () => {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify(model, null, 2)], { type: 'application/json' }));
@@ -219,3 +239,9 @@ $('exportBtn').addEventListener('click', () => {
 
 buildForm();
 render();
+initSetup({
+  get model() { return model; },
+  changed() { saveModel(model); buildForm(); render(); },
+  replace(m) { saveModel(m); model = loadModel(); buildForm(); render(); },
+  candidates(list) { candidates = list; drawTop(); drawSide(); },
+});

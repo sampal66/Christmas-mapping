@@ -80,6 +80,11 @@ function sceneEnv(z) {
       const [x, y] = unitToStage(o.quad, u, v);
       return stageToUnit(z.quad, x, y);
     },
+    // Occluder zones (tree shadow, obstacles: WP-09a) as polygons in this zone's unit coords, for stageLayout.
+    occluders() {
+      return layout.zones.filter((o) => o.occluder && !o.hidden).map((o) => (o.mask || [[0, 0], [1, 0], [1, 1], [0, 1]])
+        .map(([u, v]) => { const [x, y] = unitToStage(o.quad, u, v); return stageToUnit(z.quad, x, y); }));
+    },
   };
 }
 
@@ -234,6 +239,8 @@ function frame(now) {
   for (const z of layout.zones) {
     if (z.hidden) continue;
     const { ctx } = views.get(z.id);
+    // Occluders (tree shadow, obstacles) only steer the layout: nothing is drawn in them outside Calibrate.
+    if (z.occluder && mode !== 'calibrate') { ctx.clearRect(0, 0, z.res[0], z.res[1]); continue; }
     const [w, h] = z.res;
     ctx.clearRect(0, 0, w, h);
     ctx.save();

@@ -181,7 +181,7 @@ const secs = (label) => { const [m, ss] = label.split(' ')[0].split(':').map(Num
     await page.click('#useBtn');
     await page.waitForURL(url);
     const zones = await page.evaluate(() => JSON.parse(localStorage.getItem('christmas-mapping.layout.v1')).zones);
-    check(zones.length === 10 && zones.every((z) => z.quad.flat().every(Number.isFinite)), 'model zones saved to the Mapper');
+    check(zones.length === 12 && zones.every((z) => z.quad.flat().every(Number.isFinite)), 'model zones saved to the Mapper');
     await page.waitForTimeout(300);
     check(await page.locator('canvas.zone').count() >= 8, 'Mapper renders the model zones');
 
