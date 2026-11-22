@@ -4,9 +4,9 @@
 // The star's motion is star-story.js's drawReturn: Pooh's pot and Connor's mouth are placed on its path.
 import { cueSheet, loadFonts, easeInOutSine, clamp } from '../fx/index.js';
 import { drawReturn, RETURN_PATH, carryWalk, walkSpan } from './star-story.js';
-import { stageLayout, storyChimney, drawPets, drawPetClip, preloadTracks, talk, look, act, CONNOR_MOUTH, PET_SIZE } from './stage.js';
+import { stageLayout, towerRow, trackClips, xfadeAlphas, drawPets, drawPetClip, preloadTracks, talk, look, act, CONNOR_MOUTH, PET_SIZE } from './stage.js';
 import { preloadClips } from '../fx/clips.js';
-import { BOX_ZONES, storyTower, storyAlpha, skyBase } from './common.js';
+import { BOX_ZONES, storyTower, skyBase } from './common.js';
 import { stripStarPath, pixelAspect } from '../fx/strip.js';
 
 const cues = [{ t: 0, name: 'pooh-in' }, { t: 15, name: 'found' }, { t: 30, name: 'carry' }, { t: 50, name: 'fly' }, { t: 60, name: 'settle' }, { t: 71, name: 'out' }];
@@ -42,6 +42,10 @@ const tracks = {
   ],
 };
 
+// s07's tower top, left → right (WP-16): Alaska facing right as before, then the cats facing left,
+// laid out from the clips each plays in this scene.
+const TOWER = [{ who: 'alaska', flip: false, ids: trackClips(tracks) }, { who: 'orion', ids: trackClips(tracks) }, { who: 'gandalf', ids: trackClips(tracks) }];
+
 /** Pooh: drifts down from above the wall, bobs on his balloon, holds still while the star is in his pot, floats off. */
 function drawPooh(ctx, L, w, h, local, env) {
   const pot = env?.from?.('backdrop', ...RETURN_PATH.pot) || [0.53 + RETURN_PATH.pot[0] * 0.47, RETURN_PATH.pot[1]];
@@ -57,9 +61,10 @@ function drawPooh(ctx, L, w, h, local, env) {
   while (i + 1 < POOH_CLIPS.length && local >= POOH_CLIPS[i + 1][1]) i++;
   const one = ([id, at, loop], a) => drawPetClip(ctx, PL, 'pooh', id, local - at, { x, y, anchor: POOH_POT[id], alpha: a, loop });
   const k = i > 0 ? clamp((local - POOH_CLIPS[i][1]) / POOH_XFADE) : 1;
-  if (k < 1) one(POOH_CLIPS[i - 1], alpha * (1 - k));
+  const [a, b] = xfadeAlphas(k, alpha);                      // no see-through dip half-way (stage.js)
+  if (k < 1) one(POOH_CLIPS[i - 1], a);
   // a clip that hasn't loaded yet keeps the previous one on screen rather than leaving a gap
-  if (!one(POOH_CLIPS[i], alpha * k) && i > 0 && k >= 1) one(POOH_CLIPS[i - 1], alpha);
+  if (!one(POOH_CLIPS[i], b) && i > 0 && k >= 1) one(POOH_CLIPS[i - 1], alpha);
 }
 
 export default {
@@ -82,20 +87,18 @@ export default {
     const L = zoneId === 'wall' ? stageLayout(env, w, h) : null;
     const unit = L ? L.H * L.k * PET_SIZE.connor : undefined;
     drawReturn(zoneId, ctx, w, h, t, local, env, C, () => {
-      storyChimney(ctx, L, t, storyAlpha(local, c('out'), duration));
+      // WP-16: no chimney in s07. Alaska, Orion and Gandalf fill the whole tower top (TOWER), so it has no room.
       drawPooh(ctx, L, w, h, local, env);
       // Connor faces left (toward the tree) all scene, his mouth on the star's path: at PAW, then a few steps
-      // toward the tree. Alaska joins the cats on the tower, out of his way.
+      // toward the tree. Alaska joins the cats on the tower, out of his way, each clear of the next (WP-16).
       const P = (v) => { const q = env?.from?.('backdrop', ...v) || [0.53 + v[0] * 0.47, v[1]]; return [q[0] * w, q[1] * h]; };
       const mouthX = P(RETURN_PATH.paw)[0] - carryWalk(local, C).d * unit;
-      const top = (s) => { const [x, y] = L.towerAt(s); return { x, y, flip: true }; };
+      const [alaska, orion, gandalf] = towerRow(L, TOWER);
       drawPets(ctx, L, tracks, local, {
         inAt: c('found') - 4, outAt: c('out'),
         override: {
           connor: { x: mouthX + CONNOR_MOUTH * L.H * L.k * PET_SIZE.connor, flip: true },
-          alaska: { ...top(0.1), flip: false },
-          orion: top(0.53),
-          gandalf: top(0.86),                                // the look-loop's tail swings wider than the look-up's
+          alaska, orion, gandalf,
         },
       });
     }, { unit });
